@@ -1,0 +1,15 @@
+{
+  "name": "mine",
+  "version": "1.0.0",
+  "description": "Mine project",
+  "main": "index.html",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "blog",
+    "standalone"
+  ],
+  "author": "Gleb Lobastov",
+  "license": "SEE LICENSE IN LICENSE.md"
+}
