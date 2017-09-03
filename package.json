@@ -1,15 +1,41 @@
 {
   "name": "mine",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Mine project",
   "main": "index.html",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "build": "webpack",
+    "start": "webpack-dev-server --open"
   },
   "keywords": [
     "blog",
     "standalone"
   ],
   "author": "Gleb Lobastov",
-  "license": "SEE LICENSE IN LICENSE.md"
+  "license": "SEE LICENSE IN LICENSE.md",
+  "dependencies": {
+    "prop-types": "15.5.10",
+    "react": "15.6.1",
+    "react-dom": "15.6.1",
+    "react-markdown": "2.5.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-airbnb-base": "^11.3.2",
+    "eslint-import-resolver-webpack": "^0.8.3",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "5.0.3",
+    "eslint-plugin-react": "^7.3.0",
+    "html-webpack-plugin": "^2.30.1",
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
+  }
 }
