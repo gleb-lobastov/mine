@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
-import { articlePropTypes } from 'Content/contents.types';
+import { articlePropTypes } from 'content/contents.types';
 
 class Article extends React.PureComponent {
   static propTypes = {

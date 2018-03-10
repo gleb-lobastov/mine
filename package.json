@@ -1,6 +1,6 @@
 {
   "name": "mine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Mine project",
   "main": "index.html",
   "scripts": {
@@ -16,20 +16,26 @@
   "author": "Gleb Lobastov",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
+    "lodash": "^4.17.5",
     "mime": "^2.2.0",
+    "path-to-regexp": "^2.2.0",
     "prop-types": "^15.6.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-markdown": "2.5.0",
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2",
     "webpack": "^4.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^7.2.3",
     "babel-loader": "^7.1.2",
+    "babel-plugin-lodash": "^3.3.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-3": "^6.24.1",
     "eslint": "^4.18.0",
     "eslint-config-airbnb": "^15.1.0",
     "eslint-config-airbnb-base": "^11.3.2",

@@ -14,4 +14,4 @@ My guess, that all documentation should be reachable from the root, gradually re
 
 To every new person in team have point to start. And despite this is not team project. I'm trying to implement and test all my ideas.
 
-If you interesting, continue to read about technical information: [project structure and principles](./src/readme.md)
+If you interesting, continue to read about technical information: [project structure and principles](./src/README.md)

@@ -1,9 +1,11 @@
 {
   "plugins": [
+    "lodash",
     "transform-class-properties"
   ],
   "presets": [
     "env",
-    "react"
+    "react",
+    "stage-3"
   ]
 }

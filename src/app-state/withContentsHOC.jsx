@@ -1,5 +1,5 @@
 import React from 'react';
-import contents from 'Content/contents.json';
+import contents from 'content/contents.json';
 
 const getDisplayName = WrappedComponent => (
   WrappedComponent.displayName ||

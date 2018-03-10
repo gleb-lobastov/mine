@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { contentsPropTypes } from 'Content/contents.types';
-import withContents from 'Components/app-state/withContentsHOC';
-import Articles from 'Components/app-agnostic/Articles/Articles';
+import { contentsPropTypes } from 'content/contents.types';
+import withContents from 'state/withContentsHOC';
+import Articles from 'modules/componentsGallery/Articles';
 
 class ArticlesController extends React.PureComponent {
   static propTypes = {

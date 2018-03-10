@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { articlePropTypes } from 'Content/contents.types';
+import { articlePropTypes } from 'content/contents.types';
 import Article from './Article';
 
 const sortByDateDesc = ({ date: dateA }, { date: dateB }) => {

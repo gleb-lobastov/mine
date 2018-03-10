@@ -19,8 +19,14 @@ module.exports = {
   ],
   resolve: {
     alias: {
-      Components: path.resolve(__dirname, 'src/components/'),
-      Content: path.resolve(__dirname, 'src/content/'),
+      // app commons
+      core: path.resolve(__dirname, 'src/app-core/'),
+      state: path.resolve(__dirname, 'src/app-state/'),
+      modules: path.resolve(__dirname, 'src/app-agnostic-modules/'),
+      content: path.resolve(__dirname, 'src/content/'),
+
+      // standalone app parts
+      blog: path.resolve(__dirname, 'src/app-components/standalone/blog/'),
     },
     extensions: ['.js', '.jsx'],
   },
