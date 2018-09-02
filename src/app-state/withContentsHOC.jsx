@@ -1,14 +1,13 @@
 import React from 'react';
-import contents from 'content/contents.json';
+import { provide } from 'core/request';
 
-const getDisplayName = WrappedComponent => (
-  WrappedComponent.displayName ||
-  WrappedComponent.name ||
-  'Component'
-);
-
-export default (ExtendableComponent) => {
-  const HOC = props => <ExtendableComponent contents={contents} {...props} />;
-  HOC.displayName = `withContent${getDisplayName(ExtendableComponent)})`;
-  return HOC;
-};
+export default ExtendableComponent => provide(
+  () => ({
+    query: 'contents',
+    meta: {
+      domain: 'contents',
+    },
+  }),
+)(({ provision, ...props }) => (
+  <ExtendableComponent contents={provision}{...props} />
+));

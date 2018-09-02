@@ -1,1 +1,1 @@
-export { default } from './ContentProvider';
+export { default, contentProviderPropTypes } from './ContentProvider';

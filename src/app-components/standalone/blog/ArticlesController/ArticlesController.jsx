@@ -9,6 +9,10 @@ class ArticlesController extends React.PureComponent {
     contents: PropTypes.shape(contentsPropTypes).isRequired,
   };
 
+  static defaultProps = {
+    contents: {},
+  };
+
   render() {
     const {
       contents,

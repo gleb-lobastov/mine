@@ -20,6 +20,10 @@ class Articles extends React.PureComponent {
     ).isRequired,
   };
 
+  static defaultProps = {
+    source: [],
+  };
+
   render() {
     const {
       source,

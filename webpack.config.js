@@ -27,7 +27,9 @@ module.exports = {
 
       // standalone app parts
       blog: path.resolve(__dirname, 'src/app-components/standalone/blog/'),
+      travel: path.resolve(__dirname, 'src/app-components/standalone/travel/'),
     },
     extensions: ['.js', '.jsx'],
   },
+  devtool: 'eval',
 };

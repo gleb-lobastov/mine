@@ -2,18 +2,28 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router';
 
-const ContentProvider = ({ routesList }) => (
-  <Switch>
-    {routesList.map(props => (
-      <Route key={props.to} {...props} />
-    ))}
-  </Switch>
-);
+class ContentProvider extends React.Component {
+  render() {
+    const {
+      routesList,
+    } = this.props;
 
-ContentProvider.propTypes = {
+    return (
+      <Switch>
+        {routesList.map(props => (
+          <Route key={props.path} {...props} />
+        ))}
+      </Switch>
+    );
+  }
+}
+
+export const contentProviderPropTypes = {
   routesList: PropTypes.arrayOf(
     PropTypes.shape(Route.propTypes),
   ).isRequired,
 };
+
+ContentProvider.propTypes = contentProviderPropTypes;
 
 export default ContentProvider;
