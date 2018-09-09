@@ -1,7 +1,14 @@
+const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const PROD_API_URL = 'https://mine-backend.herokuapp.com';
+const DEV_API_URL = `http://localhost:${process.env.PORT || '8082'}`;
+
+const isDevelopmentMode = process.env.NODE_ENV === 'development';
+
 module.exports = {
+  mode: isDevelopmentMode ? 'development' : 'production',
   module: {
     rules: [
       {
@@ -15,6 +22,10 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'M - I - N - E',
       template: './src/index.html',
+    }),
+    new webpack.DefinePlugin({
+      __API_URL__: `"${isDevelopmentMode ? DEV_API_URL : PROD_API_URL}"`,
+      __DEV__: isDevelopmentMode,
     }),
   ],
   resolve: {
