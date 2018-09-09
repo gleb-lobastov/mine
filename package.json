@@ -18,6 +18,7 @@
   "dependencies": {
     "@request-kit/engine-rest": "^0.2.0",
     "@request-kit/react-redux": "^0.2.0",
+    "date-fns": "^1.29.0",
     "lodash": "^4.17.5",
     "mime": "^2.2.0",
     "path-to-regexp": "^2.2.0",
