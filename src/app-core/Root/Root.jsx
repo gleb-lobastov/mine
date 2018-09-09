@@ -1,3 +1,4 @@
+/* global window __DEV__ */
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -7,6 +8,9 @@ import ContentProvider, {
   contentProviderPropTypes,
 } from 'modules/componentsGallery/ContentProvider';
 
+if (__DEV__) {
+  window.__store = store;
+}
 const Root = ({ routesList }) => (
   <Provider store={store}>
     <BrowserRouter>
