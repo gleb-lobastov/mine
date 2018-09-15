@@ -2,10 +2,9 @@ import React from 'react';
 import { provide } from 'core/request';
 
 export default ExtendableComponent => provide(
-  () => ({
-    query: 'contents',
+  (state, { domain }) => ({
     meta: {
-      domain: 'contents',
+      domain,
     },
   }),
 )(({ provision, ...props }) => (
