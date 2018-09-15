@@ -1,4 +1,4 @@
-/* global window __IS_DEV_MODE__ */
+/* global window __IS_DEV_MODE__ __ROUTES_BASENAME__ */
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,7 +13,7 @@ if (__IS_DEV_MODE__) {
 }
 const Root = ({ routesList }) => (
   <Provider store={store}>
-    <BrowserRouter>
+    <BrowserRouter basename={__ROUTES_BASENAME__}>
       <Layout>
         <ContentProvider routesList={routesList} />
       </Layout>
