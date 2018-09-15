@@ -1,4 +1,4 @@
-/* global window __DEV__ */
+/* global window __IS_DEV_MODE__ */
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -8,7 +8,7 @@ import ContentProvider, {
   contentProviderPropTypes,
 } from 'modules/componentsGallery/ContentProvider';
 
-if (__DEV__) {
+if (__IS_DEV_MODE__) {
   window.__store = store;
 }
 const Root = ({ routesList }) => (

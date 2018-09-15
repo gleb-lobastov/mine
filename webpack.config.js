@@ -24,8 +24,8 @@ module.exports = {
       template: './src/index.html',
     }),
     new webpack.DefinePlugin({
-      __API_URL__: `"${isDevelopmentMode ? DEV_API_URL : PROD_API_URL}"`,
-      __DEV__: isDevelopmentMode,
+      __API_HOST__: `"${isDevelopmentMode ? DEV_API_URL : PROD_API_URL}"`,
+      __IS_DEV_MODE__: isDevelopmentMode,
     }),
   ],
   resolve: {
