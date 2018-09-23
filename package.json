@@ -8,8 +8,9 @@
     "test": "test",
     "build": "npm run clean && cross-env NODE_ENV=production webpack",
     "start": "cross-env NODE_ENV=development webpack-dev-server",
-    "deploy": "gh-pages -d dist",
-    "publish": "npm run build && npm run deploy"
+    "prepublish": "npm version minor",
+    "publish": "gh-pages -d dist",
+    "release": "npm run build && npm run publish"
   },
   "keywords": [
     "blog",
