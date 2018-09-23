@@ -16,6 +16,7 @@ module.exports = {
       publicPath: '/',
     } : {
       filename: '[name]-[chunkhash].js',
+      publicPath: '/mine',
     },
   module: {
     rules: [
