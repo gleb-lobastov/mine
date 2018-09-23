@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const PROD_API_URL = 'https://mine-backend.herokuapp.com';
 const DEV_API_URL = `http://localhost:${process.env.PORT || '8082'}`;
@@ -35,7 +36,10 @@ module.exports = {
       __API_HOST__: `"${isDevelopmentMode ? DEV_API_URL : PROD_API_URL}"`,
       __IS_DEV_MODE__: isDevelopmentMode,
     }),
-  ],
+    !isDevelopmentMode && (
+      new CopyWebpackPlugin(['src/404.html'])
+    ),
+  ].filter(Boolean),
   resolve: {
     alias: {
       // app commons
