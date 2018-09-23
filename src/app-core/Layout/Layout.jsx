@@ -11,6 +11,9 @@ const StyledGrid = styled.div`
   grid-template-columns: 1fr 200px;
   height: 100vh;
 `;
+const StyledMain = styled.main`
+  margin: 16px;
+`;
 
 const StyledFooter = styled(Footer)`
   grid-column-start: 1;
@@ -37,11 +40,14 @@ class Layout extends React.Component {
 
     return (
       <StyledGrid>
-        <main>
+        <StyledMain>
           {children}
-        </main>
+        </StyledMain>
         <StyledAside>
-          <Link to={routes.root.toUrl()}> Читать, что я написал </Link>
+          <Link to={routes.root.toUrl()}> Главная страница </Link>
+          <br />
+          <Link to={routes.blogRoute.toUrl()}> Читать, что я написал </Link>
+          <br />
           <Link to={routes.travelsRoute.toUrl()}> Смотреть, где я побывал </Link>
         </StyledAside>
         <StyledFooter />

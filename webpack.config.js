@@ -48,6 +48,7 @@ module.exports = {
       state: path.resolve(__dirname, 'src/app-state/'),
       modules: path.resolve(__dirname, 'src/app-agnostic-modules/'),
       content: path.resolve(__dirname, 'src/content/'),
+      components: path.resolve(__dirname, 'src/app-components/'),
 
       // standalone app parts
       blog: path.resolve(__dirname, 'src/app-components/standalone/blog/'),
