@@ -9,6 +9,13 @@ const isDevelopmentMode = process.env.NODE_ENV === 'development';
 
 module.exports = {
   mode: isDevelopmentMode ? 'development' : 'production',
+  output: isDevelopmentMode ?
+    {
+      filename: '[name].js',
+      publicPath: '/',
+    } : {
+      filename: '[name]-[chunkhash].js',
+    },
   module: {
     rules: [
       {
@@ -42,6 +49,9 @@ module.exports = {
       travel: path.resolve(__dirname, 'src/app-components/standalone/travel/'),
     },
     extensions: ['.js', '.jsx'],
+  },
+  devServer: {
+    historyApiFallback: true,
   },
   devtool: 'eval',
 };
