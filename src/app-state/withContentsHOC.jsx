@@ -7,6 +7,10 @@ export default ExtendableComponent => provide(
       domain,
     },
   }),
-)(({ provision, ...props }) => (
-  <ExtendableComponent contents={provision}{...props} />
+)(({ provision, isPending, ...props }) => (
+  isPending ? (
+    <div>Загрузка...</div>
+  ) : (
+    <ExtendableComponent contents={provision}{...props} />
+  )
 ));
