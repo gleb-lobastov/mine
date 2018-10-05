@@ -2,6 +2,7 @@ import React from 'react';
 import Dashboard from 'components/Dashboard';
 import ArticlesController from 'blog/ArticlesController';
 import TravelDashboard from 'travel/Dashboard';
+import Books from 'components/Books';
 import * as routes from './routes';
 
 export default {
@@ -17,5 +18,9 @@ export default {
     route: routes.travelsRoute,
     exact: true,
     component: () => (<TravelDashboard domain='locations' />),
+  }, {
+    route: routes.booksRoute,
+    exact: true,
+    component: () => (<Books />),
   }],
 };

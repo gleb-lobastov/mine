@@ -50,6 +50,8 @@ class Layout extends React.Component {
           <Link to={routes.blogRoute.toUrl()}> Читать, что я написал </Link>
           <br />
           <Link to={routes.travelsRoute.toUrl()}> Смотреть, где я побывал </Link>
+          <br />
+          <Link to={routes.booksRoute.toUrl()}> Узнать, что я прочитал </Link>
         </StyledAside>
         <StyledFooter />
       </StyledGrid>
