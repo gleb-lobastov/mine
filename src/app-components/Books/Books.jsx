@@ -2,6 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import getTwitterWidgets from "./getTwitterWidgets";
 
+const StyledSection = styled.article`
+  max-width: 540px;
+`;
+
 const StyledH1 = styled.h1`
   margin-top: 0;
   padding-top: 0;
@@ -35,14 +39,14 @@ class Books extends React.PureComponent {
   render() {
     const { isReady } = this.state;
     return (
-      <section>
+      <StyledSection>
         {!isReady ? (
           <div>Загрузка...</div>
         ) : (
           <StyledH1>Емкость для рецензий</StyledH1>
         )}
         <div ref={this.containerRef} />
-      </section>
+      </StyledSection>
     );
   }
 }
