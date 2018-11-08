@@ -3,16 +3,15 @@ import PropTypes from "prop-types";
 import "normalize.css";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
-import { Link } from "react-router-dom";
-import { routes } from "core/routing";
-import Footer from "./Footer";
+import Footer from "./blocks/Footer";
+import Navigation from "./blocks/Navigation";
 
 const StyledGrid = styled.div`
   font-family: "Roboto", sans-serif;
   font-size: 16px;
   display: grid;
   grid-template-rows: auto min-content;
-  grid-template-columns: 1fr 200px;
+  grid-template-columns: 1fr min-content;
   height: 100vh;
 `;
 const StyledMain = styled.main`
@@ -22,10 +21,6 @@ const StyledMain = styled.main`
 const StyledFooter = styled(Footer)`
   grid-column-start: 1;
   grid-column-end: 3;
-`;
-
-const StyledAside = styled.aside`
-  margin-top: 16px;
 `;
 
 class Layout extends React.Component {
@@ -50,17 +45,7 @@ class Layout extends React.Component {
         </Helmet>
         <StyledGrid>
           <StyledMain>{children}</StyledMain>
-          <StyledAside>
-            <Link to={routes.root.toUrl()}> Главная страница </Link>
-            <br />
-            <Link to={routes.blogRoute.toUrl()}> Читать, что я написал </Link>
-            <br />
-            <Link to={routes.travelsRoute.toUrl()}>
-              Смотреть, где я побывал
-            </Link>
-            <br />
-            <Link to={routes.booksRoute.toUrl()}> Узнать, что я прочитал </Link>
-          </StyledAside>
+          <Navigation />
           <StyledFooter />
         </StyledGrid>
       </React.Fragment>
