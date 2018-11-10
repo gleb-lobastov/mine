@@ -18,6 +18,8 @@
   "author": "Gleb Lobastov",
   "license": "SEE LICENSE IN LICENSE.md",
   "dependencies": {
+    "@material-ui/core": "^3.4.0",
+    "@material-ui/icons": "^3.0.1",
     "@request-kit/engine-rest": "^0.2.0",
     "@request-kit/react-redux": "^0.2.0",
     "date-fns": "^1.29.0",
