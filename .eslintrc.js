@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  extends: 'airbnb',
+  extends: ['airbnb', 'prettier', 'prettier/react'],
   env: {
     es6: true,
     browser: true,
@@ -14,11 +14,7 @@ module.exports = {
       jsx: true,
     },
   },
-  plugins: [
-    'react',
-    'jsx-a11y',
-    'import',
-  ],
+  plugins: ['react', 'jsx-a11y', 'import'],
   rules: {
     'import/extensions': [
       'error',
@@ -36,10 +32,7 @@ module.exports = {
       },
     ],
     // this rule is reasonable, however forces unnecessary rewriting of code
-    'react/prefer-stateless-function': [
-      'off',
-      {},
-    ],
+    'react/prefer-stateless-function': ['off', {}],
   },
   settings: {
     'import/resolver': {
