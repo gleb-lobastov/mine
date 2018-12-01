@@ -6,6 +6,7 @@ class Route {
     this.internals = internals({
       path,
       compiledPath: pathToRegexp.compile(path),
+      regexp: pathToRegexp(path),
     });
   }
 
@@ -15,6 +16,10 @@ class Route {
 
   toUrl(routeParams) {
     return this.internals.compiledPath(routeParams);
+  }
+
+  checkIsActive(pathname = window.location.href) {
+    return this.internals.regexp.test(pathname);
   }
 }
 
