@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
-import * as routes from "core/routing/routes";
 
 const StyledArticle = styled.article`
   margin-bottom: 16px;
@@ -41,12 +39,6 @@ class Dashboard extends React.PureComponent {
           Мудрость, которую можно усмотреть на этой странице в том, что большие
           дела начинаются с малого.
         </StyledArticle>
-        <div>
-          <span>Конспект Р.&nbsp;Чалдини и&nbsp;др.</span>&nbsp;
-          <Link to={routes.chaldiniRoute.toUrl()}>
-            &laquo;Психология убеждения&raquo;
-          </Link>
-        </div>
       </section>
     );
   }

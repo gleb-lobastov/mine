@@ -1,9 +1,15 @@
-import React from "react";
-import { Helmet } from "react-helmet";
-import styled from "styled-components";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+import styled from 'styled-components';
 
 const Header = styled.header`
-  font-family: "Lora", serif;
+  font-family: 'Lora', serif;
+`;
+
+const Article = styled.article`
+  max-width: 720px;
+  margin: 0 auto;
 `;
 
 const Paragraph = styled.div`
@@ -12,7 +18,7 @@ const Paragraph = styled.div`
 `;
 
 const ParagraphTitle = styled.h3`
-  font-family: "Lora", serif;
+  font-family: 'Lora', serif;
 `;
 
 const StyledBlockTitle = styled.h4`
@@ -31,24 +37,45 @@ const StyledBlockBody = styled.blockquote`
   padding: 16px 8px 8px 28px;
 `;
 
+const nodeOrStringPropType = PropTypes.oneOfType([
+  PropTypes.node,
+  PropTypes.string,
+]);
+
 const Block = ({ children, title }) => (
   <Paragraph>
     <StyledBlockTitle>{title}</StyledBlockTitle>
     <StyledBlockBody>{children}</StyledBlockBody>
   </Paragraph>
 );
+Block.propTypes = {
+  children: nodeOrStringPropType.isRequired,
+  title: nodeOrStringPropType.isRequired,
+};
 
 const Quote = ({ children }) => (
   <Block title="Цитата">
     <em>{children}</em>
   </Block>
 );
+Quote.propTypes = {
+  children: nodeOrStringPropType.isRequired,
+};
 
 const Guidance = ({ children }) => <Block title="Действие">{children}</Block>;
+Guidance.propTypes = {
+  children: nodeOrStringPropType.isRequired,
+};
 
 const Example = ({ children }) => <Block title="Пример">{children}</Block>;
+Example.propTypes = {
+  children: nodeOrStringPropType.isRequired,
+};
 
 const Footnote = ({ children }) => <Block title="Примечание">{children}</Block>;
+Footnote.propTypes = {
+  children: nodeOrStringPropType.isRequired,
+};
 
 const ChaptersList = styled.ol`
   margin: 36px 0 0;
@@ -75,7 +102,7 @@ const UnorderedList = styled.ul`
   padding: 0;
   ${Clause} {
     :before {
-      content: "–";
+      content: '–';
       margin-right: 4px;
     }
   }
@@ -95,7 +122,7 @@ class Chaldini extends React.PureComponent {
             rel="stylesheet"
           />
         </Helmet>
-        <article>
+        <Article>
           <Header>
             <h1>
               Р.&nbsp;Чалдини и&nbsp;др. &laquo;Психология убеждения&raquo;
@@ -861,7 +888,7 @@ class Chaldini extends React.PureComponent {
               </Chapter>
             </ChaptersList>
           </main>
-        </article>
+        </Article>
       </React.Fragment>
     );
   }

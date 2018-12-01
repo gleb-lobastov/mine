@@ -4,9 +4,7 @@ import { Switch, Route } from 'react-router';
 
 class ContentProvider extends React.Component {
   render() {
-    const {
-      routesList,
-    } = this.props;
+    const { routesList } = this.props;
 
     return (
       <Switch>
@@ -20,7 +18,9 @@ class ContentProvider extends React.Component {
 
 export const contentProviderPropTypes = {
   routesList: PropTypes.arrayOf(
-    PropTypes.shape(Route.propTypes),
+    PropTypes.shape({
+      path: PropTypes.string,
+    }),
   ).isRequired,
 };
 

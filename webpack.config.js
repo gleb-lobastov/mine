@@ -10,14 +10,15 @@ const isDevelopmentMode = process.env.NODE_ENV === 'development';
 
 module.exports = {
   mode: isDevelopmentMode ? 'development' : 'production',
-  output: isDevelopmentMode ?
-    {
-      filename: '[name].js',
-      publicPath: '/',
-    } : {
-      filename: '[name]-[chunkhash].js',
-      publicPath: '/mine',
-    },
+  output: isDevelopmentMode
+    ? {
+        filename: '[name].js',
+        publicPath: '/',
+      }
+    : {
+        filename: '[name]-[chunkhash].js',
+        publicPath: '/mine',
+      },
   module: {
     rules: [
       {
@@ -41,9 +42,7 @@ module.exports = {
       __API_HOST__: `"${isDevelopmentMode ? DEV_API_URL : PROD_API_URL}"`,
       __IS_DEV_MODE__: isDevelopmentMode,
     }),
-    !isDevelopmentMode && (
-      new CopyWebpackPlugin(['src/404.html'])
-    ),
+    !isDevelopmentMode && new CopyWebpackPlugin(['src/404.html']),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -53,6 +52,7 @@ module.exports = {
       modules: path.resolve(__dirname, 'src/app-agnostic-modules/'),
       content: path.resolve(__dirname, 'src/content/'),
       components: path.resolve(__dirname, 'src/app-components/'),
+      pages: path.resolve(__dirname, 'src/pages/'),
 
       // standalone app parts
       blog: path.resolve(__dirname, 'src/app-components/standalone/blog/'),

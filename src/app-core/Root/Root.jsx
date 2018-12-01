@@ -9,6 +9,7 @@ import ContentProvider, {
 } from 'modules/componentsGallery/ContentProvider';
 
 if (__IS_DEV_MODE__) {
+  // eslint-disable-next-line no-underscore-dangle
   window.__store = store;
 }
 const Root = ({ routesList }) => (

@@ -7,14 +7,14 @@ import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import IconHome from '@material-ui/icons/Home';
 import IconPublic from '@material-ui/icons/Public';
-import IconLibraryBooks from '@material-ui/icons/LibraryBooks';
+import IconCode from '@material-ui/icons/Code';
 import IconCreate from '@material-ui/icons/Create';
 
 const PAGES_INDICES = {
   MAIN: 0,
   TRAVEL: 1,
-  BOOKS: 2,
-  BLOG: 3,
+  LITERATURE: 2,
+  CODE: 3,
 };
 
 class NavigationTabs extends React.PureComponent {
@@ -34,11 +34,11 @@ class NavigationTabs extends React.PureComponent {
     if (routes.travelsRoute.checkIsActive(pathname)) {
       return PAGES_INDICES.TRAVEL;
     }
-    if (routes.booksRoute.checkIsActive(pathname)) {
-      return PAGES_INDICES.BOOKS;
+    if (routes.literatureRoute.checkIsActive(pathname)) {
+      return PAGES_INDICES.LITERATURE;
     }
-    if (routes.blogRoute.checkIsActive(pathname)) {
-      return PAGES_INDICES.BLOG;
+    if (routes.codeRoute.checkIsActive(pathname)) {
+      return PAGES_INDICES.CODE;
     }
     return -1;
   });
@@ -49,10 +49,10 @@ class NavigationTabs extends React.PureComponent {
         return routes.root.toUrl();
       case PAGES_INDICES.TRAVEL:
         return routes.travelsRoute.toUrl({ reportType: 'countries' });
-      case PAGES_INDICES.BOOKS:
-        return routes.booksRoute.toUrl();
-      case PAGES_INDICES.BLOG:
-        return routes.blogRoute.toUrl();
+      case PAGES_INDICES.LITERATURE:
+        return routes.literatureRoute.toUrl();
+      case PAGES_INDICES.CODE:
+        return routes.codeRoute.toUrl();
       default:
         return routes.error404.toUrl();
     }
@@ -74,8 +74,8 @@ class NavigationTabs extends React.PureComponent {
         <Tabs value={selectedMainTabIndex} onChange={this.handleChangeMainTab}>
           <Tab label="Главная" icon={<IconHome />} />
           <Tab label="Путешествия" icon={<IconPublic />} />
-          <Tab label="Книги" icon={<IconLibraryBooks />} />
-          <Tab label="Блог" icon={<IconCreate />} />
+          <Tab label="Литература" icon={<IconCreate />} />
+          <Tab label="Код" icon={<IconCode />} />
         </Tabs>
       </div>
     );
