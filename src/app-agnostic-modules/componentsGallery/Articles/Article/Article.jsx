@@ -12,14 +12,12 @@ class Article extends React.PureComponent {
 
   assembleContent() {
     const {
-      source: {
-        content,
-        date,
-        header,
-      },
+      source: { content, date, header },
     } = this.props;
 
-    return `### ${header} (*${format(date, 'D MMMM YYYY', { locale: ru })}*)\n\n${content}`;
+    return `### ${header} (*${format(date, 'D MMMM YYYY', {
+      locale: ru,
+    })}*)\n\n${content}`;
   }
 
   render() {

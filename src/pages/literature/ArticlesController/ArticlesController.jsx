@@ -10,13 +10,9 @@ class ArticlesController extends React.PureComponent {
   };
 
   render() {
-    const {
-      contents,
-    } = this.props;
+    const { contents } = this.props;
 
-    return (
-      <Articles source={contents.articles} />
-    );
+    return <Articles source={contents.articles} />;
   }
 }
 

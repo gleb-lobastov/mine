@@ -1,6 +1,6 @@
-import React from "react";
-import styled from "styled-components";
-import getTwitterWidgets from "./getTwitterWidgets";
+import React from 'react';
+import styled from 'styled-components';
+import getTwitterWidgets from './getTwitterWidgets';
 
 const StyledSection = styled.article`
   max-width: 540px;
@@ -28,10 +28,10 @@ class Books extends React.PureComponent {
       this.setState({ isReady: true });
       twitterWidgets.widgets.createTimeline(
         {
-          sourceType: "url",
-          url: "https://twitter.com/lobastov"
+          sourceType: 'url',
+          url: 'https://twitter.com/lobastov',
         },
-        this.containerRef.current
+        this.containerRef.current,
       );
     });
   }

@@ -18,4 +18,4 @@ Example of usage:
     }
 ```
 
-Module name reflect mentioned use case. Because purpose of module is mostly to explicitly declare idea, than reuse code. For other cases is better to use ```Object.freeze``` directly.
+Module name reflect mentioned use case. Because purpose of module is mostly to explicitly declare idea, than reuse code. For other cases is better to use `Object.freeze` directly.

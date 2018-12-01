@@ -11,9 +11,7 @@ class Footer extends React.PureComponent {
   };
 
   render() {
-    const {
-      className,
-    } = this.props;
+    const { className } = this.props;
 
     return (
       <footer className={className}>

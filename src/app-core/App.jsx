@@ -5,10 +5,7 @@ import { routesList } from './routing';
 
 const rootNode = document.getElementById('app');
 const render = () => {
-  ReactDOM.render(
-    <Root routesList={routesList} />,
-    rootNode,
-  );
+  ReactDOM.render(<Root routesList={routesList} />, rootNode);
 };
 
 render();

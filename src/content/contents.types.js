@@ -7,7 +7,5 @@ export const articlePropTypes = {
 };
 
 export const contentsPropTypes = {
-  articles: PropTypes.arrayOf(
-    PropTypes.shape(articlePropTypes),
-  ),
+  articles: PropTypes.arrayOf(PropTypes.shape(articlePropTypes)),
 };

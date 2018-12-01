@@ -1,4 +1,4 @@
-export default (object) => {
+export default object => {
   if (process.env === 'production') {
     return object;
   }

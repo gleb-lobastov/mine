@@ -15,15 +15,11 @@ const sortByDateDesc = ({ date: dateA }, { date: dateB }) => {
 
 class Articles extends React.PureComponent {
   static propTypes = {
-    source: PropTypes.arrayOf(
-      PropTypes.shape(articlePropTypes),
-    ).isRequired,
+    source: PropTypes.arrayOf(PropTypes.shape(articlePropTypes)).isRequired,
   };
 
   render() {
-    const {
-      source,
-    } = this.props;
+    const { source } = this.props;
 
     return (
       <section>

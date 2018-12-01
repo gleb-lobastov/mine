@@ -18,4 +18,4 @@ If you interesting, continue to read about technical information: [project struc
 
 # CI
 
-Run "npm run release" when ready to publish next app version to gitPages 
+Run "npm run release" when ready to publish next app version to gitPages
