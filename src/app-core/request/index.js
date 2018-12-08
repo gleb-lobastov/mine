@@ -1,6 +1,12 @@
 /* global __API_HOST__ __IS_DEV_MODE__ */
 import createRequestApi from '@request-kit/react-redux';
 import createRequestEngine from '@request-kit/engine-rest';
+import {
+  articlesAdapter,
+  tripsAdapter,
+  locationsAdapter,
+  visitsAdapter,
+} from './adapters';
 
 const loggerPlugin = next => options => {
   const id = Math.round(Math.random() * 10000);
@@ -19,49 +25,42 @@ const endpointPlugin = next => ({ endpoint, ...restOptions }) =>
     ...restOptions,
   });
 
-const articlesAdapter = articles => ({
-  articles: articles.map(({ created_at: date, header, content, id }) => ({
-    date,
-    header,
-    content: content.replace(/\\n/g, '\n'),
-    id,
-  })),
-});
-
-const locationsAdapter = locations => ({
-  locations: locations.map(({ country_name, location_name, id }) => ({
-    countryName: country_name,
-    locationName: location_name,
-    id,
-  })),
-});
-
-const tripsAdapter = trips => ({
-  trips: trips.map(({ trip_name, id }) => ({
-    tripName: trip_name,
-    id,
-  })),
-});
-
 const adaptersPlugin = next => options =>
   next(options).then(data => {
     const {
+      require,
       meta: { domain },
     } = options;
-    if (domain === 'articles') {
+
+    const entity = require || domain;
+    if (entity === 'articles') {
       return articlesAdapter(data.articles);
     }
-    if (domain === 'locations') {
+    if (entity === 'locations') {
       return locationsAdapter(data.locations);
     }
-    if (domain === 'trips') {
+    if (entity === 'trips') {
       return tripsAdapter(data.trips);
+    }
+    if (entity === 'visits') {
+      return visitsAdapter(data.visits);
     }
     return data;
   });
 
 const responseAsJsonPlugin = next => ({ format, ...restOptions }) =>
   next(restOptions).then(response => response.json());
+
+const forkPlugin = next => ({ require, ...restOptions }) => {
+  if (require && require.map) {
+    return Promise.all(
+      require.map(requireItem =>
+        next({ ...restOptions, require: requireItem }),
+      ),
+    );
+  }
+  return next({ require, ...restOptions });
+};
 
 const {
   middleware: requestMiddleware,
@@ -71,10 +70,12 @@ const {
   engine: createRequestEngine({
     presetOptions: {
       format: 'json',
-      endpoint: ({ meta: { domain } }) => `${__API_HOST__}/api/${domain}`,
+      endpoint: ({ require, meta: { domain } }) =>
+        `${__API_HOST__}/api/${require || domain}`,
     },
     plugins: [
       __IS_DEV_MODE__ && loggerPlugin,
+      forkPlugin,
       endpointPlugin,
       adaptersPlugin,
       responseAsJsonPlugin,
