@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
+import compose from 'lodash/fp/compose';
 import * as routes from 'core/routing/routes';
 import memo from 'modules/memo';
+import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import IconHome from '@material-ui/icons/Home';
@@ -25,6 +27,7 @@ class NavigationTabs extends React.PureComponent {
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
     }).isRequired,
+    width: PropTypes.number.isRequired,
   };
 
   findPageIndex = memo(pathname => {
@@ -63,6 +66,14 @@ class NavigationTabs extends React.PureComponent {
     history.push(this.resolveUrl(selectedMainTabIndex));
   };
 
+  renderLabel(label) {
+    const { width } = this.props;
+    if (!isWidthUp('sm', width)) {
+      return undefined;
+    }
+    return label;
+  }
+
   render() {
     const {
       location: { pathname },
@@ -72,14 +83,17 @@ class NavigationTabs extends React.PureComponent {
     return (
       <div>
         <Tabs value={selectedMainTabIndex} onChange={this.handleChangeMainTab}>
-          <Tab label="Главная" icon={<IconHome />} />
-          <Tab label="Путешествия" icon={<IconPublic />} />
-          <Tab label="Литература" icon={<IconCreate />} />
-          <Tab label="Код" icon={<IconCode />} />
+          <Tab label={this.renderLabel('Главная')} icon={<IconHome />} />
+          <Tab label={this.renderLabel('Путешествия')} icon={<IconPublic />} />
+          <Tab label={this.renderLabel('Литература')} icon={<IconCreate />} />
+          <Tab label={this.renderLabel('Код')} icon={<IconCode />} />
         </Tabs>
       </div>
     );
   }
 }
 
-export default withRouter(NavigationTabs);
+export default compose(
+  withWidth(),
+  withRouter,
+)(NavigationTabs);
