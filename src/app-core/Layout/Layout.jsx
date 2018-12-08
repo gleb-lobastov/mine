@@ -4,7 +4,6 @@ import 'normalize.css';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
 import AppBar from '@material-ui/core/AppBar';
-import Footer from './blocks/Footer';
 import NavigationTabs from './blocks/NavigationTabs';
 
 const StyledGrid = styled.div`
@@ -48,7 +47,6 @@ class Layout extends React.Component {
             <NavigationTabs />
           </AppBar>
           <StyledMain>{children}</StyledMain>
-          <Footer />
         </StyledGrid>
       </React.Fragment>
     );
