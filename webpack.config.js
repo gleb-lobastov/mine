@@ -36,6 +36,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'M - I - N - E',
       template: './src/index.html',
+      favicon: './src/favicon.ico',
     }),
     new webpack.DefinePlugin({
       __ROUTES_BASENAME__: '"/mine"',
