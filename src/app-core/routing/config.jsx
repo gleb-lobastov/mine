@@ -2,6 +2,7 @@ import React from 'react';
 import ArticlesController from 'pages/literature/ArticlesController';
 import Books from 'pages/literature/Books';
 import Chaldini from 'pages/literature/longreads/Chaldini';
+import BlackSwan from 'pages/literature/longreads/BlackSwan';
 import CodeDashboard from 'pages/code/Dashboard';
 import Dashboard from 'pages/main/Dashboard';
 import TravelDashboard from 'pages/travel/Dashboard';
@@ -44,6 +45,11 @@ export default {
       route: routes.chaldiniRoute,
       exact: true,
       component: () => <Chaldini />,
+    },
+    {
+      route: routes.blackSwanRoute,
+      exact: true,
+      component: () => <BlackSwan />,
     },
   ],
 };

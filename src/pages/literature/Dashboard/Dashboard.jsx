@@ -1,9 +1,16 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Button from '@material-ui/core/Button';
+import { routes } from 'core/routing';
 import ArticlesController from '../ArticlesController';
 import Books from '../Books';
-import Chaldini from '../longreads/Chaldini';
+
+const ListOfLongreads = styled.div`
+  margin: 24px 0;
+`;
 
 class Dashboard extends React.PureComponent {
   state = {
@@ -25,7 +32,16 @@ class Dashboard extends React.PureComponent {
           <Tab label="Блог" />
         </Tabs>
         {selectedMainTabIndex === 0 && <Books />}
-        {selectedMainTabIndex === 1 && <Chaldini />}
+        {selectedMainTabIndex === 1 && (
+          <ListOfLongreads>
+            <Button component={Link} to={routes.chaldiniRoute.toUrl()}>
+              &laquo;Психология убеждения&raquo; Чалдини
+            </Button>
+            <Button component={Link} to={routes.blackSwanRoute.toUrl()}>
+              &laquo;Черный лебедь&raquo; Талеба
+            </Button>
+          </ListOfLongreads>
+        )}
         {selectedMainTabIndex === 2 && <ArticlesController domain="articles" />}
       </div>
     );
