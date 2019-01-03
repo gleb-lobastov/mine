@@ -5,40 +5,43 @@ List of folders, described below, imposes the following restrictions:
 1. Modules located in folders, which placed higher in the list may import modules from subjacent folders.
 1. Modules in subjacent folders must not import modules from folders above.
 
-### components/app-core
+### packages
 
-[:paperclip:](./app-core) App initialization, common layout and routing.
+[:paperclip:](./packages) Modular part of App. Experimental approach, made in the name of decomposition. Aimless note: used packages is determined on app start and could be even dynamically changed.
 
-### components/app-components
+### core
 
-Components designed especially for app. Folder is not dictate particular level of component usage, they could be either page or embedded block or app-specific control.
+Tiny app core. At least it expected to be tiny. I will try to oversee this indicator.
 
-See details in [next section](#component-structure)
+Core is responsible for layout, routing, request-response transactions, state and context management.
 
-### components/app-agnostic
+All common components should go to modules, all package-specific logic should be in packages.
 
-Components which is created within app and for needs of app, but free from ties with app by design. For example GUI components.
+### modules
 
-**[Details about component structure](./components/readme.md)**
+Contains utils and components which is created within app and for needs of app, but free from ties with app by design. For example GUI components.
 
-### utils
+All stuff from modules is candidate for removal from the project to externals
 
-Any abstract piece of code that could be extracted from component logic. Consider that code as candidates to become packages or to be replaced by third-party packages.
+### configuration
+
+Especial guest.
+
+Plain config with no dependencies (maximum it could import some constants, but with care of recursive imports). 
+
+Nobody can import configuration by current design, instead it passed down trough context. But, we'll see.
 
 # Component structure
 
-Every react component has own folder named "ComponentName" in PascalCase.
+Every react component has own file named "ComponentName" in PascalCase.
 
-**Note:** Page components highlight by containing "Page" word in component name and also they could be grouped in one folder as any other set of resemble components. Also pages from different parts of app could lay in different dirs
+Component or utility could lie in folder with same name and configured for default import through "main" property in local package.json
 
-Rules for content of folder:
+Or it could be reexported through index.js
 
-1. ComponentName.jsx (required) – component own module
-1. index.js (required) – module entry point that do only re-exporting from ComponentName.js. This approach is chosen mainly for debug convenience. Pros over package.json that this approach are less hacky, conciseness and has no gaps in devtools support.
-1. ComponentName.scss – component styles.
-1. Other assets related to component.
-1. Subcomponents. All components that used only by current component and no reused somewhere else should be located within utilizing component. Each subcomponent has own folder and follow same rules. If subcomponent became reused, it should be hoisted up within folder in file tree.
-   verbose
+First case is more applicable for single component file, second for group of modules with common purpose
+
+Components that used other components for decomposition, i.e. that only belongs to main component and not reused in outside scope should contain such components in "block" folder. They could lie as is without wrapping folder, or use previously declared approaches. If such subcomponent became reused, it should be hoisted up within folder in file tree.
 
 Links:
 

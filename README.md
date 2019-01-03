@@ -1,10 +1,8 @@
 # About
 
-This project is like a blog. But blog of guy who is programmer by profession. So it have quite low-level management.
+This is my lovely react sandbox. Just for fun with web-technologies and programming approaches.
 
-Second purpose of this project is to have fun with web-technologies and programming approaches.
-
-My favorite rule to check the clock, that explicit is better than implicit. One consequence of it, that project should be well documented. In docs, in commit annotations, everywhere where it reasonable.
+To fill it with some meaning, I had to compose some content. Try to fill it with entertaining things. But not always at my best ¯ \ _ (ツ) _ / ¯
 
 And as it personal project I decide to limit myself in the features, but not the way to achieve them
 
