@@ -5,6 +5,7 @@ module.exports = {
   env: {
     es6: true,
     browser: true,
+    jest: true,
   },
   parser: 'babel-eslint',
   parserOptions: {
@@ -31,8 +32,22 @@ module.exports = {
         packageDir: './',
       },
     ],
-    // this rule is reasonable, however forces unnecessary rewriting of code
-    'react/prefer-stateless-function': ['off', {}],
+    'react/sort-comp': [
+      'error',
+      {
+        order: [
+          'static-methods',
+          'lifecycle',
+          'everything-else',
+          '/^handle.+$/',
+          'rendering',
+        ],
+        groups: {
+          rendering: ['/^render.+$/', 'render'],
+        },
+      },
+    ],
+    'react/jsx-boolean-value': ['error', 'always'],
   },
   settings: {
     'import/resolver': {
