@@ -1,6 +1,6 @@
 {
   "name": "mine",
-  "version": "0.11.0",
+  "version": "1.0.0",
   "description": "Mine project",
   "main": "index.html",
   "scripts": {
