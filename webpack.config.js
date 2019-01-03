@@ -58,16 +58,15 @@ module.exports = {
   resolve: {
     alias: {
       // app commons
-      core: path.resolve(__dirname, 'src/app-core/'),
-      state: path.resolve(__dirname, 'src/app-state/'),
-      modules: path.resolve(__dirname, 'src/app-agnostic-modules/'),
-      content: path.resolve(__dirname, 'src/content/'),
-      components: path.resolve(__dirname, 'src/app-components/'),
-      pages: path.resolve(__dirname, 'src/pages/'),
+      modules: path.resolve(__dirname, 'src/modules/'),
+      core: path.resolve(__dirname, 'src/core/'),
+      configuration: path.resolve(__dirname, 'src/configuration/'),
 
-      // standalone app parts
-      blog: path.resolve(__dirname, 'src/app-components/standalone/blog/'),
-      travel: path.resolve(__dirname, 'src/app-components/standalone/travel/'),
+      // packages
+      main: path.resolve(__dirname, 'src/packages/main/'),
+      travel: path.resolve(__dirname, 'src/packages/travel/'),
+      literature: path.resolve(__dirname, 'src/packages/literature/'),
+      code: path.resolve(__dirname, 'src/packages/code/'),
     },
     extensions: ['.js', '.jsx'],
   },
