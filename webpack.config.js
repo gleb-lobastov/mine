@@ -14,6 +14,16 @@ module.exports = {
     ? {
         filename: '[name].js',
         publicPath: '/',
+        devtoolModuleFilenameTemplate: ({ namespace, resourcePath }) => {
+          if (resourcePath.includes('node_modules')) {
+            return `webpack://${namespace}/${resourcePath}`;
+          }
+          const enhancedPath = resourcePath.replace(
+            /\/(\w+)\/index\.js$/,
+            '/$1/index.js::$1',
+          );
+          return `webpack://${namespace}/${enhancedPath}`;
+        },
       }
     : {
         filename: '[name]-[chunkhash].js',
