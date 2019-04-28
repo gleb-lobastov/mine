@@ -5,11 +5,13 @@ import withProvision from 'core/connection/withProvision';
 const alphabetically = ({ locationName: a }, { locationName: b }) =>
   a.localeCompare(b);
 
-const Cities = ({ provision: { locations = [] } }) => (
+const Cities = ({ locations: { data: locationsList = [] } }) => (
   <div>
-    {locations.sort(alphabetically).map(({ locationName }, locationIndex) => (
-      <div key={locationName}>{`${locationIndex + 1}. ${locationName}`}</div>
-    ))}
+    {locationsList
+      .sort(alphabetically)
+      .map(({ locationName }, locationIndex) => (
+        <div key={locationName}>{`${locationIndex + 1}. ${locationName}`}</div>
+      ))}
   </div>
 );
 Cities.propTypes = {
@@ -19,7 +21,11 @@ Cities.propTypes = {
 };
 
 export default withProvision(() => ({
-  require: 'locations',
+  require: {
+    locations: {
+      modelName: 'locations',
+    },
+  },
   meta: {
     domain: 'cities',
   },

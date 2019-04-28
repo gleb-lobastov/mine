@@ -19,16 +19,14 @@ class Blog extends React.PureComponent {
   };
 
   render() {
-    const {
-      provision: { articles },
-    } = this.props;
+    const { articles: { data: articlesList = [] } = {} } = this.props;
 
-    return <Posts source={articles} />;
+    return <Posts source={articlesList} />;
   }
 }
 
 const mapStateToRequirements = () => ({
-  require: 'articles',
+  require: { articles: { modelName: 'articles' } },
   meta: {
     domain: 'blog',
   },

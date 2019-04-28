@@ -8,6 +8,6 @@ const compose = (...funcsArray) => arg =>
 export default mapStateToRequirements => ExtendableComponent =>
   compose(
     provide(mapStateToRequirements),
-    flattenIfNeeded,
+    // flattenIfNeeded,
     withLoader,
   )(ExtendableComponent);

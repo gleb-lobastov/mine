@@ -3,7 +3,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { requestReducer, requestMiddleware } from 'core/connection';
 
 const reducer = combineReducers({
-  provision: requestReducer,
+  requestKit: requestReducer,
 });
 
 export default () => {

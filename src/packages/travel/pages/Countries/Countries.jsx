@@ -8,9 +8,9 @@ const byCitiesCount = ([, citiesA = []], [, citiesB = []]) =>
 const alphabetically = ({ locationName: a }, { locationName: b }) =>
   a.localeCompare(b);
 
-const Countries = ({ provision: { locations = [] } }) => (
+const Countries = ({ locations: { data: locationsList = [] } = {} }) => (
   <div>
-    {Object.entries(groupBy(locations, 'countryName'))
+    {Object.entries(groupBy(locationsList, 'countryName'))
       .sort(byCitiesCount)
       .map(([countryName, cities], countryIndex) => (
         <div key={countryName}>
@@ -26,13 +26,18 @@ const Countries = ({ provision: { locations = [] } }) => (
   </div>
 );
 Countries.propTypes = {
-  provision: PropTypes.shape({
-    locations: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
+  locations: PropTypes.shape({ data: PropTypes.arrayOf(PropTypes.string) }),
+};
+Countries.defaultProps = {
+  locations: { data: [] },
 };
 
 export default withProvision(() => ({
-  require: 'locations',
+  require: {
+    locations: {
+      modelName: 'locations',
+    },
+  },
   meta: {
     domain: 'countries',
   },

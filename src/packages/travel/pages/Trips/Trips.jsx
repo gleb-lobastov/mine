@@ -4,19 +4,21 @@ import groupBy from 'lodash/groupBy';
 import withProvision from 'core/connection/withProvision';
 
 const Trips = ({
-  provision: { trips = [], visits = [], locations = [] } = {},
+  trips: { data: tripsList = [] } = {},
+  visits: { data: visitsList = [] } = {},
+  locations: { data: locationsList = [] } = {},
 }) => {
-  const visitsByTrips = groupBy(visits, 'tripId');
+  const visitsByTrips = groupBy(visitsList, 'tripId');
   return (
     <div>
-      {trips.map(({ tripName, tripId }, tripIndex) => (
+      {tripsList.map(({ tripName, tripId }, tripIndex) => (
         <div>
           <h1 key={tripName}>{`${tripIndex + 1}. ${tripName}`}</h1>
           {visitsByTrips[tripId] &&
             visitsByTrips[tripId].map(({ locationId }) => (
               <div>
                 {(
-                  locations.find(
+                  locationsList.find(
                     ({ locationId: locationIdToCompare }) =>
                       locationIdToCompare === locationId,
                   ) || {}
@@ -39,7 +41,17 @@ Trips.propTypes = {
 };
 
 export default withProvision(() => ({
-  require: ['trips', 'visits', 'locations'],
+  require: {
+    trips: {
+      modelName: 'trips',
+    },
+    visits: {
+      modelName: 'visits',
+    },
+    locations: {
+      modelName: 'locations',
+    },
+  },
   meta: {
     domain: 'trips',
   },
