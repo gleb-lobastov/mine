@@ -15,26 +15,50 @@ const Trips = ({
         <div>
           <h1 key={tripName}>{`${tripIndex + 1}. ${tripName}`}</h1>
           {visitsByTrips[tripId] &&
-            visitsByTrips[tripId].map(({ locationId }) => (
-              <div>
-                {(
-                  locationsList.find(
-                    ({ locationId: locationIdToCompare }) =>
-                      locationIdToCompare === locationId,
-                  ) || {}
-                ).locationName || 'unknown'}
-              </div>
-            ))}
+            visitsByTrips[tripId]
+              .sort(
+                (
+                  { orderInTrip: orderInTripA },
+                  { orderInTrip: orderInTripB },
+                ) => orderInTripA - orderInTripB,
+              )
+              .map(({ locationId }) => (
+                <div>
+                  {(
+                    locationsList.find(
+                      ({ locationId: locationIdToCompare }) =>
+                        locationIdToCompare === locationId,
+                    ) || {}
+                  ).locationName || 'unknown'}
+                </div>
+              ))}
         </div>
       ))}
     </div>
   );
 };
 Trips.propTypes = {
-  provision: PropTypes.shape({
-    trips: PropTypes.arrayOf(
+  trips: PropTypes.shape({
+    data: PropTypes.arrayOf(
       PropTypes.shape({
         tripName: PropTypes.string,
+        tripId: PropTypes.number,
+      }),
+    ),
+  }).isRequired,
+  visits: PropTypes.shape({
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        tripId: PropTypes.number,
+        orderInTrip: PropTypes.number,
+      }),
+    ),
+  }).isRequired,
+  locations: PropTypes.shape({
+    data: PropTypes.arrayOf(
+      PropTypes.shape({
+        locationId: PropTypes.number,
+        locationName: PropTypes.string,
       }),
     ),
   }).isRequired,
