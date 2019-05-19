@@ -36,18 +36,25 @@ class MainTabs extends React.PureComponent {
     return label;
   }
 
+  renderTab = ({ id, title: { caption, icon: IconComponent } = {} }) => {
+    if (!caption && !IconComponent) {
+      return null;
+    }
+    return (
+      <Tab
+        key={id}
+        label={this.renderLabel(caption)}
+        icon={<IconComponent />}
+      />
+    );
+  };
+
   render() {
     const { mainTabIndex, packages } = this.props;
 
     return (
       <Tabs value={mainTabIndex} onChange={this.handleChangeMainTab}>
-        {packages.map(({ id, title: { caption, icon: IconComponent } }) => (
-          <Tab
-            key={id}
-            label={this.renderLabel(caption)}
-            icon={<IconComponent />}
-          />
-        ))}
+        {packages.map(this.renderTab)}
       </Tabs>
     );
   }
