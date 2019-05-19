@@ -1,6 +1,7 @@
 /* global __API_HOST__ __IS_DEV_MODE__ */
 import { schema } from 'normalizr';
 import createRequestEngine from '@request-kit/engine-rest';
+import { middleware as authPlugin } from 'modules/auth';
 import endpointPlugin from 'modules/utilities/request-kit/plugins/endpoint';
 import loggerPlugin from 'modules/utilities/request-kit/plugins/logger';
 import responseAsJsonPlugin from 'modules/utilities/request-kit/plugins/responseAsJson';
@@ -30,6 +31,7 @@ const engine = createRequestEngine({
       `${__API_HOST__}/api/${require || domain}`,
   },
   plugins: [
+    authPlugin,
     __IS_DEV_MODE__ && loggerPlugin,
     endpointPlugin,
     responseAsJsonPlugin,

@@ -67,6 +67,7 @@ module.exports = {
       travel: path.resolve(__dirname, 'src/packages/travel/'),
       literature: path.resolve(__dirname, 'src/packages/literature/'),
       code: path.resolve(__dirname, 'src/packages/code/'),
+      auth: path.resolve(__dirname, 'src/packages/auth/'),
     },
     extensions: ['.js', '.jsx'],
   },

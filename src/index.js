@@ -5,6 +5,7 @@ import main from 'main';
 import travel from 'travel';
 import literature from 'literature';
 import code from 'code';
+import auth from 'auth';
 
 // if mode == code: packages only code
 
@@ -14,6 +15,7 @@ App.create({
     main({ mountPath: '/' }),
     travel({ mountPath: '/travel' }),
     literature({ mountPath: '/liter' }),
-    code ({ mountPath: '/code' }),
+    code({ mountPath: '/code' }),
+    auth({ mountPath: '/hello' }),
   ],
 }).render();
