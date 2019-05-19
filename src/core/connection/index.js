@@ -11,6 +11,7 @@ import {
   articlesAdapter,
   tripsAdapter,
   locationsAdapter,
+  ridesAdapter,
 } from './adapters';
 
 const createListSchemaFromThisModelItemSchema = reference =>
@@ -67,6 +68,12 @@ const {
       {
         modelName: 'articles',
         toClientAdapter: articlesAdapter,
+        endpointResolver,
+        derivedSchemas: [listSchema],
+      },
+      {
+        modelName: 'rides',
+        toClientAdapter: ridesAdapter,
         endpointResolver,
         derivedSchemas: [listSchema],
       },

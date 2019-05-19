@@ -33,13 +33,22 @@ export default mountPath => {
     ),
   };
 
+  const rides = {
+    routeName: 'rides',
+    path: `${mountPath}/rides`,
+    Component: React.lazy(() =>
+      import(/* webpackChunkName: 'literature-Article' */ './pages/Rides'),
+    ),
+  };
+
   return {
-    routes: [entry, countries, cities, trips],
+    routes: [entry, countries, cities, trips, rides],
     menu: [
-      { routeName: 'entry', caption: 'Об' },
-      { routeName: 'countries', caption: 'По странам' },
-      { routeName: 'cities', caption: 'По городам' },
-      { routeName: 'trips', caption: 'По поездкам' },
+      { routeName: entry.routeName, caption: 'Об' },
+      { routeName: countries.routeName, caption: 'По странам' },
+      { routeName: cities.routeName, caption: 'По городам' },
+      { routeName: trips.routeName, caption: 'По поездкам' },
+      { routeName: rides.routeName, caption: 'Транспорт' },
     ],
   };
 };
