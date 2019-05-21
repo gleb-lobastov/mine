@@ -41,6 +41,7 @@ const provideInternal = createReactProvider({
 
 const mapValues = (object, iteratee) =>
   Object.entries(object).reduce((memo, [key, value]) => {
+    // eslint-disable-next-line no-param-reassign
     memo[key] = iteratee(value, key, object);
     return memo;
   }, {});
@@ -49,7 +50,7 @@ const createReactReduxProvider = ({
   provisionSelector,
   connect = originalConnect,
   provisionAdapter = (state, provision) => ({ provision }),
-}) => mapStateToRequirements => {
+}) => (mapStateToRequirements, originalMapStateToProps, ...forwardedParams) => {
   const selectProvision = memoizeByLastArgs((state = {}) => {
     const values = Object.values(state);
     return {
@@ -69,7 +70,12 @@ const createReactReduxProvider = ({
     const requirements = mapStateToRequirements(state, props) || {};
     const provision = selectProvision(provisionSelector(state, requirements));
 
+    const originalMapping = originalMapStateToProps
+      ? originalMapStateToProps(state, props)
+      : undefined;
+
     return {
+      ...originalMapping,
       fulfilledRequirements,
       requirements,
       ...provisionAdapter(state, provision, requirements),
@@ -78,14 +84,20 @@ const createReactReduxProvider = ({
 
   // react-redux perform optimization when props is not used in state calculation
   // usage of props is determined through mapper func arity
-  const actualMapStateToProps =
-    mapStateToRequirements.length === 1
-      ? state => mapStateToProps(state)
-      : mapStateToProps;
+  const canOptimize =
+    mapStateToRequirements.length === 1 &&
+    (!originalMapStateToProps || originalMapStateToProps.length <= 1);
+
+  const actualMapStateToProps = canOptimize
+    ? state => mapStateToProps(state)
+    : mapStateToProps;
 
   return WrappedComponent =>
     compose(
-      connect(actualMapStateToProps),
+      connect(
+        actualMapStateToProps,
+        ...forwardedParams,
+      ),
       provideInternal,
     )(WrappedComponent);
 };
