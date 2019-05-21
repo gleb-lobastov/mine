@@ -1,42 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import groupBy from 'lodash/groupBy';
+import { selectDict } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
+import Trip from './blocks/Trip';
 
 const Trips = ({
   trips: { data: tripsList = [] } = {},
   visits: { data: visitsList = [] } = {},
-  locations: { data: locationsList = [] } = {},
-}) => {
-  const visitsByTrips = groupBy(visitsList, 'tripId');
-  return (
+  locationsDict,
+}) =>
+  !locationsDict ? (
+    <div>None</div>
+  ) : (
     <div>
-      {tripsList.map(({ tripName, tripId }, tripIndex) => (
+      {tripsList.map((trip, tripIndex) => (
         <div>
-          <h1 key={tripName}>{`${tripIndex + 1}. ${tripName}`}</h1>
-          {visitsByTrips[tripId] &&
-            visitsByTrips[tripId]
-              .sort(
-                (
-                  { orderInTrip: orderInTripA },
-                  { orderInTrip: orderInTripB },
-                ) => orderInTripA - orderInTripB,
-              )
-              .map(({ locationId }) => (
-                <div>
-                  {(
-                    locationsList.find(
-                      ({ locationId: locationIdToCompare }) =>
-                        locationIdToCompare === locationId,
-                    ) || {}
-                  ).locationName || 'unknown'}
-                </div>
-              ))}
+          <h1 key={trip.tripName}>{`${tripIndex + 1}. ${trip.tripName}`}</h1>
+          <Trip
+            key={trip.tripId}
+            trip={trip}
+            visitsList={visitsList}
+            locationsDict={locationsDict}
+          />
         </div>
       ))}
     </div>
   );
-};
 Trips.propTypes = {
   trips: PropTypes.shape({
     data: PropTypes.arrayOf(
@@ -54,29 +43,30 @@ Trips.propTypes = {
       }),
     ),
   }).isRequired,
-  locations: PropTypes.shape({
-    data: PropTypes.arrayOf(
-      PropTypes.shape({
-        locationId: PropTypes.number,
-        locationName: PropTypes.string,
-      }),
-    ),
-  }).isRequired,
+  locationsDict: PropTypes.arrayOf(
+    PropTypes.shape({
+      locationId: PropTypes.number,
+      locationName: PropTypes.string,
+    }),
+  ).isRequired,
 };
 
-export default withProvision(() => ({
-  require: {
-    trips: {
-      modelName: 'trips',
+export default withProvision(
+  () => ({
+    require: {
+      trips: {
+        modelName: 'trips',
+      },
+      visits: {
+        modelName: 'visits',
+      },
+      locations: {
+        modelName: 'locations',
+      },
     },
-    visits: {
-      modelName: 'visits',
+    meta: {
+      domain: 'trips',
     },
-    locations: {
-      modelName: 'locations',
-    },
-  },
-  meta: {
-    domain: 'trips',
-  },
-}))(Trips);
+  }),
+  state => ({ locationsDict: selectDict(state, 'locations') }),
+)(Trips);
