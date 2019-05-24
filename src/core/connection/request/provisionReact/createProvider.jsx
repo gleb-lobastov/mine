@@ -1,15 +1,15 @@
 import React from 'react';
 
-const omit = (object, attrs) => {
-  return Object.entries(object).reduce((result, [key, value]) => {
+const omit = (object, attrs) =>
+  Object.entries(object).reduce((memo, [key, value]) => {
     if (!attrs.includes(key)) {
-      result[key] = value;
+      memo[key] = value;
     }
-    return result;
+    return memo;
   }, {});
-};
 
 export default ({
+  request,
   requireProvision,
   resolveProvision,
   requirementsComparator,
@@ -45,6 +45,8 @@ export default ({
       }
     }
 
+    customRequest = requirements => request({ ...this.props, requirements });
+
     render() {
       const actualProps = propsToOmit
         ? omit(this.props, propsToOmit)
@@ -53,6 +55,7 @@ export default ({
       return (
         <WrappedComponent
           provision={resolveProvision(this.props)}
+          request={this.customRequest}
           {...actualProps}
         />
       );

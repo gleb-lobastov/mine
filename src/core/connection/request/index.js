@@ -11,9 +11,14 @@ const splitRequestsEnhancer = strategy => (params, ...forwardedArgs) => {
   const {
     meta,
     meta: { domain = 'common' } = {},
-    require,
+    require, // todo require for fetch, parallel for submit?
     ...sharedRequirements
   } = params;
+
+  const { isProvision } = sharedRequirements; // todo consider split for submits
+  if (!isProvision || !require) {
+    strategy(params, ...forwardedArgs);
+  }
   const entries = Object.entries(require || {});
   return Promise.all(
     entries.map(([key, specificRequirements]) =>
@@ -33,6 +38,7 @@ const splitRequestsEnhancer = strategy => (params, ...forwardedArgs) => {
   ).then(responses =>
     responses.reduce((memo, response, index) => {
       const [key] = entries[index];
+      // eslint-disable-next-line
       memo[key] = response;
       return memo;
     }, {}),
@@ -56,6 +62,7 @@ export default ({
     reducer: entitiesReducer,
     modelsStrategyEnhancer,
     denormalize,
+    submit,
   } = createReduxModelIntegration({
     entitiesSelectorRoot: state =>
       state[requestKitStateKey][STATE_PATHS.ENTITIES],
@@ -85,6 +92,7 @@ export default ({
       }, {});
     },
     provisionAdapter: (state, provision, requirements) => {
+      // todo apply or remove:
       // const { expose = 'value' } = requirements;
       // const exposed = ['fallback', 'value'].includes(expose)
       //   ? provision[expose]
@@ -92,6 +100,7 @@ export default ({
       const { value, fallback } = provision;
       return {
         provision,
+        // todo value || fallback -- ambiguous!
         ...mapValues(value || fallback || {}, (result, key) =>
           denormalize(state, requirements.require[key], result),
         ),
@@ -113,6 +122,7 @@ export default ({
       [STATE_PATHS.ENTITIES]: entitiesReducer,
       [STATE_PATHS.PROVISION]: distributeReducer(provisionReducer),
     }),
+    submit,
   };
 };
 

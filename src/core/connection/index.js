@@ -3,6 +3,7 @@ import { schema } from 'normalizr';
 import createRequestEngine from '@request-kit/engine-rest';
 import { middleware as authPlugin } from 'modules/auth';
 import endpointPlugin from 'modules/utilities/request-kit/plugins/endpoint';
+import adapterPlugin from 'modules/utilities/request-kit/plugins/adapter';
 import loggerPlugin from 'modules/utilities/request-kit/plugins/logger';
 import responseAsJsonPlugin from 'modules/utilities/request-kit/plugins/responseAsJson';
 import createRequestApi from './request';
@@ -22,18 +23,27 @@ const listSchema = {
   schemaCreator: createListSchemaFromThisModelItemSchema,
 };
 
-const endpointResolver = ({ modelName, meta: { domain } }) =>
-  `${__API_HOST__}/api/${modelName || domain}`;
+const endpointResolver = ({
+  modelName,
+  query: { id } = {},
+  meta: { domain },
+}) => {
+  const base = `${__API_HOST__}/api/${modelName || domain}`;
+  if (!id) {
+    return base;
+  }
+  return `${base}/${id}`;
+};
 
 const engine = createRequestEngine({
   presetOptions: {
     format: 'json',
-    endpoint: ({ require, meta: { domain } }) =>
-      `${__API_HOST__}/api/${require || domain}`,
+    endpoint: ({ meta: { domain } }) => `${__API_HOST__}/api/${domain}`,
   },
   plugins: [
     authPlugin,
     __IS_DEV_MODE__ && loggerPlugin,
+    adapterPlugin,
     endpointPlugin,
     responseAsJsonPlugin,
   ].filter(Boolean),

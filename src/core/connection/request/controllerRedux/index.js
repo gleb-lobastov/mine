@@ -4,7 +4,7 @@ export {
   default as createRequestMiddleware,
   requestStrategyEnhancer,
 } from './middleware';
-export { createRequestAction } from './actionCreators';
+export { createRequestAction, createProvisionAction } from './actionCreators';
 export { default as createRequestReducer } from './reducer';
 export { requestSelectors };
 export { PROCESS_REQUEST as processRequestActionType } from './actionTypes';

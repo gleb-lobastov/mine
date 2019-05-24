@@ -2,6 +2,7 @@ import { connect as originalConnect } from 'react-redux';
 import createReactProvider from '../provisionReact';
 import {
   createRequestAction,
+  createProvisionAction,
   requestSelectors,
   requestStrategyEnhancer as provisionStrategyEnhancer,
   createRequestMiddleware,
@@ -34,6 +35,8 @@ const requirementsComparator = (requirementsA, requirementsB) => {
 
 const provideInternal = createReactProvider({
   requireProvision: ({ requirements, dispatch }) =>
+    dispatch(createProvisionAction(requirements)),
+  request: ({ requirements, dispatch }) =>
     dispatch(createRequestAction(requirements)),
   resolveProvision: ({ provision }) => provision,
   requirementsComparator,
@@ -50,7 +53,12 @@ const createReactReduxProvider = ({
   provisionSelector,
   connect = originalConnect,
   provisionAdapter = (state, provision) => ({ provision }),
-}) => (mapStateToRequirements, originalMapStateToProps, ...forwardedParams) => {
+}) => (
+  mapStateToRequirements,
+  originalMapStateToProps,
+  _, // currently mapDispatchToProps is unsupported
+  ...forwardedParams
+) => {
   const selectProvision = memoizeByLastArgs((state = {}) => {
     const values = Object.values(state);
     return {
@@ -96,6 +104,7 @@ const createReactReduxProvider = ({
     compose(
       connect(
         actualMapStateToProps,
+        null, // dispatch method should be accessible through props
         ...forwardedParams,
       ),
       provideInternal,
