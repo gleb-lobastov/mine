@@ -28,5 +28,5 @@ export const withAuth = Component => props => (
 );
 
 export const authContextPropTypes = {
-  isAuthenticated: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool,
 };
