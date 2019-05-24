@@ -17,6 +17,11 @@ module.exports = {
   },
   plugins: ['react', 'jsx-a11y', 'import'],
   rules: {
+    // only allowed in reducers
+    'no-param-reassign': [
+      'error',
+      { props: true, ignorePropertyModificationsFor: ['memo'] },
+    ],
     'import/extensions': [
       'error',
       'always',
