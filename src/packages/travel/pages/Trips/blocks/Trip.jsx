@@ -1,8 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import Visit from './Visit';
 
-const Trip = ({ trip: { tripId } = {}, visitsList, locationsDict }) => {
+const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
+const SortableVisit = SortableElement(Visit);
+
+const Trip = ({
+  trip: { tripId } = {},
+  visitsList,
+  locationsDict,
+  onSortEndOfVisit: handleSortEndOfVisit,
+}) => {
   const visitsByTrip = visitsList
     .filter(({ tripId: visitTripId }) => visitTripId === tripId)
     .sort(
@@ -12,19 +21,32 @@ const Trip = ({ trip: { tripId } = {}, visitsList, locationsDict }) => {
   if (!visitsByTrip) {
     return null;
   }
+  const isSortable = Boolean(handleSortEndOfVisit);
+  const VisitComponent = isSortable ? SortableVisit : Visit;
+  const visitsNodes = visitsByTrip.map((visit, index) => (
+    <VisitComponent
+      key={visit.visitId}
+      index={index}
+      visit={visit}
+      locationsDict={locationsDict}
+    />
+  ));
+
+  if (!isSortable) {
+    return <div>{visitsNodes}</div>;
+  }
   return (
-    <div>
-      {visitsByTrip.map(visit => (
-        <Visit
-          key={visit.visitId}
-          visit={visit}
-          locationsDict={locationsDict}
-        />
-      ))}
-    </div>
+    <SortableTrip
+      onSortEnd={(data, event) =>
+        handleSortEndOfVisit({ ...data, collection: visitsByTrip }, event)
+      }
+    >
+      {visitsNodes}
+    </SortableTrip>
   );
 };
 Trip.propTypes = {
+  onSortEndOfVisit: PropTypes.func,
   trip: PropTypes.shape({
     tripName: PropTypes.string,
     tripId: PropTypes.number,
@@ -41,6 +63,10 @@ Trip.propTypes = {
       locationName: PropTypes.string,
     }),
   ).isRequired,
+};
+
+Trip.defaultProps = {
+  onSortEndOfVisit: undefined,
 };
 
 export default Trip;
