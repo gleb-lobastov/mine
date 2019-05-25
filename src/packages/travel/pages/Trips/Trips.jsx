@@ -57,9 +57,8 @@ const Trips = ({
         <div>
           <h1 key={trip.tripName}>{`${tripIndex + 1}. ${trip.tripName}`}</h1>
           <Trip
-            onSortEndOfVisit={
-              isAuthenticated ? handleSortEndOfVisit : undefined
-            }
+            isSortable={isAuthenticated}
+            onSortEndOfVisit={handleSortEndOfVisit}
             key={trip.tripId}
             trip={trip}
             visitsList={visitsList}

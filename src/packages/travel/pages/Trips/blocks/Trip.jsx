@@ -10,6 +10,7 @@ const Trip = ({
   trip: { tripId } = {},
   visitsList,
   locationsDict,
+  isSortable,
   onSortEndOfVisit: handleSortEndOfVisit,
 }) => {
   const visitsByTrip = visitsList
@@ -21,7 +22,6 @@ const Trip = ({
   if (!visitsByTrip) {
     return null;
   }
-  const isSortable = Boolean(handleSortEndOfVisit);
   const VisitComponent = isSortable ? SortableVisit : Visit;
   const visitsNodes = visitsByTrip.map((visit, index) => (
     <VisitComponent
