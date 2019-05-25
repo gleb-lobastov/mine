@@ -32,6 +32,9 @@ const Trips = ({
   }
   const handleSortEndOfVisit = useCallback(
     ({ oldIndex, newIndex, collection }) => {
+      if (oldIndex === newIndex) {
+        return;
+      }
       request({
         modelName: 'visits',
         query: {
