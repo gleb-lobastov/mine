@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import IconHome from '@material-ui/icons/Home';
 import Visit from './Visit';
 import Location from './Location';
 
@@ -47,11 +48,15 @@ const Trip = ({
   );
 
   const originLocation = locationsDict[originLocationId];
+  const originLocationNode = (
+    <Location location={originLocation} Icon={IconHome} />
+  );
+
   return (
     <>
-      <Location location={originLocation} />
+      {originLocationNode}
       {wrappedVisitsNodes}
-      <Location location={originLocation} />
+      {originLocationNode}
     </>
   );
 };

@@ -18,11 +18,13 @@ export const visitsAdapter = ({
   location_id: rawLocationId,
   order_in_trip: rawOrderInTrip,
   trip_id: rawTripId,
+  visit_type: rawVisitType
 }) => ({
   locationId: rawLocationId,
   orderInTrip: rawOrderInTrip,
   tripId: rawTripId,
   visitId: rawVisitId,
+  visitType: rawVisitType
 });
 
 export const tripsAdapter = ({
