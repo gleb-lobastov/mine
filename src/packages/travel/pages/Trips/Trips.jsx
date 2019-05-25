@@ -54,12 +54,11 @@ const Trips = ({
   return (
     <div>
       {tripsList.map((trip, tripIndex) => (
-        <div>
+        <div key={trip.tripId}>
           <h1 key={trip.tripName}>{`${tripIndex + 1}. ${trip.tripName}`}</h1>
           <Trip
-            isSortable={isAuthenticated}
+            isEditable={isAuthenticated}
             onSortEndOfVisit={handleSortEndOfVisit}
-            key={trip.tripId}
             trip={trip}
             visitsList={visitsList}
             locationsDict={locationsDict}

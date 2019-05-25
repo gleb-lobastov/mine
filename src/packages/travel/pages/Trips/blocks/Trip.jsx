@@ -12,7 +12,7 @@ const Trip = ({
   trip: { tripId, originLocationId } = {},
   visitsList,
   locationsDict,
-  isSortable,
+  isEditable,
   onSortEndOfVisit: handleSortEndOfVisit,
 }) => {
   const visitsByTrip = visitsList
@@ -24,6 +24,8 @@ const Trip = ({
   if (!visitsByTrip || !visitsByTrip.length) {
     return null;
   }
+
+  const isSortable = isEditable;
   const VisitComponent = isSortable ? SortableVisit : Visit;
   const visitsNodes = visitsByTrip.map((visit, index) => (
     <VisitComponent
@@ -31,6 +33,7 @@ const Trip = ({
       index={index}
       visit={visit}
       locationsDict={locationsDict}
+      isEditable={isEditable}
     />
   ));
 
@@ -38,6 +41,16 @@ const Trip = ({
     <div>{visitsNodes}</div>
   ) : (
     <SortableTrip
+      shouldCancelStart={event => {
+        let element = event.target;
+        while (element) {
+          if (element.dataset && element.dataset.sortHandler === 'disabled') {
+            return true;
+          }
+          element = element.parentNode;
+        }
+        return false;
+      }}
       onSortEnd={(data, event) =>
         handleSortEndOfVisit &&
         handleSortEndOfVisit({ ...data, collection: visitsByTrip }, event)
@@ -61,7 +74,7 @@ const Trip = ({
   );
 };
 Trip.propTypes = {
-  isSortable: PropTypes.bool,
+  isEditable: PropTypes.bool,
   onSortEndOfVisit: PropTypes.func,
   trip: PropTypes.shape({
     tripName: PropTypes.string,

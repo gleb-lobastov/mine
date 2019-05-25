@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = {
+export const styles = {
+  container: {
+    display: 'inline-block',
+  },
   icon: {
     marginRight: '4px',
     display: 'inline-block',
@@ -15,7 +18,7 @@ const Location = ({
   Icon,
   classes,
 }) => (
-  <div>
+  <div className={classes.container}>
     {Icon && <Icon className={classes.icon} />}
     {locationName}
   </div>
