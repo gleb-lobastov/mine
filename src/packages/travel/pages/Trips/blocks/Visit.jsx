@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Location from './Location';
 
-const Visit = ({ visit: { locationId } = {}, locationsDict }) => {
-  const location = locationsDict[locationId] || {};
-  const { locationName = 'unknown' } = location;
-  return <div>{locationName}</div>;
-};
+const Visit = ({ visit: { locationId } = {}, locationsDict }) => (
+  <Location location={locationsDict[locationId]} />
+);
 
 Visit.propTypes = {
   visit: PropTypes.shape({

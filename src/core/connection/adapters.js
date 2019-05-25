@@ -25,9 +25,14 @@ export const visitsAdapter = ({
   visitId: rawVisitId,
 });
 
-export const tripsAdapter = ({ trip_name: rawTripName, id: rawTripId }) => ({
+export const tripsAdapter = ({
+  trip_name: rawTripName,
+  id: rawTripId,
+  origin_location_id: rawOriginLocationId,
+}) => ({
   tripName: rawTripName,
   tripId: rawTripId,
+  originLocationId: rawOriginLocationId,
 });
 
 export const locationsAdapter = ({
@@ -39,7 +44,6 @@ export const locationsAdapter = ({
   locationName: rawLocationName,
   locationId: rawLocationId,
 });
-
 
 export const ridesAdapter = ({
   arrival: rawArrival,
