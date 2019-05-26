@@ -4,6 +4,7 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import IconHome from '@material-ui/icons/Home';
 import Visit from './Visit';
 import Location from './Location';
+import Ride from './Ride';
 
 const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
 const SortableVisit = SortableElement(Visit);
@@ -72,10 +73,13 @@ const Trip = ({
     <Location location={originLocation} Icon={IconHome} />
   );
 
+  const recentVisit = visitsByTrip[visitsByTrip.length - 1];
+  const { departureRideId: rideToHomeId } = recentVisit;
   return (
     <>
       {originLocationNode}
       {wrappedVisitsNodes}
+      <Ride ride={ridesDict[rideToHomeId]} showDetails={isSorting} />
       {originLocationNode}
     </>
   );
