@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 export const styles = {
   container: {
     display: 'inline-block',
+    marginRight: '4px',
   },
   icon: {
     marginRight: '4px',

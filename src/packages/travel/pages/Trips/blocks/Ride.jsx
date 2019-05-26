@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import BikeIcon from '@material-ui/icons/DirectionsBike';
 import BoatIcon from '@material-ui/icons/DirectionsBoat';
 import BusIcon from '@material-ui/icons/DirectionsBus';
@@ -46,23 +47,59 @@ const resolveRideIconComponent = vehicleTypeId => {
   }
 };
 
-const Ride = ({ ride: { rideId, vehicleTypeId, arrivalDateTime } }) => {
+export const styles = {
+  container: {
+    display: 'inline-block',
+  },
+  icon: {
+    marginRight: '4px',
+    display: 'inline-block',
+    verticalAlign: 'text-bottom',
+  },
+  details: {
+    marginRight: '4px',
+  },
+};
+
+const resolveDateTimeString = (departureDateTime, arrivalDateTime) => {
+  const arrivalDateTimeString =
+    Boolean(arrivalDateTime) && arrivalDateTime.toLocaleDateString();
+  const departureDateTimeString =
+    Boolean(departureDateTime) && departureDateTime.toLocaleDateString();
+  if (arrivalDateTimeString === departureDateTimeString) {
+    return arrivalDateTimeString;
+  }
+  return `${departureDateTimeString}—${arrivalDateTimeString}`;
+};
+
+const Ride = ({
+  ride: { rideId, vehicleTypeId, arrivalDateTime, departureDateTime },
+  classes,
+  showDetails,
+}) => {
   if (!rideId) {
     return null;
   }
   const Icon = resolveRideIconComponent(vehicleTypeId);
+
   return (
-    <div>
-      <Icon />
-      {arrivalDateTime && <span>{arrivalDateTime.toLocaleDateString()}</span>}
+    <div className={classes.container}>
+      <Icon className={classes.icon} />
+      {showDetails && (
+        <span className={classes.details}>
+          {resolveDateTimeString(departureDateTime, arrivalDateTime)}
+        </span>
+      )}
     </div>
   );
 };
 
 Ride.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   ride: PropTypes.shape({}),
+  showDetails: PropTypes.bool,
 };
 
-Ride.defaultProps = { ride: {} };
+Ride.defaultProps = { ride: {}, showDetails: false };
 
-export default Ride;
+export default withStyles(styles)(Ride);

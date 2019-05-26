@@ -55,7 +55,7 @@ const Visit = ({
   ]);
   return (
     <div className={classes.container}>
-      <Ride ride={ridesDict[arrivalRideId]} />
+      <Ride ride={ridesDict[arrivalRideId]} showDetails={isSorting} />
       <Location
         location={locationsDict[locationId]}
         Icon={resolveVisitIconComponent(visitType)}
@@ -73,7 +73,9 @@ const Visit = ({
             <EditIcon />
           </IconButton>
         )}
-      {isSorting && <Ride ride={ridesDict[departureRideId]} />}
+      {isSorting && (
+        <Ride ride={ridesDict[departureRideId]} showDetails={isSorting} />
+      )}
     </div>
   );
 };
