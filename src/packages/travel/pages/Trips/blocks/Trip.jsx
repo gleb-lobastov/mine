@@ -9,6 +9,14 @@ import Ride from './Ride';
 const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
 const SortableVisit = SortableElement(Visit);
 
+const checkIsRidesMatch = (prevVisit, nextVisit) => {
+  if (!prevVisit || !nextVisit) {
+    return true;
+  }
+  const { departureRideId: prevVisitDepartureRideId } = prevVisit;
+  const { arrivalRideId: nextVisitArrivalRideId } = nextVisit;
+  return prevVisitDepartureRideId === nextVisitArrivalRideId;
+};
 const Trip = ({
   trip: { tripId, originLocationId } = {},
   visitsList,
@@ -32,13 +40,15 @@ const Trip = ({
   const VisitComponent = isSortable ? SortableVisit : Visit;
   const visitsNodes = visitsByTrip.map((visit, index) => (
     <VisitComponent
-      key={visit.visitId}
       index={index}
-      visit={visit}
+      isEditable={isEditable}
+      isArrivalRideMatch={checkIsRidesMatch(visitsByTrip[index - 1], visit)}
+      isDepartureRideMatch={checkIsRidesMatch(visit, visitsByTrip[index + 1])}
+      isSorting={isSorting}
+      key={visit.visitId}
       locationsDict={locationsDict}
       ridesDict={ridesDict}
-      isSorting={isSorting}
-      isEditable={isEditable}
+      visit={visit}
     />
   ));
 

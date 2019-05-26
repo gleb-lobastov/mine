@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import cls from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import BikeIcon from '@material-ui/icons/DirectionsBike';
 import BoatIcon from '@material-ui/icons/DirectionsBoat';
@@ -13,6 +14,7 @@ import TrainIcon from '@material-ui/icons/Train';
 import TruckIcon from '@material-ui/icons/LocalShipping';
 import VanIcon from '@material-ui/icons/AirportShuttle';
 import WalkIcon from '@material-ui/icons/DirectionsWalk';
+import UnknownRideIcon from '@material-ui/icons/NotListedLocation';
 
 const resolveRideIconComponent = vehicleTypeId => {
   switch (vehicleTypeId) {
@@ -73,17 +75,25 @@ const resolveDateTimeString = (departureDateTime, arrivalDateTime) => {
 };
 
 const Ride = ({
-  ride: { rideId, vehicleTypeId, arrivalDateTime, departureDateTime },
   classes,
+  className,
+  ride: { rideId, vehicleTypeId, arrivalDateTime, departureDateTime },
   showDetails,
 }) => {
   if (!rideId) {
-    return null;
+    if (!showDetails) {
+      return null;
+    }
+    return (
+      <div className={cls(className, classes.container)}>
+        <UnknownRideIcon className={classes.icon} />
+      </div>
+    );
   }
   const Icon = resolveRideIconComponent(vehicleTypeId);
 
   return (
-    <div className={classes.container}>
+    <div className={cls(className, classes.container)}>
       <Icon className={classes.icon} />
       {showDetails && (
         <span className={classes.details}>
@@ -95,11 +105,12 @@ const Ride = ({
 };
 
 Ride.propTypes = {
+  className: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   ride: PropTypes.shape({}),
   showDetails: PropTypes.bool,
 };
 
-Ride.defaultProps = { ride: {}, showDetails: false };
+Ride.defaultProps = { ride: {}, className: undefined, showDetails: false };
 
 export default withStyles(styles)(Ride);

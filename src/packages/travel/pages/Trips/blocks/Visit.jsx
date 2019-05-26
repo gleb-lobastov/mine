@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import cls from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
@@ -24,6 +25,9 @@ const styles = {
       visibility: 'visible',
     },
   },
+  warning: {
+    color: 'red',
+  },
 };
 
 const resolveVisitIconComponent = visitType => {
@@ -47,6 +51,8 @@ const Visit = ({
   classes,
   isEditable,
   isSorting,
+  isArrivalRideMatch,
+  isDepartureRideMatch,
 }) => {
   const [isInEditMode, setEditMode] = useState(false);
   const toggleEditMode = useCallback(() => setEditMode(!isInEditMode), [
@@ -55,7 +61,13 @@ const Visit = ({
   ]);
   return (
     <div className={classes.container}>
-      <Ride ride={ridesDict[arrivalRideId]} showDetails={isSorting} />
+      <Ride
+        className={cls({
+          [classes.warning]: !isArrivalRideMatch,
+        })}
+        ride={ridesDict[arrivalRideId]}
+        showDetails={isSorting || !isArrivalRideMatch}
+      />
       <Location
         location={locationsDict[locationId]}
         Icon={resolveVisitIconComponent(visitType)}
@@ -73,8 +85,14 @@ const Visit = ({
             <EditIcon />
           </IconButton>
         )}
-      {isSorting && (
-        <Ride ride={ridesDict[departureRideId]} showDetails={isSorting} />
+      {(isSorting || !isDepartureRideMatch) && (
+        <Ride
+          className={cls({
+            [classes.warning]: !isDepartureRideMatch,
+          })}
+          ride={ridesDict[departureRideId]}
+          showDetails={true}
+        />
       )}
     </div>
   );
@@ -83,6 +101,8 @@ const Visit = ({
 Visit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isEditable: PropTypes.bool,
+  isArrivalRideMatch: PropTypes.bool,
+  isDepartureRideMatch: PropTypes.bool,
   isSorting: PropTypes.bool,
   visit: PropTypes.shape({
     tripId: PropTypes.number,
@@ -101,6 +121,11 @@ Visit.propTypes = {
   ).isRequired,
 };
 
-Visit.defaultProps = { isEditable: false, isSorting: false };
+Visit.defaultProps = {
+  isEditable: false,
+  isArrivalRideMatch: true,
+  isDepartureRideMatch: true,
+  isSorting: false,
+};
 
 export default withStyles(styles)(Visit);
