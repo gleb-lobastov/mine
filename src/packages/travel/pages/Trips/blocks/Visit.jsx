@@ -59,14 +59,17 @@ const Visit = ({
     setEditMode,
     isInEditMode,
   ]);
+
+  const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
+  const shouldWarnForDepartureRide = isEditable && !isDepartureRideMatch;
   return (
     <div className={classes.container}>
       <Ride
         className={cls({
-          [classes.warning]: !isArrivalRideMatch,
+          [classes.warning]: shouldWarnForArrivalRide,
         })}
         ride={ridesDict[arrivalRideId]}
-        showDetails={isSorting || !isArrivalRideMatch}
+        showDetails={isSorting || shouldWarnForArrivalRide}
       />
       <Location
         location={locationsDict[locationId]}
@@ -88,10 +91,10 @@ const Visit = ({
       {(isSorting || !isDepartureRideMatch) && (
         <Ride
           className={cls({
-            [classes.warning]: !isDepartureRideMatch,
+            [classes.warning]: shouldWarnForDepartureRide,
           })}
           ride={ridesDict[departureRideId]}
-          showDetails={true}
+          showDetails={isSorting || shouldWarnForDepartureRide}
         />
       )}
     </div>
