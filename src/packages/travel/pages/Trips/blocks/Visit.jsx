@@ -7,7 +7,8 @@ import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStatio
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DomainIcon from '@material-ui/icons/Domain';
 import EditIcon from '@material-ui/icons/Edit';
-import Location, { styles as locationStyles } from './Location';
+import Location from './Location';
+import Ride from './Ride';
 
 const styles = {
   button: {
@@ -40,10 +41,12 @@ const resolveVisitIconComponent = visitType => {
 };
 
 const Visit = ({
-  visit: { locationId, visitType } = {},
+  visit: { locationId, visitType, arrivalRideId, departureRideId } = {},
+  ridesDict,
   locationsDict,
   classes,
   isEditable,
+  isSorting,
 }) => {
   const [isInEditMode, setEditMode] = useState(false);
   const toggleEditMode = useCallback(() => setEditMode(!isInEditMode), [
@@ -52,6 +55,7 @@ const Visit = ({
   ]);
   return (
     <div className={classes.container}>
+      <Ride ride={ridesDict[arrivalRideId]} />
       <Location
         location={locationsDict[locationId]}
         Icon={resolveVisitIconComponent(visitType)}
@@ -69,14 +73,15 @@ const Visit = ({
             <EditIcon />
           </IconButton>
         )}
-      {isInEditMode && <div>Work in progress</div>}
+      {isSorting && <Ride ride={ridesDict[departureRideId]} />}
     </div>
   );
 };
 
 Visit.propTypes = {
-  isEditable: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  isEditable: PropTypes.bool,
+  isSorting: PropTypes.bool,
   visit: PropTypes.shape({
     tripId: PropTypes.number,
     orderInTrip: PropTypes.number,
@@ -87,8 +92,13 @@ Visit.propTypes = {
       locationName: PropTypes.string,
     }),
   ).isRequired,
+  ridesDict: PropTypes.objectOf(
+    PropTypes.shape({
+      rideId: PropTypes.number,
+    }),
+  ).isRequired,
 };
 
-Visit.defaultProps = { isEditable: false };
+Visit.defaultProps = { isEditable: false, isSorting: false };
 
 export default withStyles(styles)(Visit);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import IconHome from '@material-ui/icons/Home';
@@ -12,9 +12,11 @@ const Trip = ({
   trip: { tripId, originLocationId } = {},
   visitsList,
   locationsDict,
+  ridesDict,
   isEditable,
   onSortEndOfVisit: handleSortEndOfVisit,
 }) => {
+  const [isSorting, setIsSorting] = useState(false);
   const visitsByTrip = visitsList
     .filter(({ tripId: visitTripId }) => visitTripId === tripId)
     .sort(
@@ -33,6 +35,8 @@ const Trip = ({
       index={index}
       visit={visit}
       locationsDict={locationsDict}
+      ridesDict={ridesDict}
+      isSorting={isSorting}
       isEditable={isEditable}
     />
   ));
@@ -41,6 +45,7 @@ const Trip = ({
     <div>{visitsNodes}</div>
   ) : (
     <SortableTrip
+      updateBeforeSortStart={() => setIsSorting(true)}
       shouldCancelStart={event => {
         let element = event.target;
         while (element) {
@@ -51,10 +56,12 @@ const Trip = ({
         }
         return false;
       }}
-      onSortEnd={(data, event) =>
-        handleSortEndOfVisit &&
-        handleSortEndOfVisit({ ...data, collection: visitsByTrip }, event)
-      }
+      onSortEnd={(data, event) => {
+        setIsSorting(false);
+        if (handleSortEndOfVisit) {
+          handleSortEndOfVisit({ ...data, collection: visitsByTrip }, event);
+        }
+      }}
     >
       {visitsNodes}
     </SortableTrip>

@@ -14,12 +14,16 @@ export const articlesAdapter = ({
 });
 
 export const visitsAdapter = ({
+  arrival_ride_id: rawArrivalRideId,
+  departure_ride_id: rawDepartureRideId,
   id: rawVisitId,
   location_id: rawLocationId,
   order_in_trip: rawOrderInTrip,
   trip_id: rawTripId,
   visit_type: rawVisitType
 }) => ({
+  arrivalRideId: rawArrivalRideId,
+  departureRideId: rawDepartureRideId,
   locationId: rawLocationId,
   orderInTrip: rawOrderInTrip,
   tripId: rawTripId,
@@ -52,9 +56,11 @@ export const ridesAdapter = ({
   departure: rawDeparture,
   id: rawRideId,
   vehicle_name: rawVehicleName,
+  vehicle_type_id: rawVehicleTypeId,
 }) => ({
   arrivalDateTime: new Date(rawArrival),
   departureDateTime: new Date(rawDeparture),
   rideId: rawRideId,
   vehicleName: rawVehicleName,
+  vehicleTypeId: rawVehicleTypeId,
 });

@@ -24,6 +24,7 @@ const Trips = ({
   trips: { data: tripsList = [] } = {},
   visits: { data: visitsList = [] } = {},
   locationsDict,
+  ridesDict,
   request,
   isAuthenticated,
 }) => {
@@ -62,6 +63,7 @@ const Trips = ({
             trip={trip}
             visitsList={visitsList}
             locationsDict={locationsDict}
+            ridesDict={ridesDict}
           />
         </div>
       ))}
@@ -93,6 +95,12 @@ Trips.propTypes = {
       locationName: PropTypes.string,
     }),
   ).isRequired,
+  ridesDict: PropTypes.arrayOf(
+    PropTypes.shape({
+      rideId: PropTypes.number,
+      vehicleTypeId: PropTypes.number,
+    }),
+  ).isRequired,
 };
 
 export default compose(
@@ -109,11 +117,17 @@ export default compose(
         locations: {
           modelName: 'locations',
         },
+        rides: {
+          modelName: 'rides',
+        },
       },
       meta: {
         domain: 'trips',
       },
     }),
-    state => ({ locationsDict: selectDict(state, 'locations') }),
+    state => ({
+      locationsDict: selectDict(state, 'locations'),
+      ridesDict: selectDict(state, 'rides'),
+    }),
   ),
 )(Trips);
