@@ -1,8 +1,7 @@
 import Model from '../Model';
 
 export default class ModelsSet {
-  constructor(modelsConfig) {
-    const { modelsDefinitions } = modelsConfig;
+  constructor(modelsDefinitions) {
     // step-by-step definitions of model is required to provide references for existing schemas
     this.models = {};
     modelsDefinitions

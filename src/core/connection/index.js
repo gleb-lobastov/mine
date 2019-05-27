@@ -43,8 +43,8 @@ const engine = createRequestEngine({
   plugins: [
     authPlugin,
     __IS_DEV_MODE__ && loggerPlugin,
-    adapterPlugin,
     endpointPlugin,
+    adapterPlugin,
     responseAsJsonPlugin,
   ].filter(Boolean),
 });

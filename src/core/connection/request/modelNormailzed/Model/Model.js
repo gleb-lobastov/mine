@@ -9,6 +9,7 @@ const createDerivedSchemas = (
 ) =>
   derivedSchemasConfig.reduce(
     (derivedSchemasInterim, { schemaName, schemaCreator }) => {
+      // eslint-disable-next-line
       derivedSchemasInterim[schemaName] = schemaCreator(
         createReferenceResolver({
           defaultModel: modelName,
@@ -32,11 +33,13 @@ export default class Model {
         options: itemSchemaOptions = {},
       } = {},
       toClientAdapter,
+      toServerAdapter,
       endpointResolver,
     } = definition;
 
     this.modelName = modelName;
     this.endpointResolver = endpointResolver;
+    this.adaptToServer = toServerAdapter;
 
     const reference = referenceResolverCreator(/* nothing to pass */);
     const schemaDefinition = mapValues(itemSchemaDefinition, schemaCreator =>
@@ -78,13 +81,13 @@ export default class Model {
     const schemas = shouldUseNonNestedSchemas
       ? this.nonNestedDerivedSchemas
       : this.derivedSchemas;
-    const schema = schemas[schemaName];
-    if (!schema) {
+    const resolvedSchema = schemas[schemaName];
+    if (!resolvedSchema) {
       throw new Error(
         `schema ${schemaName} is not specified for ${this.modelName}`,
       );
     }
-    return schema;
+    return resolvedSchema;
   }
 
   resolveSchemaFromRequest(request, shouldUseNonNestedSchemas) {
@@ -116,9 +119,12 @@ export default class Model {
     );
   }
 
-  resolveEndpoint = request => {
-    return typeof this.endpointResolver === 'string'
+  resolveEndpoint = request =>
+    typeof this.endpointResolver === 'string'
       ? this.endpointResolver
       : this.endpointResolver(request);
-  };
+
+  resolveToServerAdapter() {
+    return this.adaptToServer;
+  }
 }

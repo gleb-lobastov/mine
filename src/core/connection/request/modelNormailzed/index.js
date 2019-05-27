@@ -1,17 +1,19 @@
 import ModelsSet from './ModelsSet';
 
 export default modelsConfig => {
-  const modelsSet = new ModelsSet(modelsConfig);
+  const { modelsDefinitions } = modelsConfig;
+  const modelsSet = new ModelsSet(modelsDefinitions);
   return {
     // this method is responsible for normalization against models config
     modelsNormalizedPlugin: next => (requestRequirements, ...args) => {
       const { modelName, key } = requestRequirements;
+      const model = modelsSet.resolveByName(modelName || key);
       return next(
         {
           ...requestRequirements,
-          endpoint: modelsSet
-            .resolveByName(modelName || key)
-            .resolveEndpoint(requestRequirements),
+          // todo this makes requirements unserializable, reconsider
+          toServerAdapter: model.resolveToServerAdapter(),
+          endpoint: model.resolveEndpoint(requestRequirements),
         },
         ...args,
       ).then(
