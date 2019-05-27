@@ -18,10 +18,11 @@ export default next => requirements => {
   const hasBody = body !== undefined;
   return next({
     method,
-    body:
-      hasBody && toServerAdapter
-        ? JSON.stringify(toServerAdapter(body, requirements))
-        : undefined,
+    body: hasBody
+      ? JSON.stringify(
+          toServerAdapter ? toServerAdapter(body, requirements) : body,
+        )
+      : undefined,
     ...restOptions,
   });
 };
