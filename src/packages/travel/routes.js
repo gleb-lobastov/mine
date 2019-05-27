@@ -33,22 +33,13 @@ export default mountPath => {
     ),
   };
 
-  const rides = {
-    routeName: 'rides',
-    path: `${mountPath}/rides`,
-    Component: React.lazy(() =>
-      import(/* webpackChunkName: 'literature-Article' */ './pages/Rides'),
-    ),
-  };
-
   return {
-    routes: [entry, countries, cities, trips, rides],
+    routes: [entry, countries, cities, trips],
     menu: [
       { routeName: entry.routeName, caption: 'Об' },
       { routeName: countries.routeName, caption: 'По странам' },
       { routeName: cities.routeName, caption: 'По городам' },
       { routeName: trips.routeName, caption: 'По поездкам' },
-      { routeName: rides.routeName, caption: 'Транспорт' },
     ],
   };
 };
