@@ -1,15 +1,16 @@
 import { getAccessToken } from './tokens';
 
-export default next => options => {
+export default next => (requirements = {}) => {
   const accessToken = getAccessToken();
   if (!accessToken) {
-    return next(options);
+    return next(requirements);
   }
   return next({
+    ...requirements,
     headers: {
-      ...(options || {}).headers,
       Authorization: `Bearer ${accessToken}`,
+      ...requirements.headers,
+      'Content-Type': 'application/json; charset=utf-8',
     },
-    ...options,
   });
 };

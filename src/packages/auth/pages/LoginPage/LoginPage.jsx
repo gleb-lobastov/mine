@@ -29,9 +29,10 @@ class LoginPage extends React.Component {
         'Content-Type': 'application/json; charset=utf-8',
       },
     })
-      .then(({ ok, body } = {}) => {
+      .then(response => response.json())
+      .then(({ code, token }) => {
+        const ok = code === 200;
         if (ok) {
-          const { token } = body;
           setAccessToken(token);
         }
         this.setState({
