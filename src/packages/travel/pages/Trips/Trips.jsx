@@ -28,7 +28,7 @@ const Trips = ({
   request,
   isAuthenticated,
 }) => {
-  if (!locationsDict) {
+  if (!locationsDict || !ridesDict) {
     return <div>None</div>;
   }
   const handleSortEndOfVisit = useCallback(
@@ -45,7 +45,26 @@ const Trips = ({
           },
         },
         meta: {
-          domain: 'trips',
+          domain: 'trips.visits',
+        },
+      });
+    },
+    [request],
+  );
+  const handleRideUpdate = useCallback(
+    ({ ride, departureFromVisitId, arrivalToVisitId }) => {
+      request({
+        modelName: 'rides',
+        query: {
+          id: ride && ride.id,
+          body: {
+            ...ride,
+            departureFromVisitId,
+            arrivalToVisitId,
+          },
+        },
+        meta: {
+          domain: 'trips.visits.rides',
         },
       });
     },
@@ -60,6 +79,7 @@ const Trips = ({
           <Trip
             isEditable={isAuthenticated}
             onSortEndOfVisit={handleSortEndOfVisit}
+            onRideUpdate={handleRideUpdate}
             trip={trip}
             visitsList={visitsList}
             locationsDict={locationsDict}

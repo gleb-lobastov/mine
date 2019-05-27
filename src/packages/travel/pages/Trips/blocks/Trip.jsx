@@ -24,6 +24,7 @@ const Trip = ({
   ridesDict,
   isEditable,
   onSortEndOfVisit: handleSortEndOfVisit,
+  onRideUpdate: handleRideUpdate,
 }) => {
   const [isSorting, setIsSorting] = useState(false);
   const visitsByTrip = visitsList
@@ -35,6 +36,25 @@ const Trip = ({
   if (!visitsByTrip || !visitsByTrip.length) {
     return null;
   }
+
+  const handleRideUpdateInternal = ({ ride, visitId, isArrivalToVisit }) => {
+    const visitIndex = visitsByTrip.findIndex(
+      ({ visitId: visitIdToCompare }) => visitIdToCompare === visitId,
+    );
+    const lastVisitIndex = visitsByTrip.length - 1;
+    const prevVisitId =
+      visitIndex <= 1 ? null : visitsByTrip[visitIndex - 1].visitId;
+    const nextVisitId =
+      visitIndex >= lastVisitIndex - 1
+        ? null
+        : visitsByTrip[visitIndex + 1].visitId;
+
+    return handleRideUpdate({
+      ride,
+      departureFromVisitId: isArrivalToVisit ? prevVisitId : visitId,
+      arrivalToVisitId: isArrivalToVisit ? visitId : nextVisitId,
+    });
+  };
 
   const isSortable = isEditable;
   const VisitComponent = isSortable ? SortableVisit : Visit;
@@ -49,6 +69,7 @@ const Trip = ({
       locationsDict={locationsDict}
       ridesDict={ridesDict}
       visit={visit}
+      onRideUpdate={handleRideUpdateInternal}
     />
   ));
 
