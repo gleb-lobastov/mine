@@ -43,9 +43,9 @@ const engine = createRequestEngine({
   },
   plugins: [
     authPlugin,
-    __IS_DEV_MODE__ && loggerPlugin,
     endpointPlugin,
     adapterPlugin,
+    __IS_DEV_MODE__ && loggerPlugin,
     responseAsJsonPlugin,
   ].filter(Boolean),
 });
