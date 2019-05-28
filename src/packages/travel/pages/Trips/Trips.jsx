@@ -45,7 +45,7 @@ const Trips = ({
           },
         },
         meta: {
-          domain: 'trips.visits',
+          domain: 'trips.visits.sort',
         },
       });
     },
