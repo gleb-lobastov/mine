@@ -47,6 +47,7 @@ module.exports = {
       title: 'M - I - N - E',
       template: './src/index.html',
       favicon: './src/favicon.ico',
+      chunksSortMode: 'none',
     }),
     new webpack.DefinePlugin({
       __ROUTES_BASENAME__: '"/mine"',
