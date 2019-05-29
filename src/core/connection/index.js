@@ -31,7 +31,7 @@ const {
 } = createRequestApi({
   modelsConfig: {
     modelsDefinitions: [
-      literatureModels.articles,
+      literatureModels.articles.model,
       travelModels.locations.model,
       travelModels.rides.model,
       travelModels.trips.model,

@@ -3,7 +3,7 @@ import listSchema from 'modules/derivedSchemas/listSchema';
 import { toClient, toServer } from './adapters';
 
 export default {
-  modelName: 'rides',
+  modelName: 'visits',
   toClientAdapter: toClient,
   toServerAdapter: toServer,
   endpointResolver,

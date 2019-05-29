@@ -4,7 +4,7 @@ import model from './model';
 import * as propTypes from './propTypes';
 
 export default { adapters, consts, model, propTypes };
-export const ridesAdapters = adapters;
-export const ridesConsts = consts;
-export const ridesModel = model;
-export const ridesPropTypes = propTypes;
+export const visitsAdapters = adapters;
+export const visitsConsts = consts;
+export const visitsModel = model;
+export const visitsPropTypes = propTypes;
