@@ -6,23 +6,36 @@ import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
+import {
+  RIDE_CLASSES,
+  RIDE_OCCUPATION,
+  RIDE_TYPES,
+  VEHICLE_TYPES,
+} from 'travel/models/rides/consts';
 
-const VEHICLE_TYPES = {
-  CAR: 'Car',
-  TRAIN: 'Train',
-  AIRCRAFT: 'Aircraft',
-  BUS: 'Bus',
-  MOTORHOME: 'Motorhome',
-  LOCAL_TRAIN: 'LocalTrain',
-  FERRY: 'Ferry',
-  BIKE: 'Bike',
-  BY_FEET: 'ByFeet',
-  ROPEWAY: 'Ropeway',
-  FUNICULAR: 'Funicular',
-  MOTORBIKE: 'Motorbike',
-  TRUCK: 'Truck',
-  ALL_TERRAIN_VEHICLE: 'AllTerrain',
+const RIDE_CLASSES_NAMES = {
+  [RIDE_CLASSES.ECONOMY]: 'Эконом',
+  [RIDE_CLASSES.COMFORT]: 'Комфорт',
+  [RIDE_CLASSES.BUSINESS]: 'Бизнес',
+  [RIDE_CLASSES.FIRST]: 'Первый',
+  [RIDE_CLASSES.PRIVATE]: 'Частный',
 };
+
+const RIDE_OCCUPATION_NAMES = {
+  [RIDE_OCCUPATION.PASSENGER]: 'Пассажир',
+  [RIDE_OCCUPATION.STUFF]: 'Персонал', // todo кроме персонального транспорта
+  [RIDE_OCCUPATION.DRIVER]: 'Водитель', // todo только для персонального транспорта
+};
+
+const RIDE_TYPES_NAMES = {
+  [RIDE_TYPES.SELF_DRIVE]: 'Самостоятельная поездка',
+  [RIDE_TYPES.SCHEDULED]: 'Регулярный рейс',
+  [RIDE_TYPES.CHARTER]: 'Чартерный рейс', // todo only for aircrafts
+  [RIDE_TYPES.TOUR]: 'Тур', // todo except aircrafts
+  [RIDE_TYPES.CARPOOL]: 'Попутный автомобиль',
+  [RIDE_TYPES.HITCH_HIKING]: 'Автостоп',
+};
+
 const VEHICLE_NAMES = {
   [VEHICLE_TYPES.CAR]: 'Автомобиль',
   [VEHICLE_TYPES.TRAIN]: 'Поезд',
@@ -38,49 +51,6 @@ const VEHICLE_NAMES = {
   [VEHICLE_TYPES.MOTORBIKE]: 'Мотоцикл',
   [VEHICLE_TYPES.TRUCK]: 'Грузовик',
   [VEHICLE_TYPES.ALL_TERRAIN_VEHICLE]: 'Вездеход',
-};
-
-const RIDE_TYPES = {
-  SELF_DRIVE: 'SelfDrive',
-  SCHEDULED: 'Scheduled',
-  CHARTER: 'Charter',
-  TOUR: 'Tour',
-  CARPOOL: 'Carpool',
-  HITCH_HIKING: 'HitchHiking',
-};
-const RIDE_TYPES_NAMES = {
-  [RIDE_TYPES.SELF_DRIVE]: 'Самостоятельная поездка',
-  [RIDE_TYPES.SCHEDULED]: 'Регулярный рейс',
-  [RIDE_TYPES.CHARTER]: 'Чартерный рейс', // todo only for aircrafts
-  [RIDE_TYPES.TOUR]: 'Тур', // todo except aircrafts
-  [RIDE_TYPES.CARPOOL]: 'Попутный автомобиль',
-  [RIDE_TYPES.HITCH_HIKING]: 'Автостоп',
-};
-
-const RIDE_CLASSES = {
-  ECONOMY: 'Economy',
-  COMFORT: 'Comfort',
-  BUSINESS: 'Business',
-  FIRST: 'First',
-  PRIVATE: 'Private',
-};
-const RIDE_CLASSES_NAMES = {
-  [RIDE_CLASSES.ECONOMY]: 'Эконом',
-  [RIDE_CLASSES.COMFORT]: 'Комфорт',
-  [RIDE_CLASSES.BUSINESS]: 'Бизнес',
-  [RIDE_CLASSES.FIRST]: 'Первый',
-  [RIDE_CLASSES.PRIVATE]: 'Частный',
-};
-
-const RIDE_OCCUPATION = {
-  PASSENGER: 'Passenger',
-  STUFF: 'Stuff',
-  DRIVER: 'Driver',
-};
-const RIDE_OCCUPATION_NAMES = {
-  [RIDE_OCCUPATION.PASSENGER]: 'Пассажир',
-  [RIDE_OCCUPATION.STUFF]: 'Персонал', // todo кроме персонального транспорта
-  [RIDE_OCCUPATION.DRIVER]: 'Водитель', // todo только для персонального транспорта
 };
 
 const createOptionsSelect = (options, optionNames) => {
@@ -122,7 +92,11 @@ const RideOccupationOptions = createOptionsSelect(
 );
 
 export const useRideState = ({
+  nearestDepartureVisitId,
+  nearestArrivalVisitId,
   initialState: {
+    departureVisitId: initialArrivalVisitId = null,
+    arrivalVisitId: initialDepartureVisitId = null,
     vehicleType: initialVehicleType = VEHICLE_TYPES.AIRCRAFT,
     rideType: initialRideType = RIDE_TYPES.SCHEDULED,
     rideClass: initialRideClass = RIDE_CLASSES.ECONOMY,
@@ -132,6 +106,8 @@ export const useRideState = ({
   } = {},
 }) => {
   const [rideState, setRideState] = useState({
+    departureVisitId: initialArrivalVisitId,
+    arrivalVisitId: initialDepartureVisitId,
     vehicleType: initialVehicleType,
     rideType: initialRideType,
     rideClass: initialRideClass,
@@ -148,7 +124,11 @@ export const useRideState = ({
 };
 
 const RideEditCard = ({
+  visitsByTrip,
+  locationsDict,
   rideState: {
+    departureVisitId,
+    arrivalVisitId,
     vehicleType,
     rideType,
     rideClass,
@@ -158,6 +138,16 @@ const RideEditCard = ({
   },
   setRideState,
 }) => {
+  const setDepartureVisitId = useCallback(
+    ({ target: { value: nextDepartureVisitId } }) =>
+      setRideState({ departureVisitId: nextDepartureVisitId }),
+    [setRideState],
+  );
+  const setArrivalVisitId = useCallback(
+    ({ target: { value: nextArrivalVisitId } }) =>
+      setRideState({ arrivalVisitId: nextArrivalVisitId }),
+    [setRideState],
+  );
   const setVehicleType = useCallback(
     ({ target: { value: nextVehicleType } }) =>
       setRideState({ vehicleType: nextVehicleType }),
@@ -191,6 +181,40 @@ const RideEditCard = ({
 
   return (
     <>
+      <InputLabel shrink={true} htmlFor="age-simple">
+        Отправление из
+      </InputLabel>
+      <Select
+        value={departureVisitId}
+        onChange={setDepartureVisitId}
+        input={<Input id="age-simple" />}
+      >
+        <MenuItem key={null} value={null}>
+          Не определено
+        </MenuItem>
+        {visitsByTrip.map(({ visitId, locationId }) => (
+          <MenuItem key={locationId} value={visitId}>
+            {locationsDict[locationId].locationName}
+          </MenuItem>
+        ))}
+      </Select>
+      <InputLabel shrink={true} htmlFor="age-simple">
+        Прибытие в
+      </InputLabel>
+      <Select
+        value={arrivalVisitId}
+        onChange={setArrivalVisitId}
+        input={<Input id="age-simple" />}
+      >
+        <MenuItem key={null} value={null}>
+          Не определено
+        </MenuItem>
+        {visitsByTrip.map(({ visitId, locationId }) => (
+          <MenuItem key={locationId} value={visitId}>
+            {locationsDict[locationId].locationName}
+          </MenuItem>
+        ))}
+      </Select>
       <VehicleTypeOptions
         caption="Транспорт"
         value={vehicleType}

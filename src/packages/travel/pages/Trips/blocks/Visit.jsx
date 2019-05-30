@@ -8,9 +8,18 @@ import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DomainIcon from '@material-ui/icons/Domain';
 import Location from './Location';
 import Ride from './Ride';
-import RideInputDialog from './RideInputDialog';
 
 const styles = {
+  alwaysVisible: {},
+  container: {
+    position: 'relative',
+    '&:hover $editDialogTrigger': {
+      visibility: 'visible',
+    },
+    // '&:hover $ride, $alwaysVisible': {
+    //   display: 'inline-block',
+    // },
+  },
   editDialogTrigger: {
     marginLeft: '4px',
     position: 'absolute',
@@ -19,11 +28,8 @@ const styles = {
     display: 'inline-block',
     visibility: 'hidden',
   },
-  container: {
-    position: 'relative',
-    '&:hover $editDialogTrigger': {
-      visibility: 'visible',
-    },
+  ride: {
+    // display: 'none',
   },
   warning: {
     color: 'red',
@@ -56,6 +62,7 @@ const Visit = ({
   ridesDict,
   locationsDict,
   classes,
+  visitsByTrip,
   isEditable,
   isSorting,
   isArrivalRideMatch,
@@ -64,49 +71,42 @@ const Visit = ({
 }) => {
   const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
   const shouldWarnForDepartureRide = isEditable && !isDepartureRideMatch;
+  const handleArrivalRideUpdate = ride =>
+    handleRideUpdate({ ride, visitId, isArrivalToVisit: true });
+  const handleDepartureRideUpdate = ride =>
+    handleRideUpdate({ ride, visitId, isArrivalToVisit: false });
   return (
     <div className={classes.container}>
       <Ride
-        className={cls({
+        locationsDict={locationsDict}
+        visitsByTrip={visitsByTrip}
+        visitId={visitId}
+        isEditable={isEditable}
+        className={cls(classes.ride, {
+          [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
           [classes.warning]: shouldWarnForArrivalRide,
         })}
         ride={ridesDict[arrivalRideId]}
         showDetails={isSorting || shouldWarnForArrivalRide}
+        onRideUpdate={handleArrivalRideUpdate}
       />
       <Location
         location={locationsDict[locationId]}
         Icon={resolveVisitIconComponent(visitType)}
       />
-      {(isSorting || !isDepartureRideMatch) && (
-        <Ride
-          className={cls({
-            [classes.warning]: shouldWarnForDepartureRide,
-          })}
-          ride={ridesDict[departureRideId]}
-          showDetails={isSorting || shouldWarnForDepartureRide}
-        />
-      )}
-      {isEditable && (
-        <RideInputDialog
-          visit={visit}
-          ridesDict={ridesDict}
-          className={classes.editDialogTrigger}
-          onSubmit={({ arrivalRide, departureRide }) =>
-            Promise.all([
-              handleRideUpdate({
-                ride: arrivalRide,
-                visitId,
-                isArrivalToVisit: true,
-              }),
-              handleRideUpdate({
-                ride: departureRide,
-                visitId,
-                isArrivalToVisit: false,
-              }),
-            ])
-          }
-        />
-      )}
+      <Ride
+        locationsDict={locationsDict}
+        visitsByTrip={visitsByTrip}
+        visitId={visitId}
+        isEditable={isEditable}
+        className={cls(classes.ride, {
+          [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
+          [classes.warning]: shouldWarnForDepartureRide,
+        })}
+        ride={ridesDict[departureRideId]}
+        showDetails={isSorting || shouldWarnForDepartureRide}
+        onRideUpdate={handleDepartureRideUpdate}
+      />
     </div>
   );
 };

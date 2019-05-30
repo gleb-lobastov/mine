@@ -41,16 +41,12 @@ const Trips = ({
     [request],
   );
   const handleRideUpdate = useCallback(
-    ({ ride, departureFromVisitId, arrivalToVisitId }) => {
+    ({ ride, ride: { rideId } }) => {
       request({
         modelName: 'rides',
         query: {
-          id: ride && ride.id,
-          body: {
-            ...ride,
-            departureFromVisitId,
-            arrivalToVisitId,
-          },
+          id: rideId,
+          body: ride,
         },
         meta: {
           domain: 'trips.visits.rides',
@@ -107,7 +103,7 @@ Trips.propTypes = {
   ridesDict: PropTypes.arrayOf(
     PropTypes.shape({
       rideId: PropTypes.number,
-      vehicleTypeId: PropTypes.number,
+      vehicleType: PropTypes.string,
     }),
   ).isRequired,
 };

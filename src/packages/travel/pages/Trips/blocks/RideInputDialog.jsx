@@ -1,53 +1,56 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
 import RideEditCard, { useRideState } from './RideEditCard';
 
 const RideInputDialog = ({
-  ridesDict,
-  visit: { arrivalRideId, departureRideId },
+  visitId,
+  ride,
+  visitsByTrip,
+  locationsDict,
+  children,
   className,
   onSubmit: handleSubmit,
 }) => {
-  const {
-    rideState: arrivalRideState,
-    setRideState: setArrivalRideState,
-  } = useRideState({ initialState: ridesDict[arrivalRideId] });
-  const {
-    rideState: departureRideState,
-    setRideState: setDepartureRideState,
-  } = useRideState({ initialState: ridesDict[departureRideId] });
+  const visitIndex =
+    visitsByTrip &&
+    visitsByTrip.findIndex(
+      ({ visitId: visitIdToCompare }) => visitIdToCompare === visitId,
+    );
+  const prevVisitId =
+    visitIndex >= 1 ? visitsByTrip[visitIndex - 1].visitId : undefined;
+  const { rideState, setRideState } = useRideState({
+    initialState: ride,
+    nearestDepartureVisitId: prevVisitId,
+    nearestArrivalVisitId: visitId,
+  });
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleSubmitInternal = () => {
-    handleSubmit({
-      arrivalRide: arrivalRideState,
-      departureRide: departureRideState,
-    });
+    handleSubmit(rideState);
     handleClose(false);
   };
 
   return (
     <div className={className}>
-      <Button
+      <IconButton
         data-sort-handler="disabled"
         size="small"
         variant="outlined"
         color="primary"
         onClick={handleClickOpen}
       >
-        Редактировать
-      </Button>
+        {children}
+      </IconButton>
       <Dialog
         transitionDuration={500}
-        fullScreen={true}
         open={open}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
@@ -57,19 +60,11 @@ const RideInputDialog = ({
           <DialogContentText>
             Как вы добрались в место назначения и как уехали из него?
           </DialogContentText>
-          <Typography variant="h6" color="inherit">
-            Прибытие
-          </Typography>
           <RideEditCard
-            rideState={arrivalRideState}
-            setRideState={setArrivalRideState}
-          />
-          <Typography variant="h6" color="inherit">
-            Отправление
-          </Typography>
-          <RideEditCard
-            rideState={departureRideState}
-            setRideState={setDepartureRideState}
+            locationsDict={locationsDict}
+            visitsByTrip={visitsByTrip}
+            rideState={rideState}
+            setRideState={setRideState}
           />
         </DialogContent>
         <DialogActions>
@@ -86,16 +81,8 @@ const RideInputDialog = ({
 };
 
 RideInputDialog.propTypes = {
+  children: PropTypes.node.isRequired,
   className: PropTypes.string,
-  ridesDict: PropTypes.objectOf(
-    PropTypes.shape({
-      rideId: PropTypes.number,
-    }),
-  ).isRequired,
-  visit: PropTypes.shape({
-    arrivalRideId: PropTypes.number,
-    departureRideId: PropTypes.number,
-  }).isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 RideInputDialog.defaultProps = {

@@ -1,6 +1,8 @@
 export const toClient = ({
   arrival_date_time: rawArrivalDateTime,
   departure_date_time: rawDepartureDateTime,
+  arrival_visit_id: rawArrivalVisitId,
+  departure_visit_id: rawDepartureVisitId,
   id: rawRideId,
   ride_class: rawRideClass,
   ride_occupation: rawRideOccupation,
@@ -8,7 +10,9 @@ export const toClient = ({
   vehicle_type: rawVehicleType,
 }) => ({
   arrivalDateTime: new Date(rawArrivalDateTime),
+  arrivalVisitId: rawArrivalVisitId,
   departureDateTime: new Date(rawDepartureDateTime),
+  departureVisitId: rawDepartureVisitId,
   rideId: rawRideId,
   rideType: rawRideType,
   rideClass: rawRideClass,
@@ -22,9 +26,9 @@ export const toServer = (requestBody, { isProvision } = {}) => {
   }
   const {
     arrivalDateTime: rawArrivalDateTime,
-    arrivalToVisitId: rawArrivalToVisitId,
+    arrivalVisitId: rawArrivalVisitId,
     departureDateTime: rawDepartureDateTime,
-    departureFromVisitId: rawDepartureFromVisitId,
+    departureVisitId: rawDepartureVisitId,
     rideClass: rawRideClass,
     rideId: rawRideId,
     rideOccupation: rawRideOccupation,
@@ -34,9 +38,9 @@ export const toServer = (requestBody, { isProvision } = {}) => {
 
   return {
     arrival_date_time: rawArrivalDateTime,
-    arrival_to_visit_id: rawArrivalToVisitId,
+    arrival_visit_id: rawArrivalVisitId,
     departure_date_time: rawDepartureDateTime,
-    departure_from_visit_id: rawDepartureFromVisitId,
+    departure_visit_id: rawDepartureVisitId,
     id: rawRideId,
     ride_class: rawRideClass,
     ride_occupation: rawRideOccupation,

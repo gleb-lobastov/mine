@@ -15,35 +15,37 @@ import TruckIcon from '@material-ui/icons/LocalShipping';
 import VanIcon from '@material-ui/icons/AirportShuttle';
 import WalkIcon from '@material-ui/icons/DirectionsWalk';
 import UnknownRideIcon from '@material-ui/icons/NotListedLocation';
+import { VEHICLE_TYPES } from 'travel/models/rides/consts';
+import RideInputDialog from './RideInputDialog';
 
-const resolveRideIconComponent = vehicleTypeId => {
-  switch (vehicleTypeId) {
-    case 1:
+const resolveRideIconComponent = vehicleType => {
+  switch (vehicleType) {
+    case VEHICLE_TYPES.CAR:
       return CarIcon;
-    case 2:
+    case VEHICLE_TYPES.TRAIN:
       return TrainIcon;
-    case 3:
+    case VEHICLE_TYPES.AIRCRAFT:
       return FlightIcon;
-    case 4:
+    case VEHICLE_TYPES.BUS:
       return BusIcon;
-    case 5:
+    case VEHICLE_TYPES.MOTORHOME:
       return VanIcon;
-    case 6:
+    case VEHICLE_TYPES.LOCAL_TRAIN:
       return TrainIcon;
-    case 7:
+    case VEHICLE_TYPES.FERRY:
       return BoatIcon;
-    case 8:
+    case VEHICLE_TYPES.BIKE:
       return BikeIcon;
-    case 9:
+    case VEHICLE_TYPES.BY_FEET:
       return WalkIcon;
-    case 12:
+    case VEHICLE_TYPES.MOTORBIKE:
       return MotorcycleIcon;
-    case 13:
+    case VEHICLE_TYPES.TRUCK:
       return TruckIcon;
-    case 14:
+    case VEHICLE_TYPES.ALL_TERRAIN_VEHICLE:
       return TerrainIcon;
-    case 10:
-    case 11:
+    case VEHICLE_TYPES.ROPEWAY:
+    case VEHICLE_TYPES.FUNICULAR:
     default:
       return CustomTransportIcon;
   }
@@ -61,6 +63,9 @@ export const styles = {
   details: {
     marginRight: '4px',
   },
+  editDialogTrigger: {
+    display: 'inline-block',
+  },
 };
 
 const resolveDateTimeString = (departureDateTime, arrivalDateTime) => {
@@ -75,27 +80,39 @@ const resolveDateTimeString = (departureDateTime, arrivalDateTime) => {
 };
 
 const Ride = ({
+  isEditable,
+  onRideUpdate: handleRideUpdate,
   classes,
+  visitsByTrip,
+  visitId,
   className,
-  ride: { rideId, vehicleTypeId, arrivalDateTime, departureDateTime },
+  ride,
+  ride: { rideId, vehicleType, arrivalDateTime, departureDateTime },
   showDetails,
+  locationsDict,
 }) => {
-  if (!rideId) {
-    if (!showDetails) {
-      return null;
-    }
-    return (
-      <div className={cls(className, classes.container)}>
-        <UnknownRideIcon className={classes.icon} />
-      </div>
-    );
-  }
-  const Icon = resolveRideIconComponent(vehicleTypeId);
+  const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
+  const iconNode = <Icon className={classes.icon} />;
 
   return (
     <div className={cls(className, classes.container)}>
-      <Icon className={classes.icon} />
-      {showDetails && (
+      {!isEditable ? (
+        iconNode
+      ) : (
+        <RideInputDialog
+          ride={ride}
+          locationsDict={locationsDict}
+          visitId={visitId}
+          visitsByTrip={visitsByTrip}
+          className={classes.editDialogTrigger}
+          onSubmit={updatedRide =>
+            handleRideUpdate({ ...ride, ...updatedRide })
+          }
+        >
+          {iconNode}
+        </RideInputDialog>
+      )}
+      {Boolean(rideId && showDetails) && (
         <span className={classes.details}>
           {resolveDateTimeString(departureDateTime, arrivalDateTime)}
         </span>
@@ -105,12 +122,19 @@ const Ride = ({
 };
 
 Ride.propTypes = {
+  onRideUpdate: PropTypes.func.isRequired,
   className: PropTypes.string,
+  isEditable: PropTypes.bool,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   ride: PropTypes.shape({}),
   showDetails: PropTypes.bool,
 };
 
-Ride.defaultProps = { ride: {}, className: undefined, showDetails: false };
+Ride.defaultProps = {
+  isEditable: true,
+  ride: {},
+  className: undefined,
+  showDetails: false,
+};
 
 export default withStyles(styles)(Ride);
