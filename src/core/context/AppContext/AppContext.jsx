@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import reactComponentPropType from 'modules/customPropTypes/reactComponentPropType';
 import collectPaths, { pathsPropTypes } from './collectPaths';
 
 const AppContext = React.createContext({});
@@ -40,7 +41,7 @@ export const packagePropTypes = {
   packageName: PropTypes.string,
   title: PropTypes.shape({
     caption: PropTypes.string,
-    icon: PropTypes.func,
+    icon: reactComponentPropType,
   }),
   routing: PropTypes.shape({
     routes: PropTypes.arrayOf(PropTypes.shape(routeConfigPropTypes)),
