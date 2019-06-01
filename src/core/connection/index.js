@@ -1,9 +1,8 @@
-/* global __API_HOST__ __IS_DEV_MODE__ */
+/* global __API_HOST__  */
 import createRequestEngine from '@request-kit/engine-rest';
 import { middleware as authPlugin } from 'modules/auth';
 import endpointPlugin from 'modules/utilities/request-kit/plugins/endpoint';
 import adapterPlugin from 'modules/utilities/request-kit/plugins/adapter';
-import loggerPlugin from 'modules/utilities/request-kit/plugins/logger';
 import responseAsJsonPlugin from 'modules/utilities/request-kit/plugins/responseAsJson';
 import { travelModels } from 'travel';
 import { literatureModels } from 'literature';
@@ -18,7 +17,7 @@ const engine = createRequestEngine({
     authPlugin,
     endpointPlugin,
     adapterPlugin,
-    __IS_DEV_MODE__ && loggerPlugin,
+    // __IS_DEV_MODE__ && loggerPlugin,
     responseAsJsonPlugin,
   ].filter(Boolean),
 });
