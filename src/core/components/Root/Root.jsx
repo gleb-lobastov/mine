@@ -11,8 +11,8 @@ import AuthContext from '../../context/AuthContext';
 import Layout from '../Layout';
 import Router from '../Router';
 
-const Root = ({ store, config }) => (
-  <Provider store={store}>
+const Root = ({ store, config, appId }) => (
+  <Provider store={store} key={appId}>
     <BrowserRouter basename={__ROUTES_BASENAME__}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <AppContext.Provider value={config}>
@@ -33,6 +33,7 @@ Root.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   store: PropTypes.object.isRequired,
   config: PropTypes.shape(configPropTypes).isRequired,
+  appId: PropTypes.number.isRequired,
 };
 
 export default Root;

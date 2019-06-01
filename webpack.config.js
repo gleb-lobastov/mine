@@ -55,6 +55,7 @@ module.exports = {
       __IS_DEV_MODE__: isDevelopmentMode,
     }),
     !isDevelopmentMode && new CopyWebpackPlugin(['src/404.html']),
+    isDevelopmentMode && new webpack.HotModuleReplacementPlugin(),
   ].filter(Boolean),
   resolve: {
     alias: {
@@ -74,6 +75,7 @@ module.exports = {
   },
   devServer: {
     historyApiFallback: true,
+    hot: true,
   },
   devtool: isDevelopmentMode ? 'eval' : 'source-map',
 };

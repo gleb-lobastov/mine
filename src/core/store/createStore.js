@@ -6,8 +6,12 @@ const reducer = combineReducers({
   requestKit: requestReducer,
 });
 
-export default () => {
-  const store = createStore(reducer, applyMiddleware(requestMiddleware));
+export default initialState => {
+  const store = createStore(
+    reducer,
+    initialState,
+    applyMiddleware(requestMiddleware),
+  );
 
   if (__IS_DEV_MODE__) {
     // eslint-disable-next-line no-underscore-dangle
