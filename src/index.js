@@ -20,7 +20,7 @@ const app = App.create(
       auth({ mountPath: '/hello' }),
     ],
   },
-  module.hot.data && module.hot.data.state,
+  module.hot && module.hot.data && module.hot.data.state,
 );
 app.render();
 
