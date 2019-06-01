@@ -18,7 +18,7 @@ export default class ModelsSet {
     defaultModel,
     itemSchema,
     derivedSchemas,
-    isNoop = false, // to obtain non-nested denormalization schemas
+    isNoop = false, // to obtain non-nested schemas for denormalize
   } = {}) => ({ modelName = defaultModel, schemaName } = {}) => {
     if (!modelName || isNoop) {
       return undefined;

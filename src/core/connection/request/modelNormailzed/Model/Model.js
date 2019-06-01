@@ -111,11 +111,11 @@ export default class Model {
     return normalize(response, this.resolveSchemaFromRequest(request));
   }
 
-  denormalize(request, result, entitites) {
+  denormalize(request, result, entities) {
     return denormalize(
       result,
       this.resolveSchemaFromRequest(request, true),
-      entitites,
+      entities,
     );
   }
 
