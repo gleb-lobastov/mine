@@ -28,12 +28,10 @@ export const requestStrategyEnhancer = requestStrategy => (
   );
 };
 
-export default ({ requestStrategy }) => {
-  return store => next => action => {
-    if (!checkIsInitiateRequestAction(action)) {
-      return next(action);
-    }
-    const { payload: requirements = {} } = action;
-    return requestStrategy(requirements, store.dispatch, store.getState);
-  };
+export default ({ requestStrategy }) => store => next => action => {
+  if (!checkIsInitiateRequestAction(action)) {
+    return next(action);
+  }
+  const { payload: requirements = {} } = action;
+  return requestStrategy(requirements, store.dispatch, store.getState);
 };
