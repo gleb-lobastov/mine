@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import reactComponentPropType from 'modules/customPropTypes/reactComponentPropType';
+import locationPropTypes from 'travel/models/locations/propTypes';
 
 export const styles = {
   container: {
@@ -27,10 +29,8 @@ const Location = ({
 
 Location.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  location: PropTypes.shape({
-    locationName: PropTypes.string,
-  }),
-  Icon: PropTypes.func,
+  location: PropTypes.shape(locationPropTypes),
+  Icon: reactComponentPropType,
 };
 
 Location.defaultProps = {

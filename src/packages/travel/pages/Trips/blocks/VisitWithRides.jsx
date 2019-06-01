@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import LocationCityIcon from '@material-ui/icons/LocationCity';
-import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
-import LocalShippingIcon from '@material-ui/icons/LocalShipping';
-import DomainIcon from '@material-ui/icons/Domain';
-import Location from './Location';
+import ridePropTypes from 'travel/models/rides/propTypes';
+import visitPropTypes from 'travel/models/visits/propTypes';
+import Visit from 'travel/components/models/visits/Visit';
 import Ride from './Ride';
 
 const styles = {
@@ -36,33 +34,14 @@ const styles = {
   },
 };
 
-const resolveVisitIconComponent = visitType => {
-  switch (visitType) {
-    case 'Transit':
-      return TransferWithinAStationIcon;
-    case 'BaseCamp':
-      return DomainIcon;
-    case 'Relocation':
-      return LocalShippingIcon;
-    case 'Regular':
-    default:
-      return LocationCityIcon;
-  }
-};
-
-const Visit = ({
+const VisitWithRides = ({
   visit,
-  visit: {
-    visitId,
-    locationId,
-    visitType,
-    arrivalRideId,
-    departureRideId,
-  } = {},
+  visit: { visitId, arrivalRideId, departureRideId } = {},
   ridesDict,
-  locationsDict,
   classes,
-  visitsByTrip,
+  prevVisitId,
+  nextVisitId,
+  tripVisitsList,
   isEditable,
   isSorting,
   isArrivalRideMatch,
@@ -78,8 +57,9 @@ const Visit = ({
   return (
     <div className={classes.container}>
       <Ride
-        locationsDict={locationsDict}
-        visitsByTrip={visitsByTrip}
+        availableVisits={tripVisitsList}
+        defaultDepartureVisitId={prevVisitId}
+        defaultArrivalVisitId={visitId}
         visitId={visitId}
         isEditable={isEditable}
         className={cls(classes.ride, {
@@ -90,20 +70,17 @@ const Visit = ({
         showDetails={isSorting || shouldWarnForArrivalRide}
         onRideUpdate={handleArrivalRideUpdate}
       />
-      <Location
-        location={locationsDict[locationId]}
-        Icon={resolveVisitIconComponent(visitType)}
-      />
+      <Visit visit={visit} />
       <Ride
-        locationsDict={locationsDict}
-        visitsByTrip={visitsByTrip}
-        visitId={visitId}
-        isEditable={isEditable}
         className={cls(classes.ride, {
           [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
           [classes.warning]: shouldWarnForDepartureRide,
         })}
         ride={ridesDict[departureRideId]}
+        availableVisits={tripVisitsList}
+        defaultDepartureVisitId={visitId}
+        defaultArrivalVisitId={nextVisitId}
+        isEditable={isEditable}
         showDetails={isSorting || shouldWarnForDepartureRide}
         onRideUpdate={handleDepartureRideUpdate}
       />
@@ -111,35 +88,28 @@ const Visit = ({
   );
 };
 
-Visit.propTypes = {
+VisitWithRides.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  isEditable: PropTypes.bool,
   isArrivalRideMatch: PropTypes.bool,
   isDepartureRideMatch: PropTypes.bool,
+  isEditable: PropTypes.bool,
   isSorting: PropTypes.bool,
+  nextVisitId: PropTypes.number,
   onRideUpdate: PropTypes.func.isRequired,
-  visit: PropTypes.shape({
-    tripId: PropTypes.number,
-    orderInTrip: PropTypes.number,
-  }).isRequired,
-  locationsDict: PropTypes.objectOf(
-    PropTypes.shape({
-      locationId: PropTypes.number,
-      locationName: PropTypes.string,
-    }),
-  ).isRequired,
-  ridesDict: PropTypes.objectOf(
-    PropTypes.shape({
-      rideId: PropTypes.number,
-    }),
-  ).isRequired,
+  prevVisitId: PropTypes.number,
+  ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
+  tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
+  visit: PropTypes.shape(visitPropTypes).isRequired
 };
 
-Visit.defaultProps = {
-  isEditable: false,
+VisitWithRides.defaultProps = {
   isArrivalRideMatch: true,
   isDepartureRideMatch: true,
+  isEditable: false,
   isSorting: false,
+  nextVisitId: null,
+  prevVisitId: null,
+  tripVisitsList: []
 };
 
-export default withStyles(styles)(Visit);
+export default withStyles(styles)(VisitWithRides);

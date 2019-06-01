@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import IconHome from '@material-ui/icons/Home';
-import Visit from './Visit';
-import Location from './Location';
+import locationPropTypes from 'travel/models/locations/propTypes';
+import ridePropTypes from 'travel/models/rides/propTypes';
+import tripPropTypes from 'travel/models/trips/propTypes';
+import visitPropTypes from 'travel/models/visits/propTypes';
+import Location from 'travel/components/models/locations/Location';
+import VisitWithRides from './VisitWithRides';
 import Ride from './Ride';
 
 const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
-const SortableVisit = SortableElement(Visit);
+const SortableVisitWithRides = SortableElement(VisitWithRides);
 
 const checkIsRidesMatch = (prevVisit, nextVisit) => {
   if (!prevVisit || !nextVisit) {
@@ -17,125 +21,118 @@ const checkIsRidesMatch = (prevVisit, nextVisit) => {
   const { arrivalRideId: nextVisitArrivalRideId } = nextVisit;
   return prevVisitDepartureRideId === nextVisitArrivalRideId;
 };
+const checkIsNodeNotSortable = event => {
+  let element = event.target;
+  while (element) {
+    if (element.dataset && element.dataset.sortHandler === 'disabled') {
+      return true;
+    }
+    element = element.parentNode;
+  }
+  return false;
+};
+
 const Trip = ({
-  trip: { tripId, originLocationId } = {},
-  visitsList,
-  locationsDict,
-  ridesDict,
   isEditable,
-  onSortEndOfVisit: handleSortEndOfVisit,
+  locationsDict,
   onRideUpdate: handleRideUpdate,
+  onVisitsOrderUpdate: handleVisitsOrderUpdate,
+  ridesDict,
+  trip: { originLocationId },
+  tripVisitsList,
 }) => {
   const [isSorting, setIsSorting] = useState(false);
-  const visitsByTrip = visitsList
-    .filter(({ tripId: visitTripId }) => visitTripId === tripId)
-    .sort(
-      ({ orderInTrip: orderInTripA }, { orderInTrip: orderInTripB }) =>
-        orderInTripA - orderInTripB,
-    );
-  if (!visitsByTrip || !visitsByTrip.length) {
+  if (!tripVisitsList.length) {
     return null;
   }
 
-  const handleRideUpdateInternal = ride => {
-    // const visitIndex = visitsByTrip.findIndex(
-    //   ({ visitId: visitIdToCompare }) => visitIdToCompare === visitId,
-    // );
-    // const lastVisitIndex = visitsByTrip.length - 1;
-    // const prevVisitId =
-    //   visitIndex <= 1 ? null : visitsByTrip[visitIndex - 1].visitId;
-    // const nextVisitId =
-    //   visitIndex >= lastVisitIndex - 1
-    //     ? null
-    //     : visitsByTrip[visitIndex + 1].visitId;
-
-    return handleRideUpdate(ride);
-  };
-
   const isSortable = isEditable;
-  const VisitComponent = isSortable ? SortableVisit : Visit;
-  const visitsNodes = visitsByTrip.map((visit, index) => (
-    <VisitComponent
-      index={index}
-      isEditable={isEditable}
-      isArrivalRideMatch={checkIsRidesMatch(visitsByTrip[index - 1], visit)}
-      isDepartureRideMatch={checkIsRidesMatch(visit, visitsByTrip[index + 1])}
-      isSorting={isSorting}
-      key={visit.visitId}
-      locationsDict={locationsDict}
-      visitsByTrip={visitsByTrip}
-      ridesDict={ridesDict}
-      visit={visit}
-      onRideUpdate={handleRideUpdateInternal}
-    />
-  ));
+  const VisitWithRidesComponent = isSortable
+    ? SortableVisitWithRides
+    : VisitWithRides;
+  const visitsNodes = tripVisitsList.map((visit, indexOfVisit) => {
+    const { visitId } = visit;
+    const prevVisit =
+      indexOfVisit > 0 ? tripVisitsList[indexOfVisit - 1] : null;
+    const nextVisit =
+      indexOfVisit < tripVisitsList.length - 1
+        ? tripVisitsList[indexOfVisit + 1]
+        : null;
+    return (
+      <VisitWithRidesComponent
+        key={visitId}
+        index={indexOfVisit /* for SortableVisitWithRides */}
+        isArrivalRideMatch={checkIsRidesMatch(prevVisit, visit)}
+        isDepartureRideMatch={checkIsRidesMatch(visit, nextVisit)}
+        isEditable={isEditable}
+        isSorting={isSorting}
+        onRideUpdate={handleRideUpdate}
+        prevVisitId={prevVisit && prevVisit.visitId}
+        nextVisitId={nextVisit && nextVisit.visitId}
+        ridesDict={ridesDict}
+        locationsDict={locationsDict}
+        tripVisitsList={tripVisitsList}
+        visit={visit}
+      />
+    );
+  });
 
+  const handleSortEnd = (data, event) => {
+    setIsSorting(false);
+    handleVisitsOrderUpdate(event, {
+      ...data,
+      collection: tripVisitsList,
+    });
+  };
   const wrappedVisitsNodes = !isSortable ? (
     <div>{visitsNodes}</div>
   ) : (
     <SortableTrip
+      onSortEnd={handleSortEnd}
+      shouldCancelStart={checkIsNodeNotSortable}
       updateBeforeSortStart={() => setIsSorting(true)}
-      shouldCancelStart={event => {
-        let element = event.target;
-        while (element) {
-          if (element.dataset && element.dataset.sortHandler === 'disabled') {
-            return true;
-          }
-          element = element.parentNode;
-        }
-        return false;
-      }}
-      onSortEnd={(data, event) => {
-        setIsSorting(false);
-        if (handleSortEndOfVisit) {
-          handleSortEndOfVisit({ ...data, collection: visitsByTrip }, event);
-        }
-      }}
     >
       {visitsNodes}
     </SortableTrip>
   );
 
-  const originLocation = locationsDict[originLocationId];
   const originLocationNode = (
-    <Location location={originLocation} Icon={IconHome} />
+    <Location location={locationsDict[originLocationId]} Icon={IconHome} />
   );
 
-  const recentVisit = visitsByTrip[visitsByTrip.length - 1];
+  const recentVisit = tripVisitsList[tripVisitsList.length - 1];
+  const preRecentVisit = tripVisitsList[tripVisitsList.length - 2];
   const { departureRideId: rideToHomeId } = recentVisit;
   return (
     <>
       {originLocationNode}
       {wrappedVisitsNodes}
-      <Ride ride={ridesDict[rideToHomeId]} showDetails={isSorting} />
+      <Ride
+        ride={ridesDict[rideToHomeId]}
+        showDetails={
+          isSorting || checkIsRidesMatch(preRecentVisit, recentVisit)
+        }
+        onRideUpdate={handleRideUpdate}
+        isEditable={isEditable}
+      />
       {originLocationNode}
     </>
   );
 };
 Trip.propTypes = {
   isEditable: PropTypes.bool,
-  onSortEndOfVisit: PropTypes.func,
-  trip: PropTypes.shape({
-    tripName: PropTypes.string,
-    tripId: PropTypes.number,
-  }).isRequired,
-  visitsList: PropTypes.arrayOf(
-    PropTypes.shape({
-      tripId: PropTypes.number,
-      orderInTrip: PropTypes.number,
-    }),
-  ).isRequired,
-  locationsDict: PropTypes.objectOf(
-    PropTypes.shape({
-      locationId: PropTypes.number,
-      locationName: PropTypes.string,
-    }),
-  ).isRequired,
+  locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
+    .isRequired,
+  onRideUpdate: PropTypes.func.isRequired,
+  onVisitsOrderUpdate: PropTypes.func.isRequired,
+  ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
+  trip: PropTypes.shape(tripPropTypes).isRequired,
+  tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
 };
 
 Trip.defaultProps = {
   isSortable: false,
-  onSortEndOfVisit: undefined,
+  tripVisitsList: [],
 };
 
 export default Trip;

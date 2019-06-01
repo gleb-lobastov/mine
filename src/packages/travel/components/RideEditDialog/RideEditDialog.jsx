@@ -7,30 +7,19 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import RideEditCard, { useRideState } from './RideEditCard';
+import ridePropTypes from 'travel/models/rides/propTypes';
+import visitPropTypes from 'travel/models/visits/propTypes';
+import RideEditCard, { useRideState } from './blocks/RideEditCard';
 
-const RideInputDialog = ({
-  visitId,
-  ride,
-  visitsByTrip,
-  locationsDict,
+const RideEditDialog = ({
+  availableVisits,
+  initialState,
   children,
   className,
   onSubmit: handleSubmit,
 }) => {
-  const visitIndex =
-    visitsByTrip &&
-    visitsByTrip.findIndex(
-      ({ visitId: visitIdToCompare }) => visitIdToCompare === visitId,
-    );
-  const prevVisitId =
-    visitIndex >= 1 ? visitsByTrip[visitIndex - 1].visitId : undefined;
-  const { rideState, setRideState } = useRideState({
-    initialState: ride,
-    nearestDepartureVisitId: prevVisitId,
-    nearestArrivalVisitId: visitId,
-  });
-  const [open, setOpen] = React.useState(false);
+  const { rideState, setRideState } = useRideState(initialState);
+  const [isOpen, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleSubmitInternal = () => {
@@ -51,7 +40,7 @@ const RideInputDialog = ({
       </IconButton>
       <Dialog
         transitionDuration={500}
-        open={open}
+        open={isOpen}
         onClose={handleClose}
         aria-labelledby="form-dialog-title"
       >
@@ -61,8 +50,7 @@ const RideInputDialog = ({
             Как вы добрались в место назначения и как уехали из него?
           </DialogContentText>
           <RideEditCard
-            locationsDict={locationsDict}
-            visitsByTrip={visitsByTrip}
+            availableVisits={availableVisits}
             rideState={rideState}
             setRideState={setRideState}
           />
@@ -80,13 +68,16 @@ const RideInputDialog = ({
   );
 };
 
-RideInputDialog.propTypes = {
+RideEditDialog.propTypes = {
+  availableVisits: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
+  initialState: PropTypes.shape(ridePropTypes).isRequired,
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
 };
-RideInputDialog.defaultProps = {
+RideEditDialog.defaultProps = {
   className: undefined,
+  availableVisits: [],
 };
 
-export default RideInputDialog;
+export default RideEditDialog;
