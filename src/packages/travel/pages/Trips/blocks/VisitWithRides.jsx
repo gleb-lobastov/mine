@@ -71,19 +71,21 @@ const VisitWithRides = ({
         onRideUpdate={handleArrivalRideUpdate}
       />
       <Visit visit={visit} />
-      <Ride
-        className={cls(classes.ride, {
-          [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
-          [classes.warning]: shouldWarnForDepartureRide,
-        })}
-        ride={ridesDict[departureRideId]}
-        availableVisits={tripVisitsList}
-        defaultDepartureVisitId={visitId}
-        defaultArrivalVisitId={nextVisitId}
-        isEditable={isEditable}
-        showDetails={isSorting || shouldWarnForDepartureRide}
-        onRideUpdate={handleDepartureRideUpdate}
-      />
+      {(!isDepartureRideMatch || isSorting) && (
+        <Ride
+          className={cls(classes.ride, {
+            [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
+            [classes.warning]: shouldWarnForDepartureRide,
+          })}
+          ride={ridesDict[departureRideId]}
+          availableVisits={tripVisitsList}
+          defaultDepartureVisitId={visitId}
+          defaultArrivalVisitId={nextVisitId}
+          isEditable={isEditable}
+          showDetails={isSorting || shouldWarnForDepartureRide}
+          onRideUpdate={handleDepartureRideUpdate}
+        />
+      )}
     </div>
   );
 };
@@ -99,7 +101,7 @@ VisitWithRides.propTypes = {
   prevVisitId: PropTypes.number,
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
-  visit: PropTypes.shape(visitPropTypes).isRequired
+  visit: PropTypes.shape(visitPropTypes).isRequired,
 };
 
 VisitWithRides.defaultProps = {
@@ -109,7 +111,7 @@ VisitWithRides.defaultProps = {
   isSorting: false,
   nextVisitId: null,
   prevVisitId: null,
-  tripVisitsList: []
+  tripVisitsList: [],
 };
 
 export default withStyles(styles)(VisitWithRides);
