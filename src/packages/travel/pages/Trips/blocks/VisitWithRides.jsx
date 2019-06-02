@@ -81,7 +81,7 @@ const VisitWithRides = ({
           availableVisits={tripVisitsList}
           defaultDepartureVisitId={visitId}
           defaultArrivalVisitId={nextVisitId}
-          isEditable={isEditable}
+          isEditable={isEditable && !isDepartureRideMatch}
           showDetails={isSorting || shouldWarnForDepartureRide}
           onRideUpdate={handleDepartureRideUpdate}
         />
