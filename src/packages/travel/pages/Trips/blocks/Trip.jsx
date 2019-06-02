@@ -102,7 +102,7 @@ const Trip = ({
 
   const recentVisit = tripVisitsList[tripVisitsList.length - 1];
   const preRecentVisit = tripVisitsList[tripVisitsList.length - 2];
-  const { departureRideId: rideToHomeId } = recentVisit;
+  const { departureRideId: rideToHomeId, visitId: recentVisitId } = recentVisit;
   return (
     <>
       {originLocationNode}
@@ -114,6 +114,8 @@ const Trip = ({
         }
         onRideUpdate={handleRideUpdate}
         isEditable={isEditable}
+        availableVisits={tripVisitsList}
+        defaultDepartureVisitId={recentVisitId}
       />
       {originLocationNode}
     </>
