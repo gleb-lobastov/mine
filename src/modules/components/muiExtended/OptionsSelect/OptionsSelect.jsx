@@ -33,6 +33,7 @@ const OptionsSelect = ({
     </InputLabel>
     <Select
       value={value}
+      displayEmpty={true}
       onChange={handleChange}
       input={<Input id={inputId} />}
       className={classes.selectRoot}
