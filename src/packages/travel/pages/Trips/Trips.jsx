@@ -66,9 +66,10 @@ const Trips = ({
     },
     [request],
   );
-  const handleRideUpdate = useCallback(ride => request(submitRide(ride)), [
-    request,
-  ]);
+  const handleRideUpdate = useCallback(
+    ride => request(submitRide({ ride })),
+    [request],
+  );
 
   const visitsGroupedByTrips = groupAndOrderVisitsByTrips(visitsList);
   return (
