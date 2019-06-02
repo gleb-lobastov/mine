@@ -51,6 +51,10 @@ const OptionsSelect = ({
   </div>
 );
 
+const valuePropTypes = PropTypes.oneOfType([
+  PropTypes.number,
+  PropTypes.string,
+]);
 OptionsSelect.propTypes = {
   caption: PropTypes.string.isRequired,
   classes: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -58,9 +62,8 @@ OptionsSelect.propTypes = {
   inputId: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   optionRender: PropTypes.func,
-  // eslint-disable-next-line react/forbid-prop-types
-  options: PropTypes.array,
-  value: PropTypes.string,
+  options: PropTypes.arrayOf(valuePropTypes),
+  value: valuePropTypes,
 };
 
 OptionsSelect.defaultProps = {
