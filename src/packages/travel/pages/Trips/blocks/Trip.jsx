@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import IconHome from '@material-ui/icons/Home';
+import EditIcon from '@material-ui/icons/Edit';
 import locationPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Location from 'travel/components/models/locations/Location';
+import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
 import VisitWithRides from './VisitWithRides';
 import Ride from './Ride';
 
@@ -38,8 +40,11 @@ const Trip = ({
   onRideUpdate: handleRideUpdate,
   onVisitsOrderUpdate: handleVisitsOrderUpdate,
   ridesDict,
-  trip: { originLocationId },
+  trip,
+  trip: { originLocationId, tripName },
+  tripIndex,
   tripVisitsList,
+  onTripUpdate: handleTripUpdate,
 }) => {
   const [isSorting, setIsSorting] = useState(false);
   if (!tripVisitsList.length) {
@@ -105,6 +110,13 @@ const Trip = ({
   const { departureRideId: rideToHomeId, visitId: recentVisitId } = recentVisit;
   return (
     <>
+      <h1>{`${tripIndex + 1}. ${tripName}`}</h1>
+      <TripEditDialog
+        initialState={trip}
+        onSubmit={updatedTrip => handleTripUpdate({ ...trip, ...updatedTrip })}
+      >
+        <EditIcon />
+      </TripEditDialog>
       {originLocationNode}
       {wrappedVisitsNodes}
       <Ride
@@ -122,10 +134,12 @@ const Trip = ({
   );
 };
 Trip.propTypes = {
+  tripIndex: PropTypes.number.isRequired,
   isEditable: PropTypes.bool,
   locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
     .isRequired,
   onRideUpdate: PropTypes.func.isRequired,
+  onTripUpdate: PropTypes.func.isRequired,
   onVisitsOrderUpdate: PropTypes.func.isRequired,
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   trip: PropTypes.shape(tripPropTypes).isRequired,

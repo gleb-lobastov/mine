@@ -20,7 +20,7 @@ import { VEHICLE_TYPES } from 'travel/models/rides/consts';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import initializeRide from 'travel/models/rides/initialize';
-import RideEditDialog from 'travel/components/RideEditDialog';
+import RideEditDialog from 'travel/components/models/rides/RideEditDialog';
 
 const resolveRideIconComponent = vehicleType => {
   switch (vehicleType) {

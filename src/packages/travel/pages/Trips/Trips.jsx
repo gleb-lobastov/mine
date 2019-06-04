@@ -3,13 +3,16 @@ import compose from 'lodash/fp/compose';
 import PropTypes from 'prop-types';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
+import EditIcon from '@material-ui/icons/Edit';
 import createOrderCalculator from 'modules/utilities/algorithms/createOrderCalculator';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { selectDict } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
 import { authContextPropTypes, withAuth } from 'core/context/AuthContext';
+import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridesPropTypes from 'travel/models/rides/propTypes';
+import initializeTrip from 'travel/models/trips/initialize';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Trip from './blocks/Trip';
@@ -35,6 +38,16 @@ const submitRide = ({ ride, ride: { rideId } }) => ({
   },
   meta: {
     domain: 'trips.visits.rides',
+  },
+});
+const submitTrip = ({ trip, trip: { tripId } }) => ({
+  modelName: 'trips',
+  query: {
+    id: tripId,
+    body: trip,
+  },
+  meta: {
+    domain: 'trips.visits.trips',
   },
 });
 
@@ -66,26 +79,35 @@ const Trips = ({
     },
     [request],
   );
-  const handleRideUpdate = useCallback(
-    ride => request(submitRide({ ride })),
-    [request],
-  );
+  const handleRideUpdate = useCallback(ride => request(submitRide({ ride })), [
+    request,
+  ]);
+  const handleTripUpdate = useCallback(trip => request(submitTrip({ trip })), [
+    request,
+  ]);
 
   const visitsGroupedByTrips = groupAndOrderVisitsByTrips(visitsList);
   return (
     <>
+      <TripEditDialog
+        initialState={initializeTrip()}
+        onSubmit={handleTripUpdate}
+      >
+        <EditIcon />
+      </TripEditDialog>
       {tripsList.map((trip, tripIndex) => {
-        const { tripId, tripName } = trip;
+        const { tripId } = trip;
         return (
           <div key={tripId}>
-            <h1>{`${tripIndex + 1}. ${tripName}`}</h1>
             <Trip
               isEditable={isAuthenticated}
               locationsDict={locationsDict}
               onRideUpdate={handleRideUpdate}
+              onTripUpdate={handleTripUpdate}
               onVisitsOrderUpdate={handleVisitsOrderUpdate}
               ridesDict={ridesDict}
               trip={trip}
+              tripIndex={tripIndex}
               tripVisitsList={visitsGroupedByTrips[tripId]}
             />
           </div>

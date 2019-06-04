@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
-import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
+import OptionsSelect from 'modules/components/muiExtended/OptionsSelect/OptionsSelect';
 import {
   RIDE_CLASSES,
   RIDE_OCCUPATION,
