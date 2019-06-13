@@ -13,7 +13,7 @@ export default modelsConfig => {
           ...requestRequirements,
           // todo this makes requirements unserializable, reconsider
           toServerAdapter: model.resolveToServerAdapter(),
-          endpoint: model.resolveEndpoint(requestRequirements),
+          endpoint: model.resolveEndpoint,
         },
         ...args,
       ).then(
