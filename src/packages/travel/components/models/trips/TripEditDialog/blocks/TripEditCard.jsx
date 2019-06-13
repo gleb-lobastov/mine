@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
-import ProvisionedAutocomplete from 'modules/components/muiExtended/Autocomplete/modifications/ProvisionedAutocomplete';
+import ProvisionedSuggest from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
 import { TRIP_TYPES } from 'travel/models/trips/consts';
 import { TRIP_TYPE_NAMES } from '../localization';
 
@@ -53,12 +53,13 @@ const TripEditCard = ({
         />
       </div>
       <div className={classes.optionGroup}>
-        <ProvisionedAutocomplete
+        <ProvisionedSuggest
           textFieldProps={{
             label: 'Старт из',
           }}
-          transformSuggestion={({ locationName }) => ({ label: locationName })}
+          inputProps={{ placeholder: 'Введите название...' }}
           sourceProps={{
+            filterField: 'locationName',
             modelName: 'locations',
             domain: 'tripEditCard.location',
           }}
