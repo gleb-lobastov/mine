@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import withProvision from 'core/connection/withProvision';
+import locationPropTypes from 'travel/models/locations/propTypes';
 
 const alphabetically = ({ locationName: a }, { locationName: b }) =>
   a.localeCompare(b);
 
-const Cities = ({ locations: { data: locationsList = [] } }) => (
+const Cities = ({ locations: { data: locationsList = [] } = {} }) => (
   <div>
     {locationsList
       .sort(alphabetically)
@@ -14,16 +15,20 @@ const Cities = ({ locations: { data: locationsList = [] } }) => (
       ))}
   </div>
 );
+
 Cities.propTypes = {
-  provision: PropTypes.shape({
-    locations: PropTypes.arrayOf(PropTypes.string),
-  }).isRequired,
+  locations: PropTypes.shape({ data: PropTypes.arrayOf(locationPropTypes) }),
+};
+
+Cities.defaultProps = {
+  locations: { data: [] },
 };
 
 export default withProvision(() => ({
   require: {
     locations: {
       modelName: 'locations',
+      query: { navigation: { isDisabled: true } },
     },
   },
   meta: {

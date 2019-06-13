@@ -135,10 +135,22 @@ export default compose(
   withProvision(
     () => ({
       require: {
-        locations: { modelName: 'locations' },
-        rides: { modelName: 'rides' },
-        trips: { modelName: 'trips' },
-        visits: { modelName: 'visits' },
+        locations: {
+          modelName: 'locations',
+          query: { navigation: { isDisabled: true } },
+        },
+        rides: {
+          modelName: 'rides',
+          query: { navigation: { isDisabled: true } },
+        },
+        trips: {
+          modelName: 'trips',
+          query: { navigation: { isDisabled: true } },
+        },
+        visits: {
+          modelName: 'visits',
+          query: { navigation: { isDisabled: true } },
+        },
       },
       meta: { domain: 'trips' },
     }),

@@ -36,6 +36,7 @@ export default withProvision(() => ({
   require: {
     locations: {
       modelName: 'locations',
+      query: { navigation: { isDisabled: true } },
     },
   },
   meta: {
