@@ -2,9 +2,9 @@ import React from 'react';
 import Downshift from 'downshift';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import DefaultSuggestionsResolver from './blocks/DefaultSuggestionsResolver';
-import DefaultInputRender from './blocks/DefaultInputRender';
-import DefaultSuggestionRender from './blocks/DefaultSuggestionRender';
+import DefaultSuggestionsResolver from './components/DefaultSuggestionsResolver';
+import DefaultInputRender from './components/DefaultInputRender';
+import DefaultSuggestionRender from './components/DefaultSuggestionRender';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -20,13 +20,14 @@ const useStyles = makeStyles(theme => ({
   inputInput: {},
 }));
 
-export default ({
-  transformSuggestion = suggestion => suggestion,
-  resolver: SuggestionsResolver = DefaultSuggestionsResolver,
-  renderSuggestion = DefaultSuggestionRender,
-  renderInput = DefaultInputRender,
-  textFieldProps,
+export const createSuggestComponent = ({
+  SuggestionsResolver = DefaultSuggestionsResolver,
+  SuggestionItemComponent = DefaultSuggestionRender,
+  InputComponent = DefaultInputRender,
+} = {}) => ({
   sourceProps,
+  inputProps,
+  inputFieldProps,
   ...downshiftProps
 }) => {
   const classes = useStyles();
@@ -43,35 +44,38 @@ export default ({
           selectedItem,
         }) => (
           <div className={classes.container}>
-            {renderInput({
-              fullWidth: true,
-              classes,
-              InputProps: getInputProps({
-                placeholder: 'Search a country (start with a)',
-              }),
-              ...textFieldProps,
-            })}
+            <InputComponent
+              fullWidth={true}
+              classes={classes}
+              inputProps={getInputProps(inputProps)}
+              {...inputFieldProps}
+            />
             <div {...getMenuProps()}>
-              {isOpen ? (
+              {isOpen && (
                 <Paper className={classes.paper} square={true}>
                   <SuggestionsResolver
                     inputValue={inputValue}
                     sourceProps={sourceProps}
                   >
                     {resolvedSuggestions =>
-                      resolvedSuggestions.map((suggestion, index) =>
-                        renderSuggestion({
-                          suggestion: transformSuggestion(suggestion),
-                          index,
-                          itemProps: getItemProps({ item: suggestion.label }),
-                          highlightedIndex,
-                          selectedItem,
-                        }),
-                      )
+                      resolvedSuggestions.map((suggestion, index) => (
+                        <SuggestionItemComponent
+                          key={suggestion.label}
+                          itemProps={getItemProps({
+                            item: suggestion.label,
+                          })}
+                          isHighlighted={highlightedIndex === index}
+                          isSelected={
+                            (selectedItem || '').indexOf(suggestion.label) > -1
+                          }
+                        >
+                          {suggestion.label}
+                        </SuggestionItemComponent>
+                      ))
                     }
                   </SuggestionsResolver>
                 </Paper>
-              ) : null}
+              )}
             </div>
           </div>
         )}
@@ -79,6 +83,8 @@ export default ({
     </div>
   );
 };
+
+export default createSuggestComponent();
 /*
 const x = (
   <FetchContacts
