@@ -82,7 +82,7 @@ const navigationToServerAdapter = ({
   isDisabled,
 }) => {
   if (isDisabled) {
-    return {};
+    return { limit: null };
   }
   return {
     // check is following page exist, by requesting one excessive ite,
