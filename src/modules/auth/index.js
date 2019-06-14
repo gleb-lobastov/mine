@@ -1,4 +1,2 @@
-import { getAccessToken } from './tokens';
-
+export { subscribe, unsubscribe, checkIsAuthenticated } from './tokens';
 export { default as middleware } from './middleware';
-export const checkIsAuthenticated = () => Boolean(getAccessToken());

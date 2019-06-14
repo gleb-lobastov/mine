@@ -1,19 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { memoizeByLastArgs } from 'modules/utilities/memo';
-import { checkIsAuthenticated } from 'modules/auth';
+import { subscribe, unsubscribe, checkIsAuthenticated } from 'modules/auth';
 
 const AuthContext = React.createContext({});
 
-const memoizeAuthContext = memoizeByLastArgs(isAuthenticated => ({
-  isAuthenticated,
-}));
+class AuthContextProvider extends React.Component {
+  state = { context: { isAuthenticated: checkIsAuthenticated() } };
 
-const AuthContextProvider = ({ children }) => (
-  <AuthContext.Provider value={memoizeAuthContext(checkIsAuthenticated())}>
-    {children}
-  </AuthContext.Provider>
-);
+  componentDidMount() {
+    subscribe(this.handleAuthenticationUpdate);
+  }
+
+  componentWillUnmount() {
+    unsubscribe(this.handleAuthenticationUpdate);
+  }
+
+  handleAuthenticationUpdate = isAuthenticated => {
+    this.setState({ context: { isAuthenticated } });
+  };
+
+  render() {
+    const { children } = this.props;
+    const { context } = this.state;
+    return (
+      <AuthContext.Provider value={context}>{children}</AuthContext.Provider>
+    );
+  }
+}
+
 AuthContextProvider.propTypes = { children: PropTypes.node.isRequired };
 
 export default {
