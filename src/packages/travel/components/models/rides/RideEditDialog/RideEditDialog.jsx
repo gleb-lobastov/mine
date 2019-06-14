@@ -38,32 +38,34 @@ const RideEditDialog = ({
       >
         {children}
       </IconButton>
-      <Dialog
-        transitionDuration={500}
-        open={isOpen}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Транспорт</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Как вы добрались в место назначения и как уехали из него?
-          </DialogContentText>
-          <RideEditCard
-            availableVisits={availableVisits}
-            rideState={rideState}
-            setRideState={setRideState}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary">
-            Отмена
-          </Button>
-          <Button onClick={handleSubmitInternal} color="primary">
-            Сохранить
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {isOpen && (
+        <Dialog
+          transitionDuration={500}
+          open={true}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Транспорт</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Как вы добрались в место назначения и как уехали из него?
+            </DialogContentText>
+            <RideEditCard
+              availableVisits={availableVisits}
+              rideState={rideState}
+              setRideState={setRideState}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary">
+              Отмена
+            </Button>
+            <Button onClick={handleSubmitInternal} color="primary">
+              Сохранить
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </div>
   );
 };
