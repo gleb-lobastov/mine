@@ -17,6 +17,7 @@ import WalkIcon from '@material-ui/icons/DirectionsWalk';
 import UnknownRideIcon from '@material-ui/icons/NotListedLocation';
 import arrivalDepartureDateTimeToString from 'modules/utilities/dateTime/arrivalDepartureDateTimeToString';
 import { VEHICLE_TYPES } from 'travel/models/rides/consts';
+import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import initializeRide from 'travel/models/rides/initialize';
@@ -74,6 +75,7 @@ export const styles = {
 
 const Ride = ({
   availableVisits,
+  originLocation,
   classes,
   className,
   defaultArrivalVisitId,
@@ -82,7 +84,7 @@ const Ride = ({
   onRideUpdate: handleRideUpdate,
   ride,
   ride: { rideId, vehicleType, arrivalDateTime, departureDateTime },
-  showDetails
+  showDetails,
 }) => {
   const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
   const iconNode = <Icon className={classes.icon} />;
@@ -98,6 +100,7 @@ const Ride = ({
       initialState={rideInitialState}
       availableVisits={availableVisits}
       onSubmit={updatedRide => handleRideUpdate({ ...ride, ...updatedRide })}
+      originLocation={originLocation}
     >
       {iconNode}
     </RideEditDialog>
@@ -124,8 +127,9 @@ Ride.propTypes = {
   defaultDepartureVisitId: PropTypes.number,
   isEditable: PropTypes.bool,
   onRideUpdate: PropTypes.func.isRequired,
+  originLocation: PropTypes.shape(locationsPropTypes).isRequired,
   ride: PropTypes.shape(ridePropTypes),
-  showDetails: PropTypes.bool
+  showDetails: PropTypes.bool,
 };
 
 Ride.defaultProps = {
@@ -135,7 +139,7 @@ Ride.defaultProps = {
   defaultDepartureVisitId: undefined,
   isEditable: true,
   ride: {},
-  showDetails: false
+  showDetails: false,
 };
 
 export default withStyles(styles)(Ride);

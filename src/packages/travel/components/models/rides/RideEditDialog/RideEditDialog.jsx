@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import RideEditCard, { useRideState } from './blocks/RideEditCard';
@@ -17,6 +18,7 @@ const RideEditDialog = ({
   children,
   className,
   onSubmit: handleSubmit,
+  originLocation,
 }) => {
   const { rideState, setRideState } = useRideState(initialState);
   const [isOpen, setOpen] = React.useState(false);
@@ -54,6 +56,7 @@ const RideEditDialog = ({
               availableVisits={availableVisits}
               rideState={rideState}
               setRideState={setRideState}
+              originLocation={originLocation}
             />
           </DialogContent>
           <DialogActions>
@@ -76,6 +79,7 @@ RideEditDialog.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
+  originLocation: PropTypes.shape(locationsPropTypes).isRequired,
 };
 RideEditDialog.defaultProps = {
   className: undefined,

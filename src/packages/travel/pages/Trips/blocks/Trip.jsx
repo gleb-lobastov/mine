@@ -75,9 +75,9 @@ const Trip = ({
         prevVisitId={prevVisit && prevVisit.visitId}
         nextVisitId={nextVisit && nextVisit.visitId}
         ridesDict={ridesDict}
-        locationsDict={locationsDict}
         tripVisitsList={tripVisitsList}
         visit={visit}
+        originLocation={locationsDict[originLocationId]}
       />
     );
   });

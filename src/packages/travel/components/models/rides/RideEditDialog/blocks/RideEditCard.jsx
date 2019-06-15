@@ -16,6 +16,10 @@ import {
   RIDE_OCCUPATION_NAMES,
 } from '../localization';
 
+// if ride was started/ended in origin, then it has no corresponding
+// related visit. Relation is null. So this is not a magic, but real value
+const ORIGIN_OF_TRIP = null;
+
 const renderVehicleType = ({ option: vehicleType }) =>
   vehicleType ? VEHICLE_NAMES[vehicleType] : 'Не указан';
 const renderRideType = ({ option: rideType }) =>
@@ -62,6 +66,7 @@ const styles = {
 const RideEditCard = ({
   classes,
   availableVisits,
+  originLocation,
   rideState: {
     departureVisitId,
     arrivalVisitId,
@@ -123,6 +128,10 @@ const RideEditCard = ({
   );
   const renderVisit = useCallback(
     ({ option: visitId }) => {
+      if (visitId === ORIGIN_OF_TRIP) {
+        const { locationName } = originLocation;
+        return locationName;
+      }
       const visit = visitsDict[visitId];
       if (!visit) {
         return 'Не указано';
@@ -137,20 +146,20 @@ const RideEditCard = ({
       <div className={classes.optionGroup}>
         <OptionsSelect
           caption="Отправление из"
-          hasNullOption={true}
           inputId="RideEditCard-departureVisitId"
           onChange={setDepartureVisitId}
           optionRender={renderVisit}
-          options={availableVisitsIds}
+          hasNullOption={false}
+          options={[ORIGIN_OF_TRIP, ...availableVisitsIds]}
           value={departureVisitId}
         />
         <OptionsSelect
           caption="Прибытие в"
-          hasNullOption={true}
           inputId="RideEditCard-arrivalVisitId"
           onChange={setArrivalVisitId}
+          hasNullOption={false}
           optionRender={renderVisit}
-          options={availableVisitsIds}
+          options={[...availableVisitsIds, ORIGIN_OF_TRIP]}
           value={arrivalVisitId}
         />
       </div>

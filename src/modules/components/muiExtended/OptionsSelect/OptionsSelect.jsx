@@ -68,7 +68,7 @@ OptionsSelect.propTypes = {
 };
 
 OptionsSelect.defaultProps = {
-  hasNullOption: false,
+  hasNullOption: true,
   optionRender: ({ option }) => option || '',
   options: [],
   value: undefined,
