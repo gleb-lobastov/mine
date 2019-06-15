@@ -4,8 +4,9 @@ import { createSuggestComponent } from '../Suggest';
 const Resolver = ({
   sourceProps: {
     filterField,
-    convertEntityToSuggestion = ({ [filterField]: value }) => ({
-      label: value,
+    convertEntityToSuggestion = entity => ({
+      ...entity,
+      label: entity[filterField],
     }),
   } = {},
   entities: { data: entitiesList = [] } = {},

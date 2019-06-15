@@ -20,6 +20,8 @@ const useStyles = makeStyles(theme => ({
   inputInput: {},
 }));
 
+const defaultItemToString = ({ label }) => label;
+
 export const createSuggestComponent = ({
   SuggestionsResolver = DefaultSuggestionsResolver,
   SuggestionItemComponent = DefaultSuggestionRender,
@@ -33,7 +35,7 @@ export const createSuggestComponent = ({
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Downshift {...downshiftProps}>
+      <Downshift itemToString={defaultItemToString} {...downshiftProps}>
         {({
           getInputProps,
           getItemProps,
@@ -62,11 +64,12 @@ export const createSuggestComponent = ({
                         <SuggestionItemComponent
                           key={suggestion.label}
                           itemProps={getItemProps({
-                            item: suggestion.label,
+                            item: suggestion,
                           })}
                           isHighlighted={highlightedIndex === index}
                           isSelected={
-                            (selectedItem || '').indexOf(suggestion.label) > -1
+                            Boolean(selectedItem) &&
+                            selectedItem.label === suggestion.label
                           }
                         >
                           {suggestion.label}
