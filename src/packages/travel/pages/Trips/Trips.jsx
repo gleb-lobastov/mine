@@ -68,7 +68,7 @@ const Trips = ({
   locationsDict,
   ridesDict,
   request,
-  isAuthenticated,
+  isAuthenticated: isEditable,
 }) => {
   if (!ridesDict || !visitsList) {
     return <div>None</div>;
@@ -91,18 +91,20 @@ const Trips = ({
   const visitsGroupedByTrips = groupAndOrderVisitsByTrips(visitsList);
   return (
     <>
-      <TripEditDialog
-        initialState={initializeTrip()}
-        onSubmit={handleTripUpdate}
-      >
-        <EditIcon />
-      </TripEditDialog>
+      {isEditable && (
+        <TripEditDialog
+          initialState={initializeTrip()}
+          onSubmit={handleTripUpdate}
+        >
+          <EditIcon />
+        </TripEditDialog>
+      )}
       {tripsList.map((trip, tripIndex) => {
         const { tripId } = trip;
         return (
           <div key={tripId}>
             <Trip
-              isEditable={isAuthenticated}
+              isEditable={isEditable}
               locationsDict={locationsDict}
               onRideUpdate={handleRideUpdate}
               onTripUpdate={handleTripUpdate}
