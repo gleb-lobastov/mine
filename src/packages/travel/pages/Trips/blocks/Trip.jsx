@@ -47,9 +47,6 @@ const Trip = ({
   onTripUpdate: handleTripUpdate,
 }) => {
   const [isSorting, setIsSorting] = useState(false);
-  if (!tripVisitsList.length) {
-    return null;
-  }
   const handleSortEnd = (data, event) => {
     setIsSorting(false);
     handleVisitsOrderUpdate(event, {
@@ -108,7 +105,8 @@ const Trip = ({
 
   const recentVisit = tripVisitsList[tripVisitsList.length - 1];
   const preRecentVisit = tripVisitsList[tripVisitsList.length - 2];
-  const { departureRideId: rideToHomeId, visitId: recentVisitId } = recentVisit;
+  const { departureRideId: rideToHomeId, visitId: recentVisitId } =
+    recentVisit || {};
   return (
     <>
       <h1>
