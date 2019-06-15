@@ -52,10 +52,6 @@ const VisitWithRides = ({
 }) => {
   const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
   const shouldWarnForDepartureRide = isEditable && !isDepartureRideMatch;
-  const handleArrivalRideUpdate = ride =>
-    handleRideUpdate({ ride, visitId, isArrivalToVisit: true });
-  const handleDepartureRideUpdate = ride =>
-    handleRideUpdate({ ride, visitId, isArrivalToVisit: false });
   return (
     <div className={classes.container}>
       <Ride
@@ -70,7 +66,7 @@ const VisitWithRides = ({
         })}
         ride={ridesDict[arrivalRideId]}
         showDetails={isSorting || shouldWarnForArrivalRide}
-        onRideUpdate={handleArrivalRideUpdate}
+        onRideUpdate={handleRideUpdate}
         originLocation={originLocation}
       />
       <Visit visit={visit} />
@@ -86,7 +82,7 @@ const VisitWithRides = ({
           defaultArrivalVisitId={nextVisitId}
           isEditable={isEditable && !isDepartureRideMatch}
           showDetails={isSorting || shouldWarnForDepartureRide}
-          onRideUpdate={handleDepartureRideUpdate}
+          onRideUpdate={handleRideUpdate}
           originLocation={originLocation}
         />
       )}
