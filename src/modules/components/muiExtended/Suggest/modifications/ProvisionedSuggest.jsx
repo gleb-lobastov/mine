@@ -35,6 +35,7 @@ export default createSuggestComponent({
       meta: {
         domain,
       },
+      debounceRequest: 500,
     }),
   )(Resolver),
 });

@@ -1,4 +1,5 @@
 import React from 'react';
+import debounce from 'lodash/debounce';
 
 const omit = (object, attrs) =>
   Object.entries(object).reduce((memo, [key, value]) => {
@@ -19,6 +20,14 @@ export default ({
     static displayName = `Provided(${WrappedComponent.displayName ||
       WrappedComponent.name ||
       'WrappedComponent'})`;
+
+    constructor(props) {
+      super(props);
+      const { requirements: { debounceRequest } = {} } = this.props;
+      if (debounceRequest) {
+        this.require = debounce(this.require, debounceRequest);
+      }
+    }
 
     componentDidMount() {
       const { fulfilledRequirements, requirements } = this.props;
