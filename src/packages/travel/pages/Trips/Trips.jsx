@@ -17,7 +17,9 @@ import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Trip from './blocks/Trip';
 
-const calcOrder = createOrderCalculator(({ orderInTrip }) => orderInTrip);
+const calcOrder = createOrderCalculator({
+  orderResolver: ({ orderInTrip }) => orderInTrip,
+});
 const submitOrderInTrip = ({ oldIndex, newIndex, collection }) => ({
   modelName: 'visits',
   query: {
