@@ -110,17 +110,19 @@ const Trip = ({
   const { departureRideId: rideToHomeId, visitId: recentVisitId } = recentVisit;
   return (
     <>
-      <h1>{`${tripIndex + 1}. ${tripName}`}</h1>
-      {isEditable && (
-        <TripEditDialog
-          initialState={trip}
-          onSubmit={updatedTrip =>
-            handleTripUpdate({ ...trip, ...updatedTrip })
-          }
-        >
-          <EditIcon />
-        </TripEditDialog>
-      )}
+      <h1>
+        {`${tripIndex + 1}. ${tripName}`}
+        {isEditable && (
+          <TripEditDialog
+            initialState={trip}
+            onSubmit={updatedTrip =>
+              handleTripUpdate({ ...trip, ...updatedTrip })
+            }
+          >
+            <EditIcon />
+          </TripEditDialog>
+        )}
+      </h1>
       {originLocationNode}
       {wrappedVisitsNodes}
       <Ride

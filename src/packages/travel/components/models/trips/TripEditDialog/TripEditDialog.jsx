@@ -10,12 +10,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import TripEditCard, { useTripState } from './blocks/TripEditCard';
 
-const TripEditDialog = ({
-  initialState,
-  children,
-  className,
-  onSubmit: handleSubmit,
-}) => {
+const TripEditDialog = ({ initialState, children, onSubmit: handleSubmit }) => {
   const { tripState, setTripState } = useTripState(initialState);
   const [isOpen, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
@@ -26,7 +21,7 @@ const TripEditDialog = ({
   };
 
   return (
-    <div className={className}>
+    <>
       <IconButton
         data-sort-handler="disabled"
         size="small"
@@ -56,18 +51,15 @@ const TripEditDialog = ({
           </Button>
         </DialogActions>
       </Dialog>
-    </div>
+    </>
   );
 };
 
 TripEditDialog.propTypes = {
   initialState: PropTypes.shape(ridePropTypes).isRequired,
   children: PropTypes.node.isRequired,
-  className: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
 };
-TripEditDialog.defaultProps = {
-  className: undefined,
-};
+TripEditDialog.defaultProps = {};
 
 export default TripEditDialog;
