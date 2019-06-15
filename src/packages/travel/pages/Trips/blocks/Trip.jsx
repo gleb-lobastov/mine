@@ -50,11 +50,19 @@ const Trip = ({
   if (!tripVisitsList.length) {
     return null;
   }
+  const handleSortEnd = (data, event) => {
+    setIsSorting(false);
+    handleVisitsOrderUpdate(event, {
+      ...data,
+      collection: tripVisitsList,
+    });
+  };
 
   const isSortable = isEditable;
   const VisitWithRidesComponent = isSortable
     ? SortableVisitWithRides
     : VisitWithRides;
+
   const visitsNodes = tripVisitsList.map((visit, indexOfVisit) => {
     const { visitId } = visit;
     const prevVisit =
@@ -82,13 +90,6 @@ const Trip = ({
     );
   });
 
-  const handleSortEnd = (data, event) => {
-    setIsSorting(false);
-    handleVisitsOrderUpdate(event, {
-      ...data,
-      collection: tripVisitsList,
-    });
-  };
   const wrappedVisitsNodes = !isSortable ? (
     <div>{visitsNodes}</div>
   ) : (

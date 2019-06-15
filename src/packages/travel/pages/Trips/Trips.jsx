@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 import EditIcon from '@material-ui/icons/Edit';
-import createOrderCalculator from 'modules/utilities/algorithms/createOrderCalculator';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { selectDict } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
@@ -16,42 +15,7 @@ import initializeTrip from 'travel/models/trips/initialize';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Trip from './blocks/Trip';
-
-const calcOrder = createOrderCalculator({
-  orderResolver: ({ orderInTrip }) => orderInTrip,
-});
-const submitOrderInTrip = ({ oldIndex, newIndex, collection }) => ({
-  modelName: 'visits',
-  query: {
-    id: collection[oldIndex].visitId,
-    body: {
-      orderInTrip: calcOrder({ index: newIndex, collection }),
-    },
-  },
-  meta: {
-    domain: 'trips.visits.sort',
-  },
-});
-const submitRide = ({ ride, ride: { rideId } }) => ({
-  modelName: 'rides',
-  query: {
-    id: rideId,
-    body: ride,
-  },
-  meta: {
-    domain: 'trips.visits.rides',
-  },
-});
-const submitTrip = ({ trip, trip: { tripId } }) => ({
-  modelName: 'trips',
-  query: {
-    id: tripId,
-    body: trip,
-  },
-  meta: {
-    domain: 'trips.visits.trips',
-  },
-});
+import { submitRide, submitOrderInTrip, submitTrip } from './actionCreators';
 
 const groupAndOrderVisitsByTrips = memoizeByLastArgs(visitsList =>
   mapValues(groupBy(visitsList, 'tripId'), tripVisitsList =>
