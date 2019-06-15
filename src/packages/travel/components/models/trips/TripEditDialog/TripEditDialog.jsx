@@ -31,26 +31,28 @@ const TripEditDialog = ({ initialState, children, onSubmit: handleSubmit }) => {
       >
         {children}
       </IconButton>
-      <Dialog
-        transitionDuration={500}
-        open={isOpen}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Поездка</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Редактирование поездки</DialogContentText>
-          <TripEditCard tripState={tripState} setTripState={setTripState} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary">
-            Отмена
-          </Button>
-          <Button onClick={handleSubmitInternal} color="primary">
-            Сохранить
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {isOpen && (
+        <Dialog
+          transitionDuration={500}
+          open={isOpen}
+          onClose={handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Поездка</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Редактирование поездки</DialogContentText>
+            <TripEditCard tripState={tripState} setTripState={setTripState} />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary">
+              Отмена
+            </Button>
+            <Button onClick={handleSubmitInternal} color="primary">
+              Сохранить
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   );
 };
