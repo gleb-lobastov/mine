@@ -18,7 +18,7 @@ class Post extends React.PureComponent {
       source: { content, date, header },
     } = this.props;
 
-    return `### ${header} (*${format(date, 'D MMMM YYYY', {
+    return `### ${header} (*${format(date, 'eeeeee, d MMMM yyyy', {
       locale: ru,
     })}*)\n\n${content}`;
   }
