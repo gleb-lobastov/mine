@@ -19,16 +19,19 @@ export default next => requirements => {
 
   const shouldPrepareQuery =
     !id && method === 'GET' && (filter || sorting || navigation);
-  const hasQueryParams = shouldPrepareQuery || Boolean(queryParams);
+  const actualQueryParams = shouldPrepareQuery
+    ? {
+        ...queryToServerAdapter({ filter, sorting, navigation }),
+        ...queryParams,
+      }
+    : queryParams;
+
   const hasBody = body !== undefined;
   return next({
     method,
     id,
-    query: hasQueryParams
-      ? {
-          ...queryParams,
-          ...queryToServerAdapter({ filter, sorting, navigation }),
-        }
+    query: Object.keys(actualQueryParams).length
+      ? actualQueryParams
       : undefined,
     body: hasBody
       ? JSON.stringify(
