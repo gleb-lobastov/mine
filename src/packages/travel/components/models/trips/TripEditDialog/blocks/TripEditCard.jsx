@@ -1,18 +1,27 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import compose from 'lodash/fp/compose';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import ProvisionedSuggest from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
+import { selectDict } from 'core/connection';
 import { TRIP_TYPES } from 'travel/models/trips/consts';
 import { TRIP_TYPE_NAMES } from '../localization';
 
 const renderTripType = ({ option: tripType }) =>
   tripType ? TRIP_TYPE_NAMES[tripType] : 'Не указан';
 
-export const useTripState = ({ tripType: initiaTripType }) => {
+export const useTripState = ({
+  tripName: initialTripName,
+  tripType: initialTripType,
+  originLocationId: initialOriginLocationId,
+}) => {
   const [tripState, setTripState] = useState({
-    tripType: initiaTripType,
+    tripName: initialTripName,
+    tripType: initialTripType,
+    originLocationId: initialOriginLocationId,
   });
 
   return {
@@ -30,7 +39,8 @@ const styles = {
 
 const TripEditCard = ({
   classes,
-  tripState: { tripType, tripName },
+  locationsDict,
+  tripState: { tripType, tripName, originLocationId },
   setTripState,
 }) => {
   const setTripName = useCallback(
@@ -43,6 +53,14 @@ const TripEditCard = ({
       setTripState({ tripType: nextTripType }),
     [setTripState],
   );
+  const setOriginLocation = useCallback(
+    ({ locationId: nextOriginLocationId }) =>
+      setTripState({ originLocationId: nextOriginLocationId }),
+    [setTripState],
+  );
+
+  const originLocation = locationsDict[originLocationId];
+  const { locationName } = originLocation || {};
   return (
     <>
       <div className={classes.optionGroup}>
@@ -57,7 +75,9 @@ const TripEditCard = ({
           textFieldProps={{
             label: 'Старт из',
           }}
-          inputProps={{ placeholder: 'Введите название...' }}
+          initialInputValue={locationName}
+          inputProps={{ placeholder: 'Населенный пункт...' }}
+          onChange={setOriginLocation}
           sourceProps={{
             filterField: 'locationName',
             modelName: 'locations',
@@ -88,4 +108,11 @@ TripEditCard.defaultProps = {
   className: undefined,
 };
 
-export default withStyles(styles)(TripEditCard);
+const mapStateToProps = state => ({
+  locationsDict: selectDict(state, 'locations'),
+});
+
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles),
+)(TripEditCard);
