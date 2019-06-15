@@ -8,7 +8,6 @@ import {
   createRequestMiddleware,
   createRequestReducer,
 } from '../controllerRedux';
-import { memoizeByLastArgs } from './memo';
 
 const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
@@ -42,27 +41,8 @@ const provideInternal = createReactProvider({
   requirementsComparator,
 });
 
-const mapValues = (object, iteratee) =>
-  Object.entries(object).reduce((memo, [key, value]) => {
-    // eslint-disable-next-line no-param-reassign
-    memo[key] = iteratee(value, key, object);
-    return memo;
-  }, {});
-
-const resolveProvisionState = (state = {}) => {
-  const values = Object.values(state);
-  return {
-    isComplete: values.every(requestSelectors.selectIsReady),
-    isPending: values.some(requestSelectors.selectIsPending),
-    error: values.find(requestSelectors.selectError),
-    errors: values.map(requestSelectors.selectError).filter(Boolean),
-    fallback: mapValues(state, requestSelectors.selectAvailableResult),
-    value: mapValues(state, requestSelectors.selectRelevantResult),
-  };
-};
-
 const createReactReduxProvider = ({
-  provisionSelector,
+  provisionSelector: selectProvision,
   connect = originalConnect,
   provisionAdapter = (state, provision) => ({ provision }),
 }) => (
@@ -71,14 +51,12 @@ const createReactReduxProvider = ({
   _, // currently mapDispatchToProps is unsupported
   ...forwardedParams
 ) => {
-  const selectProvision = memoizeByLastArgs(resolveProvisionState);
-
   const mapStateToProps = (state, props) => {
     const fulfilledRequirements = requestSelectors.selectIsFulfilled(state)
       ? requestSelectors.selectRequirements(state)
       : null;
     const requirements = mapStateToRequirements(state, props) || {};
-    const provision = selectProvision(provisionSelector(state, requirements));
+    const provision = selectProvision(state, requirements);
 
     const originalMapping = originalMapStateToProps
       ? originalMapStateToProps(state, props)
@@ -116,12 +94,7 @@ const createReactReduxProvider = ({
 export default ({
   provisionSelector,
   provisionAdapter,
-  selectDomainStates,
 }) => ({
-  selectors: {
-    selectProvisionStatus: (state, domain) =>
-      resolveProvisionState(selectDomainStates(state, domain)),
-  },
   reducer: createRequestReducer(/* reducerOptions */),
   createMiddleware: createRequestMiddleware,
   provisionStrategyEnhancer,

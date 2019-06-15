@@ -2,48 +2,15 @@ import { combineReducers } from 'redux';
 import createDistributor from './distributeReducer';
 import createReactReduxIntegration from './intgReactRedux';
 import createReduxModelIntegration from './intgReduxModelNormalized';
+import {
+  multiRequestEnhancer,
+  multiProvisionSelector,
+  mergeProvisionState,
+} from './multiRequest';
 
 const STATE_PATHS = { ENTITIES: 'entities', PROVISION: 'provision' };
 const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
-
-const splitRequestsEnhancer = strategy => (params, ...forwardedArgs) => {
-  const {
-    meta,
-    meta: { domain = 'common' } = {},
-    require, // todo require for fetch, parallel for submit?
-    ...sharedRequirements
-  } = params;
-
-  const { isProvision } = sharedRequirements; // todo consider split for submits
-  if (!isProvision || !require) {
-    strategy(params, ...forwardedArgs);
-  }
-  const entries = Object.entries(require || {});
-  return Promise.all(
-    entries.map(([key, specificRequirements]) =>
-      strategy(
-        {
-          ...sharedRequirements,
-          key,
-          ...specificRequirements,
-          meta: {
-            ...meta,
-            domain: `${domain}.${key}`,
-          },
-        },
-        ...forwardedArgs,
-      ),
-    ),
-  ).then(responses =>
-    responses.reduce((memo, response, index) => {
-      const [key] = entries[index];
-      // eslint-disable-next-line
-      memo[key] = response;
-      return memo;
-    }, {}),
-  );
-};
 
 const mapValues = (object, iteratee) =>
   Object.entries(object).reduce((memo, [key, value]) => {
@@ -76,26 +43,18 @@ export default ({
   } = createDistributor(distributorConfig);
 
   const {
-    selectors: provisionSelectors,
     reducer: provisionReducer,
     provisionStrategyEnhancer,
     createMiddleware,
     provide,
   } = createReactReduxIntegration({
     provisionSelector: (state, requirements) => {
-      const { meta: { domain = 'common' } = {}, require = {} } =
-        requirements || {};
-
       const provisionState = state[requestKitStateKey][STATE_PATHS.PROVISION];
-      return Object.keys(require).reduce((memo, key) => {
-        memo[key] = selectDomainState(provisionState, `${domain}.${key}`);
-        return memo;
-      }, {});
-    },
-    selectDomainStates: (state, domain) => {
-      const provisionState = state[requestKitStateKey][STATE_PATHS.PROVISION];
-      // note this is array, when expected an object
-      return selectDomainStates(provisionState, domain);
+      return multiProvisionSelector(
+        provisionState,
+        requirements,
+        selectDomainState,
+      );
     },
     provisionAdapter: (state, provision, requirements) => {
       // todo apply or remove:
@@ -117,13 +76,20 @@ export default ({
   return {
     reduxMiddleware: createMiddleware({
       requestStrategy: compose(
-        splitRequestsEnhancer,
+        multiRequestEnhancer,
         provisionStrategyEnhancer,
         modelsStrategyEnhancer,
       )(requestHandler),
     }),
     provide,
-    selectors: { ...entitiesSelectors, ...provisionSelectors },
+    selectors: {
+      ...entitiesSelectors,
+      selectProvisionStatus: (state, domain) => {
+        const provisionState = state[requestKitStateKey][STATE_PATHS.PROVISION];
+        // note this is array, when expected an object
+        return mergeProvisionState(selectDomainStates(provisionState, domain));
+      },
+    },
     reducer: combineReducers({
       [STATE_PATHS.ENTITIES]: entitiesReducer,
       [STATE_PATHS.PROVISION]: distributeReducer(provisionReducer),
