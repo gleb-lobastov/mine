@@ -5,7 +5,7 @@ export const toClient = ({
   id: rawArticleId,
 }) => ({
   content: rawContent.replace(/\\n/g, '\n'),
-  date: rawDate,
+  date: new Date(rawDate),
   header: rawHeader,
   id: rawArticleId,
 });
