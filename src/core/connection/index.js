@@ -26,7 +26,13 @@ const {
   reduxMiddleware: requestMiddleware,
   provide,
   reducer: requestReducer,
-  selectors: { selectDict, selectItem, selectList, selectMissingIds },
+  selectors: {
+    selectDict,
+    selectItem,
+    selectList,
+    selectMissingIds,
+    selectProvisionStatus,
+  },
 } = createRequestApi({
   modelsConfig: {
     modelsDefinitions: [
@@ -44,6 +50,7 @@ export {
   requestMiddleware,
   provide,
   requestReducer,
+  selectProvisionStatus,
   selectDict,
   selectItem,
   selectList,

@@ -49,6 +49,18 @@ const mapValues = (object, iteratee) =>
     return memo;
   }, {});
 
+const resolveProvisionState = (state = {}) => {
+  const values = Object.values(state);
+  return {
+    isComplete: values.every(requestSelectors.selectIsReady),
+    isPending: values.some(requestSelectors.selectIsPending),
+    error: values.find(requestSelectors.selectError),
+    errors: values.map(requestSelectors.selectError).filter(Boolean),
+    fallback: mapValues(state, requestSelectors.selectAvailableResult),
+    value: mapValues(state, requestSelectors.selectRelevantResult),
+  };
+};
+
 const createReactReduxProvider = ({
   provisionSelector,
   connect = originalConnect,
@@ -59,17 +71,7 @@ const createReactReduxProvider = ({
   _, // currently mapDispatchToProps is unsupported
   ...forwardedParams
 ) => {
-  const selectProvision = memoizeByLastArgs((state = {}) => {
-    const values = Object.values(state);
-    return {
-      isComplete: values.every(requestSelectors.selectIsReady),
-      isPending: values.some(requestSelectors.selectIsPending),
-      error: values.find(requestSelectors.selectError),
-      errors: values.map(requestSelectors.selectError).filter(Boolean),
-      fallback: mapValues(state, requestSelectors.selectAvailableResult),
-      value: mapValues(state, requestSelectors.selectRelevantResult),
-    };
-  });
+  const selectProvision = memoizeByLastArgs(resolveProvisionState);
 
   const mapStateToProps = (state, props) => {
     const fulfilledRequirements = requestSelectors.selectIsFulfilled(state)
@@ -111,7 +113,15 @@ const createReactReduxProvider = ({
     )(WrappedComponent);
 };
 
-export default ({ provisionSelector, provisionAdapter }) => ({
+export default ({
+  provisionSelector,
+  provisionAdapter,
+  selectDomainStates,
+}) => ({
+  selectors: {
+    selectProvisionStatus: (state, domain) =>
+      resolveProvisionState(selectDomainStates(state, domain)),
+  },
   reducer: createRequestReducer(/* reducerOptions */),
   createMiddleware: createRequestMiddleware,
   provisionStrategyEnhancer,

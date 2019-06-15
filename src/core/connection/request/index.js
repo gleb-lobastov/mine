@@ -69,11 +69,14 @@ export default ({
     modelsConfig,
   });
 
-  const { distributeReducer, selectDomainState } = createDistributor(
-    distributorConfig,
-  );
+  const {
+    distributeReducer,
+    selectDomainState,
+    selectDomainStates,
+  } = createDistributor(distributorConfig);
 
   const {
+    selectors: provisionSelectors,
     reducer: provisionReducer,
     provisionStrategyEnhancer,
     createMiddleware,
@@ -83,13 +86,16 @@ export default ({
       const { meta: { domain = 'common' } = {}, require = {} } =
         requirements || {};
 
+      const provisionState = state[requestKitStateKey][STATE_PATHS.PROVISION];
       return Object.keys(require).reduce((memo, key) => {
-        memo[key] = selectDomainState(
-          state[requestKitStateKey][STATE_PATHS.PROVISION],
-          `${domain}.${key}`,
-        );
+        memo[key] = selectDomainState(provisionState, `${domain}.${key}`);
         return memo;
       }, {});
+    },
+    selectDomainStates: (state, domain) => {
+      const provisionState = state[requestKitStateKey][STATE_PATHS.PROVISION];
+      // note this is array, when expected an object
+      return selectDomainStates(provisionState, domain);
     },
     provisionAdapter: (state, provision, requirements) => {
       // todo apply or remove:
@@ -117,7 +123,7 @@ export default ({
       )(requestHandler),
     }),
     provide,
-    selectors: entitiesSelectors,
+    selectors: { ...entitiesSelectors, ...provisionSelectors },
     reducer: combineReducers({
       [STATE_PATHS.ENTITIES]: entitiesReducer,
       [STATE_PATHS.PROVISION]: distributeReducer(provisionReducer),
@@ -125,57 +131,3 @@ export default ({
     submit,
   };
 };
-
-/*
-const { models, middleware, provide, reducer } = createRequestKit({
-  requestConfig: {
-    presetOptions: {},
-    plugins: [],
-  },
-  modelsDefinitions: {
-    travelers: {},
-    visits: {},
-    cities: {},
-  },
-});
-
-/*
-const PAGE_DOMAIN = 'CitiesPage';
-const CITIES_KEY = 'cities';
-provide((state, { match: { params: { strTravelerId, strCountryId } } }) => ({
-meta: {
-  domain: 'CitiesPage',
-  }
-  requests: {
-    traveler: {
-      modelKey: travelers.modelKey,
-      query: {
-        id: { id: parseInt(strTravelerId, 10) },
-      },
-    },
-    [CITIES_KEY]: {
-      modelKey: cities.modelKey,
-      query: {
-        filter: {
-          countryId: parseInt(strCountryId, 10),
-        },
-        navigation: false,
-      },
-    },
-    visits: {
-      modelKey: visits.modelKey,
-      query: {
-        filter: {
-          citiesIds: cities.selectMissingIds({
-            requiredIds: selectProvision(
-              state,
-              `${PAGE_DOMAIN}.${CITIES_KEY}`,
-            ),
-          }),
-        },
-        navigation: false,
-      },
-    },
-  },
-}));
-*/

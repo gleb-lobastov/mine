@@ -44,18 +44,4 @@ const multiRequestStrategyEnhancer = (strategy, resolver, modelsSet) => (
   );
 };
 
-// a(b(c))
-// a->
-//   b->
-//     c->
-//     c<-
-//   b<-
-// a<-
-//
-// fork queries
-// request
-// normalize
-// dispatch entities
-// dispatch provision
-
 export default multiRequestStrategyEnhancer;
