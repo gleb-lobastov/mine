@@ -135,6 +135,7 @@ const Trip = ({
         isEditable={isEditable}
         availableVisits={tripVisitsList}
         defaultDepartureVisitId={recentVisitId}
+        originLocation={locationsDict[originLocationId]}
       />
       {originLocationNode}
     </>
