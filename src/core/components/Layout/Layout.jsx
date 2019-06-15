@@ -4,7 +4,8 @@ import 'normalize.css';
 import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
 import { withPackages } from 'core/context/AppContext';
-import Navigation from './blocks/Navigation/Navigation';
+import Navigation from './blocks/Navigation';
+import PendingRequestsIndicator from './blocks/PendingRequestsIndicator';
 
 const StyledGrid = styled.div`
   font-family: 'Roboto', sans-serif;
@@ -16,6 +17,12 @@ const StyledGrid = styled.div`
 `;
 const StyledMain = styled.main`
   margin: 16px;
+`;
+const StatusBar = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 `;
 
 class Layout extends React.Component {
@@ -38,7 +45,7 @@ class Layout extends React.Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, hasPendingRequest } = this.props;
 
     return (
       <React.Fragment>
@@ -56,6 +63,9 @@ class Layout extends React.Component {
           {this.renderNavigation()}
           <StyledMain>{children}</StyledMain>
         </StyledGrid>
+        <StatusBar>
+          <PendingRequestsIndicator />
+        </StatusBar>
       </React.Fragment>
     );
   }
