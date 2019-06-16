@@ -19,8 +19,12 @@ export default memoizeByLastArgs(packages => {
     if (!namedPaths[packageName]) {
       namedPaths[packageName] = {};
     }
-    routes.forEach(({ routeName, path, ...meta }) => {
-      const pathInstance = Path.create(path, { ...meta, packageName });
+    routes.forEach(({ routeName, path, defaultRouteParams, ...meta }) => {
+      const pathInstance = Path.create(
+        path,
+        { ...meta, packageName },
+        defaultRouteParams,
+      );
       namedPaths[packageName][routeName] = pathInstance;
       orderedPaths.push(pathInstance);
     });

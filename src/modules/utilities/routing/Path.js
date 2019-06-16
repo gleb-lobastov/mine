@@ -1,17 +1,25 @@
 import pathToRegexp from 'path-to-regexp';
 
 export default class Path {
-  static create = (path, meta) => new Path(path, meta);
+  static create = (path, meta, defaultRouteParams) =>
+    new Path(path, meta, defaultRouteParams);
 
-  constructor(path, meta) {
+  constructor(path, meta, defaultRouteParams) {
     this.path = path;
     this.compiledPath = pathToRegexp.compile(path);
     this.regexp = pathToRegexp(path, [], { end: false });
     this.meta = meta;
+    this.defaultRouteParams = defaultRouteParams;
   }
 
-  derive(extensionPath, meta) {
-    return Path.create(`${this.path}${extensionPath}`, { ...this.meta, meta });
+  derive(extensionPath, meta, defaultRouteParams) {
+    return Path.create(
+      `${this.path}${extensionPath}`,
+      { ...this.meta, meta },
+      this.defaultRouteParams
+        ? { ...this.defaultRouteParams, ...defaultRouteParams }
+        : defaultRouteParams,
+    );
   }
 
   getMeta() {
@@ -23,7 +31,7 @@ export default class Path {
   }
 
   toUrl(routeParams) {
-    return this.compiledPath(routeParams);
+    return this.compiledPath({ ...this.defaultRouteParams, ...routeParams });
   }
 
   checkIsActive(pathname = window.location.href) {
