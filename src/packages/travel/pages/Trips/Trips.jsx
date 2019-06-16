@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
-import compose from 'lodash/fp/compose';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import compose from 'lodash/fp/compose';
 import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 import EditIcon from '@material-ui/icons/Edit';
@@ -100,8 +101,16 @@ Trips.propTypes = {
 
 export default compose(
   withAuth,
+  withRouter,
   withProvision(
-    () => ({
+    (
+      _,
+      {
+        match: {
+          params: { userAlias },
+        },
+      },
+    ) => ({
       require: {
         locations: {
           modelName: 'locations',
@@ -109,15 +118,15 @@ export default compose(
         },
         rides: {
           modelName: 'rides',
-          query: { navigation: { isDisabled: true } },
+          query: { userAlias, navigation: { isDisabled: true } },
         },
         trips: {
           modelName: 'trips',
-          query: { navigation: { isDisabled: true } },
+          query: { userAlias, navigation: { isDisabled: true } },
         },
         visits: {
           modelName: 'visits',
-          query: { navigation: { isDisabled: true } },
+          query: { userAlias, navigation: { isDisabled: true } },
         },
       },
       meta: { domain: 'trips' },

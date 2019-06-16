@@ -1,5 +1,10 @@
 import queryToServerAdapter from '../queryToServerAdapter';
 
+const queryParamsAdapter = ({ userAlias, ...forwardingParams }) => ({
+  user: userAlias,
+  ...forwardingParams,
+});
+
 export default next => requirements => {
   const {
     isProvision,
@@ -31,7 +36,7 @@ export default next => requirements => {
     method,
     id,
     query: Object.keys(actualQueryParams).length
-      ? actualQueryParams
+      ? queryParamsAdapter(actualQueryParams)
       : undefined,
     body: hasBody
       ? JSON.stringify(

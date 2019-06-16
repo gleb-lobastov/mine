@@ -27,7 +27,8 @@ export default mountPath => {
 
   const trips = {
     routeName: 'trips',
-    path: `${mountPath}/trips`,
+    path: `${mountPath}/:userAlias([a-z0-9\\-]+)/trips`,
+    defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'literature-Article' */ './pages/Trips'),
     ),
