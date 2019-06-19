@@ -12,33 +12,12 @@ import {
 const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
 
-const requirementsComparator = (requirementsA, requirementsB) => {
-  if (!requirementsA && !requirementsB) {
-    return true;
-  }
-  if (Boolean(requirementsA) !== Boolean(requirementsB)) {
-    return false;
-  }
-
-  const {
-    query: queryA,
-    meta: { domain: domainA },
-  } = requirementsA;
-  const {
-    query: queryB,
-    meta: { domain: domainB },
-  } = requirementsB;
-
-  return domainA === domainB && queryA === queryB;
-};
-
 const provideInternal = createReactProvider({
   requireProvision: ({ requirements, dispatch }) =>
     dispatch(createProvisionAction(requirements)),
   request: ({ requirements, dispatch }) =>
     dispatch(createRequestAction(requirements)),
   resolveProvision: ({ provision }) => provision,
-  requirementsComparator,
 });
 
 const createReactReduxProvider = ({
@@ -52,10 +31,9 @@ const createReactReduxProvider = ({
   ...forwardedParams
 ) => {
   const mapStateToProps = (state, props) => {
-    const fulfilledRequirements = requestSelectors.selectIsFulfilled(state)
-      ? requestSelectors.selectRequirements(state)
-      : null;
-    const requirements = mapStateToRequirements(state, props) || {};
+    const prevIdentity = requestSelectors.selectIdentity(state);
+    const requirements =
+      mapStateToRequirements(state, props, prevIdentity) || {};
     const provision = selectProvision(state, requirements);
 
     const originalMapping = originalMapStateToProps
@@ -64,7 +42,7 @@ const createReactReduxProvider = ({
 
     return {
       ...originalMapping,
-      fulfilledRequirements,
+      prevIdentity,
       requirements,
       ...provisionAdapter(state, provision, requirements),
     };
@@ -91,10 +69,7 @@ const createReactReduxProvider = ({
     )(WrappedComponent);
 };
 
-export default ({
-  provisionSelector,
-  provisionAdapter,
-}) => ({
+export default ({ provisionSelector, provisionAdapter }) => ({
   reducer: createRequestReducer(/* reducerOptions */),
   createMiddleware: createRequestMiddleware,
   provisionStrategyEnhancer,

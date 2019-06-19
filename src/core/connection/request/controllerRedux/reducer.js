@@ -14,7 +14,7 @@ export default (/* further configuration */) => (state, action) => {
   const {
     payload,
     error,
-    meta: { readyState = undefined, requirements = undefined } = {},
+    meta: { readyState = undefined, requirements: { identity } = {} } = {},
   } = action;
 
   if (readyState === consts.READY_STATE.OPENED) {
@@ -22,7 +22,7 @@ export default (/* further configuration */) => (state, action) => {
       ...state,
       readyState,
       recent: {},
-      requirements,
+      identity,
     };
   }
   if (readyState === consts.READY_STATE.DONE) {

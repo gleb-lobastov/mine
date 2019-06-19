@@ -1,4 +1,5 @@
 import React from 'react';
+import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 
 const omit = (object, attrs) =>
@@ -9,11 +10,12 @@ const omit = (object, attrs) =>
     return memo;
   }, {});
 
+const checkIsIdentityEqual = isEqual;
+
 export default ({
   request,
   requireProvision,
   resolveProvision,
-  requirementsComparator,
   propsToOmit = [],
 }) => WrappedComponent =>
   class extends React.Component {
@@ -30,17 +32,24 @@ export default ({
     }
 
     componentDidMount() {
-      const { fulfilledRequirements, requirements } = this.props;
-      if (!requirementsComparator(fulfilledRequirements, requirements)) {
+      const {
+        prevIdentity,
+        requirements: { identity },
+      } = this.props;
+      if (!checkIsIdentityEqual(prevIdentity, identity)) {
         this.require();
       }
     }
 
     componentDidUpdate(prevProps) {
-      const { requirements: prevRequirements } = prevProps;
-      const { requirements: nextRequirements } = this.props;
+      const {
+        requirements: { identity: prevIdentity },
+      } = prevProps;
+      const {
+        requirements: { identity: nextIdentity },
+      } = this.props;
 
-      if (!requirementsComparator(prevRequirements, nextRequirements)) {
+      if (!checkIsIdentityEqual(prevIdentity, nextIdentity)) {
         this.require();
       }
     }

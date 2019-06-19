@@ -3,7 +3,7 @@ import * as consts from './consts';
 const checkHasProperty = (object, property) =>
   Object.prototype.hasOwnProperty.call(object, property);
 
-export const selectRequirements = (state = {}) => state.requirements;
+export const selectIdentity = (state = {}) => state.identity;
 
 export const selectReadyState = (state = {}) =>
   state.readyState || consts.READY_STATE.UNSENT;
