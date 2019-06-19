@@ -63,8 +63,10 @@ const filterToServerAdapter = (filter = {}) =>
         );
         return undefined;
       }
-      // % is allowed to be used with "like" comparator, " to escape sting
-      if (/[!@#$^&*(),.?:{}|<>]+/.test(stringifiedValue)) {
+      // % is allowed to be used with "like" comparator
+      // " to escape sting
+      // , to separate values in sequence
+      if (/[!@#$^&*().?:{}|<>]+/.test(stringifiedValue)) {
         warning(
           true,
           `value "${stringifiedValue}" should not contain special characters`,
