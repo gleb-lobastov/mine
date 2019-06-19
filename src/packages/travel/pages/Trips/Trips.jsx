@@ -6,7 +6,7 @@ import groupBy from 'lodash/groupBy';
 import mapValues from 'lodash/mapValues';
 import EditIcon from '@material-ui/icons/Edit';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
-import { selectDict } from 'core/connection';
+import { selectDict, selectProvisionStatus } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
 import { authContextPropTypes, withAuth } from 'core/context/AuthContext';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
@@ -104,33 +104,50 @@ export default compose(
   withRouter,
   withProvision(
     (
-      _,
+      state,
       {
         match: {
           params: { userAlias },
         },
       },
-    ) => ({
-      require: {
-        locations: {
-          modelName: 'locations',
-          query: { navigation: { isDisabled: true } },
+      { userAlias: prevUserAlias } = {},
+    ) => {
+      const { fallback = {} } =
+        selectProvisionStatus(state, 'trips.trips') || {};
+      const { data: userTripsIds = [] } = fallback[0] || {};
+      const isUserChanged = prevUserAlias !== userAlias;
+      return {
+        identity: {
+          userAlias,
+          userTripsIds,
         },
-        rides: {
-          modelName: 'rides',
-          query: { userAlias, navigation: { isDisabled: true } },
+        require: {
+          locations: !prevUserAlias && {
+            modelName: 'locations',
+            query: { navigation: { isDisabled: true } },
+          },
+          trips: isUserChanged && {
+            modelName: 'trips',
+            query: { userAlias, navigation: { isDisabled: true } },
+          },
+          rides: userTripsIds.length && {
+            modelName: 'rides',
+            query: {
+              filter: { trips: { comparator: 'in', value: userTripsIds } },
+              navigation: { isDisabled: true },
+            },
+          },
+          visits: userTripsIds.length && {
+            modelName: 'visits',
+            query: {
+              filter: { trips: { comparator: 'in', value: userTripsIds } },
+              navigation: { isDisabled: true },
+            },
+          },
         },
-        trips: {
-          modelName: 'trips',
-          query: { userAlias, navigation: { isDisabled: true } },
-        },
-        visits: {
-          modelName: 'visits',
-          query: { userAlias, navigation: { isDisabled: true } },
-        },
-      },
-      meta: { domain: 'trips' },
-    }),
+        meta: { domain: 'trips' },
+      };
+    },
     state => ({
       locationsDict: selectDict(state, 'locations'),
       ridesDict: selectDict(state, 'rides'),

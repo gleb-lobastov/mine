@@ -23,7 +23,7 @@ export default next => requirements => {
   }
 
   const shouldPrepareQuery =
-    !id && method === 'GET' && (filter || sorting || navigation);
+    !id && method === 'GET' && Boolean(filter || sorting || navigation);
   const actualQueryParams = shouldPrepareQuery
     ? {
         ...queryToServerAdapter({ filter, sorting, navigation }),
