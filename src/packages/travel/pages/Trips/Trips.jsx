@@ -133,14 +133,14 @@ export default compose(
           rides: userTripsIds.length && {
             modelName: 'rides',
             query: {
-              filter: { trips: { comparator: 'in', value: userTripsIds } },
+              filter: { trip_id: { comparator: 'in', value: userTripsIds } },
               navigation: { isDisabled: true },
             },
           },
           visits: userTripsIds.length && {
             modelName: 'visits',
             query: {
-              filter: { trips: { comparator: 'in', value: userTripsIds } },
+              filter: { trip_id: { comparator: 'in', value: userTripsIds } },
               navigation: { isDisabled: true },
             },
           },
