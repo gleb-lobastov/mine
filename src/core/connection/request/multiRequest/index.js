@@ -82,3 +82,13 @@ export const multiProvisionSelector = (
     }, {}),
   );
 };
+
+export const multiProvisionAdapter = ({
+  originalAdapter,
+  provisionValues,
+  requirements,
+  state, // todo use ...forwardingProps
+}) =>
+  mapValues(provisionValues || {}, (result, key) =>
+    originalAdapter(state, requirements.require[key], result),
+  );

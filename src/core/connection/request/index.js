@@ -5,18 +5,13 @@ import createReduxModelIntegration from './intgReduxModelNormalized';
 import {
   multiRequestEnhancer,
   multiProvisionSelector,
+  multiProvisionAdapter,
   mergeProvisionState,
 } from './multiRequest';
 
 const STATE_PATHS = { ENTITIES: 'entities', PROVISION: 'provision' };
 const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
-
-const mapValues = (object, iteratee) =>
-  Object.entries(object).reduce((memo, [key, value]) => {
-    memo[key] = iteratee(value, key, object);
-    return memo;
-  }, {});
 
 export default ({
   modelsConfig,
@@ -58,17 +53,16 @@ export default ({
     },
     provisionAdapter: (state, provision, requirements) => {
       // todo apply or remove:
-      // const { expose = 'value' } = requirements;
-      // const exposed = ['fallback', 'value'].includes(expose)
-      //   ? provision[expose]
-      //   : undefined;
+      const { shouldFallbackIfNoValue = true } = requirements;
       const { value, fallback } = provision;
       return {
         provision,
-        // todo value || fallback -- ambiguous!
-        ...mapValues(value || fallback || {}, (result, key) =>
-          denormalize(state, requirements.require[key], result),
-        ),
+        ...multiProvisionAdapter({
+          originalAdapter: denormalize,
+          provisionValues: shouldFallbackIfNoValue ? value || fallback : value,
+          requirements,
+          state,
+        }),
       };
     },
   });
