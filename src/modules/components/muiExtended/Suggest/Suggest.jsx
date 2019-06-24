@@ -20,7 +20,10 @@ const useStyles = makeStyles(theme => ({
   inputInput: {},
 }));
 
-const defaultItemToString = ({ label }) => label;
+const defaultItemToString = item => {
+  const { label } = item || {};
+  return label;
+};
 
 export const createSuggestComponent = ({
   SuggestionsResolver = DefaultSuggestionsResolver,
