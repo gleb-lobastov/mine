@@ -122,23 +122,27 @@ export default compose(
           userTripsIds,
         },
         require: {
-          locations: !prevUserAlias && {
+          locations: {
             modelName: 'locations',
+            isMissingIf: !prevUserAlias,
             query: { navigation: { isDisabled: true } },
           },
-          trips: isUserChanged && {
+          trips: {
             modelName: 'trips',
+            isMissingIf: isUserChanged,
             query: { userAlias, navigation: { isDisabled: true } },
           },
-          rides: userTripsIds.length && {
+          rides: {
             modelName: 'rides',
+            isMissingIf: !userTripsIds.length,
             query: {
               filter: { trip_id: { comparator: 'in', value: userTripsIds } },
               navigation: { isDisabled: true },
             },
           },
-          visits: userTripsIds.length && {
+          visits: {
             modelName: 'visits',
+            isMissingIf: !userTripsIds.length,
             query: {
               filter: { trip_id: { comparator: 'in', value: userTripsIds } },
               navigation: { isDisabled: true },

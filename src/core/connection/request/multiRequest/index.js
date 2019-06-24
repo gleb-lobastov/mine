@@ -13,8 +13,7 @@ export const multiRequestEnhancer = strategy => (params, ...forwardedArgs) => {
     strategy(params, ...forwardedArgs);
   }
   const entries = Object.entries(require || {}).filter(
-    // ignore falsy values, to allow quick requests disabling by condition
-    ([, specificRequirements]) => specificRequirements,
+    ([, { isMissingIf }]) => isMissingIf,
   );
   return Promise.all(
     entries.map(([key, specificRequirements]) =>
@@ -73,11 +72,8 @@ export const multiProvisionSelector = (
   const { meta: { domain = 'common' } = {}, require = {} } = requirements || {};
 
   return mergeProvisionState(
-    Object.entries(require).reduce((memo, [key, value]) => {
-      // ignore falsy values, to allow quick requests disabling by condition
-      if (value) {
-        memo[key] = particularSelector(provisionState, `${domain}.${key}`);
-      }
+    Object.keys(require).reduce((memo, key) => {
+      memo[key] = particularSelector(provisionState, `${domain}.${key}`);
       return memo;
     }, {}),
   );
