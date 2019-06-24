@@ -47,7 +47,7 @@ const filterToServerAdapter = (filter = {}) =>
       if (isUndefined(stringifiedValue)) {
         return undefined;
       }
-      if (!/^[A-Za-z0-9]+$/.test(fieldName)) {
+      if (!/^[A-Za-z0-9_]+$/.test(fieldName)) {
         warning(
           true,
           `fieldName "${fieldName}" should contain only latin letters and digits`,
