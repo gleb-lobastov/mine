@@ -30,22 +30,25 @@ const createReactReduxProvider = ({
   _, // currently mapDispatchToProps is unsupported
   ...forwardedParams
 ) => {
+  let prevIdentity;
   const mapStateToProps = (state, props) => {
-    const prevIdentity = requestSelectors.selectIdentity(state);
     const requirements =
       mapStateToRequirements(state, props, prevIdentity) || {};
+    const { identity } = requirements;
     const provision = selectProvision(state, requirements);
 
     const originalMapping = originalMapStateToProps
       ? originalMapStateToProps(state, props)
       : undefined;
 
-    return {
+    const resolvedProps = {
       ...originalMapping,
       prevIdentity,
       requirements,
       ...provisionAdapter(state, provision, requirements),
     };
+    prevIdentity = identity;
+    return resolvedProps;
   };
 
   // react-redux perform optimization when props is not used in state calculation
