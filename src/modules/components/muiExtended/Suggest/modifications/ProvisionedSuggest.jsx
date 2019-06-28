@@ -22,6 +22,7 @@ export default createSuggestComponent({
         sourceProps: { modelName, domain, filterField, numberOfItemsToRequest },
       },
     ) => ({
+      identity: inputValue,
       require: {
         entities: {
           modelName,
