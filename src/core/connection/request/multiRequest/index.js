@@ -12,9 +12,13 @@ export const multiRequestEnhancer = strategy => (params, ...forwardedArgs) => {
   if (!isProvision || !require) {
     strategy(params, ...forwardedArgs);
   }
-  const entries = Object.entries(require || {}).filter(
-    ([, { isMissingIf }]) => isMissingIf,
-  );
+  const entries = Object.entries(require || {}).filter(([, requirements]) => {
+    if (!Object.prototype.hasOwnProperty.call(requirements, 'isMissingIf')) {
+      return true;
+    }
+    const { isMissingIf } = requirements;
+    return isMissingIf;
+  });
   return Promise.all(
     entries.map(([key, specificRequirements]) =>
       strategy(
