@@ -1,4 +1,8 @@
+const INITIAL_ORDER = 100;
 export default ({ orderResolver: resolveOrder }) => ({ index, collection }) => {
+  if (!collection.length) {
+    return INITIAL_ORDER;
+  }
   if (index <= 0) {
     return resolveOrder(collection[0]) - 1;
   }
