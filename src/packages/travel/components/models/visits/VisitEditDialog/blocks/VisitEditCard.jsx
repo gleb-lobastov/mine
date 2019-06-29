@@ -13,14 +13,12 @@ const renderVisitType = ({ option: visitType }) =>
   visitType ? VISIT_TYPE_NAMES[visitType] : 'Не указан';
 
 export const useVisitState = ({
-  visitName: initialVisitName,
   visitType: initialVisitType,
-  originLocationId: initialOriginLocationId,
+  locationId: initialLocationId,
 }) => {
   const [visitState, setVisitState] = useState({
-    visitName: initialVisitName,
     visitType: initialVisitType,
-    originLocationId: initialOriginLocationId,
+    locationId: initialLocationId,
   });
 
   return {
@@ -47,14 +45,14 @@ const VisitEditCard = ({
       setVisitState({ visitType: nextVisitType }),
     [setVisitState],
   );
-  const setOriginLocation = useCallback(
+  const setLocation = useCallback(
     ({ locationId: nextLocationId }) =>
       setVisitState({ locationId: nextLocationId }),
     [setVisitState],
   );
 
-  const originLocation = locationsDict[locationId];
-  const { locationName } = originLocation || {};
+  const location = locationsDict[locationId];
+  const { locationName } = location || {};
   return (
     <>
       <div className={classes.optionGroup}>
@@ -64,7 +62,7 @@ const VisitEditCard = ({
           }}
           initialInputValue={locationName}
           inputProps={{ placeholder: 'Населенный пункт...' }}
-          onChange={setOriginLocation}
+          onChange={setLocation}
           sourceProps={{
             filterField: 'locationName',
             modelName: 'locations',
