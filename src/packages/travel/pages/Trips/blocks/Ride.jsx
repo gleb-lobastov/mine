@@ -86,14 +86,16 @@ const Ride = ({
   ride: { rideId, vehicleType, arrivalDateTime, departureDateTime },
   showDetails,
 }) => {
-  const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
-  const iconNode = <Icon className={classes.icon} />;
   const rideInitialState = rideId
     ? ride
     : initializeRide({
         defaultDepartureVisitId,
         defaultArrivalVisitId,
       });
+
+  const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
+
+  const iconNode = <Icon className={classes.icon} />;
   const rideNode = isEditable ? (
     <RideEditDialog
       className={classes.editDialogTrigger}
@@ -107,6 +109,7 @@ const Ride = ({
   ) : (
     iconNode
   );
+
   return (
     <div className={cls(className, classes.container)}>
       {rideNode}

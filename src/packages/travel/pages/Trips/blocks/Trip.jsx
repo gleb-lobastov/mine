@@ -17,6 +17,15 @@ import Ride from './Ride';
 const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
 const SortableVisitWithRides = SortableElement(VisitWithRides);
 
+const resolveVisitsWindow = (tripVisitsList, indexOfVisit) => {
+  const prevVisit = indexOfVisit > 0 ? tripVisitsList[indexOfVisit - 1] : null;
+  const nextVisit =
+    indexOfVisit < tripVisitsList.length - 1
+      ? tripVisitsList[indexOfVisit + 1]
+      : null;
+  return [prevVisit, nextVisit];
+};
+
 const Trip = ({
   isEditable,
   locationsDict,
@@ -29,6 +38,7 @@ const Trip = ({
   tripVisitsList,
   onTripUpdate: handleTripUpdate,
 }) => {
+  const isSortable = isEditable;
   const [isSorting, setIsSorting] = useState(false);
   const handleSortEnd = (data, event) => {
     setIsSorting(false);
@@ -38,41 +48,38 @@ const Trip = ({
     });
   };
 
-  const isSortable = isEditable;
   const VisitWithRidesComponent = isSortable
     ? SortableVisitWithRides
     : VisitWithRides;
 
   const visitsNodes = tripVisitsList.map((visit, indexOfVisit) => {
     const { visitId } = visit;
-    const prevVisit =
-      indexOfVisit > 0 ? tripVisitsList[indexOfVisit - 1] : null;
-    const nextVisit =
-      indexOfVisit < tripVisitsList.length - 1
-        ? tripVisitsList[indexOfVisit + 1]
-        : null;
+    const [prevVisit, nextVisit] = resolveVisitsWindow(
+      tripVisitsList,
+      indexOfVisit,
+    );
+    const { visitId: prevVisitId } = prevVisit || {};
+    const { visitId: nextVisitId } = nextVisit || {};
     return (
       <VisitWithRidesComponent
-        key={visitId}
         index={indexOfVisit /* for SortableVisitWithRides */}
         isArrivalRideMatch={checkIsVisitsConnectedByRide(prevVisit, visit)}
         isDepartureRideMatch={checkIsVisitsConnectedByRide(visit, nextVisit)}
         isEditable={isEditable}
         isSorting={isSorting}
+        key={visitId}
+        nextVisitId={nextVisitId}
         onRideUpdate={handleRideUpdate}
-        prevVisitId={prevVisit && prevVisit.visitId}
-        nextVisitId={nextVisit && nextVisit.visitId}
+        originLocation={locationsDict[originLocationId]}
+        prevVisitId={prevVisitId}
         ridesDict={ridesDict}
         tripVisitsList={tripVisitsList}
         visit={visit}
-        originLocation={locationsDict[originLocationId]}
       />
     );
   });
 
-  const wrappedVisitsNodes = !isSortable ? (
-    <div>{visitsNodes}</div>
-  ) : (
+  const wrappedVisitsNodes = isSortable ? (
     <SortableTrip
       onSortEnd={handleSortEnd}
       shouldCancelStart={checkIsNodeNotSortable}
@@ -80,44 +87,52 @@ const Trip = ({
     >
       {visitsNodes}
     </SortableTrip>
+  ) : (
+    <div>{visitsNodes}</div>
   );
 
   const originLocationNode = (
     <Location location={locationsDict[originLocationId]} Icon={IconHome} />
   );
 
-  const recentVisit = tripVisitsList[tripVisitsList.length - 1];
-  const preRecentVisit = tripVisitsList[tripVisitsList.length - 2];
-  const { departureRideId: rideToHomeId, visitId: recentVisitId } =
-    recentVisit || {};
+  const tripEditControlsNode = (
+    <TripEditDialog
+      initialState={trip}
+      onSubmit={updatedTrip => handleTripUpdate({ ...trip, ...updatedTrip })}
+    >
+      <EditIcon />
+    </TripEditDialog>
+  );
+
+  const lastVisit = tripVisitsList[tripVisitsList.length - 1];
+  const lastButOneVisit = tripVisitsList[tripVisitsList.length - 2];
+  const { departureRideId: rideToOriginId, visitId: recentVisitId } =
+    lastVisit || {};
+  const rideToOriginNode = (
+    <Ride
+      availableVisits={tripVisitsList}
+      defaultDepartureVisitId={recentVisitId}
+      isEditable={isEditable}
+      onRideUpdate={handleRideUpdate}
+      originLocation={locationsDict[originLocationId]}
+      ride={ridesDict[rideToOriginId]}
+      showDetails={
+        isSorting || checkIsVisitsConnectedByRide(lastButOneVisit, lastVisit)
+      }
+    />
+  );
+
   return (
     <>
       <h1>
         {`${tripIndex + 1}. ${tripName}`}
-        {isEditable && (
-          <TripEditDialog
-            initialState={trip}
-            onSubmit={updatedTrip =>
-              handleTripUpdate({ ...trip, ...updatedTrip })
-            }
-          >
-            <EditIcon />
-          </TripEditDialog>
-        )}
+        {isEditable && tripEditControlsNode}
       </h1>
+
       {originLocationNode}
       {wrappedVisitsNodes}
-      <Ride
-        ride={ridesDict[rideToHomeId]}
-        showDetails={
-          isSorting || checkIsVisitsConnectedByRide(preRecentVisit, recentVisit)
-        }
-        onRideUpdate={handleRideUpdate}
-        isEditable={isEditable}
-        availableVisits={tripVisitsList}
-        defaultDepartureVisitId={recentVisitId}
-        originLocation={locationsDict[originLocationId]}
-      />
+
+      {rideToOriginNode}
       {originLocationNode}
     </>
   );

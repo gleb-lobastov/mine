@@ -52,6 +52,7 @@ const VisitWithRides = ({
 }) => {
   const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
   const shouldWarnForDepartureRide = isEditable && !isDepartureRideMatch;
+
   return (
     <div className={classes.container}>
       <Ride
