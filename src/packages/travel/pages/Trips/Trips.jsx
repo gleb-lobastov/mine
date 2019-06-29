@@ -8,7 +8,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { selectDict, selectProvisionStatus } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
-import { authContextPropTypes, withAuth } from 'core/context/AuthContext';
+import { authContextPropTypes, useAuthContext } from 'core/context/AuthContext';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridesPropTypes from 'travel/models/rides/propTypes';
@@ -33,8 +33,8 @@ const Trips = ({
   locationsDict,
   ridesDict,
   request,
-  isAuthenticated: isEditable,
 }) => {
+  const { isAuthenticated: isEditable } = useAuthContext();
   if (!ridesDict || !visitsList) {
     return <div>None</div>;
   }
@@ -69,7 +69,6 @@ const Trips = ({
         return (
           <div key={tripId}>
             <Trip
-              isEditable={isEditable}
               locationsDict={locationsDict}
               onRideUpdate={handleRideUpdate}
               onTripUpdate={handleTripUpdate}
@@ -85,6 +84,7 @@ const Trips = ({
     </>
   );
 };
+
 Trips.propTypes = {
   isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
   request: PropTypes.func.isRequired,
@@ -99,62 +99,61 @@ Trips.propTypes = {
     .isRequired,
 };
 
-export default compose(
-  withAuth,
-  withRouter,
-  withProvision(
-    (
-      state,
-      {
-        match: {
-          params: { userAlias },
+const mapStateToRequirements = (
+  state,
+  {
+    match: {
+      params: { userAlias },
+    },
+  },
+  { userAlias: prevUserAlias } = {},
+) => {
+  const { fallback = {} } = selectProvisionStatus(state, 'trips.trips') || {};
+  const { data: userTripsIds = [] } = fallback[0] || {};
+  const isUserChanged = prevUserAlias !== userAlias;
+  return {
+    identity: {
+      userAlias,
+      userTripsIds,
+    },
+    require: {
+      locations: {
+        modelName: 'locations',
+        isMissingIf: !prevUserAlias,
+        query: { navigation: { isDisabled: true } },
+      },
+      trips: {
+        modelName: 'trips',
+        isMissingIf: isUserChanged,
+        query: { userAlias, navigation: { isDisabled: true } },
+      },
+      rides: {
+        modelName: 'rides',
+        isMissingIf: !userTripsIds.length,
+        query: {
+          filter: { trip_id: { comparator: 'in', value: userTripsIds } },
+          navigation: { isDisabled: true },
         },
       },
-      { userAlias: prevUserAlias } = {},
-    ) => {
-      const { fallback = {} } =
-        selectProvisionStatus(state, 'trips.trips') || {};
-      const { data: userTripsIds = [] } = fallback[0] || {};
-      const isUserChanged = prevUserAlias !== userAlias;
-      return {
-        identity: {
-          userAlias,
-          userTripsIds,
+      visits: {
+        modelName: 'visits',
+        isMissingIf: !userTripsIds.length,
+        query: {
+          filter: { trip_id: { comparator: 'in', value: userTripsIds } },
+          navigation: { isDisabled: true },
         },
-        require: {
-          locations: {
-            modelName: 'locations',
-            isMissingIf: !prevUserAlias,
-            query: { navigation: { isDisabled: true } },
-          },
-          trips: {
-            modelName: 'trips',
-            isMissingIf: isUserChanged,
-            query: { userAlias, navigation: { isDisabled: true } },
-          },
-          rides: {
-            modelName: 'rides',
-            isMissingIf: !userTripsIds.length,
-            query: {
-              filter: { trip_id: { comparator: 'in', value: userTripsIds } },
-              navigation: { isDisabled: true },
-            },
-          },
-          visits: {
-            modelName: 'visits',
-            isMissingIf: !userTripsIds.length,
-            query: {
-              filter: { trip_id: { comparator: 'in', value: userTripsIds } },
-              navigation: { isDisabled: true },
-            },
-          },
-        },
-        meta: { domain: 'trips' },
-      };
+      },
     },
-    state => ({
-      locationsDict: selectDict(state, 'locations'),
-      ridesDict: selectDict(state, 'rides'),
-    }),
-  ),
+    meta: { domain: 'trips' },
+  };
+};
+
+const mapStateToProps = state => ({
+  locationsDict: selectDict(state, 'locations'),
+  ridesDict: selectDict(state, 'rides'),
+});
+
+export default compose(
+  withRouter,
+  withProvision(mapStateToRequirements, mapStateToProps),
 )(Trips);
