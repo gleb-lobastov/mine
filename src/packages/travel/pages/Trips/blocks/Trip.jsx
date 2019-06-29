@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import IconHome from '@material-ui/icons/Home';
 import EditIcon from '@material-ui/icons/Edit';
+import checkIsNodeNotSortable from 'modules/utilities/dom/checkIsNodeNotSortable';
+import checkIsVisitsConnectedByRide from 'travel/utils/checkIsVisitsConnectedByRide';
 import locationPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import tripPropTypes from 'travel/models/trips/propTypes';
@@ -14,25 +16,6 @@ import Ride from './Ride';
 
 const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
 const SortableVisitWithRides = SortableElement(VisitWithRides);
-
-const checkIsRidesMatch = (prevVisit, nextVisit) => {
-  if (!prevVisit || !nextVisit) {
-    return true;
-  }
-  const { departureRideId: prevVisitDepartureRideId } = prevVisit;
-  const { arrivalRideId: nextVisitArrivalRideId } = nextVisit;
-  return prevVisitDepartureRideId === nextVisitArrivalRideId;
-};
-const checkIsNodeNotSortable = event => {
-  let element = event.target;
-  while (element) {
-    if (element.dataset && element.dataset.sortHandler === 'disabled') {
-      return true;
-    }
-    element = element.parentNode;
-  }
-  return false;
-};
 
 const Trip = ({
   isEditable,
@@ -72,8 +55,8 @@ const Trip = ({
       <VisitWithRidesComponent
         key={visitId}
         index={indexOfVisit /* for SortableVisitWithRides */}
-        isArrivalRideMatch={checkIsRidesMatch(prevVisit, visit)}
-        isDepartureRideMatch={checkIsRidesMatch(visit, nextVisit)}
+        isArrivalRideMatch={checkIsVisitsConnectedByRide(prevVisit, visit)}
+        isDepartureRideMatch={checkIsVisitsConnectedByRide(visit, nextVisit)}
         isEditable={isEditable}
         isSorting={isSorting}
         onRideUpdate={handleRideUpdate}
@@ -127,7 +110,7 @@ const Trip = ({
       <Ride
         ride={ridesDict[rideToHomeId]}
         showDetails={
-          isSorting || checkIsRidesMatch(preRecentVisit, recentVisit)
+          isSorting || checkIsVisitsConnectedByRide(preRecentVisit, recentVisit)
         }
         onRideUpdate={handleRideUpdate}
         isEditable={isEditable}
