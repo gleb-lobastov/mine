@@ -5,6 +5,8 @@ import LocationCityIcon from '@material-ui/icons/LocationCity';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DomainIcon from '@material-ui/icons/Domain';
+import EditIcon from '@material-ui/icons/Edit';
+import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
 import visitPropTypes from 'travel/models/visits/propTypes';
 
 const resolveVisitIconComponent = visitType => {
@@ -21,7 +23,7 @@ const resolveVisitIconComponent = visitType => {
   }
 };
 
-const Visit = ({ visit, classes }) => {
+const Visit = ({ visit, onVisitUpdate: handleVisitUpdate, classes }) => {
   if (!visit) {
     return 'Не указано';
   }
@@ -31,6 +33,14 @@ const Visit = ({ visit, classes }) => {
     <div className={classes.container}>
       {Icon && <Icon className={classes.icon} />}
       {locationName}
+      <VisitEditDialog
+        initialState={visit}
+        onSubmit={updatedVisit =>
+          handleVisitUpdate({ ...visit, ...updatedVisit })
+        }
+      >
+        <EditIcon />
+      </VisitEditDialog>
     </div>
   );
 };
@@ -50,6 +60,7 @@ const styles = {
 Visit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   visit: PropTypes.shape(visitPropTypes),
+  onVisitUpdate: PropTypes.func.isRequired,
 };
 
 Visit.defaultProps = {

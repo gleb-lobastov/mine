@@ -4,24 +4,46 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import IconHome from '@material-ui/icons/Home';
 import EditIcon from '@material-ui/icons/Edit';
 import checkIsNodeNotSortable from 'modules/utilities/dom/checkIsNodeNotSortable';
+import { withItem } from 'modules/utilities/structures/array';
 import checkIsVisitsConnectedByRide from 'travel/utils/checkIsVisitsConnectedByRide';
 import locationPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
+import initializeVisit from 'travel/models/visits/initialize';
 import Location from 'travel/components/models/locations/Location';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
+import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
 import VisitWithRides from './VisitWithRides';
 import Ride from './Ride';
 
 const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
-const SortableVisitWithRides = SortableElement(VisitWithRides);
+const SortableVisitWithRides = SortableElement(
+  ({ isItVisitCreatorControl, onVisitUpdate: handleVisitUpdate, ...props }) =>
+    isItVisitCreatorControl ? (
+      <div>
+        <span>Добавить поездку</span>
+        <VisitEditDialog
+          initialState={initializeVisit()}
+          onSubmit={handleVisitUpdate}
+        >
+          <EditIcon />
+        </VisitEditDialog>
+      </div>
+    ) : (
+      <VisitWithRides onVisitUpdate={handleVisitUpdate} {...props} />
+    ),
+);
 
-const resolveVisitsWindow = (tripVisitsList, indexOfVisit) => {
-  const prevVisit = indexOfVisit > 0 ? tripVisitsList[indexOfVisit - 1] : null;
+const resolveVisitsWindow = (tripVisitsList, indexOfVisit, overstepIndex) => {
+  const prevVisitIndex =
+    indexOfVisit - 1 - (indexOfVisit > overstepIndex ? 1 : 0);
+  const nextVisitIndex =
+    indexOfVisit + 1 - (indexOfVisit + 1 > overstepIndex ? 1 : 0);
+  const prevVisit = prevVisitIndex >= 0 ? tripVisitsList[prevVisitIndex] : null;
   const nextVisit =
-    indexOfVisit < tripVisitsList.length - 1
-      ? tripVisitsList[indexOfVisit + 1]
+    nextVisitIndex < tripVisitsList.length
+      ? tripVisitsList[nextVisitIndex]
       : null;
   return [prevVisit, nextVisit];
 };
@@ -33,30 +55,64 @@ const Trip = ({
   onVisitsOrderUpdate: handleVisitsOrderUpdate,
   ridesDict,
   trip,
-  trip: { originLocationId, tripName },
+  trip: { tripId, originLocationId, tripName },
   tripIndex,
   tripVisitsList,
   onTripUpdate: handleTripUpdate,
+  onVisitUpdate: handleVisitUpdate,
 }) => {
   const isSortable = isEditable;
   const [isSorting, setIsSorting] = useState(false);
+  const [addVisitControlIndex, setAddVisitControlIndex] = useState(
+    tripVisitsList.length,
+  );
   const handleSortEnd = (data, event) => {
     setIsSorting(false);
-    handleVisitsOrderUpdate(event, {
-      ...data,
-      collection: tripVisitsList,
-    });
+    const { oldIndex, newIndex } = data;
+    if (oldIndex === addVisitControlIndex) {
+      setAddVisitControlIndex(newIndex);
+    } else {
+      handleVisitsOrderUpdate(event, {
+        oldIndex: oldIndex > addVisitControlIndex ? oldIndex - 1 : oldIndex,
+        newIndex: newIndex > addVisitControlIndex ? newIndex - 1 : newIndex,
+        collection: tripVisitsList,
+      });
+    }
   };
 
   const VisitWithRidesComponent = isSortable
     ? SortableVisitWithRides
     : VisitWithRides;
 
-  const visitsNodes = tripVisitsList.map((visit, indexOfVisit) => {
-    const { visitId } = visit;
+  const actualTripVisitsList = !isEditable
+    ? tripVisitsList
+    : withItem(
+        tripVisitsList,
+        { isItVisitCreatorControl: true },
+        addVisitControlIndex,
+      );
+  const visitsNodes = actualTripVisitsList.map((visit, indexOfVisit) => {
+    const { isItVisitCreatorControl, visitId } = visit;
+    if (isItVisitCreatorControl) {
+      return (
+        <SortableVisitWithRides
+          key="visitCreator"
+          index={indexOfVisit /* for SortableVisitWithRides */}
+          isItVisitCreatorControl={true}
+          onVisitUpdate={newVisit =>
+            handleVisitUpdate(newVisit, {
+              indexInCollection: addVisitControlIndex,
+              collection: tripVisitsList,
+              tripId,
+            })
+          }
+        />
+      );
+    }
     const [prevVisit, nextVisit] = resolveVisitsWindow(
       tripVisitsList,
       indexOfVisit,
+      addVisitControlIndex,
     );
     const { visitId: prevVisitId } = prevVisit || {};
     const { visitId: nextVisitId } = nextVisit || {};
@@ -70,6 +126,7 @@ const Trip = ({
         key={visitId}
         nextVisitId={nextVisitId}
         onRideUpdate={handleRideUpdate}
+        onVisitUpdate={handleVisitUpdate}
         originLocation={locationsDict[originLocationId]}
         prevVisitId={prevVisitId}
         ridesDict={ridesDict}
