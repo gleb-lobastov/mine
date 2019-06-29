@@ -38,3 +38,27 @@ export const submitTrip = ({ trip, trip: { tripId } }) => ({
     domain: 'trips.visits.trips',
   },
 });
+
+export const submitVisit = ({
+  visit,
+  visit: { visitId },
+  tripId,
+  indexInCollection,
+  collection,
+}) => ({
+  modelName: 'visits',
+  query: {
+    id: visitId,
+    body: {
+      ...visit,
+      tripId,
+      orderInTrip:
+        indexInCollection || indexInCollection === 0
+          ? calcOrder({ index: indexInCollection, collection })
+          : undefined,
+    },
+  },
+  meta: {
+    domain: 'trips.visits.visit',
+  },
+});

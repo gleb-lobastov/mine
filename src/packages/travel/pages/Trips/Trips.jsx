@@ -16,7 +16,12 @@ import initializeTrip from 'travel/models/trips/initialize';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Trip from './blocks/Trip';
-import { submitRide, submitOrderInTrip, submitTrip } from './actionCreators';
+import {
+  submitRide,
+  submitOrderInTrip,
+  submitTrip,
+  submitVisit,
+} from './actionCreators';
 
 const groupAndOrderVisitsByTrips = memoizeByLastArgs(visitsList =>
   mapValues(groupBy(visitsList, 'tripId'), tripVisitsList =>
@@ -38,6 +43,7 @@ const Trips = ({
   if (!ridesDict || !visitsList) {
     return <div>None</div>;
   }
+
   const handleVisitsOrderUpdate = useCallback(
     (event, { oldIndex, newIndex, collection }) => {
       if (oldIndex !== newIndex) {
@@ -46,12 +52,39 @@ const Trips = ({
     },
     [request],
   );
-  const handleRideUpdate = useCallback(ride => request(submitRide({ ride })), [
-    request,
-  ]);
-  const handleTripUpdate = useCallback(trip => request(submitTrip({ trip })), [
-    request,
-  ]);
+
+  const handleRideUpdate = useCallback(
+    ride =>
+      request(
+        submitRide({
+          ride,
+        }),
+      ),
+    [request],
+  );
+
+  const handleTripUpdate = useCallback(
+    trip =>
+      request(
+        submitTrip({
+          trip,
+        }),
+      ),
+    [request],
+  );
+
+  const handleVisitUpdate = useCallback(
+    (visit, { indexInCollection, collection, tripId }) =>
+      request(
+        submitVisit({
+          visit,
+          tripId,
+          indexInCollection,
+          collection,
+        }),
+      ),
+    [request],
+  );
 
   const visitsGroupedByTrips = groupAndOrderVisitsByTrips(visitsList);
   return (
@@ -72,11 +105,13 @@ const Trips = ({
               locationsDict={locationsDict}
               onRideUpdate={handleRideUpdate}
               onTripUpdate={handleTripUpdate}
+              onVisitUpdate={handleVisitUpdate}
               onVisitsOrderUpdate={handleVisitsOrderUpdate}
               ridesDict={ridesDict}
               trip={trip}
               tripIndex={tripIndex}
               tripVisitsList={visitsGroupedByTrips[tripId]}
+              isEditable={isEditable}
             />
           </div>
         );

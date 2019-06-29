@@ -18,4 +18,23 @@ export const toClient = ({
   visitType: rawVisitType,
 });
 
-export const toServer = () => undefined;
+export const toServer = (requestBody, { isProvision } = {}) => {
+  if (isProvision) {
+    return undefined;
+  }
+  const {
+    locationId: rawLocationId,
+    orderInTrip: rawOrderInTrip,
+    tripId: rawTripId,
+    visitId: rawVisitId,
+    visitType: rawVisitType
+  } = requestBody || {};
+
+  return {
+    id: rawVisitId,
+    location_id: rawLocationId,
+    order_in_trip: rawOrderInTrip,
+    trip_id: rawTripId,
+    visit_type: rawVisitType
+  };
+};
