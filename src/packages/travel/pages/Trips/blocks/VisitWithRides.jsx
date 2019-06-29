@@ -7,12 +7,16 @@ import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Visit from 'travel/components/models/visits/Visit';
 import Ride from './Ride';
+import DragHandler from './DragHandler';
 
 const styles = {
   alwaysVisible: {},
   container: {
     position: 'relative',
     '&:hover $editDialogTrigger': {
+      visibility: 'visible',
+    },
+    '&:hover $dragHandler': {
       visibility: 'visible',
     },
     // '&:hover $ride, $alwaysVisible': {
@@ -25,6 +29,9 @@ const styles = {
     top: '50%',
     transform: 'translateY(-50%)',
     display: 'inline-block',
+    visibility: 'hidden',
+  },
+  dragHandler: {
     visibility: 'hidden',
   },
   ride: {
@@ -88,6 +95,7 @@ const VisitWithRides = ({
           originLocation={originLocation}
         />
       )}
+      <DragHandler className={classes.dragHandler} />
     </div>
   );
 };

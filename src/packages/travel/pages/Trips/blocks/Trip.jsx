@@ -10,27 +10,16 @@ import locationPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
-import initializeVisit from 'travel/models/visits/initialize';
 import Location from 'travel/components/models/locations/Location';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
-import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
 import VisitWithRides from './VisitWithRides';
 import Ride from './Ride';
+import VisitCreator from './VisitCreator';
 
 const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
 const SortableVisitWithRides = SortableElement(
-  ({ isItVisitCreatorControl, onVisitUpdate: handleVisitUpdate, ...props }) =>
-    isItVisitCreatorControl ? (
-      <div>
-        <span>Добавить поездку</span>
-        <VisitEditDialog
-          initialState={initializeVisit()}
-          onSubmit={handleVisitUpdate}
-        >
-          <EditIcon />
-        </VisitEditDialog>
-      </div>
-    ) : (
+  ({ replaceWithNode, onVisitUpdate: handleVisitUpdate, ...props }) =>
+    replaceWithNode || (
       <VisitWithRides onVisitUpdate={handleVisitUpdate} {...props} />
     ),
 );
@@ -97,14 +86,18 @@ const Trip = ({
       return (
         <SortableVisitWithRides
           key="visitCreator"
-          index={indexOfVisit /* for SortableVisitWithRides */}
-          isItVisitCreatorControl={true}
-          onVisitUpdate={newVisit =>
-            handleVisitUpdate(newVisit, {
-              indexInCollection: addVisitControlIndex,
-              collection: tripVisitsList,
-              tripId,
-            })
+          index={indexOfVisit}
+          replaceWithNode={
+            <VisitCreator
+              isSorting={isSorting}
+              onVisitUpdate={newVisit =>
+                handleVisitUpdate(newVisit, {
+                  indexInCollection: addVisitControlIndex,
+                  collection: tripVisitsList,
+                  tripId,
+                })
+              }
+            />
           }
         />
       );
