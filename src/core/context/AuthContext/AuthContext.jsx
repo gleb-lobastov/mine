@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { subscribe, unsubscribe, checkIsAuthenticated } from 'modules/auth';
 
@@ -40,6 +40,8 @@ export const withAuth = Component => props => (
     {authContext => <Component {...props} {...authContext} />}
   </AuthContext.Consumer>
 );
+
+export const useAuthContext = () => useContext(AuthContext);
 
 export const authContextPropTypes = {
   isAuthenticated: PropTypes.bool,
