@@ -134,6 +134,8 @@ const Trip = ({
       onSortEnd={handleSortEnd}
       shouldCancelStart={checkIsNodeNotSortable}
       updateBeforeSortStart={() => setIsSorting(true)}
+      lockAxis="y"
+      lockToContainerEdges={true}
     >
       {visitsNodes}
     </SortableTrip>

@@ -6,6 +6,7 @@ import IconDragHandle from '@material-ui/icons/DragHandle';
 
 const styles = {
   dragHandler: {
+    cursor: 'grab',
     marginLeft: '4px',
     position: 'absolute',
     top: '50%',
