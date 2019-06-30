@@ -14,6 +14,10 @@ import TrainIcon from '@material-ui/icons/Train';
 import TruckIcon from '@material-ui/icons/LocalShipping';
 import VanIcon from '@material-ui/icons/AirportShuttle';
 import WalkIcon from '@material-ui/icons/DirectionsWalk';
+import TramIcon from '@material-ui/icons/Tram';
+import LocalTaxiIcon from '@material-ui/icons/LocalTaxi';
+import SubwayIcon from '@material-ui/icons/Subway';
+import SeatIcon from '@material-ui/icons/AirlineSeatReclineNormal';
 import UnknownRideIcon from '@material-ui/icons/NotListedLocation';
 import arrivalDepartureDateTimeToString from 'modules/utilities/dateTime/arrivalDepartureDateTimeToString';
 import { VEHICLE_TYPES } from 'travel/models/rides/consts';
@@ -32,8 +36,11 @@ const resolveRideIconComponent = vehicleType => {
     case VEHICLE_TYPES.AIRCRAFT:
       return FlightIcon;
     case VEHICLE_TYPES.BUS:
+    case VEHICLE_TYPES.TROLLEY:
+    case VEHICLE_TYPES.CITY_BUS:
       return BusIcon;
     case VEHICLE_TYPES.MOTORHOME:
+    case VEHICLE_TYPES.JITNEY:
       return VanIcon;
     case VEHICLE_TYPES.LOCAL_TRAIN:
       return TrainIcon;
@@ -49,6 +56,14 @@ const resolveRideIconComponent = vehicleType => {
       return TruckIcon;
     case VEHICLE_TYPES.ALL_TERRAIN_VEHICLE:
       return TerrainIcon;
+    case VEHICLE_TYPES.TRAM:
+      return TramIcon;
+    case VEHICLE_TYPES.TAXI:
+      return LocalTaxiIcon;
+    case VEHICLE_TYPES.SUBWAY:
+      return SubwayIcon;
+    case VEHICLE_TYPES.PUBLIC_TRANSPORT:
+      return SeatIcon;
     case VEHICLE_TYPES.ROPEWAY:
     case VEHICLE_TYPES.FUNICULAR:
     default:

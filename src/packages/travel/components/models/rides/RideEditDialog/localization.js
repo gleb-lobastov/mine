@@ -44,4 +44,11 @@ export const VEHICLE_NAMES = {
   [VEHICLE_TYPES.MOTORBIKE]: 'Мотоцикл',
   [VEHICLE_TYPES.TRUCK]: 'Грузовик',
   [VEHICLE_TYPES.ALL_TERRAIN_VEHICLE]: 'Вездеход',
+  [VEHICLE_TYPES.TRAM]: 'Трамвай',
+  [VEHICLE_TYPES.TROLLEY]: 'Троллейбус',
+  [VEHICLE_TYPES.TAXI]: 'Такси',
+  [VEHICLE_TYPES.CITY_BUS]: 'Муниципальный автобус',
+  [VEHICLE_TYPES.JITNEY]: 'Маршрутное такси',
+  [VEHICLE_TYPES.SUBWAY]: 'Метро',
+  [VEHICLE_TYPES.PUBLIC_TRANSPORT]: 'Общественный транспорт',
 };

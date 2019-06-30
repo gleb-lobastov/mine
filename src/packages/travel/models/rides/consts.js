@@ -13,6 +13,13 @@ export const VEHICLE_TYPES = {
   MOTORBIKE: 'Motorbike',
   TRUCK: 'Truck',
   ALL_TERRAIN_VEHICLE: 'AllTerrain',
+  TRAM: 'Tram',
+  TROLLEY: 'Trolley',
+  TAXI: 'Taxi',
+  CITY_BUS: 'CityBus',
+  JITNEY: 'Jitney',
+  SUBWAY: 'Subway',
+  PUBLIC_TRANSPORT: 'PublicTransport',
 };
 
 export const RIDE_TYPES = {
