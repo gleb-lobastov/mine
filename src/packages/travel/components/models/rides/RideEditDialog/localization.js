@@ -27,6 +27,7 @@ export const RIDE_TYPES_NAMES = {
   [RIDE_TYPES.TOUR]: 'Тур', // todo except aircrafts
   [RIDE_TYPES.CARPOOL]: 'Попутный автомобиль',
   [RIDE_TYPES.HITCH_HIKING]: 'Автостоп',
+  [RIDE_TYPES.DROP_OFF]: 'Подбросили до места',
 };
 
 export const VEHICLE_NAMES = {

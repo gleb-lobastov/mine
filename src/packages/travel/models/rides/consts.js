@@ -29,6 +29,7 @@ export const RIDE_TYPES = {
   TOUR: 'Tour',
   CARPOOL: 'Carpool',
   HITCH_HIKING: 'HitchHiking',
+  DROP_OFF: 'DropOff',
 };
 
 export const RIDE_CLASSES = {
