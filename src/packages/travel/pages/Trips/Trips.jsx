@@ -2,17 +2,17 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import compose from 'lodash/fp/compose';
-import groupBy from 'lodash/groupBy';
-import mapValues from 'lodash/mapValues';
 import EditIcon from '@material-ui/icons/Edit';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { selectDict, selectProvisionStatus } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
+import { withPaths, pathsPropTypes } from 'core/context/AppContext';
 import { authContextPropTypes, useAuthContext } from 'core/context/AuthContext';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridesPropTypes from 'travel/models/rides/propTypes';
 import initializeTrip from 'travel/models/trips/initialize';
+import { groupAndSortVisitsByTrips } from 'travel/models/trips/utils';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Trip from './blocks/Trip';
@@ -23,19 +23,15 @@ import {
   submitVisit,
 } from './actionCreators';
 
-const groupAndOrderVisitsByTrips = memoizeByLastArgs(visitsList =>
-  mapValues(groupBy(visitsList, 'tripId'), tripVisitsList =>
-    tripVisitsList.sort(
-      ({ orderInTrip: orderInTripA }, { orderInTrip: orderInTripB }) =>
-        orderInTripA - orderInTripB,
-    ),
-  ),
+const memoizedGroupAndSortVisitsByTrips = memoizeByLastArgs(
+  groupAndSortVisitsByTrips,
 );
 
 const Trips = ({
   trips: { data: tripsList = [] } = {},
   visits: { data: visitsList = [] } = {},
   locationsDict,
+  namedPaths,
   ridesDict,
   request,
 }) => {
@@ -86,7 +82,7 @@ const Trips = ({
     [request],
   );
 
-  const visitsGroupedByTrips = groupAndOrderVisitsByTrips(visitsList);
+  const visitsGroupedByTrips = memoizedGroupAndSortVisitsByTrips(visitsList);
   return (
     <>
       {isEditable && (
@@ -112,6 +108,9 @@ const Trips = ({
               tripIndex={tripIndex}
               tripVisitsList={visitsGroupedByTrips[tripId]}
               isEditable={isEditable}
+              storyUrl={namedPaths.travel.tripStory.toUrl({
+                strTripId: String(tripId),
+              })}
             />
           </div>
         );
@@ -121,6 +120,7 @@ const Trips = ({
 };
 
 Trips.propTypes = {
+  namedPaths: pathsPropTypes.namedPaths.isRequired,
   isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
   request: PropTypes.func.isRequired,
   trips: PropTypes.shape({
@@ -190,5 +190,6 @@ const mapStateToProps = state => ({
 
 export default compose(
   withRouter,
+  withPaths,
   withProvision(mapStateToRequirements, mapStateToProps),
 )(Trips);

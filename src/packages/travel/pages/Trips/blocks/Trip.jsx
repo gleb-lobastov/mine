@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import IconHome from '@material-ui/icons/Home';
 import EditIcon from '@material-ui/icons/Edit';
 import checkIsNodeNotSortable from 'modules/utilities/dom/checkIsNodeNotSortable';
-import { withItem } from 'modules/utilities/structures/array';
+import { withItem } from 'modules/utilities/types/array';
 import checkIsVisitsConnectedByRide from 'travel/utils/checkIsVisitsConnectedByRide';
 import locationPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
@@ -49,6 +50,7 @@ const Trip = ({
   tripVisitsList,
   onTripUpdate: handleTripUpdate,
   onVisitUpdate: handleVisitUpdate,
+  storyUrl,
 }) => {
   const isSortable = isEditable;
   const [isSorting, setIsSorting] = useState(false);
@@ -174,18 +176,37 @@ const Trip = ({
     />
   );
 
+  const hasStory = tripVisitsList.some(
+    ({ visitComment, arrivalRideId, departureRideId }) => {
+      if (visitComment) {
+        return true;
+      }
+      const { rideComment: arrivalRideComment } =
+        ridesDict[arrivalRideId] || {};
+      if (arrivalRideComment) {
+        return true;
+      }
+      const { rideComment: departureRideComment } =
+        ridesDict[departureRideId] || {};
+      return Boolean(departureRideComment);
+    },
+  );
   return (
     <>
       <h1>
         {`${tripIndex + 1}. ${tripName}`}
         {isEditable && tripEditControlsNode}
       </h1>
-
       {originLocationNode}
       {wrappedVisitsNodes}
 
       {rideToOriginNode}
       {originLocationNode}
+      {hasStory && (
+        <div>
+          <Link to={storyUrl}>Заметки</Link>
+        </div>
+      )}
     </>
   );
 };

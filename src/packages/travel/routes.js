@@ -5,7 +5,7 @@ export default mountPath => {
     routeName: 'entry',
     path: mountPath,
     Component: React.lazy(() =>
-      import(/* webpackChunkName: 'literature-Dashboard' */ './pages/Dashboard'),
+      import(/* webpackChunkName: 'travel-Dashboard' */ './pages/Dashboard'),
     ),
   };
 
@@ -13,7 +13,7 @@ export default mountPath => {
     routeName: 'countries',
     path: `${mountPath}/countries`,
     Component: React.lazy(() =>
-      import(/* webpackChunkName: 'literature-Books' */ './pages/Countries'),
+      import(/* webpackChunkName: 'travel-Countries' */ './pages/Countries'),
     ),
   };
 
@@ -21,7 +21,7 @@ export default mountPath => {
     routeName: 'cities',
     path: `${mountPath}/cities`,
     Component: React.lazy(() =>
-      import(/* webpackChunkName: 'literature-Articles' */ './pages/Cities'),
+      import(/* webpackChunkName: 'travel-Cities' */ './pages/Cities'),
     ),
   };
 
@@ -30,12 +30,21 @@ export default mountPath => {
     path: `${mountPath}/:userAlias([a-z0-9\\-]+)/trips`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
-      import(/* webpackChunkName: 'literature-Article' */ './pages/Trips'),
+      import(/* webpackChunkName: 'travel-Trips' */ './pages/Trips'),
+    ),
+  };
+
+  const tripStory = {
+    routeName: 'tripStory',
+    path: `${mountPath}/:userAlias([a-z0-9\\-]+)/trips/:strTripId`,
+    defaultRouteParams: { userAlias: 'my' },
+    Component: React.lazy(() =>
+      import(/* webpackChunkName: 'travel-TripStory' */ './pages/TripStory'),
     ),
   };
 
   return {
-    routes: [entry, countries, cities, trips],
+    routes: [entry, countries, cities, trips, tripStory],
     menu: [
       { routeName: entry.routeName, caption: 'Об' },
       { routeName: countries.routeName, caption: 'По странам' },
