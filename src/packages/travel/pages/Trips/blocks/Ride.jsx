@@ -18,9 +18,10 @@ import TramIcon from '@material-ui/icons/Tram';
 import LocalTaxiIcon from '@material-ui/icons/LocalTaxi';
 import SubwayIcon from '@material-ui/icons/Subway';
 import SeatIcon from '@material-ui/icons/AirlineSeatReclineNormal';
+import HichHikingIcon from '@material-ui/icons/ThumbUp';
 import UnknownRideIcon from '@material-ui/icons/NotListedLocation';
 import arrivalDepartureDateTimeToString from 'modules/utilities/dateTime/arrivalDepartureDateTimeToString';
-import { VEHICLE_TYPES } from 'travel/models/rides/consts';
+import { VEHICLE_TYPES, RIDE_TYPES } from 'travel/models/rides/consts';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
@@ -98,7 +99,7 @@ const Ride = ({
   isEditable,
   onRideUpdate: handleRideUpdate,
   ride,
-  ride: { rideId, vehicleType, arrivalDateTime, departureDateTime },
+  ride: { rideId, vehicleType, rideType, arrivalDateTime, departureDateTime },
   showDetails,
 }) => {
   const rideInitialState = rideId
@@ -127,6 +128,9 @@ const Ride = ({
 
   return (
     <div className={cls(className, classes.container)}>
+      {rideType === RIDE_TYPES.HITCH_HIKING && (
+        <HichHikingIcon className={classes.icon} />
+      )}
       {rideNode}
       {Boolean(rideId && showDetails) && (
         <span className={classes.details}>

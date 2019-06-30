@@ -7,6 +7,7 @@ export const toClient = ({
   order_in_trip: rawOrderInTrip,
   trip_id: rawTripId,
   visit_type: rawVisitType,
+  visit_comment: rawVisitComment,
 }) => ({
   arrivalRideId: rawArrivalRideId,
   departureRideId: rawDepartureRideId,
@@ -16,6 +17,7 @@ export const toClient = ({
   tripId: rawTripId,
   visitId: rawVisitId,
   visitType: rawVisitType,
+  visitComment: rawVisitComment,
 });
 
 export const toServer = (requestBody, { isProvision } = {}) => {
@@ -27,7 +29,8 @@ export const toServer = (requestBody, { isProvision } = {}) => {
     orderInTrip: rawOrderInTrip,
     tripId: rawTripId,
     visitId: rawVisitId,
-    visitType: rawVisitType
+    visitType: rawVisitType,
+    visitComment: rawVisitComment,
   } = requestBody || {};
 
   return {
@@ -35,6 +38,7 @@ export const toServer = (requestBody, { isProvision } = {}) => {
     location_id: rawLocationId,
     order_in_trip: rawOrderInTrip,
     trip_id: rawTripId,
-    visit_type: rawVisitType
+    visit_type: rawVisitType,
+    visit_comment: rawVisitComment,
   };
 };

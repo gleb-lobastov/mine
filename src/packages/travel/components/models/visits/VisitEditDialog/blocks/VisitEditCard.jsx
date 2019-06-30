@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import compose from 'lodash/fp/compose';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import ProvisionedSuggest from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
@@ -14,9 +15,11 @@ const renderVisitType = ({ option: visitType }) =>
 
 export const useVisitState = ({
   visitType: initialVisitType,
+  visitComment: initialVisitComment,
   locationId: initialLocationId,
 }) => {
   const [visitState, setVisitState] = useState({
+    visitComment: initialVisitComment,
     visitType: initialVisitType,
     locationId: initialLocationId,
   });
@@ -37,7 +40,7 @@ const styles = {
 const VisitEditCard = ({
   classes,
   locationsDict,
-  visitState: { visitType, locationId },
+  visitState: { visitType, visitComment, locationId },
   setVisitState,
 }) => {
   const setVisitType = useCallback(
@@ -48,6 +51,11 @@ const VisitEditCard = ({
   const setLocation = useCallback(
     ({ locationId: nextLocationId }) =>
       setVisitState({ locationId: nextLocationId }),
+    [setVisitState],
+  );
+  const setVisitComment = useCallback(
+    ({ target: { value: nextVisitComment } }) =>
+      setVisitState({ visitComment: nextVisitComment }),
     [setVisitState],
   );
 
@@ -79,6 +87,17 @@ const VisitEditCard = ({
           options={Object.values(VISIT_TYPES)}
           hasNullOption={true}
           value={visitType}
+        />
+      </div>
+      <div className={classes.optionGroup}>
+        <TextField
+          label="Комментарий"
+          value={visitComment}
+          onChange={setVisitComment}
+          placeholder=""
+          multiline={true}
+          rows={2}
+          rowsMax={10}
         />
       </div>
     </>
