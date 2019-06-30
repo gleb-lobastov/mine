@@ -94,10 +94,9 @@ const VisitEditCard = ({
           label="Комментарий"
           value={visitComment}
           onChange={setVisitComment}
-          placeholder=""
           multiline={true}
-          rows={2}
-          rowsMax={10}
+          rows={1}
+          rowsMax={12}
         />
       </div>
     </>

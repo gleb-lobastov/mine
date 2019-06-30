@@ -14,6 +14,7 @@ export default ({
   arrivalVisitId: defaultArrivalVisitId,
   vehicleType: VEHICLE_TYPES.AIRCRAFT,
   rideType: RIDE_TYPES.SCHEDULED,
+  rideComment: '',
   rideClass: RIDE_CLASSES.ECONOMY,
   rideOccupation: RIDE_OCCUPATION.PASSENGER,
   departureDateTime: startOfDay(new Date()),

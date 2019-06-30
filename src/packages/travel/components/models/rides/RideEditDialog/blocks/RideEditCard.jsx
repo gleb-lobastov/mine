@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import { DatePicker, TimePicker } from '@material-ui/pickers';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect/OptionsSelect';
 import {
@@ -34,6 +35,7 @@ export const useRideState = ({
   arrivalVisitId: initialDepartureVisitId,
   vehicleType: initialVehicleType,
   rideType: initialRideType,
+  rideComment: initialRideComment,
   rideClass: initialRideClass,
   rideOccupation: initialRideOccupation,
   departureDateTime: initialDepartureDateTime,
@@ -44,6 +46,7 @@ export const useRideState = ({
     arrivalVisitId: initialDepartureVisitId,
     vehicleType: initialVehicleType,
     rideType: initialRideType,
+    rideComment: initialRideComment,
     rideClass: initialRideClass,
     rideOccupation: initialRideOccupation,
     departureDateTime: initialDepartureDateTime,
@@ -61,6 +64,9 @@ const styles = {
   optionGroup: {
     display: 'flex',
   },
+  option: {
+    flexGrow: '1',
+  },
 };
 
 const RideEditCard = ({
@@ -72,6 +78,7 @@ const RideEditCard = ({
     arrivalVisitId,
     vehicleType,
     rideType,
+    rideComment,
     rideClass,
     rideOccupation,
     departureDateTime,
@@ -117,6 +124,11 @@ const RideEditCard = ({
   const setDepartureDateTime = useCallback(
     nextDepartureDateTime =>
       setRideState({ departureDateTime: nextDepartureDateTime }),
+    [setRideState],
+  );
+  const setRideComment = useCallback(
+    ({ target: { value: nextRideComment } }) =>
+      setRideState({ rideComment: nextRideComment }),
     [setRideState],
   );
   const availableVisitsIds = availableVisits.map(({ visitId }) => visitId);
@@ -202,31 +214,46 @@ const RideEditCard = ({
       <div className={classes.optionGroup}>
         <DatePicker
           autoOk={true}
-          value={departureDateTime}
-          onChange={setDepartureDateTime}
+          className={classes.option}
           label="Дата отправления"
+          onChange={setDepartureDateTime}
+          value={departureDateTime}
         />
         <TimePicker
-          autoOk={true}
           ampm={false}
-          value={departureDateTime}
-          onChange={setDepartureDateTime}
+          autoOk={true}
+          className={classes.option}
           label="Время отправления"
+          onChange={setDepartureDateTime}
+          value={departureDateTime}
         />
       </div>
       <div className={classes.optionGroup}>
         <DatePicker
           autoOk={true}
-          value={arrivalDateTime}
-          onChange={setArrivalDateTime}
+          className={classes.option}
           label="Дата прибытия"
+          onChange={setArrivalDateTime}
+          value={arrivalDateTime}
         />
         <TimePicker
-          autoOk={true}
           ampm={false}
-          value={arrivalDateTime}
-          onChange={setArrivalDateTime}
+          autoOk={true}
+          className={classes.option}
           label="Время прибытия"
+          onChange={setArrivalDateTime}
+          value={arrivalDateTime}
+        />
+      </div>
+      <div className={classes.optionGroup}>
+        <TextField
+          className={classes.option}
+          label="Комментарий"
+          multiline={true}
+          onChange={setRideComment}
+          rows={1}
+          rowsMax={12}
+          value={rideComment}
         />
       </div>
     </>

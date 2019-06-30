@@ -1,23 +1,25 @@
 export const toClient = ({
   arrival_date_time: rawArrivalDateTime,
-  departure_date_time: rawDepartureDateTime,
   arrival_visit_id: rawArrivalVisitId,
+  departure_date_time: rawDepartureDateTime,
   departure_visit_id: rawDepartureVisitId,
   id: rawRideId,
   ride_class: rawRideClass,
+  ride_comment: rawRideComment,
   ride_occupation: rawRideOccupation,
   ride_type: rawRideType,
-  vehicle_type: rawVehicleType,
+  vehicle_type: rawVehicleType
 }) => ({
   arrivalDateTime: new Date(rawArrivalDateTime),
   arrivalVisitId: rawArrivalVisitId,
   departureDateTime: new Date(rawDepartureDateTime),
   departureVisitId: rawDepartureVisitId,
-  rideId: rawRideId,
-  rideType: rawRideType,
   rideClass: rawRideClass,
+  rideComment: rawRideComment,
+  rideId: rawRideId,
   rideOccupation: rawRideOccupation,
-  vehicleType: rawVehicleType,
+  rideType: rawRideType,
+  vehicleType: rawVehicleType
 });
 
 export const toServer = (requestBody, { isProvision } = {}) => {
@@ -30,10 +32,11 @@ export const toServer = (requestBody, { isProvision } = {}) => {
     departureDateTime: rawDepartureDateTime,
     departureVisitId: rawDepartureVisitId,
     rideClass: rawRideClass,
+    rideComment: rawRideComment,
     rideId: rawRideId,
     rideOccupation: rawRideOccupation,
     rideType: rawRideType,
-    vehicleType: rawVehicleType,
+    vehicleType: rawVehicleType
   } = requestBody || {};
 
   return {
@@ -43,8 +46,9 @@ export const toServer = (requestBody, { isProvision } = {}) => {
     departure_visit_id: rawDepartureVisitId,
     id: rawRideId,
     ride_class: rawRideClass,
+    ride_comment: rawRideComment,
     ride_occupation: rawRideOccupation,
     ride_type: rawRideType,
-    vehicle_type: rawVehicleType,
+    vehicle_type: rawVehicleType
   };
 };
