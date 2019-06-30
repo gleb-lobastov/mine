@@ -38,9 +38,9 @@ const VisitEditDialog = ({ initialState, children, onSubmit: handleSubmit }) => 
           onClose={handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">Поездка</DialogTitle>
+          <DialogTitle id="form-dialog-title">Посещение</DialogTitle>
           <DialogContent>
-            <DialogContentText>Редактирование поездки</DialogContentText>
+            <DialogContentText>Редактирование посещения</DialogContentText>
             <VisitEditCard visitState={visitState} setVisitState={setVisitState} />
           </DialogContent>
           <DialogActions>
