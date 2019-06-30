@@ -36,7 +36,10 @@ export default ({
         prevIdentity,
         requirements: { identity },
       } = this.props;
-      if (!checkIsIdentityEqual(prevIdentity, identity)) {
+      if (
+        !checkIsIdentityEqual(prevIdentity, identity) ||
+        (typeof prevIdentity === 'undefined' && typeof identity === 'undefined')
+      ) {
         this.require();
       }
     }
