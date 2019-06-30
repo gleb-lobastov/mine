@@ -23,7 +23,12 @@ const resolveVisitIconComponent = visitType => {
   }
 };
 
-const Visit = ({ visit, onVisitUpdate: handleVisitUpdate, classes }) => {
+const Visit = ({
+  visit,
+  onVisitUpdate: handleVisitUpdate,
+  classes,
+  isEditable,
+}) => {
   if (!visit) {
     return 'Не указано';
   }
@@ -33,14 +38,16 @@ const Visit = ({ visit, onVisitUpdate: handleVisitUpdate, classes }) => {
     <div className={classes.container}>
       {Icon && <Icon className={classes.icon} />}
       {locationName}
-      <VisitEditDialog
-        initialState={visit}
-        onSubmit={updatedVisit =>
-          handleVisitUpdate({ ...visit, ...updatedVisit })
-        }
-      >
-        <EditIcon className={classes.editIcon} />
-      </VisitEditDialog>
+      {isEditable && (
+        <VisitEditDialog
+          initialState={visit}
+          onSubmit={updatedVisit =>
+            handleVisitUpdate({ ...visit, ...updatedVisit })
+          }
+        >
+          <EditIcon className={classes.editIcon} />
+        </VisitEditDialog>
+      )}
     </div>
   );
 };
@@ -60,11 +67,13 @@ const styles = {
 
 Visit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  visit: PropTypes.shape(visitPropTypes),
+  isEditable: PropTypes.bool,
   onVisitUpdate: PropTypes.func.isRequired,
+  visit: PropTypes.shape(visitPropTypes)
 };
 
 Visit.defaultProps = {
+  isEditable: false,
   visit: {},
 };
 

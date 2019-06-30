@@ -117,6 +117,7 @@ const Trip = ({
         isArrivalRideMatch={checkIsVisitsConnectedByRide(prevVisit, visit)}
         isDepartureRideMatch={checkIsVisitsConnectedByRide(visit, nextVisit)}
         isEditable={isEditable}
+        isSortable={isSortable}
         isSorting={isSorting}
         key={visitId}
         nextVisitId={nextVisitId}

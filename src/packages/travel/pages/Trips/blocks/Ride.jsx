@@ -159,7 +159,7 @@ Ride.defaultProps = {
   className: undefined,
   defaultArrivalVisitId: undefined,
   defaultDepartureVisitId: undefined,
-  isEditable: true,
+  isEditable: false,
   ride: {},
   showDetails: false,
 };

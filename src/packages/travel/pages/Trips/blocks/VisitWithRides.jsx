@@ -51,6 +51,7 @@ const VisitWithRides = ({
   nextVisitId,
   tripVisitsList,
   isEditable,
+  isSortable,
   isSorting,
   isArrivalRideMatch,
   isDepartureRideMatch,
@@ -79,9 +80,10 @@ const VisitWithRides = ({
         originLocation={originLocation}
       />
       <Visit
-        visit={visit}
-        onVisitUpdate={handleVisitUpdate}
         classes={{ editIcon: classes.visibleOnlyOnHover }}
+        isEditable={isEditable}
+        onVisitUpdate={handleVisitUpdate}
+        visit={visit}
       />
       {(!isDepartureRideMatch || isSorting) && (
         <Ride
@@ -99,7 +101,8 @@ const VisitWithRides = ({
           originLocation={originLocation}
         />
       )}
-      <DragHandler className={classes.visibleOnlyOnHover} />
+      {isSortable &&
+        !isSorting && <DragHandler className={classes.visibleOnlyOnHover} />}
     </div>
   );
 };
@@ -109,6 +112,7 @@ VisitWithRides.propTypes = {
   isArrivalRideMatch: PropTypes.bool,
   isDepartureRideMatch: PropTypes.bool,
   isEditable: PropTypes.bool,
+  isSortable: PropTypes.bool,
   isSorting: PropTypes.bool,
   nextVisitId: PropTypes.number,
   onRideUpdate: PropTypes.func.isRequired,
@@ -124,6 +128,7 @@ VisitWithRides.defaultProps = {
   isArrivalRideMatch: true,
   isDepartureRideMatch: true,
   isEditable: false,
+  isSortable: false,
   isSorting: false,
   nextVisitId: null,
   prevVisitId: null,
