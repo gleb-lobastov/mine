@@ -8,11 +8,11 @@ import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
 import DragHandler from './DragHandler';
 
 const styles = {
-  dragHandler: {
+  visibleOnlyOnHover: {
     visibility: 'hidden',
   },
   draggableContainer: {
-    '&:hover $dragHandler': {
+    '&:hover $visibleOnlyOnHover': {
       visibility: 'visible',
     },
   },
@@ -29,9 +29,9 @@ const VisitCreator = ({
       initialState={initializeVisit()}
       onSubmit={handleVisitUpdate}
     >
-      <EditIcon />
+      <EditIcon className={classes.visibleOnlyOnHover} />
     </VisitEditDialog>
-    <DragHandler className={classes.dragHandler} />
+    <DragHandler className={classes.visibleOnlyOnHover} />
   </div>
 );
 

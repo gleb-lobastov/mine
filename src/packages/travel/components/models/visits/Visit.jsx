@@ -39,7 +39,7 @@ const Visit = ({ visit, onVisitUpdate: handleVisitUpdate, classes }) => {
           handleVisitUpdate({ ...visit, ...updatedVisit })
         }
       >
-        <EditIcon />
+        <EditIcon className={classes.editIcon} />
       </VisitEditDialog>
     </div>
   );

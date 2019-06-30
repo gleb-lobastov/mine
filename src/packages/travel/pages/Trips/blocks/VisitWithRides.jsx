@@ -16,7 +16,7 @@ const styles = {
     '&:hover $editDialogTrigger': {
       visibility: 'visible',
     },
-    '&:hover $dragHandler': {
+    '&:hover $visibleOnlyOnHover': {
       visibility: 'visible',
     },
     // '&:hover $ride, $alwaysVisible': {
@@ -31,7 +31,7 @@ const styles = {
     display: 'inline-block',
     visibility: 'hidden',
   },
-  dragHandler: {
+  visibleOnlyOnHover: {
     visibility: 'hidden',
   },
   ride: {
@@ -78,7 +78,11 @@ const VisitWithRides = ({
         onRideUpdate={handleRideUpdate}
         originLocation={originLocation}
       />
-      <Visit visit={visit} onVisitUpdate={handleVisitUpdate} />
+      <Visit
+        visit={visit}
+        onVisitUpdate={handleVisitUpdate}
+        classes={{ editIcon: classes.visibleOnlyOnHover }}
+      />
       {(!isDepartureRideMatch || isSorting) && (
         <Ride
           className={cls(classes.ride, {
@@ -95,7 +99,7 @@ const VisitWithRides = ({
           originLocation={originLocation}
         />
       )}
-      <DragHandler className={classes.dragHandler} />
+      <DragHandler className={classes.visibleOnlyOnHover} />
     </div>
   );
 };
