@@ -55,6 +55,7 @@ const styles = {
     display: 'inline-block',
     verticalAlign: 'text-bottom',
   },
+  editIcon: {},
 };
 
 Visit.propTypes = {

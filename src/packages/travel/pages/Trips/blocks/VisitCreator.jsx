@@ -12,6 +12,7 @@ const styles = {
     visibility: 'hidden',
   },
   draggableContainer: {
+    position: 'relative',
     '&:hover $visibleOnlyOnHover': {
       visibility: 'visible',
     },
