@@ -74,7 +74,7 @@ const Trips = ({
   );
 
   const handleVisitUpdate = useCallback(
-    (visit, { indexInCollection, collection, tripId }) =>
+    (visit, { indexInCollection, collection, tripId } = {}) =>
       request(
         submitVisit({
           visit,
