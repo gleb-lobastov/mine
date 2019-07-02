@@ -3,7 +3,6 @@ import createReactProvider from '../provisionReact';
 import {
   createRequestAction,
   createProvisionAction,
-  requestSelectors,
   requestStrategyEnhancer as provisionStrategyEnhancer,
   createRequestMiddleware,
   createRequestReducer,
@@ -32,14 +31,20 @@ const createReactReduxProvider = ({
 ) => {
   let prevIdentity;
   const mapStateToProps = (state, props) => {
-    const requirements =
-      mapStateToRequirements(state, props, prevIdentity) || {};
-    const { identity } = requirements;
-    const provision = selectProvision(state, requirements);
-
     const originalMapping = originalMapStateToProps
       ? originalMapStateToProps(state, props)
       : undefined;
+
+    const actualProps = originalMapping
+      ? { ...props, ...originalMapping }
+      : props;
+
+    const requirements =
+      mapStateToRequirements(state, actualProps, prevIdentity) || {};
+
+    const { identity } = requirements;
+
+    const provision = selectProvision(state, requirements);
 
     const resolvedProps = {
       ...originalMapping,
