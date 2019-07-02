@@ -176,7 +176,7 @@ const mapStateToRequirements = (
         isMissingIf: missingLocationsIds.length,
         query: {
           filter: {
-            location_id: { comparator: 'in', value: missingLocationsIds },
+            id: { comparator: 'in', value: missingLocationsIds },
           },
           navigation: { isDisabled: true },
         },
