@@ -2,6 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import compose from 'lodash/fp/compose';
+import uniq from 'lodash/uniq';
 import EditIcon from '@material-ui/icons/Edit';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { selectDict, selectProvisionStatus } from 'core/connection';
@@ -137,6 +138,7 @@ Trips.propTypes = {
 const mapStateToRequirements = (
   state,
   {
+    locationsDict = {},
     match: {
       params: { userAlias },
     },
@@ -145,17 +147,39 @@ const mapStateToRequirements = (
 ) => {
   const { fallback = {} } = selectProvisionStatus(state, 'trips.trips') || {};
   const { data: userTripsIds = [] } = fallback[0] || {};
+  const tripsDict = selectDict(state, 'trips');
+  const requiredLocationsIds = uniq(
+    userTripsIds.reduce((memo, tripId) => {
+      const trip = tripsDict[tripId];
+      if (trip) {
+        const { originLocationId } = trip;
+        if (originLocationId) {
+          memo.push(originLocationId);
+        }
+      }
+      return memo;
+    }, []),
+  );
+  const missingLocationsIds = requiredLocationsIds.filter(
+    requiredLocationId => !locationsDict[requiredLocationId],
+  );
   const isUserChanged = prevUserAlias !== userAlias;
   return {
     identity: {
       userAlias,
       userTripsIds,
+      missingLocationsIds,
     },
     require: {
       locations: {
         modelName: 'locations',
-        isMissingIf: !prevUserAlias,
-        query: { navigation: { isDisabled: true } },
+        isMissingIf: missingLocationsIds.length,
+        query: {
+          filter: {
+            location_id: { comparator: 'in', value: missingLocationsIds },
+          },
+          navigation: { isDisabled: true },
+        },
       },
       trips: {
         modelName: 'trips',
