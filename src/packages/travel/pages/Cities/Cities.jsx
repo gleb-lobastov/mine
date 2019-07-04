@@ -5,12 +5,16 @@ import uniqBy from 'lodash/uniqBy';
 import property from 'lodash/property';
 import withProvision from 'core/connection/withProvision';
 import { selectProvisionStatus } from 'core/connection';
+import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import visitPropTypes from 'travel/models/visits/propTypes';
 
 const byVisitsCount = ([, nameA, countA], [, nameB, countB]) =>
   countB - countA || nameA.localeCompare(nameB);
 
 const Cities = ({ visits: { data: visitsList = [] } = {} }) => {
+  if (!visitsList.length) {
+    return <WelcomeScreen />;
+  }
   const visitsGroupedByLocation = groupBy(visitsList, property('locationId'));
   const visitedLocationsWithCounter = Object.values(
     visitsGroupedByLocation,

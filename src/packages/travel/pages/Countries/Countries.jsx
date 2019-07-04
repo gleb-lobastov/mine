@@ -5,6 +5,7 @@ import property from 'lodash/property';
 import PropTypes from 'prop-types';
 import withProvision from 'core/connection/withProvision';
 import { selectDict, selectProvisionStatus } from 'core/connection';
+import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import countriesPropTypes from 'travel/models/countries/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 
@@ -33,6 +34,10 @@ const Countries = ({
   countriesDict,
   visits: { data: visitsList = [] } = {},
 }) => {
+  if (!visitsList.length) {
+    return <WelcomeScreen />;
+  }
+
   /**
   visitsWithCounter structure example:
    

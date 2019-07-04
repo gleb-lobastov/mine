@@ -9,6 +9,7 @@ import { selectDict, selectProvisionStatus } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
 import { withPaths, pathsPropTypes } from 'core/context/AppContext';
 import { authContextPropTypes, useAuthContext } from 'core/context/AuthContext';
+import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridesPropTypes from 'travel/models/rides/propTypes';
@@ -37,9 +38,6 @@ const Trips = ({
   request,
 }) => {
   const { isAuthenticated: isEditable } = useAuthContext();
-  if (!ridesDict || !visitsList) {
-    return <div>None</div>;
-  }
 
   const handleVisitsOrderUpdate = useCallback(
     (event, { oldIndex, newIndex, collection }) => {
@@ -83,17 +81,21 @@ const Trips = ({
     [request],
   );
 
+  const addTripNode = (
+    <TripEditDialog initialState={initializeTrip()} onSubmit={handleTripUpdate}>
+      <EditIcon />
+    </TripEditDialog>
+  );
+  if (!tripsList.length) {
+    return (
+      <WelcomeScreen shouldShowLinkToTrips={false}>{addTripNode}</WelcomeScreen>
+    );
+  }
+
   const visitsGroupedByTrips = memoizedGroupAndSortVisitsByTrips(visitsList);
   return (
     <>
-      {isEditable && (
-        <TripEditDialog
-          initialState={initializeTrip()}
-          onSubmit={handleTripUpdate}
-        >
-          <EditIcon />
-        </TripEditDialog>
-      )}
+      {isEditable && addTripNode}
       {tripsList.map((trip, tripIndex) => {
         const { tripId } = trip;
         return (
