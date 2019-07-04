@@ -1,32 +1,30 @@
 import * as consts from './consts';
 
+// Empty state should be threatened as unsent as it was actually not called
+const EMPTY_STATE = { readyState: consts.READY_STATE.UNSENT };
+
 const checkHasProperty = (object, property) =>
   Object.prototype.hasOwnProperty.call(object, property);
 
-export const selectIdentity = (state = {}) => state.identity;
+export const selectIdentity = (state = EMPTY_STATE) => state.identity;
 
-export const selectReadyState = (state = {}) =>
+export const selectReadyState = (state = EMPTY_STATE) =>
   state.readyState || consts.READY_STATE.UNSENT;
 
-export const selectIsReady = (state = {}) =>
+export const selectIsReady = (state = EMPTY_STATE) =>
   state.readyState === consts.READY_STATE.DONE;
 
-export const selectIsPending = (state = {}) =>
-  Boolean(state.readyState) &&
-  !selectIsReady(state) &&
-  state.readyState !== consts.READY_STATE.UNSENT;
+export const selectIsPending = (state = EMPTY_STATE) =>
+  !selectIsReady(state) && state.readyState !== consts.READY_STATE.UNSENT;
 
-export const selectRelevantResult = state => {
-  if (!state || !state.recent || !checkHasProperty(state.recent, 'result')) {
+export const selectRelevantResult = (state = EMPTY_STATE) => {
+  if (!state.recent || !checkHasProperty(state.recent, 'result')) {
     return undefined;
   }
   return state.recent.result;
 };
 
-export const selectAvailableResult = state => {
-  if (!state) {
-    return undefined;
-  }
+export const selectAvailableResult = (state = EMPTY_STATE) => {
   if (state.recent && checkHasProperty(state.recent, 'result')) {
     return state.recent.result;
   }
@@ -39,12 +37,12 @@ export const selectAvailableResult = state => {
   return undefined;
 };
 
-export const selectError = state => {
-  if (!state || !state.recent || !checkHasProperty(state.recent, 'error')) {
+export const selectError = (state = EMPTY_STATE) => {
+  if (!state.recent || !checkHasProperty(state.recent, 'error')) {
     return undefined;
   }
   return state.recent.error;
 };
 
-export const selectIsFulfilled = state =>
+export const selectIsFulfilled = (state = EMPTY_STATE) =>
   Boolean(selectAvailableResult(state) || selectError(state));
