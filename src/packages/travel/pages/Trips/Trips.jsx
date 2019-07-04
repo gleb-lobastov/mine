@@ -143,7 +143,7 @@ const mapStateToRequirements = (
       params: { userAlias },
     },
   },
-  { userAlias: prevUserAlias } = {},
+  { userAlias: prevUserAlias, userTripsIds: prevUserTripsIds } = {},
 ) => {
   const { fallback = {} } = selectProvisionStatus(state, 'trips.trips') || {};
   const { data: userTripsIds = [] } = fallback[0] || {};
@@ -164,6 +164,7 @@ const mapStateToRequirements = (
     requiredLocationId => !locationsDict[requiredLocationId],
   );
   const isUserChanged = prevUserAlias !== userAlias;
+  const isUserTripsFetchCompleted = Boolean(!prevUserTripsIds && userTripsIds);
   return {
     identity: {
       userAlias,
@@ -188,7 +189,7 @@ const mapStateToRequirements = (
       },
       rides: {
         modelName: 'rides',
-        isMissingIf: !userTripsIds.length,
+        isMissingIf: isUserTripsFetchCompleted && userTripsIds.length,
         query: {
           filter: { trip_id: { comparator: 'in', value: userTripsIds } },
           navigation: { isDisabled: true },
@@ -196,7 +197,7 @@ const mapStateToRequirements = (
       },
       visits: {
         modelName: 'visits',
-        isMissingIf: !userTripsIds.length,
+        isMissingIf: isUserTripsFetchCompleted && userTripsIds.length,
         query: {
           filter: { trip_id: { comparator: 'in', value: userTripsIds } },
           navigation: { isDisabled: true },
