@@ -1,5 +1,13 @@
 import { requestSelectors } from '../controllerRedux';
 
+const checkIsMissing = requirements => {
+  if (!Object.prototype.hasOwnProperty.call(requirements, 'isMissingIf')) {
+    return true;
+  }
+  const { isMissingIf } = requirements;
+  return Boolean(isMissingIf);
+};
+
 export const multiRequestEnhancer = strategy => (params, ...forwardedArgs) => {
   const {
     meta,
@@ -12,13 +20,9 @@ export const multiRequestEnhancer = strategy => (params, ...forwardedArgs) => {
   if (!isProvision || !require) {
     strategy(params, ...forwardedArgs);
   }
-  const entries = Object.entries(require || {}).filter(([, requirements]) => {
-    if (!Object.prototype.hasOwnProperty.call(requirements, 'isMissingIf')) {
-      return true;
-    }
-    const { isMissingIf } = requirements;
-    return isMissingIf;
-  });
+  const entries = Object.entries(require || {}).filter(
+    ([, specificRequirements]) => checkIsMissing(specificRequirements),
+  );
   return Promise.all(
     entries.map(([key, specificRequirements]) =>
       strategy(
@@ -77,7 +81,20 @@ export const multiProvisionSelector = (
 
   return mergeProvisionState(
     Object.keys(require).reduce((memo, key) => {
-      memo[key] = particularSelector(provisionState, `${domain}.${key}`);
+      const particularProvision = particularSelector(
+        provisionState,
+        `${domain}.${key}`,
+      );
+
+      // Ignore particular requirements, which was never requested and not missing.
+      // Difference is in isComplete flag. If some data is required, but never
+      // requested, then provision can not be marked as complete. As not all
+      // required data is provided. But if some requirement is flagged as
+      // not missing (not required), then lack of this data should not mark
+      // provision as incomplete. Because, this request could even never be called.
+      if (particularProvision || checkIsMissing(require[key])) {
+        memo[key] = particularProvision;
+      }
       return memo;
     }, {}),
   );
