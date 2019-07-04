@@ -20,7 +20,7 @@ class SubTabs extends React.PureComponent {
     const { namedPaths, packages, mainTabIndex } = this.props;
     const currentRoutes = this.resolveRoutes();
     const { routeName } = currentRoutes[selectedSubTabIndex];
-    const {packageName: selectedPackageName} = packages[mainTabIndex];
+    const { packageName: selectedPackageName } = packages[mainTabIndex];
     return namedPaths[selectedPackageName][routeName];
   }
 
@@ -30,8 +30,11 @@ class SubTabs extends React.PureComponent {
   }
 
   handleChangeSubTab = (event, selectedSubTabIndex) => {
-    const { onChangeUrl: handleChangeUrl } = this.props;
-    handleChangeUrl(this.resolveRoute(selectedSubTabIndex).toUrl());
+    const { subTabIndex, onChangeUrl: handleChangeUrl } = this.props;
+    handleChangeUrl(
+      this.resolveRoute(selectedSubTabIndex),
+      this.resolveRoute(subTabIndex),
+    );
   };
 
   render() {

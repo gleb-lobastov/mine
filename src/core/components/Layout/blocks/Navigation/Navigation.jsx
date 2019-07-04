@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import { withRouter, matchPath } from 'react-router';
 import compose from 'lodash/fp/compose';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
@@ -36,6 +36,9 @@ class Navigation extends React.PureComponent {
     location: PropTypes.shape({
       pathname: PropTypes.string.isRequired,
     }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.objectOf(PropTypes.string),
+    }).isRequired,
     packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
     namedPaths: pathsPropTypes.namedPaths.isRequired,
     isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
@@ -59,9 +62,15 @@ class Navigation extends React.PureComponent {
       ),
   );
 
-  handleChangeUrl = url => {
-    const { history } = this.props;
-    history.push(url);
+  handleChangeUrl = (nextPath, currentPath) => {
+    const {
+      history,
+      location: { pathname },
+      match: { params },
+    } = this.props;
+    const match = matchPath(pathname, { path: currentPath.toString() });
+    const { params: pathParams } = match || {};
+    history.push(nextPath.toUrl({ ...params, ...pathParams }));
   };
 
   render() {
