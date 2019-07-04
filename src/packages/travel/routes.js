@@ -1,5 +1,7 @@
 import React from 'react';
 
+const USER_ALIAS_TYPE = '[a-z0-9-]+';
+
 export default mountPath => {
   const entry = {
     routeName: 'entry',
@@ -11,7 +13,8 @@ export default mountPath => {
 
   const countries = {
     routeName: 'countries',
-    path: `${mountPath}/countries`,
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/countries`,
+    defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'travel-Countries' */ './pages/Countries'),
     ),
@@ -19,7 +22,8 @@ export default mountPath => {
 
   const cities = {
     routeName: 'cities',
-    path: `${mountPath}/cities`,
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/cities`,
+    defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'travel-Cities' */ './pages/Cities'),
     ),
@@ -27,7 +31,7 @@ export default mountPath => {
 
   const trips = {
     routeName: 'trips',
-    path: `${mountPath}/:userAlias([a-z0-9\\-]+)/trips`,
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/trips`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'travel-Trips' */ './pages/Trips'),
@@ -36,7 +40,7 @@ export default mountPath => {
 
   const tripStory = {
     routeName: 'tripStory',
-    path: `${mountPath}/:userAlias([a-z0-9\\-]+)/trips/:strTripId`,
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'travel-TripStory' */ './pages/TripStory'),
