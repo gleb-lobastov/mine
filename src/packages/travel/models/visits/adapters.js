@@ -3,6 +3,7 @@ export const toClient = ({
   departure_ride_id: rawDepartureRideId,
   id: rawVisitId,
   location_id: rawLocationId,
+  country_id: rawCountryId,
   location_name: rawLocationName,
   order_in_trip: rawOrderInTrip,
   trip_id: rawTripId,
@@ -11,6 +12,7 @@ export const toClient = ({
 }) => ({
   arrivalRideId: rawArrivalRideId,
   departureRideId: rawDepartureRideId,
+  countryId: rawCountryId,
   locationId: rawLocationId,
   locationName: rawLocationName,
   orderInTrip: rawOrderInTrip,
