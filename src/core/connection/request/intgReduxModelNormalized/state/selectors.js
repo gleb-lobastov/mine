@@ -1,6 +1,5 @@
-export const selectDict = (state, modelName) => {
-  return state && state[modelName];
-};
+export const selectDict = (state, modelName) =>
+  (state && state[modelName]) || {};
 
 export const selectItem = (state, modelName, id) => {
   const entitiesDict = selectDict(state, modelName);
