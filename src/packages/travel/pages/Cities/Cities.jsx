@@ -39,7 +39,9 @@ const Cities = ({ visits: { data: visitsList = [] } = {} }) => {
 };
 
 Cities.propTypes = {
-  visits: PropTypes.shape({ data: PropTypes.arrayOf(visitPropTypes) }),
+  visits: PropTypes.shape({
+    data: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
+  }),
 };
 
 Cities.defaultProps = {
