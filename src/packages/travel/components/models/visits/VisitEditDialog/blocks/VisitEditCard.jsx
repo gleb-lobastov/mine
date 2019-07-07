@@ -5,7 +5,9 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import compose from 'lodash/fp/compose';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
-import ProvisionedSuggest from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
+import ProvisionedSuggest, {
+  QUERY_FORMATS,
+} from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
 import { selectDict } from 'core/connection';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
 import { VISIT_TYPE_NAMES } from '../localization';
@@ -17,11 +19,13 @@ export const useVisitState = ({
   visitType: initialVisitType,
   visitComment: initialVisitComment,
   locationId: initialLocationId,
+  geonameId: initialGeonameId,
 }) => {
   const [visitState, setVisitState] = useState({
     visitComment: initialVisitComment,
     visitType: initialVisitType,
     locationId: initialLocationId,
+    geonameId: initialGeonameId,
   });
 
   return {
@@ -39,8 +43,9 @@ const styles = {
 
 const VisitEditCard = ({
   classes,
+  geonamesDict,
   locationsDict,
-  visitState: { visitType, visitComment, locationId },
+  visitState: { visitType, visitComment, geonameId, locationId },
   setVisitState,
 }) => {
   const setVisitType = useCallback(
@@ -48,9 +53,9 @@ const VisitEditCard = ({
       setVisitState({ visitType: nextVisitType }),
     [setVisitState],
   );
-  const setLocation = useCallback(
-    ({ locationId: nextLocationId }) =>
-      setVisitState({ locationId: nextLocationId }),
+  const setGeoname = useCallback(
+    ({ geonameId: nextGeonameId }) =>
+      setVisitState({ geonameId: nextGeonameId }),
     [setVisitState],
   );
   const setVisitComment = useCallback(
@@ -59,8 +64,9 @@ const VisitEditCard = ({
     [setVisitState],
   );
 
-  const location = locationsDict[locationId];
-  const { locationName } = location || {};
+  const { locationName } =
+    geonamesDict[geonameId] || locationsDict[locationId] || {};
+
   return (
     <>
       <div className={classes.optionGroup}>
@@ -70,11 +76,14 @@ const VisitEditCard = ({
           }}
           initialInputValue={locationName}
           inputProps={{ placeholder: 'Населенный пункт...' }}
-          onChange={setLocation}
+          onChange={setGeoname}
           sourceProps={{
             filterField: 'locationName',
-            modelName: 'locations',
-            domain: 'visitEditCard.location',
+            modelName: 'geonames',
+            domain: 'visitEditCard.geoname',
+            queryFormat: QUERY_FORMATS.SEARCH,
+            resolveDetails: ({ countryName, regionName }) =>
+              [countryName, regionName].filter(Boolean).join(', '),
           }}
         />
       </div>
@@ -112,6 +121,7 @@ VisitEditCard.defaultProps = {
 };
 
 const mapStateToProps = state => ({
+  geonamesDict: selectDict(state, 'geonames'),
   locationsDict: selectDict(state, 'locations'),
 });
 

@@ -28,6 +28,7 @@ export const toServer = (requestBody, { isProvision } = {}) => {
   }
   const {
     locationId: rawLocationId,
+    geonameId: rawGeonameId,
     orderInTrip: rawOrderInTrip,
     tripId: rawTripId,
     visitId: rawVisitId,
@@ -38,6 +39,7 @@ export const toServer = (requestBody, { isProvision } = {}) => {
   return {
     id: rawVisitId,
     location_id: rawLocationId,
+    geoname_id: rawGeonameId,
     order_in_trip: rawOrderInTrip,
     trip_id: rawTripId,
     visit_type: rawVisitType,
