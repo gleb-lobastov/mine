@@ -69,7 +69,7 @@ Visit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isEditable: PropTypes.bool,
   onVisitUpdate: PropTypes.func.isRequired,
-  visit: PropTypes.shape(visitPropTypes)
+  visit: PropTypes.shape(visitPropTypes),
 };
 
 Visit.defaultProps = {

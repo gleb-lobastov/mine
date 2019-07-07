@@ -1,14 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import compose from 'lodash/fp/compose';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import ProvisionedSuggest, {
   QUERY_FORMATS,
 } from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
-import { selectDict } from 'core/connection';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
 import { VISIT_TYPE_NAMES } from '../localization';
 
@@ -19,12 +16,14 @@ export const useVisitState = ({
   visitType: initialVisitType,
   visitComment: initialVisitComment,
   locationId: initialLocationId,
+  locationName: initialLocationName,
   geonameId: initialGeonameId,
 }) => {
   const [visitState, setVisitState] = useState({
     visitComment: initialVisitComment,
     visitType: initialVisitType,
     locationId: initialLocationId,
+    locationName: initialLocationName,
     geonameId: initialGeonameId,
   });
 
@@ -43,9 +42,7 @@ const styles = {
 
 const VisitEditCard = ({
   classes,
-  geonamesDict,
-  locationsDict,
-  visitState: { visitType, visitComment, geonameId, locationId },
+  visitState: { visitType, visitComment, locationName },
   setVisitState,
 }) => {
   const setVisitType = useCallback(
@@ -63,9 +60,6 @@ const VisitEditCard = ({
       setVisitState({ visitComment: nextVisitComment }),
     [setVisitState],
   );
-
-  const { locationName } =
-    geonamesDict[geonameId] || locationsDict[locationId] || {};
 
   return (
     <>
@@ -116,16 +110,9 @@ VisitEditCard.propTypes = {
   className: PropTypes.string,
   classes: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
+
 VisitEditCard.defaultProps = {
   className: undefined,
 };
 
-const mapStateToProps = state => ({
-  geonamesDict: selectDict(state, 'geonames'),
-  locationsDict: selectDict(state, 'locations'),
-});
-
-export default compose(
-  connect(mapStateToProps),
-  withStyles(styles),
-)(VisitEditCard);
+export default withStyles(styles)(VisitEditCard);
