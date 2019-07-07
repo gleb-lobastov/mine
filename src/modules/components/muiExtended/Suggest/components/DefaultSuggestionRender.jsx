@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MenuItem from '@material-ui/core/MenuItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const DefaultSuggestionRender = ({
   itemProps,
   isHighlighted,
   isSelected,
-  children,
+  children: { label, details },
 }) => (
   <MenuItem
     {...itemProps}
@@ -16,7 +17,7 @@ const DefaultSuggestionRender = ({
       fontWeight: isSelected ? 500 : 400,
     }}
   >
-    {children}
+    <ListItemText primary={label} secondary={details} />
   </MenuItem>
 );
 

@@ -75,7 +75,7 @@ export const createSuggestComponent = ({
                             selectedItem.label === suggestion.label
                           }
                         >
-                          {suggestion.label}
+                          {suggestion}
                         </SuggestionItemComponent>
                       ))
                     }
