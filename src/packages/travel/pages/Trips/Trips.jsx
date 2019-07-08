@@ -8,7 +8,7 @@ import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { selectDict, selectProvisionStatus } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
 import { withPaths, pathsPropTypes } from 'core/context/AppContext';
-import { authContextPropTypes, useAuthContext } from 'core/context/AuthContext';
+import { useAuthContext } from 'core/context/AuthContext';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
 import locationsPropTypes from 'travel/models/locations/propTypes';
@@ -30,6 +30,9 @@ const memoizedGroupAndSortVisitsByTrips = memoizeByLastArgs(
 );
 
 const Trips = ({
+  match: {
+    params: { userAlias: visitedUserAlias },
+  },
   trips: { data: tripsList = [] } = {},
   visits: { data: visitsList = [] } = {},
   locationsDict,
@@ -37,7 +40,13 @@ const Trips = ({
   ridesDict,
   request,
 }) => {
-  const { isAuthenticated: isEditable } = useAuthContext();
+  const {
+    isAuthenticated,
+    userAlias: authenticatedUserAlias,
+  } = useAuthContext();
+
+  const isEditable =
+    isAuthenticated && authenticatedUserAlias === visitedUserAlias;
 
   const handleVisitsOrderUpdate = useCallback(
     (event, { oldIndex, newIndex, collection }) => {
@@ -123,8 +132,12 @@ const Trips = ({
 };
 
 Trips.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      userAlias: PropTypes.string.isRequired,
+    }).isRequired,
+  }).isRequired,
   namedPaths: pathsPropTypes.namedPaths.isRequired,
-  isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
   request: PropTypes.func.isRequired,
   trips: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape(tripPropTypes)),
