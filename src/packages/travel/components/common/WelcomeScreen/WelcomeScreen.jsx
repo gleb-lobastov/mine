@@ -1,34 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter, Route, Redirect, Switch } from 'react-router-dom';
 import compose from 'lodash/fp/compose';
 import Path from 'modules/utilities/routing/Path';
 import { withPaths } from 'core/context/AppContext';
+import { useAuthContext } from 'core/context/AuthContext';
 
 const WelcomeScreen = ({
   children,
   match: {
-    params: { userAlias },
+    params: { userAlias: visitedUserAlias },
   },
   namedPaths: { travel: { trips: tripsPath } = {} } = {},
-  shouldShowLinkToTrips,
-}) => (
-  <div>
-    <span>
-      Нам пока ничего не известно о ваших путешествиях. Но очень интересно
-      узнать.
-    </span>
-    &nbsp;
-    {shouldShowLinkToTrips ? (
-      <Link to={tripsPath.toUrl({ userAlias })}>Создайте</Link>
-    ) : (
-      <span>Создайте</span>
-    )}
-    &nbsp;
-    <span>вашу первую поездку, а мы подготовим по ней отчет</span>
-    {children}
-  </div>
-);
+}) => {
+  const { userAlias: authenticatedUserAlias } = useAuthContext();
+  if (visitedUserAlias !== authenticatedUserAlias) {
+    return (
+      <span>Пользователь пока еще не внес информацию о своих поездках</span>
+    );
+  }
+  return (
+    <Switch>
+      <Route
+        path={tripsPath.toUrl({ userAlias: authenticatedUserAlias })}
+        component={() => (
+          <div>
+            <span>
+              Нам пока ничего не известно о ваших путешествиях. Но очень
+              интересно узнать. Создайте вашу первую поездку, а мы подготовим по
+              ней отчет
+            </span>
+            {children}
+          </div>
+        )}
+      />
+      <Redirect to={tripsPath.toUrl({ userAlias: authenticatedUserAlias })} />
+    </Switch>
+  );
+};
 
 WelcomeScreen.propTypes = {
   children: PropTypes.node,
@@ -38,12 +47,10 @@ WelcomeScreen.propTypes = {
   namedPaths: PropTypes.shape({
     travel: PropTypes.shape({ trips: PropTypes.instanceOf(Path) }),
   }).isRequired,
-  shouldShowLinkToTrips: PropTypes.bool,
 };
 
 WelcomeScreen.defaultProps = {
   children: null,
-  shouldShowLinkToTrips: true,
 };
 
 export default compose(
