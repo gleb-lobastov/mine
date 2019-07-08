@@ -42,6 +42,7 @@ class Navigation extends React.PureComponent {
     packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
     namedPaths: pathsPropTypes.namedPaths.isRequired,
     isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
+    userAlias: authContextPropTypes.userAlias.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
@@ -79,6 +80,7 @@ class Navigation extends React.PureComponent {
       namedPaths,
       packages,
       isAuthenticated,
+      userAlias: authorizedUserAlias,
       classes,
     } = this.props;
 
@@ -104,7 +106,7 @@ class Navigation extends React.PureComponent {
           />
           {isAuthenticated && (
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              Admin
+              {authorizedUserAlias}
             </Typography>
           )}
         </AppBar>

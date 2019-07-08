@@ -60,4 +60,5 @@ export const useAuthContext = () => useContext(AuthContext);
 
 export const authContextPropTypes = {
   isAuthenticated: PropTypes.bool,
+  userAlias: PropTypes.string,
 };
