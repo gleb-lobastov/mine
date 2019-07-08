@@ -25,7 +25,7 @@ const VisitCreator = ({
   onVisitUpdate: handleVisitUpdate,
 }) => (
   <div className={cls({ [classes.draggableContainer]: !isSorting })}>
-    <span>Добавить поездку</span>
+    <span>Добавить посещение</span>
     <VisitEditDialog
       initialState={initializeVisit()}
       onSubmit={handleVisitUpdate}
@@ -37,7 +37,7 @@ const VisitCreator = ({
 );
 
 VisitCreator.propTypes = {
-  classes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isSorting: PropTypes.bool,
   onVisitUpdate: PropTypes.func.isRequired,
 };
