@@ -36,7 +36,11 @@ export const useVisitState = ({
 
 const styles = {
   optionGroup: {
-    display: 'block',
+    display: 'flex',
+    minWidth: '400px',
+  },
+  suggest: {
+    flexGrow: 1,
   },
 };
 
@@ -65,6 +69,7 @@ const VisitEditCard = ({
     <>
       <div className={classes.optionGroup}>
         <ProvisionedSuggest
+          classes={{ root: classes.suggest }}
           textFieldProps={{
             label: 'Место посещения',
           }}
@@ -95,6 +100,7 @@ const VisitEditCard = ({
       <div className={classes.optionGroup}>
         <TextField
           label="Комментарий"
+          fullWidth={true}
           value={visitComment}
           onChange={setVisitComment}
           multiline={true}

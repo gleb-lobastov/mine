@@ -30,12 +30,13 @@ export const createSuggestComponent = ({
   SuggestionItemComponent = DefaultSuggestionRender,
   InputComponent = DefaultInputRender,
 } = {}) => ({
+  classes: customClasses,
   sourceProps,
   inputProps,
   inputFieldProps,
   ...downshiftProps
 }) => {
-  const classes = useStyles();
+  const classes = { ...useStyles(), ...customClasses };
   return (
     <div className={classes.root}>
       <Downshift itemToString={defaultItemToString} {...downshiftProps}>

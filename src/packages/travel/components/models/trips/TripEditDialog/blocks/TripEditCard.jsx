@@ -33,7 +33,11 @@ export const useTripState = ({
 
 const styles = {
   optionGroup: {
-    display: 'block',
+    display: 'flex',
+    minWidth: '400px',
+  },
+  suggest: {
+    flexGrow: 1,
   },
 };
 
@@ -65,6 +69,7 @@ const TripEditCard = ({
     <>
       <div className={classes.optionGroup}>
         <TextField
+          fullWidth={true}
           label="Название поездки"
           value={tripName}
           onChange={setTripName}
@@ -72,6 +77,7 @@ const TripEditCard = ({
       </div>
       <div className={classes.optionGroup}>
         <ProvisionedSuggest
+          classes={{ root: classes.suggest }}
           textFieldProps={{
             label: 'Старт из',
           }}
