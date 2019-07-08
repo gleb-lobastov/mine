@@ -79,7 +79,7 @@ const TripStory = ({
 };
 
 TripStory.propTypes = {
-  classes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   trips: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape(tripPropTypes)),
   }).isRequired,

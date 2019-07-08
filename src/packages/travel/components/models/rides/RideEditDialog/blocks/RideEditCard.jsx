@@ -262,7 +262,7 @@ const RideEditCard = ({
 
 RideEditCard.propTypes = {
   className: PropTypes.string,
-  classes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 RideEditCard.defaultProps = {
   className: undefined,

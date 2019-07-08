@@ -58,7 +58,7 @@ const valuePropTypes = PropTypes.oneOfType([
 ]);
 OptionsSelect.propTypes = {
   caption: PropTypes.string.isRequired,
-  classes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   hasNullOption: PropTypes.bool,
   inputId: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

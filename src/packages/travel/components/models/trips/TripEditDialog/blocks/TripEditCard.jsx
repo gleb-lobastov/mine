@@ -102,7 +102,7 @@ const TripEditCard = ({
 
 TripEditCard.propTypes = {
   className: PropTypes.string,
-  classes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 TripEditCard.defaultProps = {
   className: undefined,

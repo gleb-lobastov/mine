@@ -108,7 +108,7 @@ const VisitEditCard = ({
 
 VisitEditCard.propTypes = {
   className: PropTypes.string,
-  classes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 VisitEditCard.defaultProps = {

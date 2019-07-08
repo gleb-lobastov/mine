@@ -24,7 +24,7 @@ const DragHandler = ({ className, classes }) => (
 
 DragHandler.propTypes = {
   className: PropTypes.string,
-  classes: PropTypes.arrayOf(PropTypes.string).isRequired,
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
 DragHandler.defaultProps = { className: undefined };
