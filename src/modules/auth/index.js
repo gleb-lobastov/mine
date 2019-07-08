@@ -1,2 +1,7 @@
-export { subscribe, unsubscribe, checkIsAuthenticated } from './tokens';
+export {
+  subscribe,
+  unsubscribe,
+  checkIsAuthenticated,
+  deriveTokenStatus,
+} from './tokens';
 export { default as middleware } from './middleware';

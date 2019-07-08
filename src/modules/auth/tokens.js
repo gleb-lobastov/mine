@@ -23,16 +23,6 @@ export const unsubscribe = listenerToRemove =>
 
 export const getAccessToken = () => storage.getItem('_at') || '';
 
-export const setAccessToken = accessToken => {
-  storage.setItem('_at', accessToken);
-  listeners.forEach(listener => listener(true));
-};
-
-export const resetAccessToken = () => {
-  storage.removeItem('_at');
-  listeners.forEach(listener => listener(false));
-};
-
 export const safeDecode = token => {
   if (!token) {
     return null;
@@ -44,19 +34,39 @@ export const safeDecode = token => {
   }
 };
 
-export const deriveTokenStatus = token => {
+export const deriveTokenStatus = (token = getAccessToken()) => {
   const claims = safeDecode(token);
-  const { exp: expirationTime } = claims || {};
+  const { exp: expirationTime, alias: userAlias } = claims || {};
   return {
     // todo: IMPORTANT, need to request server time, and compare with it
     // otherwise comparison could give false results if user has
     // shifted system time
+    userAlias,
     isExpired: !expirationTime || new Date().getTime() > expirationTime * 1000,
     isValid: Boolean(claims),
   };
 };
 
-export const checkIsAuthenticated = () => {
-  const { isValid, isExpired } = deriveTokenStatus(getAccessToken());
+export const checkIsAuthenticated = (tokenStatus = deriveTokenStatus()) => {
+  const { isValid, isExpired } = tokenStatus;
   return isValid && !isExpired;
+};
+
+export const setAccessToken = accessToken => {
+  storage.setItem('_at', accessToken);
+  listeners.forEach(listener => {
+    const tokenStatus = deriveTokenStatus(accessToken);
+    const { userAlias } = tokenStatus;
+    return listener({
+      isAuthenticated: checkIsAuthenticated(tokenStatus),
+      userAlias,
+    });
+  });
+};
+
+export const resetAccessToken = () => {
+  storage.removeItem('_at');
+  listeners.forEach(listener =>
+    listener({ isAuthenticated: false, userAlias: null }),
+  );
 };

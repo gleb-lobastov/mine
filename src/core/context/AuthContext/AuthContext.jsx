@@ -1,11 +1,26 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { subscribe, unsubscribe, checkIsAuthenticated } from 'modules/auth';
+import {
+  subscribe,
+  unsubscribe,
+  checkIsAuthenticated,
+  deriveTokenStatus,
+} from 'modules/auth';
 
 const AuthContext = React.createContext({});
 
 class AuthContextProvider extends React.Component {
-  state = { context: { isAuthenticated: checkIsAuthenticated() } };
+  constructor(props) {
+    super(props);
+    const tokenStatus = deriveTokenStatus();
+    const { userAlias } = tokenStatus;
+    this.state = {
+      context: {
+        isAuthenticated: checkIsAuthenticated(tokenStatus),
+        userAlias,
+      },
+    };
+  }
 
   componentDidMount() {
     subscribe(this.handleAuthenticationUpdate);
@@ -15,8 +30,8 @@ class AuthContextProvider extends React.Component {
     unsubscribe(this.handleAuthenticationUpdate);
   }
 
-  handleAuthenticationUpdate = isAuthenticated => {
-    this.setState({ context: { isAuthenticated } });
+  handleAuthenticationUpdate = ({ isAuthenticated, userAlias }) => {
+    this.setState({ context: { isAuthenticated, userAlias } });
   };
 
   render() {
