@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import compose from 'lodash/fp/compose';
@@ -90,10 +90,19 @@ const Trips = ({
     [request],
   );
 
-  const addTripNode = (
-    <TripEditDialog initialState={initializeTrip()} onSubmit={handleTripUpdate}>
-      <EditIcon />
-    </TripEditDialog>
+  // changes of node, when used in WelcomeScreen lead to recreation of
+  // Message Component, so loosing all internal state of TripEditDialog
+  // actually it became hidden, after isOpen flag reset
+  const addTripNode = useMemo(
+    () => (
+      <TripEditDialog
+        initialState={initializeTrip()}
+        onSubmit={handleTripUpdate}
+      >
+        <EditIcon />
+      </TripEditDialog>
+    ),
+    [handleTripUpdate],
   );
   if (!tripsList.length) {
     return (

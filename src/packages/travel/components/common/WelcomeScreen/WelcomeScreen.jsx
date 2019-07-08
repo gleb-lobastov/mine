@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Route, Redirect, Switch } from 'react-router-dom';
 import compose from 'lodash/fp/compose';
@@ -19,20 +19,23 @@ const WelcomeScreen = ({
       <span>Пользователь пока еще не внес информацию о своих поездках</span>
     );
   }
+  const Message = useCallback(
+    () => (
+      <div>
+        <span>
+          Нам пока ничего не известно о ваших путешествиях. Но очень интересно
+          узнать. Создайте вашу первую поездку, а мы подготовим по ней отчет
+        </span>
+        {children}
+      </div>
+    ),
+    [children],
+  );
   return (
     <Switch>
       <Route
         path={tripsPath.toUrl({ userAlias: authenticatedUserAlias })}
-        component={() => (
-          <div>
-            <span>
-              Нам пока ничего не известно о ваших путешествиях. Но очень
-              интересно узнать. Создайте вашу первую поездку, а мы подготовим по
-              ней отчет
-            </span>
-            {children}
-          </div>
-        )}
+        component={Message}
       />
       <Redirect to={tripsPath.toUrl({ userAlias: authenticatedUserAlias })} />
     </Switch>
