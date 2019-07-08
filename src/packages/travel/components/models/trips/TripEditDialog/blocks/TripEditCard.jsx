@@ -5,7 +5,9 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import compose from 'lodash/fp/compose';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
-import ProvisionedSuggest from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
+import ProvisionedSuggest, {
+  QUERY_FORMATS,
+} from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
 import { selectDict } from 'core/connection';
 import { TRIP_TYPES } from 'travel/models/trips/consts';
 import { TRIP_TYPE_NAMES } from '../localization';
@@ -17,11 +19,13 @@ export const useTripState = ({
   tripName: initialTripName,
   tripType: initialTripType,
   originLocationId: initialOriginLocationId,
+  originGeonameId: initialOriginGeonameId,
 }) => {
   const [tripState, setTripState] = useState({
     tripName: initialTripName,
     tripType: initialTripType,
     originLocationId: initialOriginLocationId,
+    originGeonameId: initialOriginGeonameId,
   });
 
   return {
@@ -57,12 +61,13 @@ const TripEditCard = ({
       setTripState({ tripType: nextTripType }),
     [setTripState],
   );
-  const setOriginLocation = useCallback(
-    ({ locationId: nextOriginLocationId }) =>
-      setTripState({ originLocationId: nextOriginLocationId }),
+  const setOriginGeoname = useCallback(
+    ({ geonameId: nextOriginGeonameId }) =>
+      setTripState({ originGeonameId: nextOriginGeonameId }),
     [setTripState],
   );
 
+  // origin locations is fetched, so name available through locations dict
   const originLocation = locationsDict[originLocationId];
   const { locationName } = originLocation || {};
   return (
@@ -83,11 +88,14 @@ const TripEditCard = ({
           }}
           initialInputValue={locationName}
           inputProps={{ placeholder: 'Населенный пункт...' }}
-          onChange={setOriginLocation}
+          onChange={setOriginGeoname}
           sourceProps={{
             filterField: 'locationName',
-            modelName: 'locations',
-            domain: 'tripEditCard.location',
+            modelName: 'geonames',
+            domain: 'visitEditCard.geoname',
+            queryFormat: QUERY_FORMATS.SEARCH,
+            resolveDetails: ({ countryName, regionName }) =>
+              [countryName, regionName].filter(Boolean).join(', '),
           }}
         />
       </div>
