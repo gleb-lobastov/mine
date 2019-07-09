@@ -92,7 +92,7 @@ const TripEditCard = ({
           sourceProps={{
             filterField: 'locationName',
             modelName: 'geonames',
-            domain: 'visitEditCard.geoname',
+            domain: 'tripEditCard.geoname',
             queryFormat: QUERY_FORMATS.SEARCH,
             resolveDetails: ({ countryName, regionName }) =>
               [countryName, regionName].filter(Boolean).join(', '),
