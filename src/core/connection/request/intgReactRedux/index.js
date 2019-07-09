@@ -22,7 +22,6 @@ const provideInternal = createReactProvider({
 const createReactReduxProvider = ({
   provisionSelector: selectProvision,
   connect = originalConnect,
-  provisionAdapter = (state, provision) => ({ provision }),
 }) => (
   mapStateToRequirements,
   originalMapStateToProps,
@@ -46,13 +45,11 @@ const createReactReduxProvider = ({
 
     const { identity } = requirements;
 
-    const provision = selectProvision(state, requirements);
-
     const resolvedProps = {
       ...originalMapping,
       prevIdentity,
       requirements,
-      ...provisionAdapter(state, provision, requirements),
+      ...selectProvision(state, requirements),
     };
     prevIdentity = identity;
     return resolvedProps;
@@ -79,9 +76,9 @@ const createReactReduxProvider = ({
     )(WrappedComponent);
 };
 
-export default ({ provisionSelector, provisionAdapter }) => ({
+export default ({ provisionSelector }) => ({
   reducer: createRequestReducer(/* reducerOptions */),
   createMiddleware: createRequestMiddleware,
   provisionStrategyEnhancer,
-  provide: createReactReduxProvider({ provisionSelector, provisionAdapter }),
+  provide: createReactReduxProvider({ provisionSelector }),
 });

@@ -45,21 +45,19 @@ export default ({
   } = createReactReduxIntegration({
     provisionSelector: (state, requirements) => {
       const provisionState = state[requestKitStateKey][STATE_PATHS.PROVISION];
-      return multiProvisionSelector(
+      const provision = multiProvisionSelector(
         provisionState,
         requirements,
         selectDomainState,
       );
-    },
-    provisionAdapter: (state, provision, requirements) => {
-      // todo apply or remove:
-      const { shouldFallbackIfNoValue = true } = requirements;
+      const { noFallback } = requirements;
       const { value, fallback } = provision;
       return {
         provision,
         ...multiProvisionAdapter({
           originalAdapter: denormalize,
-          provisionValues: shouldFallbackIfNoValue ? value || fallback : value,
+          provisionValues:
+            noFallback || typeof value !== 'undefined' ? value : fallback,
           requirements,
           state,
         }),
