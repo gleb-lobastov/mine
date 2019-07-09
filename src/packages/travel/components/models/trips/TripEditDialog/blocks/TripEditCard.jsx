@@ -87,7 +87,7 @@ const TripEditCard = ({
             label: 'Старт из',
           }}
           initialInputValue={locationName}
-          inputProps={{ placeholder: 'Населенный пункт...' }}
+          inputProps={{ placeholder: 'Пункт отправления...' }}
           onChange={setOriginGeoname}
           sourceProps={{
             filterField: 'locationName',
