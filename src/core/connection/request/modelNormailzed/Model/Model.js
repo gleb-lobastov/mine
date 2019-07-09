@@ -91,7 +91,11 @@ export default class Model {
   }
 
   resolveSchemaFromRequest(request, shouldUseNonNestedSchemas) {
-    const { query: { id = undefined } = {}, applicableSchemaName } = request;
+    const {
+      isProvision,
+      query: { id = undefined } = {},
+      applicableSchemaName,
+    } = request;
 
     if (applicableSchemaName) {
       return this.resolveSchemaByName(
@@ -99,7 +103,7 @@ export default class Model {
         shouldUseNonNestedSchemas,
       );
     }
-    if (!id) {
+    if (isProvision && !id) {
       return this.resolveSchemaByName('list', shouldUseNonNestedSchemas);
     }
     return shouldUseNonNestedSchemas
