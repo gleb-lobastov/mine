@@ -14,7 +14,6 @@ const checkIsIdentityEqual = isEqual;
 
 export default ({
   request,
-  requireProvision,
   resolveProvision,
   propsToOmit = [],
 }) => WrappedComponent =>
@@ -59,7 +58,7 @@ export default ({
 
     require() {
       const { onRequest: handleRequest } = this.props;
-      const response = requireProvision(this.props);
+      const response = request(this.props);
 
       if (handleRequest) {
         handleRequest(response);

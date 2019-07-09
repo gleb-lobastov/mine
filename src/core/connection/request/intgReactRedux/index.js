@@ -2,7 +2,6 @@ import { connect as originalConnect } from 'react-redux';
 import createReactProvider from '../provisionReact';
 import {
   createRequestAction,
-  createProvisionAction,
   requestStrategyEnhancer as provisionStrategyEnhancer,
   createRequestMiddleware,
   createRequestReducer,
@@ -12,8 +11,6 @@ const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
 
 const provideInternal = createReactProvider({
-  requireProvision: ({ requirements, dispatch }) =>
-    dispatch(createProvisionAction(requirements)),
   request: ({ requirements, dispatch }) =>
     dispatch(createRequestAction(requirements)),
   resolveProvision: ({ provision }) => provision,
