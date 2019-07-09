@@ -8,40 +8,49 @@ const checkIsMissing = requirements => {
   return Boolean(isMissingIf);
 };
 
-export const multiRequestEnhancer = strategy => (params, ...forwardedArgs) => {
-  const {
+const resolveSpecificRequirements = (
+  {
     meta,
     meta: { domain = 'common' } = {},
     require, // todo require for fetch, parallel for submit?
     ...sharedRequirements
-  } = params;
+  },
+  key,
+) => {
+  const specificRequirements = require[key];
+  return {
+    ...sharedRequirements,
+    key,
+    ...specificRequirements,
+    meta: {
+      ...meta,
+      domain: `${domain}.${key}`,
+    },
+  };
+};
 
-  const { isProvision } = sharedRequirements; // todo consider split for submits
+export const multiRequestEnhancer = strategy => (
+  requirements,
+  ...forwardedArgs
+) => {
+  const { isProvision, require } = requirements; // todo consider split for submits
   if (!isProvision || !require) {
-    strategy(params, ...forwardedArgs);
+    strategy(requirements, ...forwardedArgs);
   }
+
   const entries = Object.entries(require || {}).filter(
     ([, specificRequirements]) => checkIsMissing(specificRequirements),
   );
   return Promise.all(
-    entries.map(([key, specificRequirements]) =>
+    entries.map(([key]) =>
       strategy(
-        {
-          ...sharedRequirements,
-          key,
-          ...specificRequirements,
-          meta: {
-            ...meta,
-            domain: `${domain}.${key}`,
-          },
-        },
+        resolveSpecificRequirements(requirements, key),
         ...forwardedArgs,
       ),
     ),
   ).then(responses =>
     responses.reduce((memo, response, index) => {
       const [key] = entries[index];
-      // eslint-disable-next-line
       memo[key] = response;
       return memo;
     }, {}),
@@ -107,5 +116,9 @@ export const multiProvisionAdapter = ({
   state, // todo use ...forwardingProps
 }) =>
   mapValues(provisionValues || {}, (result, key) =>
-    originalAdapter(state, requirements.require[key], result),
+    originalAdapter(
+      state,
+      resolveSpecificRequirements(requirements, key),
+      result,
+    ),
   );
