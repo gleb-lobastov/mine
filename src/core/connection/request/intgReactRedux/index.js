@@ -39,8 +39,10 @@ const createReactReduxProvider = ({
       ? { ...props, ...originalMapping }
       : props;
 
-    const requirements =
-      mapStateToRequirements(state, actualProps, prevIdentity) || {};
+    const requirements = {
+      ...mapStateToRequirements(state, actualProps, prevIdentity),
+      isProvision: true,
+    };
 
     const { identity } = requirements;
 

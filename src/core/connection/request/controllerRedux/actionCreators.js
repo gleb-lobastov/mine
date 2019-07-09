@@ -8,7 +8,7 @@ export const createRequestAction = requirements => ({
 
 export const createProvisionAction = requirements => ({
   type: INITIATE_REQUEST,
-  payload: { ...requirements, isProvision: true },
+  payload: requirements,
 });
 
 export const createPendingAction = ({ meta, ...requirements } = {}) => ({
