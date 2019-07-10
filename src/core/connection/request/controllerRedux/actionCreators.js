@@ -1,4 +1,8 @@
-import { INITIATE_REQUEST, PROCESS_REQUEST } from './actionTypes';
+import {
+  INITIATE_REQUEST,
+  PROCESS_REQUEST,
+  INVALIDATE_REQUEST,
+} from './actionTypes';
 import * as consts from './consts';
 
 export const createRequestAction = requirements => ({
@@ -37,4 +41,9 @@ export const createSuccessAction = (
     requirements,
     readyState: consts.READY_STATE.DONE,
   },
+});
+
+export const createInvalidateRequestAction = ({ domain }) => ({
+  type: INVALIDATE_REQUEST,
+  meta: { domain },
 });

@@ -1,4 +1,4 @@
-import { PROCESS_REQUEST } from './actionTypes';
+import { PROCESS_REQUEST, INVALIDATE_REQUEST } from './actionTypes';
 import * as consts from './consts';
 
 const checkIsRequestAction = action => {
@@ -6,7 +6,16 @@ const checkIsRequestAction = action => {
   return action.meta !== undefined && actionType === PROCESS_REQUEST;
 };
 
+const checkIsInvalidateRequestAction = action => {
+  const { type: actionType } = action;
+  return action.meta !== undefined && actionType === INVALIDATE_REQUEST;
+};
+
 export default (/* further configuration */) => (state, action) => {
+  if (checkIsInvalidateRequestAction(action)) {
+    return undefined;
+  }
+
   if (!checkIsRequestAction(action)) {
     return state;
   }

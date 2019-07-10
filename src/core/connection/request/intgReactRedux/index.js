@@ -2,6 +2,7 @@ import { connect as originalConnect } from 'react-redux';
 import createReactProvider from '../provisionReact';
 import {
   createRequestAction,
+  createInvalidateRequestAction,
   requestStrategyEnhancer as provisionStrategyEnhancer,
   createRequestMiddleware,
   createRequestReducer,
@@ -17,6 +18,8 @@ const provideInternal = createReactProvider({
   transformProps: ({ dispatch, provision, ...props }) => ({
     ...props,
     provision,
+    invalidateRequest: ({ domain }) =>
+      dispatch(createInvalidateRequestAction({ domain })),
     // for passing down to component
     request: ({ requirements }) => dispatch(createRequestAction(requirements)),
   }),
