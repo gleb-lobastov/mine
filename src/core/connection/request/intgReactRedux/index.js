@@ -11,9 +11,15 @@ const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
 
 const provideInternal = createReactProvider({
-  request: ({ requirements, dispatch }) =>
+  // for provider internal use
+  request: ({ dispatch, requirements }) =>
     dispatch(createRequestAction(requirements)),
-  resolveProvision: ({ provision }) => provision,
+  transformProps: ({ dispatch, provision, ...props }) => ({
+    ...props,
+    provision,
+    // for passing down to component
+    request: ({ requirements }) => dispatch(createRequestAction(requirements)),
+  }),
 });
 
 const createReactReduxProvider = ({
