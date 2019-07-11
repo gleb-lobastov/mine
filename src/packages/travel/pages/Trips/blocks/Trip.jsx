@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
 import IconHome from '@material-ui/icons/Home';
 import EditIcon from '@material-ui/icons/Edit';
 import checkIsNodeNotSortable from 'modules/utilities/dom/checkIsNodeNotSortable';
@@ -26,6 +27,17 @@ const SortableVisitWithRides = SortableElement(
     ),
 );
 
+const styles = {
+  container: {
+    '&:hover $visibleOnlyOnHover': {
+      visibility: 'visible',
+    },
+  },
+  visibleOnlyOnHover: {
+    visibility: 'hidden',
+  },
+};
+
 const resolveVisitsWindow = (tripVisitsList, indexOfVisit, overstepIndex) => {
   const prevVisitIndex =
     indexOfVisit - 1 - (indexOfVisit > overstepIndex ? 1 : 0);
@@ -40,6 +52,7 @@ const resolveVisitsWindow = (tripVisitsList, indexOfVisit, overstepIndex) => {
 };
 
 const Trip = ({
+  classes,
   isEditable,
   locationsDict,
   onRideUpdate: handleRideUpdate,
@@ -162,7 +175,7 @@ const Trip = ({
         variant="outlined"
         color="primary"
       >
-        <EditIcon />
+        <EditIcon className={classes.visibleOnlyOnHover} />
       </IconButton>
     </TripEditDialog>
   );
@@ -202,7 +215,7 @@ const Trip = ({
   );
   return (
     <>
-      <h1>
+      <h1 className={classes.container}>
         {`${tripIndex + 1}. ${tripName}`}
         {isEditable && tripEditControlsNode}
       </h1>
@@ -220,6 +233,7 @@ const Trip = ({
   );
 };
 Trip.propTypes = {
+  classes: PropTypes.objectOf(PropTypes.string).isRequired,
   tripIndex: PropTypes.number.isRequired,
   isEditable: PropTypes.bool,
   locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
@@ -237,4 +251,4 @@ Trip.defaultProps = {
   tripVisitsList: [],
 };
 
-export default Trip;
+export default withStyles(styles)(Trip);

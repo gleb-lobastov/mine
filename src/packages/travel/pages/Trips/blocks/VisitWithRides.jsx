@@ -19,9 +19,6 @@ const styles = {
     '&:hover $visibleOnlyOnHover': {
       visibility: 'visible',
     },
-    // '&:hover $ride, $alwaysVisible': {
-    //   display: 'inline-block',
-    // },
   },
   editDialogTrigger: {
     marginLeft: '4px',
