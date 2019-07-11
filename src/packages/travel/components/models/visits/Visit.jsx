@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
@@ -45,7 +46,14 @@ const Visit = ({
             handleVisitUpdate({ ...visit, ...updatedVisit })
           }
         >
-          <EditIcon className={classes.editIcon} />
+          <IconButton
+            data-sort-handler="disabled"
+            size="small"
+            variant="outlined"
+            color="primary"
+          >
+            <EditIcon className={classes.editIcon} />
+          </IconButton>
         </VisitEditDialog>
       )}
     </div>

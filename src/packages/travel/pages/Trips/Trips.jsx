@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import compose from 'lodash/fp/compose';
 import uniq from 'lodash/uniq';
-import EditIcon from '@material-ui/icons/Edit';
+import Button from '@material-ui/core/Button';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { selectDict, selectProvisionStatus } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
@@ -99,7 +99,9 @@ const Trips = ({
         initialState={initializeTrip()}
         onSubmit={handleTripUpdate}
       >
-        <EditIcon />
+        <Button size="small" variant="outlined" color="primary">
+          Добавить поездку
+        </Button>
       </TripEditDialog>
     ),
     [handleTripUpdate],

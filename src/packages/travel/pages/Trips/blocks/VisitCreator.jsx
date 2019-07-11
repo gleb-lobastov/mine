@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
+import Button from '@material-ui/core/Button';
 import initializeVisit from 'travel/models/visits/initialize';
 import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
 import DragHandler from './DragHandler';
@@ -25,12 +25,18 @@ const VisitCreator = ({
   onVisitUpdate: handleVisitUpdate,
 }) => (
   <div className={cls({ [classes.draggableContainer]: !isSorting })}>
-    <span>Добавить посещение</span>
     <VisitEditDialog
       initialState={initializeVisit()}
       onSubmit={handleVisitUpdate}
     >
-      <EditIcon className={classes.visibleOnlyOnHover} />
+      <Button
+        data-sort-handler="disabled"
+        size="small"
+        variant="outlined"
+        color="primary"
+      >
+        <span>Добавить посещение</span>
+      </Button>
     </VisitEditDialog>
     <DragHandler className={classes.visibleOnlyOnHover} />
   </div>

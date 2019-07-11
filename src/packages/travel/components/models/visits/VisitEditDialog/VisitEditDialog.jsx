@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -10,7 +9,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import VisitEditCard, { useVisitState } from './blocks/VisitEditCard';
 
-const VisitEditDialog = ({ initialState, children, onSubmit: handleSubmit }) => {
+const VisitEditDialog = ({
+  initialState,
+  children,
+  onSubmit: handleSubmit,
+}) => {
   const { visitState, setVisitState } = useVisitState(initialState);
   const [isOpen, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
@@ -22,15 +25,7 @@ const VisitEditDialog = ({ initialState, children, onSubmit: handleSubmit }) => 
 
   return (
     <>
-      <IconButton
-        data-sort-handler="disabled"
-        size="small"
-        variant="outlined"
-        color="primary"
-        onClick={handleClickOpen}
-      >
-        {children}
-      </IconButton>
+      {React.cloneElement(children, { onClick: handleClickOpen })}
       {isOpen && (
         <Dialog
           transitionDuration={500}
@@ -41,7 +36,10 @@ const VisitEditDialog = ({ initialState, children, onSubmit: handleSubmit }) => 
           <DialogTitle id="form-dialog-title">Посещение</DialogTitle>
           <DialogContent>
             <DialogContentText>Редактирование посещения</DialogContentText>
-            <VisitEditCard visitState={visitState} setVisitState={setVisitState} />
+            <VisitEditCard
+              visitState={visitState}
+              setVisitState={setVisitState}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="secondary">

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -22,15 +21,7 @@ const TripEditDialog = ({ initialState, children, onSubmit: handleSubmit }) => {
 
   return (
     <>
-      <IconButton
-        data-sort-handler="disabled"
-        size="small"
-        variant="outlined"
-        color="primary"
-        onClick={handleClickOpen}
-      >
-        {children}
-      </IconButton>
+      {React.cloneElement(children, { onClick: handleClickOpen })}
       {isOpen && (
         <Dialog
           transitionDuration={500}

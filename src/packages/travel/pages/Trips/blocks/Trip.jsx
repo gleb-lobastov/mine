@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import IconButton from '@material-ui/core/IconButton';
 import IconHome from '@material-ui/icons/Home';
 import EditIcon from '@material-ui/icons/Edit';
 import checkIsNodeNotSortable from 'modules/utilities/dom/checkIsNodeNotSortable';
@@ -155,7 +156,14 @@ const Trip = ({
       initialState={trip}
       onSubmit={updatedTrip => handleTripUpdate({ ...trip, ...updatedTrip })}
     >
-      <EditIcon />
+      <IconButton
+        data-sort-handler="disabled"
+        size="small"
+        variant="outlined"
+        color="primary"
+      >
+        <EditIcon />
+      </IconButton>
     </TripEditDialog>
   );
 
