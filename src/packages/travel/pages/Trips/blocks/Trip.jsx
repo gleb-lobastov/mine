@@ -12,6 +12,7 @@ import checkIsVisitsConnectedByRide from 'travel/utils/checkIsVisitsConnectedByR
 import locationPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import tripPropTypes from 'travel/models/trips/propTypes';
+import { TRIP_TYPES } from 'travel/models/trips/consts';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Location from 'travel/components/models/locations/Location';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
@@ -59,7 +60,7 @@ const Trip = ({
   onVisitsOrderUpdate: handleVisitsOrderUpdate,
   ridesDict,
   trip,
-  trip: { tripId, originLocationId, tripName },
+  trip: { tripId, originLocationId, tripName, tripType },
   tripIndex,
   tripVisitsList,
   onTripUpdate: handleTripUpdate,
@@ -184,7 +185,9 @@ const Trip = ({
   const lastButOneVisit = tripVisitsList[tripVisitsList.length - 2];
   const { departureRideId: rideToOriginId, visitId: recentVisitId } =
     lastVisit || {};
-  const rideToOriginNode = (
+
+  const isRelocation = tripType === TRIP_TYPES.RELOCATION;
+  const rideToOriginNode = isRelocation ? null : (
     <Ride
       availableVisits={tripVisitsList}
       defaultDepartureVisitId={recentVisitId}
@@ -221,9 +224,12 @@ const Trip = ({
       </h1>
       {originLocationNode}
       {wrappedVisitsNodes}
-
-      {rideToOriginNode}
-      {originLocationNode}
+      {!isRelocation && (
+        <>
+          {rideToOriginNode}
+          {originLocationNode}
+        </>
+      )}
       {hasStory && (
         <div>
           <Link to={storyUrl}>Заметки</Link>
