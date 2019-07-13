@@ -6,5 +6,6 @@ export const TRIP_TYPE_NAMES = {
   [TRIP_TYPES.LEISURE]: 'Отдых',
   [TRIP_TYPES.BUSINESS]: 'Работа',
   [TRIP_TYPES.MIXED]: 'Смешанный',
+  [TRIP_TYPES.RELOCATION]: 'Переезд',
   [TRIP_TYPES.OTHER]: 'Другой',
 };
