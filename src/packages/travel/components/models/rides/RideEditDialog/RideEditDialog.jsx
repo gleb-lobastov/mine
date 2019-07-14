@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Formik } from 'formik';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -10,22 +11,21 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
-import RideEditCard, { useRideState } from './blocks/RideEditCard';
+import RideEditForm from './blocks/RideEditForm';
 
 const RideEditDialog = ({
   availableVisits,
   initialState,
   children,
   className,
-  onSubmit: handleSubmit,
+  onSubmit: handleSubmitExternal,
   originLocation,
 }) => {
-  const { rideState, setRideState } = useRideState(initialState);
   const [isOpen, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleSubmitInternal = () => {
-    handleSubmit(rideState);
+  const handleSubmitInternal = values => {
+    handleSubmitExternal(values);
     handleClose(false);
   };
 
@@ -41,33 +41,40 @@ const RideEditDialog = ({
         {children}
       </IconButton>
       {isOpen && (
-        <Dialog
-          transitionDuration={500}
-          open={true}
-          onClose={handleClose}
-          aria-labelledby="form-dialog-title"
+        <Formik
+          initialValues={initialState}
+          enableReinitialize={true}
+          onSubmit={handleSubmitInternal}
         >
-          <DialogTitle id="form-dialog-title">Транспорт</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Как вы добрались в место назначения и как уехали из него?
-            </DialogContentText>
-            <RideEditCard
-              availableVisits={availableVisits}
-              rideState={rideState}
-              setRideState={setRideState}
-              originLocation={originLocation}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">
-              Отмена
-            </Button>
-            <Button onClick={handleSubmitInternal} color="primary">
-              Сохранить
-            </Button>
-          </DialogActions>
-        </Dialog>
+          {({ handleSubmit, ...formikProps }) => (
+            <Dialog
+              transitionDuration={500}
+              open={true}
+              onClose={handleClose}
+              aria-labelledby="form-dialog-title"
+            >
+              <DialogTitle id="form-dialog-title">Транспорт</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Как вы добрались в место назначения и как уехали из него?
+                </DialogContentText>
+                <RideEditForm
+                  {...formikProps}
+                  availableVisits={availableVisits}
+                  originLocation={originLocation}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="secondary">
+                  Отмена
+                </Button>
+                <Button onClick={handleSubmit} color="primary">
+                  Сохранить
+                </Button>
+              </DialogActions>
+            </Dialog>
+          )}
+        </Formik>
       )}
     </div>
   );
