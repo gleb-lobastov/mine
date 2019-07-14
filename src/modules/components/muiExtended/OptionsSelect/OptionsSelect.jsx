@@ -22,6 +22,7 @@ const OptionsSelect = ({
   classes,
   hasNullOption,
   inputId,
+  name,
   onChange: handleChange,
   optionRender,
   options,
@@ -32,6 +33,7 @@ const OptionsSelect = ({
       {caption}
     </InputLabel>
     <Select
+      name={name}
       value={value}
       displayEmpty={true}
       onChange={handleChange}
@@ -57,6 +59,7 @@ const valuePropTypes = PropTypes.oneOfType([
   PropTypes.string,
 ]);
 OptionsSelect.propTypes = {
+  name: PropTypes.string,
   caption: PropTypes.string.isRequired,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   hasNullOption: PropTypes.bool,
@@ -68,6 +71,7 @@ OptionsSelect.propTypes = {
 };
 
 OptionsSelect.defaultProps = {
+  name: undefined,
   hasNullOption: true,
   optionRender: ({ option }) => option || '',
   options: [],
