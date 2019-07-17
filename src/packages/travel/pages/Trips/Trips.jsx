@@ -198,17 +198,7 @@ const mapStateToRequirements = (
       userTripsIds,
       missingLocationsIds,
     },
-    require: {
-      locations: {
-        modelName: 'locations',
-        isMissingIf: missingLocationsIds.length,
-        query: {
-          filter: {
-            id: { comparator: 'in', value: missingLocationsIds },
-          },
-          navigation: { isDisabled: true },
-        },
-      },
+    request: {
       trips: {
         modelName: 'trips',
         isMissingIf: isUserChanged,

@@ -164,7 +164,7 @@ const mapStateToRequirements = (
       userAlias,
       userTripsIds,
     },
-    require: {
+    request: {
       countries: {
         isMissingIf: !countriesDict || !Object.keys(countriesDict).length,
         modelName: 'countries',

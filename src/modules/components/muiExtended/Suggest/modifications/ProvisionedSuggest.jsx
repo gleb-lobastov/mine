@@ -58,7 +58,7 @@ export default createSuggestComponent({
     ) => ({
       domain,
       identity: inputValue,
-      require: {
+      request: {
         entities: {
           modelName,
           query: resolveQueryByFormat({

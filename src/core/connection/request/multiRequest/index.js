@@ -11,12 +11,12 @@ const checkIsMissing = requirements => {
 const resolveSpecificRequirements = (
   {
     domain = 'common',
-    require, // todo require for fetch, parallel for submit?
+    request,
     ...sharedRequirements
   },
   key,
 ) => {
-  const specificRequirements = require[key];
+  const specificRequirements = request[key];
   return {
     ...sharedRequirements,
     modelName: key,
@@ -30,23 +30,30 @@ export const multiRequestEnhancer = strategy => (
   requirements,
   ...forwardedArgs
 ) => {
-  const { isProvision, require } = requirements; // todo consider split for submits
-  if (!isProvision || !require) {
+  const { isProvision, request } = requirements; // todo consider split for submits
+  if (!isProvision || !request) {
     strategy(requirements, ...forwardedArgs);
   }
 
-  const requests = Object.keys(require || {}).reduce((memo, key) => {
-    const specificRequirements = resolveSpecificRequirements(requirements, key);
-    if (checkIsMissing(specificRequirements)) {
-      memo[key] = strategy(specificRequirements, ...forwardedArgs);
-    }
-    return memo;
-  }, {});
+  const requests = Object.keys(request || {})
+    .reduce((memo, key) => {
+      const specificRequirements = resolveSpecificRequirements(
+        requirements,
+        key,
+      );
+      if (!checkIsMissing(specificRequirements)) {
+        memo[key] = specificRequirements;
+      }
+      return memo;
+    }, {})
+    .map(specificRequirements =>
+      strategy(specificRequirements, ...forwardedArgs),
+    );
 
-  const entries = Object.entries(requests);
-  return Promise.all(entries).then(responses =>
+  const requestsEntries = Object.entries(requests);
+  return Promise.all(requestsEntries).then(responses =>
     responses.reduce((memo, response, index) => {
-      const [key] = entries[index];
+      const [key] = requestsEntries[index];
       memo[key] = response;
       return memo;
     }, {}),
@@ -82,10 +89,10 @@ export const multiProvisionSelector = (
   requirements,
   particularSelector,
 ) => {
-  const { domain = 'common', require = {} } = requirements || {};
+  const { domain = 'common', request = {} } = requirements || {};
 
   return mergeProvisionState(
-    Object.keys(require).reduce((memo, key) => {
+    Object.keys(request).reduce((memo, key) => {
       const particularProvision = particularSelector(
         provisionState,
         `${domain}.${key}`,

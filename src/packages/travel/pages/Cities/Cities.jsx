@@ -73,7 +73,7 @@ const mapStateToRequirements = (
       userAlias,
       userTripsIds,
     },
-    require: {
+    request: {
       trips: {
         modelName: 'trips',
         isMissingIf: isUserChanged,

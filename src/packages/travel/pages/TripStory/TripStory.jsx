@@ -102,7 +102,7 @@ const mapStateToRequirements = (
     identity: {
       strTripId,
     },
-    require: {
+    request: {
       rides: {
         modelName: 'rides',
         query: {

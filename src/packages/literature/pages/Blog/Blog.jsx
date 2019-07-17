@@ -20,7 +20,7 @@ class Blog extends React.PureComponent {
 
 const mapStateToRequirements = () => ({
   domain: 'blogPage',
-  require: {
+  request: {
     articles: {
       modelName: 'articles',
       query: { navigation: { isDisabled: true } },
