@@ -68,6 +68,7 @@ const mapStateToRequirements = (
     (!prevUserTripsIds || !prevUserTripsIds.length) &&
     Boolean(userTripsIds.length);
   return {
+    domain: 'citiesPage',
     identity: {
       userAlias,
       userTripsIds,
@@ -86,9 +87,6 @@ const mapStateToRequirements = (
           navigation: { isDisabled: true },
         },
       },
-    },
-    meta: {
-      domain: 'cities',
     },
   };
 };

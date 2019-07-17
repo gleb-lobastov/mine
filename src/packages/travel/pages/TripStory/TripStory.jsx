@@ -118,7 +118,7 @@ const mapStateToRequirements = (
         },
       },
     },
-    meta: { domain: 'tripStory' },
+    domain: 'tripStoryPage',
   };
 };
 

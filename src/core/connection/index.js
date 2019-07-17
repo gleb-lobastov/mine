@@ -11,7 +11,7 @@ import createRequestApi from './request';
 const engine = createRequestEngine({
   presetOptions: {
     format: 'json',
-    endpoint: ({ meta: { domain } }) => `${__API_HOST__}/api/${domain}`,
+    endpoint: ({ domain }) => `${__API_HOST__}/api/${domain}`,
   },
   plugins: [
     authPlugin,

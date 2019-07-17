@@ -5,6 +5,7 @@ const calcOrder = createOrderCalculator({
 });
 
 export const submitOrderInTrip = ({ oldIndex, newIndex, collection }) => ({
+  domain: 'tripsPage.visits.sort',
   modelName: 'visits',
   query: {
     id: collection[oldIndex].visitId,
@@ -12,30 +13,23 @@ export const submitOrderInTrip = ({ oldIndex, newIndex, collection }) => ({
       orderInTrip: calcOrder({ index: newIndex, collection }),
     },
   },
-  meta: {
-    domain: 'trips.visits.sort',
-  },
 });
 
 export const submitRide = ({ ride, ride: { rideId } }) => ({
+  domain: 'tripsPage.visits.rides',
   modelName: 'rides',
   query: {
     id: rideId,
     body: ride,
   },
-  meta: {
-    domain: 'trips.visits.rides',
-  },
 });
 
 export const submitTrip = ({ trip, trip: { tripId } }) => ({
+  domain: 'tripsPage.visits.trips',
   modelName: 'trips',
   query: {
     id: tripId,
     body: trip,
-  },
-  meta: {
-    domain: 'trips.visits.trips',
   },
 });
 
@@ -46,6 +40,7 @@ export const submitVisit = ({
   indexInCollection,
   collection,
 }) => ({
+  domain: 'tripsPage.visits.visit',
   modelName: 'visits',
   query: {
     id: visitId,
@@ -57,8 +52,5 @@ export const submitVisit = ({
           ? calcOrder({ index: indexInCollection, collection })
           : undefined,
     },
-  },
-  meta: {
-    domain: 'trips.visits.visit',
   },
 });

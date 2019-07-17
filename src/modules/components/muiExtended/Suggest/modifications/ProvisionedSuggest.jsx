@@ -56,6 +56,7 @@ export default createSuggestComponent({
         },
       },
     ) => ({
+      domain,
       identity: inputValue,
       require: {
         entities: {
@@ -67,9 +68,6 @@ export default createSuggestComponent({
             numberOfItemsToRequest,
           }),
         },
-      },
-      meta: {
-        domain,
       },
       debounceRequest: 500,
     }),

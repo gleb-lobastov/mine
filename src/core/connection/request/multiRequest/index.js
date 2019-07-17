@@ -10,8 +10,7 @@ const checkIsMissing = requirements => {
 
 const resolveSpecificRequirements = (
   {
-    meta,
-    meta: { domain = 'common' } = {},
+    domain = 'common',
     require, // todo require for fetch, parallel for submit?
     ...sharedRequirements
   },
@@ -86,7 +85,7 @@ export const multiProvisionSelector = (
   requirements,
   particularSelector,
 ) => {
-  const { meta: { domain = 'common' } = {}, require = {} } = requirements || {};
+  const { domain = 'common', require = {} } = requirements || {};
 
   return mergeProvisionState(
     Object.keys(require).reduce((memo, key) => {

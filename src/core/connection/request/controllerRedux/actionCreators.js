@@ -10,34 +10,34 @@ export const createRequestAction = requirements => ({
   payload: requirements,
 });
 
-export const createPendingAction = ({ meta, ...requirements } = {}) => ({
+export const createPendingAction = ({ domain, ...requirements } = {}) => ({
   type: PROCESS_REQUEST,
   meta: {
-    ...meta,
+    domain,
     requirements,
     readyState: consts.READY_STATE.OPENED,
   },
 });
 
-export const createFailureAction = ({ meta, ...requirements } = {}, error) => ({
+export const createFailureAction = ({ domain, ...requirements } = {}, error) => ({
   type: PROCESS_REQUEST,
   payload: error,
   error: true,
   meta: {
-    ...meta,
+    domain,
     requirements,
     readyState: consts.READY_STATE.DONE,
   },
 });
 
 export const createSuccessAction = (
-  { meta, ...requirements } = {},
+  { domain, ...requirements } = {},
   result,
 ) => ({
   type: PROCESS_REQUEST,
   payload: result,
   meta: {
-    ...meta,
+    domain,
     requirements,
     readyState: consts.READY_STATE.DONE,
   },

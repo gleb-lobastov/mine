@@ -192,6 +192,7 @@ const mapStateToRequirements = (
   );
   const isUserChanged = prevUserAlias !== userAlias;
   return {
+    domain: 'tripsPage',
     identity: {
       userAlias,
       userTripsIds,
@@ -230,7 +231,6 @@ const mapStateToRequirements = (
         },
       },
     },
-    meta: { domain: 'trips' },
   };
 };
 
