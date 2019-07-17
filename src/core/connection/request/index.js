@@ -19,6 +19,11 @@ export default ({
   distributorConfig = {},
   requestKitStateKey = 'requestKit',
 }) => {
+  const selectEntities = state =>
+    state[requestKitStateKey][STATE_PATHS.ENTITIES];
+  const selectProvision = state =>
+    state[requestKitStateKey][STATE_PATHS.PROVISION];
+
   const {
     selectors: entitiesSelectors,
     reducer: entitiesReducer,
@@ -26,8 +31,7 @@ export default ({
     denormalize,
     submit,
   } = createReduxModelIntegration({
-    entitiesSelectorRoot: state =>
-      state[requestKitStateKey][STATE_PATHS.ENTITIES],
+    entitiesSelector: selectEntities,
     modelsConfig,
   });
 
@@ -37,55 +41,59 @@ export default ({
     selectDomainStates,
   } = createDistributor(distributorConfig);
 
+  const provisionSelector = (state, requirements) => {
+    const provisionState = selectProvision(state);
+    const provision = multiProvisionSelector(
+      provisionState,
+      requirements,
+      selectDomainState,
+    );
+    const { noFallback } = requirements;
+    const { value, fallback } = provision;
+    return {
+      provision,
+      ...multiProvisionAdapter({
+        originalAdapter: denormalize,
+        provisionValues:
+          noFallback || typeof value !== 'undefined' ? value : fallback,
+        requirements,
+        state,
+      }),
+    };
+  };
+
   const {
     reducer: provisionReducer,
     provisionStrategyEnhancer,
     createMiddleware,
     provide,
   } = createReactReduxIntegration({
-    provisionSelector: (state, requirements) => {
-      const provisionState = state[requestKitStateKey][STATE_PATHS.PROVISION];
-      const provision = multiProvisionSelector(
-        provisionState,
-        requirements,
-        selectDomainState,
-      );
-      const { noFallback } = requirements;
-      const { value, fallback } = provision;
-      return {
-        provision,
-        ...multiProvisionAdapter({
-          originalAdapter: denormalize,
-          provisionValues:
-            noFallback || typeof value !== 'undefined' ? value : fallback,
-          requirements,
-          state,
-        }),
-      };
-    },
+    provisionSelector,
+  });
+
+  const requestStrategy = compose(
+    multiRequestEnhancer,
+    provisionStrategyEnhancer,
+    modelsStrategyEnhancer,
+  )(requestHandler);
+
+  const reducer = combineReducers({
+    [STATE_PATHS.ENTITIES]: entitiesReducer,
+    [STATE_PATHS.PROVISION]: distributeReducer(provisionReducer),
   });
 
   return {
-    reduxMiddleware: createMiddleware({
-      requestStrategy: compose(
-        multiRequestEnhancer,
-        provisionStrategyEnhancer,
-        modelsStrategyEnhancer,
-      )(requestHandler),
-    }),
+    reduxMiddleware: createMiddleware({ requestStrategy }),
     provide,
     selectors: {
       ...entitiesSelectors,
       selectProvisionStatus: (state, domain) => {
-        const provisionState = state[requestKitStateKey][STATE_PATHS.PROVISION];
+        const provisionState = selectProvision(state);
         // note this is array, when expected an object
         return mergeProvisionState(selectDomainStates(provisionState, domain));
       },
     },
-    reducer: combineReducers({
-      [STATE_PATHS.ENTITIES]: entitiesReducer,
-      [STATE_PATHS.PROVISION]: distributeReducer(provisionReducer),
-    }),
+    reducer,
     submit,
   };
 };

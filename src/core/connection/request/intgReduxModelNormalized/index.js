@@ -30,7 +30,7 @@ const adoptEntitySelector = (selector, selectorRoot) => {
   return adoptedSelector;
 };
 
-export default ({ entitiesSelectorRoot, modelsConfig }) => {
+export default ({ entitiesSelector: selectEntities, modelsConfig }) => {
   const { modelsNormalizedPlugin, denormalize } = configureModels(modelsConfig);
 
   const modelsStrategyEnhancer = requestHandler =>
@@ -39,17 +39,13 @@ export default ({ entitiesSelectorRoot, modelsConfig }) => {
   return {
     reducer,
     modelsStrategyEnhancer,
-    // reduxModelPlugin,
     selectors: {
-      selectDict: adoptEntitySelector(selectDict, entitiesSelectorRoot),
-      selectItem: adoptEntitySelector(selectItem, entitiesSelectorRoot),
-      selectList: adoptEntitySelector(selectList, entitiesSelectorRoot),
-      selectMissingIds: adoptEntitySelector(
-        selectMissingIds,
-        entitiesSelectorRoot,
-      ),
+      selectDict: adoptEntitySelector(selectDict, selectEntities),
+      selectItem: adoptEntitySelector(selectItem, selectEntities),
+      selectList: adoptEntitySelector(selectList, selectEntities),
+      selectMissingIds: adoptEntitySelector(selectMissingIds, selectEntities),
     },
     denormalize: (state, requirements, result) =>
-      denormalize(requirements, result, entitiesSelectorRoot(state)),
+      denormalize(requirements, result, selectEntities(state)),
   };
 };
