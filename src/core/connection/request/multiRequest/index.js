@@ -22,10 +22,7 @@ const resolveSpecificRequirements = (
     modelName: key,
     key,
     ...specificRequirements,
-    meta: {
-      ...meta,
-      domain: `${domain}.${key}`,
-    },
+    domain: `${domain}.${key}`,
   };
 };
 
