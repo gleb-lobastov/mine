@@ -35,17 +35,16 @@ export const multiRequestEnhancer = strategy => (
     strategy(requirements, ...forwardedArgs);
   }
 
-  const entries = Object.entries(require || {}).filter(
-    ([, specificRequirements]) => checkIsMissing(specificRequirements),
-  );
-  return Promise.all(
-    entries.map(([key]) =>
-      strategy(
-        resolveSpecificRequirements(requirements, key),
-        ...forwardedArgs,
-      ),
-    ),
-  ).then(responses =>
+  const requests = Object.keys(require || {}).reduce((memo, key) => {
+    const specificRequirements = resolveSpecificRequirements(requirements, key);
+    if (checkIsMissing(specificRequirements)) {
+      memo[key] = strategy(specificRequirements, ...forwardedArgs);
+    }
+    return memo;
+  }, {});
+
+  const entries = Object.entries(requests);
+  return Promise.all(entries).then(responses =>
     responses.reduce((memo, response, index) => {
       const [key] = entries[index];
       memo[key] = response;
@@ -98,7 +97,10 @@ export const multiProvisionSelector = (
       // required data is provided. But if some requirement is flagged as
       // not missing (not required), then lack of this data should not mark
       // provision as incomplete. Because, this request could even never be called.
-      if (particularProvision || checkIsMissing(require[key])) {
+      if (
+        particularProvision ||
+        checkIsMissing(resolveSpecificRequirements(requirements, key))
+      ) {
         memo[key] = particularProvision;
       }
       return memo;
