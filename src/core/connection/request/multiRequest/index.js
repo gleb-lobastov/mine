@@ -19,6 +19,7 @@ const resolveSpecificRequirements = (
   const specificRequirements = require[key];
   return {
     ...sharedRequirements,
+    modelName: key,
     key,
     ...specificRequirements,
     meta: {
