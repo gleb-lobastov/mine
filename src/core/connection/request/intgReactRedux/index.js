@@ -8,6 +8,8 @@ import {
   createRequestReducer,
 } from '../controllerRedux';
 
+export { READY_STATE, EMPTY_STATE } from '../controllerRedux';
+
 const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
 
