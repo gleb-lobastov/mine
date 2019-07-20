@@ -11,9 +11,12 @@ const checkIsInvalidateRequestAction = action => {
   return action.meta !== undefined && actionType === INVALIDATE_REQUEST;
 };
 
-export default (/* further configuration */) => (state, action) => {
+export default (/* further configuration */) => (
+  state = consts.EMPTY_STATE,
+  action,
+) => {
   if (checkIsInvalidateRequestAction(action)) {
-    return undefined;
+    return consts.EMPTY_STATE;
   }
 
   if (!checkIsRequestAction(action)) {

@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export const READY_STATE = {
   UNSENT: 0,
   OPENED: 1,
@@ -6,3 +5,4 @@ export const READY_STATE = {
   LOADING: 3,
   DONE: 4,
 };
+export const EMPTY_STATE = { readyState: READY_STATE.UNSENT };
