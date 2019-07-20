@@ -57,14 +57,6 @@ export const multiRequestEnhancer = strategy => (
     strategy(requirements, ...forwardedArgs);
   }
 
-  // multiRequestMap(requirements, (_, key) => {
-  //   const specificRequirements = resolveSpecificRequirements(requirements, key);
-  //   if (checkIsNoop(specificRequirements)) {
-  //     return undefined;
-  //   }
-  //   return strategy(specificRequirements, ...forwardedArgs);
-  // });
-
   const requests = mapValues(
     Object.keys(request || {}).reduce((memo, key) => {
       const specificRequirements = resolveSpecificRequirements(
