@@ -11,21 +11,12 @@ export default mountPath => {
     ),
   };
 
-  const countries = {
+  const visits = {
     routeName: 'countries',
-    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/countries`,
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/visits`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
-      import(/* webpackChunkName: 'travel-Countries' */ './pages/Countries'),
-    ),
-  };
-
-  const cities = {
-    routeName: 'cities',
-    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/cities`,
-    defaultRouteParams: { userAlias: 'my' },
-    Component: React.lazy(() =>
-      import(/* webpackChunkName: 'travel-Cities' */ './pages/Cities'),
+      import(/* webpackChunkName: 'travel-Countries' */ './pages/VisitsPage'),
     ),
   };
 
@@ -48,11 +39,10 @@ export default mountPath => {
   };
 
   return {
-    routes: [entry, countries, cities, trips, tripStory],
+    routes: [entry, visits, trips, tripStory],
     menu: [
       { routeName: entry.routeName, caption: 'Об' },
-      { routeName: countries.routeName, caption: 'По странам' },
-      { routeName: cities.routeName, caption: 'По городам' },
+      { routeName: visits.routeName, caption: 'По поещенным местам' },
       { routeName: trips.routeName, caption: 'По поездкам' },
     ],
   };

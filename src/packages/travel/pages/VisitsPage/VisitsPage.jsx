@@ -30,7 +30,7 @@ const byLocationsVisitsCount = (
   { locationName: locationNameB = '', visitsCount: visitsCountB = 0 },
 ) => visitsCountB - visitsCountA || locationNameA.localeCompare(locationNameB);
 
-const Countries = ({
+const VisitsPage = ({
   countriesDict,
   visits: { data: visitsList = [] } = {},
 }) => {
@@ -126,13 +126,13 @@ const Countries = ({
     </div>
   );
 };
-Countries.propTypes = {
+VisitsPage.propTypes = {
   countriesDict: PropTypes.shape(countriesPropTypes),
   visits: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   }),
 };
-Countries.defaultProps = {
+VisitsPage.defaultProps = {
   countriesDict: {},
   visits: { data: [] },
 };
@@ -188,5 +188,5 @@ const mapStateToRequirements = (
 };
 
 export default withProvision(mapStateToRequirements, mapStateToProps)(
-  Countries,
+  VisitsPage,
 );
