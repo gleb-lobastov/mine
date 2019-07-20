@@ -1,6 +1,8 @@
 import observeIsChanged from '../observeIsChanged';
 import { requestSelectors } from '../controllerRedux';
 
+const DEFAULT_DOMAIN = '__unassigned';
+
 const checkIsNoop = requirements => {
   const { isChanged, isNoop } = requirements;
   return Boolean(isNoop || !isChanged);
@@ -27,7 +29,12 @@ export const multiRequestMap = (requirements, callback) => {
 };
 
 const resolveSpecificRequirements = (
-  { domain = 'common', request, comparisonResult = {}, ...sharedRequirements },
+  {
+    domain = DEFAULT_DOMAIN,
+    request,
+    comparisonResult = {},
+    ...sharedRequirements
+  },
   key,
 ) => {
   const specificRequirements = request[key];
@@ -105,7 +112,7 @@ export const multiProvisionSelector = (
   requirements,
   particularSelector,
 ) => {
-  const { domain = 'common', request = {} } = requirements || {};
+  const { domain = DEFAULT_DOMAIN, request = {} } = requirements || {};
 
   return mergeProvisionState(
     Object.keys(request).reduce((memo, key) => {
