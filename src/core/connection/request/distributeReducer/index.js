@@ -16,6 +16,13 @@ const getNestedDomain = (domain, pathPartition) => {
   return domain.domains[pathPartition];
 };
 
+const getNestedPath = (basePath, pathPartition) => {
+  if (!basePath) {
+    return pathPartition;
+  }
+  return `${basePath}${consts.DOMAIN_PROPERTY_SEPARATOR}${pathPartition}`;
+};
+
 class Distributor {
   constructor(options) {
     const {
@@ -50,17 +57,22 @@ class Distributor {
     );
   }
 
-  selectNestedDomainStates(baseDomain) {
+  selectDomainStates(baseDomain, basePath = '') {
     if (!baseDomain) {
-      return [];
+      return {};
     }
+    const baseMap = baseDomain.domainState
+      ? { [basePath]: baseDomain.domainState }
+      : {};
     if (!baseDomain.domains) {
-      return [baseDomain.domainState];
+      return baseMap;
     }
-    return [baseDomain.domainState].concat(
+    return Object.assign(
+      baseMap,
       ...Object.keys(baseDomain.domains).map(pathPartition =>
-        this.selectNestedDomainStates(
+        this.selectDomainStates(
           getNestedDomain(baseDomain, pathPartition),
+          getNestedPath(basePath, pathPartition),
         ),
       ),
     );
@@ -73,12 +85,6 @@ class Distributor {
     }
     const { domainState } = domain;
     return domainState;
-  }
-
-  selectDomainStates(rootDomain, domain) {
-    return this.selectNestedDomainStates(
-      this.selectDomain(rootDomain, domain),
-    ).filter(state => typeof state !== 'undefined');
   }
 
   reduce(prevRootDomain = {}, action, targetReducer) {
