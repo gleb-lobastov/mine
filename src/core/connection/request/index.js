@@ -6,9 +6,9 @@ import {
   multiRequestEnhancer,
   multiProvisionSelector,
   multiProvisionAdapter,
-  mergeProvisionState,
   multiRequirementsComparator,
 } from './multiRequest';
+import mergeProvisionState from './mergeProvisionState';
 
 const STATE_PATHS = { ENTITIES: 'entities', PROVISION: 'provision' };
 const compose = (...funcs) => arg =>

@@ -1,5 +1,5 @@
 import observeIsChanged from '../observeIsChanged';
-import { requestSelectors } from '../controllerRedux';
+import mergeProvisionState, { mapValues } from '../mergeProvisionState';
 
 const DEFAULT_DOMAIN = '__unassigned';
 
@@ -7,12 +7,6 @@ const checkIsNoop = requirements => {
   const { isChanged, isNoop } = requirements;
   return Boolean(isNoop || !isChanged);
 };
-
-const mapValues = (object, iteratee) =>
-  Object.entries(object).reduce((memo, [key, value]) => {
-    memo[key] = iteratee(value, key, object);
-    return memo;
-  }, {});
 
 export const multiRequestMap = (requirements, callback) => {
   const { request } = requirements;
@@ -79,24 +73,6 @@ export const multiRequestEnhancer = strategy => (
       return memo;
     }, {}),
   );
-};
-
-export const mergeProvisionState = (provisionStateMapping = {}) => {
-  const values = Object.values(provisionStateMapping);
-  return {
-    isComplete: values.every(requestSelectors.selectIsReady),
-    isPending: values.some(requestSelectors.selectIsPending),
-    error: values.find(requestSelectors.selectError),
-    errors: values.map(requestSelectors.selectError).filter(Boolean),
-    fallback: mapValues(
-      provisionStateMapping,
-      requestSelectors.selectAvailableResult,
-    ),
-    value: mapValues(
-      provisionStateMapping,
-      requestSelectors.selectRelevantResult,
-    ),
-  };
 };
 
 export const multiProvisionSelector = (
