@@ -2,10 +2,9 @@ import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import compose from 'lodash/fp/compose';
-import uniq from 'lodash/uniq';
 import Button from '@material-ui/core/Button';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
-import { selectDict, selectProvisionStatus } from 'core/connection';
+import { selectDict } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
 import { withPaths, pathsPropTypes } from 'core/context/AppContext';
 import { useAuthContext } from 'core/context/AuthContext';
@@ -24,6 +23,7 @@ import {
   submitTrip,
   submitVisit,
 } from './actionCreators';
+import { selectUserTripsIds, selectLocationsIds } from './selectors';
 
 const memoizedGroupAndSortVisitsByTrips = memoizeByLastArgs(
   groupAndSortVisitsByTrips,
@@ -39,6 +39,7 @@ const Trips = ({
   namedPaths,
   ridesDict,
   request,
+  invalidateRequest,
 }) => {
   const {
     isAuthenticated,
@@ -73,7 +74,7 @@ const Trips = ({
         submitTrip({
           trip,
         }),
-      ),
+      ).then(() => invalidateRequest({ domain: 'trips.trips' })),
     [request],
   );
 
@@ -86,7 +87,7 @@ const Trips = ({
           indexInCollection,
           collection,
         }),
-      ),
+      ).then(() => invalidateRequest({ domain: 'trips.visits' })),
     [request],
   );
 
@@ -164,59 +165,53 @@ Trips.propTypes = {
 const mapStateToRequirements = (
   state,
   {
-    locationsDict = {},
     match: {
       params: { userAlias },
     },
   },
-  { userAlias: prevUserAlias } = {},
 ) => {
-  const { isComplete: isUserTripsFetchComplete, fallback } =
-    selectProvisionStatus(state, 'trips.trips') || {};
-  const { data: userTripsIds = [] } = fallback[0] || {};
-  const tripsDict = selectDict(state, 'trips');
-  const requiredLocationsIds = uniq(
-    userTripsIds.reduce((memo, tripId) => {
-      const trip = tripsDict[tripId];
-      if (trip) {
-        const { originLocationId } = trip;
-        if (originLocationId) {
-          memo.push(originLocationId);
-        }
-      }
-      return memo;
-    }, []),
+  const userTripsIds = selectUserTripsIds(state);
+  const { requiredLocationsIds, missingLocationsIds } = selectLocationsIds(
+    state,
+    userTripsIds,
   );
-  const missingLocationsIds = requiredLocationsIds.filter(
-    requiredLocationId => !locationsDict[requiredLocationId],
-  );
-  const isUserChanged = prevUserAlias !== userAlias;
+
   return {
     domain: 'tripsPage',
-    identity: {
-      userAlias,
-      userTripsIds,
-      missingLocationsIds,
-    },
     request: {
       trips: {
         modelName: 'trips',
-        isMissingIf: isUserChanged,
+        observe: userAlias,
         query: { userAlias, navigation: { isDisabled: true } },
+      },
+      locations: {
+        modelName: 'locations',
+        observe: requiredLocationsIds,
+        isNoop: !missingLocationsIds.length,
+        query: {
+          filter: { id: { comparator: 'in', value: missingLocationsIds } },
+          navigation: { isDisabled: true },
+        },
       },
       rides: {
         modelName: 'rides',
-        isMissingIf: isUserTripsFetchComplete && userTripsIds.length,
+        observe: userTripsIds,
+        isNoop: !userTripsIds || !userTripsIds.length,
         query: {
-          filter: { trip_id: { comparator: 'in', value: userTripsIds } },
+          filter: {
+            trip_id: { comparator: 'in', value: userTripsIds },
+          },
           navigation: { isDisabled: true },
         },
       },
       visits: {
         modelName: 'visits',
-        isMissingIf: isUserTripsFetchComplete && userTripsIds.length,
+        observe: userTripsIds,
+        isNoop: !userTripsIds || !userTripsIds.length,
         query: {
-          filter: { trip_id: { comparator: 'in', value: userTripsIds } },
+          filter: {
+            trip_id: { comparator: 'in', value: userTripsIds },
+          },
           navigation: { isDisabled: true },
         },
       },

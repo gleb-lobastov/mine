@@ -1,14 +1,14 @@
 import React from 'react';
-import isEqual from 'lodash/isEqual';
 import debounce from 'lodash/debounce';
 
-const checkIsIdentityEqual = isEqual;
-
 export default ({
+  requirementsComparator: compareRequirements,
   transformProps = props => props,
   request,
-}) => WrappedComponent =>
-  class extends React.Component {
+}) => WrappedComponent => {
+  let preservedRequirements; // keep observable between remounts
+
+  return class extends React.Component {
     static displayName = `Provided(${WrappedComponent.displayName ||
       WrappedComponent.name ||
       'WrappedComponent'})`;
@@ -17,39 +17,43 @@ export default ({
       super(props);
       const { requirements: { debounceRequest } = {} } = this.props;
       if (debounceRequest) {
-        this.require = debounce(this.require, debounceRequest);
+        this.request = debounce(this.request, debounceRequest);
       }
     }
 
     componentDidMount() {
-      const {
-        prevIdentity,
-        requirements: { identity },
-      } = this.props;
-      if (
-        !checkIsIdentityEqual(prevIdentity, identity) ||
-        (typeof prevIdentity === 'undefined' && typeof identity === 'undefined')
-      ) {
-        this.require();
+      const { requirements } = this.props;
+      const comparisonResult = compareRequirements(
+        preservedRequirements,
+        requirements,
+      );
+      if (comparisonResult) {
+        this.request(comparisonResult);
       }
     }
 
     componentDidUpdate(prevProps) {
-      const {
-        requirements: { identity: prevIdentity },
-      } = prevProps;
-      const {
-        requirements: { identity: nextIdentity },
-      } = this.props;
+      const { requirements: prevRequirements } = prevProps;
+      const { requirements: nextRequirements } = this.props;
 
-      if (!checkIsIdentityEqual(prevIdentity, nextIdentity)) {
-        this.require();
+      const comparisonResult = compareRequirements(
+        prevRequirements,
+        nextRequirements,
+      );
+
+      if (comparisonResult) {
+        this.request(comparisonResult);
       }
     }
 
-    require() {
-      const { onRequest: handleRequest } = this.props;
-      const response = request(this.props);
+    request(comparisonResult) {
+      const { requirements, onRequest: handleRequest } = this.props;
+      preservedRequirements = requirements;
+
+      const response = request({
+        ...this.props,
+        requirements: { ...requirements, comparisonResult },
+      });
 
       if (handleRequest) {
         handleRequest(response);
@@ -60,3 +64,4 @@ export default ({
       return <WrappedComponent {...transformProps(this.props)} />;
     }
   };
+};

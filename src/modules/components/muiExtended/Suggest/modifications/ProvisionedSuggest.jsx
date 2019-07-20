@@ -61,6 +61,7 @@ export default createSuggestComponent({
       request: {
         entities: {
           modelName,
+          observe: inputValue,
           query: resolveQueryByFormat({
             queryFormat,
             filterField,

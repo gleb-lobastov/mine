@@ -7,6 +7,7 @@ import {
   multiProvisionSelector,
   multiProvisionAdapter,
   mergeProvisionState,
+  multiRequirementsComparator,
 } from './multiRequest';
 
 const STATE_PATHS = { ENTITIES: 'entities', PROVISION: 'provision' };
@@ -68,6 +69,7 @@ export default ({
     createMiddleware,
     provide,
   } = createReactReduxIntegration({
+    requirementsComparator: multiRequirementsComparator,
     provisionSelector,
   });
 

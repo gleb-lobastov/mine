@@ -149,35 +149,27 @@ const mapStateToRequirements = (
       params: { userAlias },
     },
   },
-  { userAlias: prevUserAlias, userTripsIds: prevUserTripsIds } = {},
 ) => {
   const { fallback = {} } =
-    selectProvisionStatus(state, 'countries.trips') || {};
+    selectProvisionStatus(state, 'visitsPage.trips') || {};
   const { data: userTripsIds = [] } = fallback[0] || {};
-  const isUserChanged = prevUserAlias !== userAlias;
-  const isUserTripsFetchCompleted =
-    (!prevUserTripsIds || !prevUserTripsIds.length) &&
-    Boolean(userTripsIds.length);
   return {
-    domain: 'countriesPage',
-    identity: {
-      userAlias,
-      userTripsIds,
-    },
+    domain: 'visitsPage',
     request: {
       countries: {
-        isMissingIf: !countriesDict || !Object.keys(countriesDict).length,
+        isNoop: countriesDict && Object.keys(countriesDict).length,
         modelName: 'countries',
         query: { navigation: { isDisabled: true } },
       },
       trips: {
         modelName: 'trips',
-        isMissingIf: isUserChanged,
+        observe: userAlias,
         query: { userAlias, navigation: { isDisabled: true } },
       },
       visits: {
         modelName: 'visits',
-        isMissingIf: isUserTripsFetchCompleted,
+        observe: userTripsIds,
+        isNoop: !userTripsIds || !userTripsIds.length,
         query: {
           filter: { trip_id: { comparator: 'in', value: userTripsIds } },
           navigation: { isDisabled: true },

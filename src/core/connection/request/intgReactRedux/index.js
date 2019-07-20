@@ -11,22 +11,9 @@ import {
 const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
 
-const provideInternal = createReactProvider({
-  // for provider internal use
-  request: ({ dispatch, requirements }) =>
-    dispatch(createRequestAction(requirements)),
-  transformProps: ({ dispatch, provision, ...props }) => ({
-    ...props,
-    provision,
-    invalidateRequest: ({ domain }) =>
-      dispatch(createInvalidateRequestAction({ domain })),
-    // for passing down to component
-    request: ({ requirements }) => dispatch(createRequestAction(requirements)),
-  }),
-});
-
 const createReactReduxProvider = ({
   provisionSelector: selectProvision,
+  requirementsComparator: compareRequirements,
   connect = originalConnect,
 }) => (
   mapStateToRequirements,
@@ -34,7 +21,6 @@ const createReactReduxProvider = ({
   _, // currently mapDispatchToProps is unsupported
   ...forwardedParams
 ) => {
-  let prevIdentity;
   const mapStateToProps = (state, props) => {
     const originalMapping = originalMapStateToProps
       ? originalMapStateToProps(state, props)
@@ -45,20 +31,15 @@ const createReactReduxProvider = ({
       : props;
 
     const requirements = {
-      ...mapStateToRequirements(state, actualProps, prevIdentity),
+      ...mapStateToRequirements(state, actualProps),
       isProvision: true,
     };
 
-    const { identity } = requirements;
-
-    const resolvedProps = {
+    return {
       ...originalMapping,
-      prevIdentity,
       requirements,
       ...selectProvision(state, requirements),
     };
-    prevIdentity = identity;
-    return resolvedProps;
   };
 
   // react-redux perform optimization when props is not used in state calculation
@@ -78,13 +59,32 @@ const createReactReduxProvider = ({
         null, // dispatch method should be accessible through props
         ...forwardedParams,
       ),
-      provideInternal,
+      createReactProvider({
+        requirementsComparator: compareRequirements,
+        // for provider internal use
+        request: ({ dispatch, requirements }) =>
+          dispatch(createRequestAction(requirements)),
+        transformProps: ({ dispatch, requirements, provision, ...props }) => ({
+          ...props,
+          provision,
+          invalidateRequest: ({ domain }) =>
+            dispatch(createInvalidateRequestAction({ domain })),
+          // for passing down to component
+          request: customRequirements =>
+            // this is an arbitrary requirements, not same that resolved
+            // in mapStateToRequirements func
+            dispatch(createRequestAction(customRequirements)),
+        }),
+      }),
     )(WrappedComponent);
 };
 
-export default ({ provisionSelector }) => ({
+export default ({ provisionSelector, requirementsComparator }) => ({
   reducer: createRequestReducer(/* reducerOptions */),
   createMiddleware: createRequestMiddleware,
   provisionStrategyEnhancer,
-  provide: createReactReduxProvider({ provisionSelector }),
+  provide: createReactReduxProvider({
+    provisionSelector,
+    requirementsComparator,
+  }),
 });

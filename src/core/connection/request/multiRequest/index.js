@@ -1,24 +1,39 @@
+import observeIsChanged from '../observeIsChanged';
 import { requestSelectors } from '../controllerRedux';
 
-const checkIsMissing = requirements => {
-  if (!Object.prototype.hasOwnProperty.call(requirements, 'isMissingIf')) {
-    return true;
-  }
-  const { isMissingIf } = requirements;
-  return Boolean(isMissingIf);
+const checkIsNoop = requirements => {
+  const { isChanged, isNoop } = requirements;
+  return Boolean(isNoop || !isChanged);
+};
+
+const mapValues = (object, iteratee) =>
+  Object.entries(object).reduce((memo, [key, value]) => {
+    memo[key] = iteratee(value, key, object);
+    return memo;
+  }, {});
+
+export const multiRequestMap = (requirements, callback) => {
+  const { request } = requirements;
+
+  const mapping = Object.keys(request || {}).reduce((memo, key) => {
+    const value = callback(request[key], key, requirements);
+    if (value !== undefined) {
+      memo[key] = value;
+    }
+    return memo;
+  }, {});
+
+  return { ...requirements, request: mapping };
 };
 
 const resolveSpecificRequirements = (
-  {
-    domain = 'common',
-    request,
-    ...sharedRequirements
-  },
+  { domain = 'common', request, comparisonResult = {}, ...sharedRequirements },
   key,
 ) => {
   const specificRequirements = request[key];
   return {
     ...sharedRequirements,
+    isChanged: comparisonResult[key],
     modelName: key,
     key,
     ...specificRequirements,
@@ -35,20 +50,27 @@ export const multiRequestEnhancer = strategy => (
     strategy(requirements, ...forwardedArgs);
   }
 
-  const requests = Object.keys(request || {})
-    .reduce((memo, key) => {
+  // multiRequestMap(requirements, (_, key) => {
+  //   const specificRequirements = resolveSpecificRequirements(requirements, key);
+  //   if (checkIsNoop(specificRequirements)) {
+  //     return undefined;
+  //   }
+  //   return strategy(specificRequirements, ...forwardedArgs);
+  // });
+
+  const requests = mapValues(
+    Object.keys(request || {}).reduce((memo, key) => {
       const specificRequirements = resolveSpecificRequirements(
         requirements,
         key,
       );
-      if (!checkIsMissing(specificRequirements)) {
+      if (!checkIsNoop(specificRequirements)) {
         memo[key] = specificRequirements;
       }
       return memo;
-    }, {})
-    .map(specificRequirements =>
-      strategy(specificRequirements, ...forwardedArgs),
-    );
+    }, {}),
+    specificRequirements => strategy(specificRequirements, ...forwardedArgs),
+  );
 
   const requestsEntries = Object.entries(requests);
   return Promise.all(requestsEntries).then(responses =>
@@ -59,12 +81,6 @@ export const multiRequestEnhancer = strategy => (
     }, {}),
   );
 };
-
-const mapValues = (object, iteratee) =>
-  Object.entries(object).reduce((memo, [key, value]) => {
-    memo[key] = iteratee(value, key, object);
-    return memo;
-  }, {});
 
 export const mergeProvisionState = (provisionStateMapping = {}) => {
   const values = Object.values(provisionStateMapping);
@@ -106,7 +122,7 @@ export const multiProvisionSelector = (
       // provision as incomplete. Because, this request could even never be called.
       if (
         particularProvision ||
-        checkIsMissing(resolveSpecificRequirements(requirements, key))
+        !checkIsNoop(resolveSpecificRequirements(requirements, key))
       ) {
         memo[key] = particularProvision;
       }
@@ -128,3 +144,18 @@ export const multiProvisionAdapter = ({
       result,
     ),
   );
+
+export const multiRequirementsComparator = (
+  prevRequirements,
+  nextRequirements,
+) => {
+  const hasPrevRequirements = Boolean(prevRequirements);
+  const { request: prevRequest = {} } = prevRequirements || {};
+  const { request: nextRequest = {} } = nextRequirements || {};
+  return mapValues(nextRequest, (nextSpecificRequirements, key) => {
+    const prevSpecificRequirements = hasPrevRequirements
+      ? prevRequest[key] || {}
+      : undefined;
+    return observeIsChanged(prevSpecificRequirements, nextSpecificRequirements);
+  });
+};
