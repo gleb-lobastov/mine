@@ -152,7 +152,7 @@ const mapStateToRequirements = (
 ) => {
   const { fallback = {} } =
     selectProvisionStatus(state, 'visitsPage.trips') || {};
-  const { data: userTripsIds = [] } = fallback[0] || {};
+  const { data: userTripsIds = [] } = fallback['visitsPage.trips'] || {};
   return {
     domain: 'visitsPage',
     request: {
