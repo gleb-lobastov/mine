@@ -59,7 +59,7 @@ class Distributor {
     );
   }
 
-  selectDomainStates(baseDomain, basePath = '') {
+  selectNestedDomainStates(baseDomain, basePath = '') {
     if (!baseDomain) {
       return { [basePath]: this.emptyState };
     }
@@ -71,11 +71,18 @@ class Distributor {
     return Object.assign(
       baseMap,
       ...Object.keys(baseDomain.domains).map(pathPartition =>
-        this.selectDomainStates(
+        this.selectNestedDomainStates(
           getNestedDomain(baseDomain, pathPartition),
           getNestedPath(basePath, pathPartition),
         ),
       ),
+    );
+  }
+
+  selectDomainStates(baseDomain, basePath) {
+    return this.selectNestedDomainStates(
+      this.selectDomain(baseDomain, basePath),
+      basePath,
     );
   }
 
