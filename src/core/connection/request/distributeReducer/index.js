@@ -24,12 +24,14 @@ const getNestedPath = (basePath, pathPartition) => {
 };
 
 class Distributor {
-  constructor(options) {
+  constructor(options = {}) {
     const {
+      emptyState,
       pathPartitionsSeparator = consts.PATH_PARTITIONS_SEPARATOR,
       pathProperty = consts.DEFAULT_PATH,
     } = options;
 
+    this.emptyState = emptyState;
     this.pathPartitionsSeparator = pathPartitionsSeparator;
 
     if (typeof pathProperty === 'function') {
@@ -59,11 +61,10 @@ class Distributor {
 
   selectDomainStates(baseDomain, basePath = '') {
     if (!baseDomain) {
-      return {};
+      return { [basePath]: this.emptyState };
     }
-    const baseMap = baseDomain.domainState
-      ? { [basePath]: baseDomain.domainState }
-      : {};
+    const { domainState = this.emptyState } = baseDomain;
+    const baseMap = { [basePath]: domainState };
     if (!baseDomain.domains) {
       return baseMap;
     }
@@ -81,9 +82,9 @@ class Distributor {
   selectDomainState(rootDomain, domainPath) {
     const domain = this.selectDomain(rootDomain, domainPath);
     if (!domain) {
-      return undefined;
+      return this.emptyState;
     }
-    const { domainState } = domain;
+    const { domainState = this.emptyState } = domain;
     return domainState;
   }
 
@@ -124,12 +125,8 @@ class Distributor {
   }
 }
 
-const createDistributor = (options = {}) => {
-  const { pathPartitionsSeparator, pathProperty } = options;
-  const distributor = new Distributor({
-    pathPartitionsSeparator,
-    pathProperty,
-  });
+const createDistributor = options => {
+  const distributor = new Distributor(options);
   return {
     distributeReducer: targetReducer => (state, action) =>
       distributor.reduce(state, action, targetReducer),
