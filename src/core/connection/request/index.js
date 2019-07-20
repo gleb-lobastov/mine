@@ -89,10 +89,12 @@ export default ({
     provide,
     selectors: {
       ...entitiesSelectors,
-      selectProvisionStatus: (state, domain) => {
+      selectProvisionStatus: (state, domain, { excludeDomains = [] } = {}) => {
         const provisionState = selectProvision(state);
-        // note this is array, when expected an object
-        return mergeProvisionState(selectDomainStates(provisionState, domain));
+        return mergeProvisionState(
+          selectDomainStates(provisionState, domain),
+          particularDomain => !excludeDomains.includes(particularDomain),
+        );
       },
     },
     reducer,

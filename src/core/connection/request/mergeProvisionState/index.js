@@ -6,8 +6,19 @@ export const mapValues = (object, iteratee) =>
     return memo;
   }, {});
 
-export default (provisionStateMapping = {}) => {
-  const values = Object.values(provisionStateMapping);
+export default (
+  provisionStateMapping = {},
+  checkShouldMergeDomain = () => true,
+) => {
+  const values = Object.entries(provisionStateMapping).reduce(
+    (memo, [domain, value]) => {
+      if (checkShouldMergeDomain(domain)) {
+        memo.push(value);
+      }
+      return memo;
+    },
+    [],
+  );
   return {
     isComplete: values.every(requestSelectors.selectIsReady),
     isPending: values.some(requestSelectors.selectIsPending),
