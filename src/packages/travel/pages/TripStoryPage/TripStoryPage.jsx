@@ -21,7 +21,7 @@ const styles = {
   storyPart: { margin: '12px 0' },
 };
 
-const TripStory = ({
+const TripStoryPage = ({
   classes,
   visits: { data: visitsList = [] } = {},
   ridesDict,
@@ -78,7 +78,7 @@ const TripStory = ({
   return <div className={classes.container}>{contentNode}</div>;
 };
 
-TripStory.propTypes = {
+TripStoryPage.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   trips: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape(tripPropTypes)),
@@ -130,4 +130,4 @@ export default compose(
   withRouter,
   withStyles(styles),
   withProvision(mapStateToRequirements, mapStateToProps),
-)(TripStory);
+)(TripStoryPage);

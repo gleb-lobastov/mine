@@ -5,7 +5,8 @@ export const selectUserTripsIds = state => {
   const { isComplete: isUserTripsFetchComplete, fallback: availableUserTrips } =
     selectProvisionStatus(state, 'tripsPage.trips') || {};
 
-  const { data: userTripsIds = [] } = availableUserTrips[0] || {};
+  const { data: userTripsIds = [] } =
+    availableUserTrips['tripsPage.trips'] || {};
 
   return isUserTripsFetchComplete ? userTripsIds : null;
 };

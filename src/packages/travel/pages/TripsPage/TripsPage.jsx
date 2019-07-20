@@ -29,7 +29,7 @@ const memoizedGroupAndSortVisitsByTrips = memoizeByLastArgs(
   groupAndSortVisitsByTrips,
 );
 
-const Trips = ({
+const TripsPage = ({
   match: {
     params: { userAlias: visitedUserAlias },
   },
@@ -143,7 +143,7 @@ const Trips = ({
   );
 };
 
-Trips.propTypes = {
+TripsPage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       userAlias: PropTypes.string.isRequired,
@@ -228,4 +228,4 @@ export default compose(
   withRouter,
   withPaths,
   withProvision(mapStateToRequirements, mapStateToProps),
-)(Trips);
+)(TripsPage);
