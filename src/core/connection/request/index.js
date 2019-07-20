@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import createDistributor from './distributeReducer';
-import createReactReduxIntegration from './intgReactRedux';
+import createReactReduxIntegration, { EMPTY_STATE } from './intgReactRedux';
 import createReduxModelIntegration from './intgReduxModelNormalized';
 import {
   multiRequestEnhancer,
@@ -40,7 +40,7 @@ export default ({
     distributeReducer,
     selectDomainState,
     selectDomainStates,
-  } = createDistributor(distributorConfig);
+  } = createDistributor({ ...distributorConfig, emptyState: EMPTY_STATE });
 
   const provisionSelector = (state, requirements) => {
     const provisionState = selectProvision(state);
