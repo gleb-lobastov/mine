@@ -74,7 +74,7 @@ const TripsPage = ({
         submitTrip({
           trip,
         }),
-      ).then(() => invalidateRequest({ domain: 'trips.trips' })),
+      ).then(() => invalidateRequest({ domain: 'tripsPage.trips' })),
     [request],
   );
 
@@ -87,7 +87,7 @@ const TripsPage = ({
           indexInCollection,
           collection,
         }),
-      ).then(() => invalidateRequest({ domain: 'trips.visits' })),
+      ).then(() => invalidateRequest({ domain: 'tripsPage.visits' })),
     [request],
   );
 
