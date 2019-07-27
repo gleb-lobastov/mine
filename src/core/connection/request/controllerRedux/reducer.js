@@ -16,7 +16,12 @@ export default (/* further configuration */) => (
   action,
 ) => {
   if (checkIsInvalidateRequestAction(action)) {
-    return consts.EMPTY_STATE;
+    return {
+      ...state,
+      recent: {}, // deprecated
+
+      isValid: false,
+    };
   }
 
   if (!checkIsRequestAction(action)) {
@@ -29,7 +34,6 @@ export default (/* further configuration */) => (
     return {
       ...state,
       readyState,
-      recent: {},
     };
   }
   if (readyState === consts.READY_STATE.DONE) {
@@ -37,14 +41,21 @@ export default (/* further configuration */) => (
       return {
         ...state,
         readyState,
-        recent: { error: payload },
+        recent: { error: payload }, // deprecated
+
+        lastError: error,
+        isError: true,
       };
     }
     return {
       ...state,
       readyState,
-      recent: { result: payload },
-      lastSuccessful: { result: payload },
+      recent: { result: payload }, // deprecated
+      lastSuccessful: { result: payload }, // deprecated
+
+      lastResult: payload,
+      isError: false,
+      isValid: true,
     };
   }
   return state;

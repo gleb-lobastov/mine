@@ -17,6 +17,8 @@ export const selectIsReady = (state = EMPTY_STATE) =>
 export const selectIsPending = (state = EMPTY_STATE) =>
   !selectIsReady(state) && state.readyState !== consts.READY_STATE.UNSENT;
 
+export const selectIsValid = (state = EMPTY_STATE) => state.isValid;
+
 export const selectRelevantResult = (state = EMPTY_STATE) => {
   if (!state.recent || !checkHasProperty(state.recent, 'result')) {
     return undefined;

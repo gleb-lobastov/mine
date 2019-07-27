@@ -5,4 +5,9 @@ export const READY_STATE = {
   LOADING: 3,
   DONE: 4,
 };
-export const EMPTY_STATE = { readyState: READY_STATE.UNSENT };
+
+export const EMPTY_STATE = {
+  readyState: READY_STATE.UNSENT,
+  isError: false,
+  isValid: true,
+};
