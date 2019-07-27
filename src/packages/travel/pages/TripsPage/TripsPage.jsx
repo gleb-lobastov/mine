@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import compose from 'lodash/fp/compose';
 import Button from '@material-ui/core/Button';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
-import { selectDict } from 'core/connection';
+import { selectDict, selectProvisionStatus } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
 import { withPaths, pathsPropTypes } from 'core/context/AppContext';
 import { useAuthContext } from 'core/context/AuthContext';
@@ -33,6 +33,7 @@ const TripsPage = ({
   match: {
     params: { userAlias: visitedUserAlias },
   },
+  isTripsComplete,
   trips: { data: tripsList = [] } = {},
   visits: { data: visitsList = [] } = {},
   locationsDict,
@@ -107,7 +108,7 @@ const TripsPage = ({
     ),
     [handleTripUpdate],
   );
-  if (!tripsList.length) {
+  if (isTripsComplete && !tripsList.length) {
     return (
       <WelcomeScreen shouldShowLinkToTrips={false}>{addTripNode}</WelcomeScreen>
     );
@@ -151,6 +152,7 @@ TripsPage.propTypes = {
   }).isRequired,
   namedPaths: pathsPropTypes.namedPaths.isRequired,
   request: PropTypes.func.isRequired,
+  isTripsComplete: PropTypes.bool.isRequired,
   trips: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape(tripPropTypes)),
   }).isRequired,
@@ -161,6 +163,13 @@ TripsPage.propTypes = {
   locationsDict: PropTypes.objectOf(PropTypes.shape(locationsPropTypes))
     .isRequired,
 };
+
+const mapStateToProps = state => ({
+  locationsDict: selectDict(state, 'locations'),
+  ridesDict: selectDict(state, 'rides'),
+  isTripsComplete: selectProvisionStatus(state, 'tripsPage.trips')
+    .isComplete,
+});
 
 const mapStateToRequirements = (
   state,
@@ -218,11 +227,6 @@ const mapStateToRequirements = (
     },
   };
 };
-
-const mapStateToProps = state => ({
-  locationsDict: selectDict(state, 'locations'),
-  ridesDict: selectDict(state, 'rides'),
-});
 
 export default compose(
   withRouter,
