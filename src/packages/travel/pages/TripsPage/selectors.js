@@ -2,13 +2,12 @@ import uniq from 'lodash/uniq';
 import { selectDict, selectProvisionStatus } from 'core/connection';
 
 export const selectUserTripsIds = state => {
-  const { isComplete: isUserTripsFetchComplete, fallback: availableUserTrips } =
+  const { fallback: availableUserTrips } =
     selectProvisionStatus(state, 'tripsPage.trips') || {};
 
-  const { data: userTripsIds = [] } =
-    availableUserTrips['tripsPage.trips'] || {};
+  const { data: userTripsIds } = availableUserTrips['tripsPage.trips'] || {};
 
-  return isUserTripsFetchComplete ? userTripsIds : null;
+  return userTripsIds;
 };
 
 export const selectLocationsIds = (state, userTripsIds) => {
