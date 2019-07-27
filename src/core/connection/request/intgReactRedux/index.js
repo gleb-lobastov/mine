@@ -14,7 +14,7 @@ const compose = (...funcs) => arg =>
   funcs.reduceRight((composed, f) => f(composed), arg);
 
 const createReactReduxProvider = ({
-  provisionSelector: selectProvision,
+  provisionSelector: mapStateToProvision,
   requirementsComparator: compareRequirements,
   connect = originalConnect,
 }) => (
@@ -24,12 +24,12 @@ const createReactReduxProvider = ({
   ...forwardedParams
 ) => {
   const mapStateToProps = (state, props) => {
-    const originalMapping = originalMapStateToProps
+    const originalPropsMapping = originalMapStateToProps
       ? originalMapStateToProps(state, props)
       : undefined;
 
-    const actualProps = originalMapping
-      ? { ...props, ...originalMapping }
+    const actualProps = originalPropsMapping
+      ? { ...props, ...originalPropsMapping }
       : props;
 
     const requirements = {
@@ -37,10 +37,11 @@ const createReactReduxProvider = ({
       isProvision: true,
     };
 
+    const provisionPropsMapping = mapStateToProvision(state, requirements);
     return {
-      ...originalMapping,
+      ...originalPropsMapping,
       requirements,
-      ...selectProvision(state, requirements),
+      ...provisionPropsMapping,
     };
   };
 
