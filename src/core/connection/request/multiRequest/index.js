@@ -48,7 +48,7 @@ export const multiRequestEnhancer = strategy => (
 ) => {
   const { isProvision, request } = requirements; // todo consider split for submits
   if (!isProvision || !request) {
-    strategy(requirements, ...forwardedArgs);
+    return strategy(requirements, ...forwardedArgs);
   }
 
   const requests = mapValues(
