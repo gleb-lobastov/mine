@@ -120,9 +120,18 @@ export const multiProvisionAdapter = ({
     ),
   );
 
-export const multiRequirementsComparator = (
-  prevRequirements,
-  nextRequirements,
+const checkIsInvalidated = (prevProvision, nextProvision, key) => {
+  if (!prevProvision) {
+    return false;
+  }
+  const { validStateMapping: prevValidStateMapping = {} } = prevProvision || {};
+  const { validStateMapping: nextValidStateMapping = {} } = nextProvision || {};
+  return prevValidStateMapping[key] && !nextValidStateMapping[key];
+};
+
+export const multiCheckIsRequirementsChanged = (
+  { requirements: prevRequirements, provision: prevProvision },
+  { requirements: nextRequirements, provision: nextProvision },
 ) => {
   const hasPrevRequirements = Boolean(prevRequirements);
   const { request: prevRequest = {} } = prevRequirements || {};
@@ -131,6 +140,9 @@ export const multiRequirementsComparator = (
     const prevSpecificRequirements = hasPrevRequirements
       ? prevRequest[key] || {}
       : undefined;
-    return observeIsChanged(prevSpecificRequirements, nextSpecificRequirements);
+    return (
+      checkIsInvalidated(prevProvision, nextProvision, key) ||
+      observeIsChanged(prevSpecificRequirements, nextSpecificRequirements)
+    );
   });
 };

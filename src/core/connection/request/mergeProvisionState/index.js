@@ -22,6 +22,11 @@ export default (
   return {
     isComplete: values.every(requestSelectors.selectIsReady),
     isPending: values.some(requestSelectors.selectIsPending),
+    isValid: values.every(requestSelectors.selectIsValid),
+    validStateMapping: mapValues(
+      provisionStateMapping,
+      requestSelectors.selectIsValid,
+    ),
     error: values.find(requestSelectors.selectError),
     errors: values.map(requestSelectors.selectError).filter(Boolean),
     fallback: mapValues(

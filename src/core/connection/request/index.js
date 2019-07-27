@@ -6,7 +6,7 @@ import {
   multiRequestEnhancer,
   multiProvisionSelector,
   multiProvisionAdapter,
-  multiRequirementsComparator,
+  multiCheckIsRequirementsChanged,
 } from './multiRequest';
 import mergeProvisionState from './mergeProvisionState';
 
@@ -69,7 +69,7 @@ export default ({
     createMiddleware,
     provide,
   } = createReactReduxIntegration({
-    requirementsComparator: multiRequirementsComparator,
+    requirementsComparator: multiCheckIsRequirementsChanged,
     provisionSelector,
   });
 

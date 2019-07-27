@@ -17,15 +17,16 @@ export default ({
       super(props);
       const { requirements: { debounceRequest } = {} } = this.props;
       if (debounceRequest) {
+        // todo: return correct promise
         this.request = debounce(this.request, debounceRequest);
       }
     }
 
     componentDidMount() {
-      const { requirements } = this.props;
+      const { requirements, provision } = this.props;
       const comparisonResult = compareRequirements(
-        preservedRequirements,
-        requirements,
+        { requirements: preservedRequirements },
+        { requirements, provision },
       );
       if (comparisonResult) {
         this.request(comparisonResult);
@@ -33,12 +34,18 @@ export default ({
     }
 
     componentDidUpdate(prevProps) {
-      const { requirements: prevRequirements } = prevProps;
-      const { requirements: nextRequirements } = this.props;
+      const {
+        requirements: prevRequirements,
+        provision: prevProvision,
+      } = prevProps;
+      const {
+        requirements: nextRequirements,
+        provision: nextProvision,
+      } = this.props;
 
       const comparisonResult = compareRequirements(
-        prevRequirements,
-        nextRequirements,
+        { requirements: prevRequirements, provision: prevProvision },
+        { requirements: nextRequirements, provision: nextProvision },
       );
 
       if (comparisonResult) {
