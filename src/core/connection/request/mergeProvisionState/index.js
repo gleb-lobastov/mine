@@ -19,6 +19,10 @@ export default (
     },
     [],
   );
+  const fallback = mapValues(
+    provisionStateMapping,
+    requestSelectors.selectAvailableResult,
+  );
   return {
     isComplete: values.every(requestSelectors.selectIsReady),
     isPending: values.some(requestSelectors.selectIsPending),
@@ -29,10 +33,8 @@ export default (
     ),
     error: values.find(requestSelectors.selectError),
     errors: values.map(requestSelectors.selectError).filter(Boolean),
-    fallback: mapValues(
-      provisionStateMapping,
-      requestSelectors.selectAvailableResult,
-    ),
+    hasFallback: Object.values(fallback).every(Boolean),
+    fallback,
     value: mapValues(
       provisionStateMapping,
       requestSelectors.selectRelevantResult,
