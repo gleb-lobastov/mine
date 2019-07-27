@@ -32,9 +32,10 @@ const byLocationsVisitsCount = (
 
 const VisitsPage = ({
   countriesDict,
+  isVisitsComplete,
   visits: { data: visitsList = [] } = {},
 }) => {
-  if (!visitsList.length) {
+  if (isVisitsComplete && !visitsList.length) {
     return <WelcomeScreen />;
   }
 
@@ -128,6 +129,7 @@ const VisitsPage = ({
 };
 VisitsPage.propTypes = {
   countriesDict: PropTypes.shape(countriesPropTypes),
+  isVisitsComplete: PropTypes.bool.isRequired,
   visits: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   }),
@@ -139,6 +141,8 @@ VisitsPage.defaultProps = {
 
 const mapStateToProps = state => ({
   countriesDict: selectDict(state, 'countries'),
+  isVisitsComplete: selectProvisionStatus(state, 'visitsPage.visits')
+    .isComplete,
 });
 
 const mapStateToRequirements = (
