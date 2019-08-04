@@ -133,9 +133,8 @@ const TripsPage = ({
               tripIndex={tripIndex}
               tripVisitsList={visitsGroupedByTrips[tripId]}
               isEditable={isEditable}
-              storyUrl={namedPaths.travel.tripStory.toUrl({
-                strTripId: String(tripId),
-              })}
+              storyPath={namedPaths.travel.tripStory}
+              locationPath={namedPaths.travel.locationPath}
             />
           </div>
         );
@@ -167,8 +166,7 @@ TripsPage.propTypes = {
 const mapStateToProps = state => ({
   locationsDict: selectDict(state, 'locations'),
   ridesDict: selectDict(state, 'rides'),
-  isTripsComplete: selectProvisionStatus(state, 'tripsPage.trips')
-    .isComplete,
+  isTripsComplete: selectProvisionStatus(state, 'tripsPage.trips').isComplete,
 });
 
 const mapStateToRequirements = (

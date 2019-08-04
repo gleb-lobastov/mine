@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
@@ -7,6 +8,7 @@ import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStatio
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DomainIcon from '@material-ui/icons/Domain';
 import EditIcon from '@material-ui/icons/Edit';
+import { pathPropType } from 'core/context/AppContext';
 import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
 import visitPropTypes from 'travel/models/visits/propTypes';
 
@@ -29,16 +31,19 @@ const Visit = ({
   onVisitUpdate: handleVisitUpdate,
   classes,
   isEditable,
+  locationPath,
 }) => {
   if (!visit) {
     return 'Не указано';
   }
-  const { locationName, visitType } = visit;
+  const { locationName, visitType, locationId } = visit;
   const Icon = resolveVisitIconComponent(visitType);
   return (
     <div className={classes.container}>
       {Icon && <Icon className={classes.icon} />}
-      {locationName}
+      <Link to={locationPath.toUrl({ strLocationId: String(locationId) })}>
+        {locationName}
+      </Link>
       {isEditable && (
         <VisitEditDialog
           initialState={visit}
@@ -78,6 +83,7 @@ Visit.propTypes = {
   isEditable: PropTypes.bool,
   onVisitUpdate: PropTypes.func.isRequired,
   visit: PropTypes.shape(visitPropTypes),
+  locationPath: pathPropType.isRequired,
 };
 
 Visit.defaultProps = {

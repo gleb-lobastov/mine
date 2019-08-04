@@ -38,8 +38,17 @@ export default mountPath => {
     ),
   };
 
+  const location = {
+    routeName: 'locationPath',
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/visits/location/:strLocationId`,
+    defaultRouteParams: { userAlias: 'my' },
+    Component: React.lazy(() =>
+      import(/* webpackChunkName: 'travel-TripStory' */ './pages/LocationPage'),
+    ),
+  };
+
   return {
-    routes: [entry, visits, trips, tripStory],
+    routes: [entry, visits, trips, tripStory, location],
     menu: [
       { routeName: entry.routeName, caption: 'Об' },
       { routeName: visits.routeName, caption: 'По посещенным местам' },

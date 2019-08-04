@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+import { pathPropType } from 'core/context/AppContext';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
@@ -55,6 +56,7 @@ const VisitWithRides = ({
   onRideUpdate: handleRideUpdate,
   onVisitUpdate: handleVisitUpdate,
   originLocation,
+  locationPath,
 }) => {
   const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
   const shouldWarnForDepartureRide = isEditable && !isDepartureRideMatch;
@@ -81,6 +83,7 @@ const VisitWithRides = ({
         isEditable={isEditable}
         onVisitUpdate={handleVisitUpdate}
         visit={visit}
+        locationPath={locationPath}
       />
       {(!isDepartureRideMatch || isSorting) && (
         <Ride
@@ -119,6 +122,7 @@ VisitWithRides.propTypes = {
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   visit: PropTypes.shape(visitPropTypes).isRequired,
+  locationPath: pathPropType.isRequired,
 };
 
 VisitWithRides.defaultProps = {

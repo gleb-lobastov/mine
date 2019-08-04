@@ -52,6 +52,7 @@ module.exports = {
     new webpack.DefinePlugin({
       __ROUTES_BASENAME__: '"/mine"',
       __API_HOST__: `"${isDevelopmentMode ? DEV_API_URL : PROD_API_URL}"`,
+      __GOOGLE_MAP_API_KEY__: `"AIzaSyCSYFsXFHuaSxG3nZ55Ru8W9hRPOyJHdaQ"`,
       __IS_DEV_MODE__: isDevelopmentMode,
     }),
     !isDevelopmentMode && new CopyWebpackPlugin(['src/404.html']),
@@ -76,6 +77,7 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     hot: true,
+    allowedHosts: ['mine.local'],
   },
   devtool: isDevelopmentMode ? 'eval' : 'source-map',
 };

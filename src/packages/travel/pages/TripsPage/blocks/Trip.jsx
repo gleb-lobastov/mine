@@ -8,6 +8,7 @@ import IconHome from '@material-ui/icons/Home';
 import EditIcon from '@material-ui/icons/Edit';
 import checkIsNodeNotSortable from 'modules/utilities/dom/checkIsNodeNotSortable';
 import { withItem } from 'modules/utilities/types/array';
+import { pathPropType } from 'core/context/AppContext';
 import checkIsVisitsConnectedByRide from 'travel/utils/checkIsVisitsConnectedByRide';
 import locationPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
@@ -65,7 +66,8 @@ const Trip = ({
   tripVisitsList,
   onTripUpdate: handleTripUpdate,
   onVisitUpdate: handleVisitUpdate,
-  storyUrl,
+  storyPath,
+  locationPath,
 }) => {
   const isSortable = isEditable;
   const [isSorting, setIsSorting] = useState(false);
@@ -143,6 +145,7 @@ const Trip = ({
         ridesDict={ridesDict}
         tripVisitsList={tripVisitsList}
         visit={visit}
+        locationPath={locationPath}
       />
     );
   });
@@ -232,7 +235,9 @@ const Trip = ({
       )}
       {hasStory && (
         <div>
-          <Link to={storyUrl}>Заметки</Link>
+          <Link to={storyPath.toUrl({ strTripId: String(tripId) })}>
+            Заметки
+          </Link>
         </div>
       )}
     </>
@@ -250,6 +255,8 @@ Trip.propTypes = {
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   trip: PropTypes.shape(tripPropTypes).isRequired,
   tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
+  storyPath: pathPropType.isRequired,
+  locationPath: pathPropType.isRequired,
 };
 
 Trip.defaultProps = {

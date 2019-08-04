@@ -31,6 +31,7 @@
     "date-fns": "^2.0.0-alpha.27",
     "downshift": "^3.2.10",
     "formik": "^1.5.8",
+    "google-map-react": "^1.1.4",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
     "mime": "^2.2.0",
