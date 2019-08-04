@@ -1,130 +1,18 @@
-/* globals __GOOGLE_MAP_API_KEY__ */
-import React, { useMemo, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import GoogleMapReact from 'google-map-react';
-import compose from 'lodash/fp/compose';
-import { withStyles } from '@material-ui/core/styles';
 import { toNumber } from 'modules/utilities/types/numbers';
-import withProvision from 'core/connection/withProvision';
-import locationPropTypes from 'travel/models/locations/propTypes';
-import visitPropTypes from 'travel/models/visits/propTypes';
-
-const styles = {
-  container: { fontSize: '16px', lineHeight: '1.5' },
-  visitContainer: { margin: '20px 0' },
-  location: { fontWeight: 'bold', fontSize: '21px' },
-  googleMapContainer: {
-    margin: '12px 0',
-    width: '800px',
-    maxWidth: '100%',
-    height: '400px',
-    maxHeight: '100%',
-  },
-};
-
-const createControlledPromise = () => {
-  // This fields will be initialized synchronously in promise constructor
-  let resolver = null;
-  let rejector = null;
-
-  const promise = new Promise((resolve, reject) => {
-    resolver = resolve;
-    rejector = reject;
-  });
-  return { promise, resolver, rejector };
-};
-
-const useMarker = ({ lat, lon }) => {
-  const { promise: apiPromise, resolver: handleGoogleApiLoaded } = useMemo(
-    createControlledPromise,
-    [],
-  );
-
-  useEffect(
-    () => {
-      let marker;
-      apiPromise.then(api => {
-        const { map, maps } = api;
-        marker = new maps.Marker({ position: { lat, lng: lon }, map });
-      });
-      return () => {
-        if (marker) {
-          marker.setMap(null);
-        }
-      };
-    },
-    [lat, lon],
-  );
-  return { handleGoogleApiLoaded };
-};
+import LocationCard from 'travel/components/models/locations/LocationCard';
 
 const LocationPage = ({
-  classes,
-  location: { locationName, lat, lon } = {},
-  visits: { data: visitsList = [] } = {},
-}) => {
-  const noDataNode = <div>Заметки о поездке не найдены</div>;
-  if (!visitsList.length) {
-    return noDataNode;
-  }
-
-  const { handleGoogleApiLoaded } = useMarker({ lat, lon });
-
-  return (
-    <div className={classes.container}>
-      <h1 className={classes.location}>{locationName}</h1>
-      <div>{`Посещено ${visitsList.length} раз`}</div>
-      <div className={classes.googleMapContainer}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: __GOOGLE_MAP_API_KEY__ }}
-          center={{ lat, lng: lon }}
-          defaultZoom={11}
-          onGoogleApiLoaded={handleGoogleApiLoaded}
-        />
-      </div>
-    </div>
-  );
-};
+  match: {
+    params: { strLocationId },
+  },
+}) => <LocationCard locationId={toNumber(strLocationId)} />;
 
 LocationPage.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  location: PropTypes.shape(locationPropTypes).isRequired,
-  visits: PropTypes.shape({
-    data: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
+  match: PropTypes.shape({
+    params: PropTypes.shape({ strLocationId: PropTypes.string }).isRequired,
   }).isRequired,
 };
 
-const mapStateToRequirements = (
-  state,
-  {
-    match: {
-      params: { strLocationId },
-    },
-  },
-) => {
-  const locationId = toNumber(strLocationId);
-
-  return {
-    request: {
-      location: {
-        modelName: 'locations',
-        observe: locationId,
-        query: { id: locationId },
-      },
-      visits: {
-        modelName: 'visits',
-        observe: locationId,
-        query: {
-          filter: { location_id: { comparator: '=', value: locationId } },
-          navigation: { isDisabled: true },
-        },
-      },
-    },
-    domain: 'locationPage',
-  };
-};
-
-export default compose(
-  withStyles(styles),
-  withProvision(mapStateToRequirements),
-)(LocationPage);
+export default LocationPage;
