@@ -1,8 +1,10 @@
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
+const GOOGLE_API_KEY = fs.readFileSync('.google_api_key', 'utf8').trim();
 const PROD_API_URL = 'https://mine-backend.herokuapp.com';
 const DEV_API_URL = `http://localhost:${process.env.PORT || '8082'}`;
 
@@ -52,7 +54,7 @@ module.exports = {
     new webpack.DefinePlugin({
       __ROUTES_BASENAME__: '"/mine"',
       __API_HOST__: `"${isDevelopmentMode ? DEV_API_URL : PROD_API_URL}"`,
-      __GOOGLE_MAP_API_KEY__: `"AIzaSyCSYFsXFHuaSxG3nZ55Ru8W9hRPOyJHdaQ"`,
+      __GOOGLE_MAP_API_KEY__: `"${GOOGLE_API_KEY}"`,
       __IS_DEV_MODE__: isDevelopmentMode,
     }),
     !isDevelopmentMode && new CopyWebpackPlugin(['src/404.html']),
