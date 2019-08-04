@@ -1,4 +1,5 @@
 import startOfDay from 'date-fns/startOfDay';
+import endOfDay from 'date-fns/endOfDay';
 import {
   VEHICLE_TYPES,
   RIDE_OCCUPATION,
@@ -18,5 +19,5 @@ export default ({
   rideClass: RIDE_CLASSES.ECONOMY,
   rideOccupation: RIDE_OCCUPATION.PASSENGER,
   departureDateTime: startOfDay(new Date()),
-  arrivalDateTime: startOfDay(new Date()),
+  arrivalDateTime: endOfDay(new Date()),
 });
