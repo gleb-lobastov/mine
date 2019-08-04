@@ -165,7 +165,11 @@ const Trip = ({
   );
 
   const originLocationNode = (
-    <Location location={locationsDict[originLocationId]} Icon={IconHome} />
+    <Location
+      location={locationsDict[originLocationId]}
+      Icon={IconHome}
+      locationPath={locationPath}
+    />
   );
 
   const tripEditControlsNode = (
