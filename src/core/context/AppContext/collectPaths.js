@@ -2,11 +2,10 @@ import PropTypes from 'prop-types';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import Path from 'modules/utilities/routing/Path';
 
+export const pathPropType = PropTypes.instanceOf(Path);
 export const pathsPropTypes = {
-  namedPaths: PropTypes.objectOf(
-    PropTypes.objectOf(PropTypes.instanceOf(Path)),
-  ),
-  orderedPaths: PropTypes.arrayOf(PropTypes.instanceOf(Path)),
+  namedPaths: PropTypes.objectOf(PropTypes.objectOf(pathPropType)),
+  orderedPaths: PropTypes.arrayOf(pathPropType),
 };
 
 export default memoizeByLastArgs(packages => {

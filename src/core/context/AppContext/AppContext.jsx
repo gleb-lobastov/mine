@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import reactComponentPropType from 'modules/customPropTypes/reactComponentPropType';
-import collectPaths, { pathsPropTypes } from './collectPaths';
+import collectPaths, { pathsPropTypes, pathPropType } from './collectPaths';
 
 const AppContext = React.createContext({});
 
@@ -53,4 +53,4 @@ export const configPropTypes = {
   packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
 };
 
-export { pathsPropTypes };
+export { pathsPropTypes, pathPropType };
