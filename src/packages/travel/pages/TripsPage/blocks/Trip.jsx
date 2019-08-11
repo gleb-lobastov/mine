@@ -14,6 +14,7 @@ import locationPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import { TRIP_TYPES } from 'travel/models/trips/consts';
+import { resolveTripCaption } from 'travel/models/trips/utils';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Location from 'travel/components/models/locations/Location';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
@@ -55,6 +56,7 @@ const resolveVisitsWindow = (tripVisitsList, indexOfVisit, overstepIndex) => {
 
 const Trip = ({
   classes,
+  countriesDict,
   isEditable,
   locationsDict,
   onRideUpdate: handleRideUpdate,
@@ -226,7 +228,13 @@ const Trip = ({
   return (
     <>
       <h1 className={classes.container}>
-        {`${tripIndex + 1}. ${tripName}`}
+        {`${tripIndex + 1}. ${resolveTripCaption(
+          tripVisitsList,
+          countriesDict,
+          locationsDict[originLocationId] &&
+            locationsDict[originLocationId].countryId,
+          tripName,
+        )}`}
         {isEditable && tripEditControlsNode}
       </h1>
       {originLocationNode}

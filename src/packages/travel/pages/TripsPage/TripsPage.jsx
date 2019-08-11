@@ -36,6 +36,7 @@ const TripsPage = ({
   isTripsComplete,
   trips: { data: tripsList = [] } = {},
   visits: { data: visitsList = [] } = {},
+  countriesDict,
   locationsDict,
   namedPaths,
   ridesDict,
@@ -124,6 +125,7 @@ const TripsPage = ({
           <div key={tripId}>
             <Trip
               locationsDict={locationsDict}
+              countriesDict={countriesDict}
               onRideUpdate={handleRideUpdate}
               onTripUpdate={handleTripUpdate}
               onVisitUpdate={handleVisitUpdate}
@@ -164,6 +166,7 @@ TripsPage.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  countriesDict: selectDict(state, 'countries'),
   locationsDict: selectDict(state, 'locations'),
   ridesDict: selectDict(state, 'rides'),
   isTripsComplete: selectProvisionStatus(state, 'tripsPage.trips').isComplete,
@@ -172,6 +175,7 @@ const mapStateToProps = state => ({
 const mapStateToRequirements = (
   state,
   {
+    countriesDict,
     match: {
       params: { userAlias },
     },
@@ -186,6 +190,11 @@ const mapStateToRequirements = (
   return {
     domain: 'tripsPage',
     request: {
+      countries: {
+        isNoop: countriesDict && Object.keys(countriesDict).length,
+        modelName: 'countries',
+        query: { navigation: { isDisabled: true } },
+      },
       trips: {
         modelName: 'trips',
         observe: userAlias,
