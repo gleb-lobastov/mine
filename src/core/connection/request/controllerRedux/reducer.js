@@ -1,5 +1,5 @@
 import { PROCESS_REQUEST, INVALIDATE_REQUEST } from './actionTypes';
-import * as consts from './consts';
+import { EMPTY_STATE, READY_STATE } from './consts';
 
 const checkIsRequestAction = action => {
   const { type: actionType } = action;
@@ -12,14 +12,12 @@ const checkIsInvalidateRequestAction = action => {
 };
 
 export default (/* further configuration */) => (
-  state = consts.EMPTY_STATE,
+  state = EMPTY_STATE,
   action,
 ) => {
   if (checkIsInvalidateRequestAction(action)) {
     return {
       ...state,
-      recent: {}, // deprecated
-
       isValid: false,
     };
   }
@@ -30,19 +28,17 @@ export default (/* further configuration */) => (
 
   const { payload, error, meta: { readyState = undefined } = {} } = action;
 
-  if (readyState === consts.READY_STATE.OPENED) {
+  if (readyState === READY_STATE.OPENED) {
     return {
       ...state,
       readyState,
     };
   }
-  if (readyState === consts.READY_STATE.DONE) {
+  if (readyState === READY_STATE.DONE) {
     if (error) {
       return {
         ...state,
         readyState,
-        recent: { error: payload }, // deprecated
-
         lastError: error,
         isError: true,
       };
@@ -50,9 +46,6 @@ export default (/* further configuration */) => (
     return {
       ...state,
       readyState,
-      recent: { result: payload }, // deprecated
-      lastSuccessful: { result: payload }, // deprecated
-
       lastResult: payload,
       isError: false,
       isValid: true,

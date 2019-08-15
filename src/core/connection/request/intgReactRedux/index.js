@@ -3,9 +3,9 @@ import createReactProvider from '../provisionReact';
 import {
   createRequestAction,
   createInvalidateRequestAction,
-  requestStrategyEnhancer as provisionStrategyEnhancer,
-  createRequestMiddleware,
-  createRequestReducer,
+  strategyEnhancer as provisionStrategyEnhancer,
+  createMiddleware as createRequestMiddleware,
+  createReducer as createRequestReducer,
 } from '../controllerRedux';
 
 export { READY_STATE, EMPTY_STATE } from '../controllerRedux';

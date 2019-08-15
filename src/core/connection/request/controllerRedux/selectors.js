@@ -1,50 +1,26 @@
-import * as consts from './consts';
+import { READY_STATE, EMPTY_STATE } from './consts';
 
-// Empty state should be threatened as unsent as it was actually not called
-const EMPTY_STATE = { readyState: consts.READY_STATE.UNSENT };
+export const selectReadyState = ({ readyState } = EMPTY_STATE) =>
+  readyState || READY_STATE.UNSENT;
 
-const checkHasProperty = (object, property) =>
-  Object.prototype.hasOwnProperty.call(object, property);
-
-export const selectIdentity = (state = EMPTY_STATE) => state.identity;
-
-export const selectReadyState = (state = EMPTY_STATE) =>
-  state.readyState || consts.READY_STATE.UNSENT;
+export const selectIsUnsent = (state = EMPTY_STATE) =>
+  selectReadyState(state) === READY_STATE.UNSENT;
 
 export const selectIsReady = (state = EMPTY_STATE) =>
-  state.readyState === consts.READY_STATE.DONE;
+  selectReadyState(state) === READY_STATE.DONE;
 
 export const selectIsPending = (state = EMPTY_STATE) =>
-  !selectIsReady(state) && state.readyState !== consts.READY_STATE.UNSENT;
+  !selectIsReady(state) && !selectIsUnsent(state);
 
 export const selectIsValid = (state = EMPTY_STATE) => state.isValid;
+export const selectIsError = (state = EMPTY_STATE) => state.isError;
 
-export const selectRelevantResult = (state = EMPTY_STATE) => {
-  if (!state.recent || !checkHasProperty(state.recent, 'result')) {
-    return undefined;
-  }
-  return state.recent.result;
-};
+export const selectResult = ({ isValid, isError, lastResult } = EMPTY_STATE) =>
+  isValid && !isError ? lastResult : undefined;
 
-export const selectAvailableResult = (state = EMPTY_STATE) => {
-  if (state.recent && checkHasProperty(state.recent, 'result')) {
-    return state.recent.result;
-  }
-  if (
-    state.lastSuccessful &&
-    checkHasProperty(state.lastSuccessful, 'result')
-  ) {
-    return state.lastSuccessful.result;
-  }
-  return undefined;
-};
+export const selectPlaceholder = ({ lastResult } = EMPTY_STATE) => lastResult;
 
-export const selectError = (state = EMPTY_STATE) => {
-  if (!state.recent || !checkHasProperty(state.recent, 'error')) {
-    return undefined;
-  }
-  return state.recent.error;
-};
+export const selectError = ({ isError, lastError } = EMPTY_STATE) =>
+  isError ? lastError : undefined;
 
-export const selectIsFulfilled = (state = EMPTY_STATE) =>
-  Boolean(selectAvailableResult(state) || selectError(state));
+export const selectLastError = ({ lastError } = EMPTY_STATE) => lastError;

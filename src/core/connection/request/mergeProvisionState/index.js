@@ -1,4 +1,11 @@
-import { requestSelectors } from '../controllerRedux';
+import {
+  selectPlaceholder,
+  selectResult,
+  selectError,
+  selectIsReady,
+  selectIsPending,
+  selectIsValid,
+} from '../controllerRedux';
 
 export const mapValues = (object, iteratee) =>
   Object.entries(object).reduce((memo, [key, value]) => {
@@ -19,25 +26,16 @@ export default (
     },
     [],
   );
-  const fallback = mapValues(
-    provisionStateMapping,
-    requestSelectors.selectAvailableResult,
-  );
+  const fallback = mapValues(provisionStateMapping, selectPlaceholder);
   return {
-    isComplete: values.every(requestSelectors.selectIsReady),
-    isPending: values.some(requestSelectors.selectIsPending),
-    isValid: values.every(requestSelectors.selectIsValid),
-    validStateMapping: mapValues(
-      provisionStateMapping,
-      requestSelectors.selectIsValid,
-    ),
-    error: values.find(requestSelectors.selectError),
-    errors: values.map(requestSelectors.selectError).filter(Boolean),
+    isComplete: values.every(selectIsReady),
+    isPending: values.some(selectIsPending),
+    isValid: values.every(selectIsValid),
+    validStateMapping: mapValues(provisionStateMapping, selectIsValid),
+    error: values.find(selectError),
+    errors: values.map(selectError).filter(Boolean),
     hasFallback: Object.values(fallback).every(Boolean),
     fallback,
-    value: mapValues(
-      provisionStateMapping,
-      requestSelectors.selectRelevantResult,
-    ),
+    value: mapValues(provisionStateMapping, selectResult),
   };
 };

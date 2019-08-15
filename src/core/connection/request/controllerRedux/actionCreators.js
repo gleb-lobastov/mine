@@ -3,7 +3,7 @@ import {
   PROCESS_REQUEST,
   INVALIDATE_REQUEST,
 } from './actionTypes';
-import * as consts from './consts';
+import { READY_STATE } from './consts';
 
 export const createRequestAction = requirements => ({
   type: INITIATE_REQUEST,
@@ -15,18 +15,21 @@ export const createPendingAction = ({ domain, ...requirements } = {}) => ({
   meta: {
     domain,
     requirements,
-    readyState: consts.READY_STATE.OPENED,
+    readyState: READY_STATE.OPENED,
   },
 });
 
-export const createFailureAction = ({ domain, ...requirements } = {}, error) => ({
+export const createFailureAction = (
+  { domain, ...requirements } = {},
+  error,
+) => ({
   type: PROCESS_REQUEST,
   payload: error,
   error: true,
   meta: {
     domain,
     requirements,
-    readyState: consts.READY_STATE.DONE,
+    readyState: READY_STATE.DONE,
   },
 });
 
@@ -39,7 +42,7 @@ export const createSuccessAction = (
   meta: {
     domain,
     requirements,
-    readyState: consts.READY_STATE.DONE,
+    readyState: READY_STATE.DONE,
   },
 });
 
