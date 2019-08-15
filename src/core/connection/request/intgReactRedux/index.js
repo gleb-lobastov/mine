@@ -1,17 +1,31 @@
 import { connect as originalConnect } from 'react-redux';
 import createReactProvider from '../provisionReact';
 import {
+  selectError,
+  selectIsError,
+  selectIsPending,
+  selectIsReady,
+  selectIsUnsent,
+  selectIsValid,
+  selectLastError,
+  selectPlaceholder,
+  selectReadyState,
+  selectResult,
   createRequestAction,
   createInvalidateRequestAction,
-  strategyEnhancer as provisionStrategyEnhancer,
-  createMiddleware as createRequestMiddleware,
+  strategyEnhancer,
+  createMiddleware,
   createReducer as createRequestReducer,
 } from '../controllerRedux';
 
 export { READY_STATE, EMPTY_STATE } from '../controllerRedux';
 
-const compose = (...funcs) => arg =>
-  funcs.reduceRight((composed, f) => f(composed), arg);
+const compose = (...funcs) => (...args) => {
+  const lastFn = funcs[funcs.length - 1] || (arg => arg);
+  return funcs
+    .slice(0, -1)
+    .reduceRight((composed, f) => f(composed), lastFn(...args));
+};
 
 const createReactReduxProvider = ({
   provisionSelector: mapStateToProvision,
@@ -82,12 +96,58 @@ const createReactReduxProvider = ({
     )(WrappedComponent);
 };
 
-export default ({ provisionSelector, requirementsComparator }) => ({
-  reducer: createRequestReducer(/* reducerOptions */),
-  createMiddleware: createRequestMiddleware,
-  provisionStrategyEnhancer,
+export default ({
+  provisionSelector,
+  stateSelector,
+  requirementsComparator,
+}) => ({
   provide: createReactReduxProvider({
     provisionSelector,
     requirementsComparator,
   }),
+  createMiddleware,
+  strategyEnhancer,
+  reducer: createRequestReducer(/* reducerOptions */),
+  selectors: {
+    selectError: compose(
+      selectError,
+      stateSelector,
+    ),
+    selectIsError: compose(
+      selectIsError,
+      stateSelector,
+    ),
+    selectIsPending: compose(
+      selectIsPending,
+      stateSelector,
+    ),
+    selectIsReady: compose(
+      selectIsReady,
+      stateSelector,
+    ),
+    selectIsUnsent: compose(
+      selectIsUnsent,
+      stateSelector,
+    ),
+    selectIsValid: compose(
+      selectIsValid,
+      stateSelector,
+    ),
+    selectLastError: compose(
+      selectLastError,
+      stateSelector,
+    ),
+    selectPlaceholder: compose(
+      selectPlaceholder,
+      stateSelector,
+    ),
+    selectReadyState: compose(
+      selectReadyState,
+      stateSelector,
+    ),
+    selectResult: compose(
+      selectResult,
+      stateSelector,
+    ),
+  },
 });

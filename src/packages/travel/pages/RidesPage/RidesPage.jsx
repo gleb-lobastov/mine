@@ -2,7 +2,7 @@ import React from 'react';
 import groupBy from 'lodash/groupBy';
 import PropTypes from 'prop-types';
 import withProvision from 'core/connection/withProvision';
-import { selectProvisionStatus } from 'core/connection';
+import { selectPlaceholder, selectIsReady } from 'core/connection';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import ridesPropTypes from 'travel/models/rides/propTypes';
 import { VEHICLE_NAMES } from 'travel/components/models/rides/RideEditDialog/localization';
@@ -49,7 +49,7 @@ RidesPage.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  isRidesComplete: selectProvisionStatus(state, 'ridesPage.rides').isComplete,
+  isRidesComplete: selectIsReady(state, 'ridesPage.rides'),
 });
 
 const mapStateToRequirements = (
@@ -60,9 +60,8 @@ const mapStateToRequirements = (
     },
   },
 ) => {
-  const { fallback = {} } =
-    selectProvisionStatus(state, 'ridesPage.trips') || {};
-  const { data: userTripsIds = [] } = fallback['ridesPage.trips'] || {};
+  const { data: userTripsIds = [] } =
+    selectPlaceholder(state, 'ridesPage.trips') || {};
   return {
     domain: 'ridesPage',
     request: {

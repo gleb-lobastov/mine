@@ -65,12 +65,15 @@ export default ({
 
   const {
     reducer: provisionReducer,
-    provisionStrategyEnhancer,
-    createMiddleware,
+    selectors: provisionSelectors,
+    strategyEnhancer: provisionStrategyEnhancer,
+    createMiddleware: createReduxMiddleware,
     provide,
   } = createReactReduxIntegration({
     requirementsComparator: multiCheckIsRequirementsChanged,
     provisionSelector,
+    stateSelector: (state, domain) =>
+      selectDomainState(selectProvision(state), domain),
   });
 
   const requestStrategy = compose(
@@ -85,10 +88,11 @@ export default ({
   });
 
   return {
-    reduxMiddleware: createMiddleware({ requestStrategy }),
+    reduxMiddleware: createReduxMiddleware({ requestStrategy }),
     provide,
     selectors: {
       ...entitiesSelectors,
+      ...provisionSelectors,
       selectProvisionStatus: (state, domain, { excludeDomains = [] } = {}) => {
         const provisionState = selectProvision(state);
         return mergeProvisionState(

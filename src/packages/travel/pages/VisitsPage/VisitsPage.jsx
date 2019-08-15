@@ -4,7 +4,7 @@ import uniq from 'lodash/uniq';
 import property from 'lodash/property';
 import PropTypes from 'prop-types';
 import withProvision from 'core/connection/withProvision';
-import { selectDict, selectProvisionStatus } from 'core/connection';
+import { selectDict, selectPlaceholder, selectIsReady } from 'core/connection';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import countriesPropTypes from 'travel/models/countries/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
@@ -141,8 +141,7 @@ VisitsPage.defaultProps = {
 
 const mapStateToProps = state => ({
   countriesDict: selectDict(state, 'countries'),
-  isVisitsComplete: selectProvisionStatus(state, 'visitsPage.visits')
-    .isComplete,
+  isVisitsComplete: selectIsReady(state, 'visitsPage.visits'),
 });
 
 const mapStateToRequirements = (
@@ -154,9 +153,8 @@ const mapStateToRequirements = (
     },
   },
 ) => {
-  const { fallback = {} } =
-    selectProvisionStatus(state, 'visitsPage.trips') || {};
-  const { data: userTripsIds = [] } = fallback['visitsPage.trips'] || {};
+  const { data: userTripsIds = [] } =
+    selectPlaceholder(state, 'visitsPage.trips') || {};
   return {
     domain: 'visitsPage',
     request: {

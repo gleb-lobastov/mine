@@ -1,12 +1,9 @@
 import uniq from 'lodash/uniq';
-import { selectDict, selectProvisionStatus } from 'core/connection';
+import { selectDict, selectPlaceholder } from 'core/connection';
 
 export const selectUserTripsIds = state => {
-  const { fallback: availableUserTrips } =
-    selectProvisionStatus(state, 'tripsPage.trips') || {};
-
-  const { data: userTripsIds } = availableUserTrips['tripsPage.trips'] || {};
-
+  const { data: userTripsIds } =
+    selectPlaceholder(state, 'tripsPage.trips') || {};
   return userTripsIds;
 };
 
