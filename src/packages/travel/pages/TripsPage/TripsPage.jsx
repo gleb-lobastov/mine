@@ -191,7 +191,7 @@ const mapStateToRequirements = (
     domain: 'tripsPage',
     request: {
       countries: {
-        isNoop: countriesDict && Object.keys(countriesDict).length,
+        condition: !countriesDict || !Object.keys(countriesDict).length,
         modelName: 'countries',
         query: { navigation: { isDisabled: true } },
       },
@@ -203,7 +203,7 @@ const mapStateToRequirements = (
       locations: {
         modelName: 'locations',
         observe: requiredLocationsIds,
-        isNoop: !missingLocationsIds.length,
+        condition: missingLocationsIds.length,
         query: {
           filter: { id: { comparator: 'in', value: missingLocationsIds } },
           navigation: { isDisabled: true },
@@ -212,7 +212,7 @@ const mapStateToRequirements = (
       rides: {
         modelName: 'rides',
         observe: userTripsIds,
-        isNoop: !userTripsIds || !userTripsIds.length,
+        condition: userTripsIds && userTripsIds.length,
         query: {
           filter: {
             trip_id: { comparator: 'in', value: userTripsIds },
@@ -223,7 +223,7 @@ const mapStateToRequirements = (
       visits: {
         modelName: 'visits',
         observe: userTripsIds,
-        isNoop: !userTripsIds || !userTripsIds.length,
+        condition: userTripsIds && userTripsIds.length,
         query: {
           filter: {
             trip_id: { comparator: 'in', value: userTripsIds },

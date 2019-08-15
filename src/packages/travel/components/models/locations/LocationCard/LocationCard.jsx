@@ -119,7 +119,7 @@ const mapStateToRequirements = (state, { locationId }) => {
       },
       rides: {
         modelName: 'rides',
-        isNoop: !requiredVisitIds || !requiredVisitIds.length,
+        condition: requiredVisitIds && requiredVisitIds.length,
         observe: requiredVisitIds,
         query: {
           filter: { visit_id: { comparator: 'in', value: requiredVisitIds } },

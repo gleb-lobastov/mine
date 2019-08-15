@@ -159,7 +159,7 @@ const mapStateToRequirements = (
     domain: 'visitsPage',
     request: {
       countries: {
-        isNoop: countriesDict && Object.keys(countriesDict).length,
+        condition: !countriesDict || !Object.keys(countriesDict).length,
         modelName: 'countries',
         query: { navigation: { isDisabled: true } },
       },
@@ -171,7 +171,7 @@ const mapStateToRequirements = (
       visits: {
         modelName: 'visits',
         observe: userTripsIds,
-        isNoop: !userTripsIds || !userTripsIds.length,
+        condition: userTripsIds && userTripsIds.length,
         query: {
           filter: { trip_id: { comparator: 'in', value: userTripsIds } },
           navigation: { isDisabled: true },

@@ -4,8 +4,8 @@ import mergeProvisionState, { mapValues } from '../mergeProvisionState';
 const DEFAULT_DOMAIN = '__unassigned';
 
 const checkIsNoop = requirements => {
-  const { isChanged, isNoop } = requirements;
-  return Boolean(isNoop || !isChanged);
+  const { isChanged, condition } = requirements;
+  return Boolean(!condition || !isChanged);
 };
 
 export const multiRequestMap = (requirements, callback) => {
