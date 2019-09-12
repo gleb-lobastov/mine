@@ -1,12 +1,12 @@
 /* global __API_HOST__  */
 import createRequestEngine from '@request-kit/engine-rest';
 import { middleware as authPlugin } from 'modules/auth';
+import createRequestApi from '@request-kit/preset-react-redux-entities'
 import endpointPlugin from 'modules/utilities/request-kit/plugins/endpoint';
 import adapterPlugin from 'modules/utilities/request-kit/plugins/adapter';
 import responseAsJsonPlugin from 'modules/utilities/request-kit/plugins/responseAsJson';
 import { travelModels } from 'travel';
 import { literatureModels } from 'literature';
-import createRequestApi from './request';
 
 const engine = createRequestEngine({
   presetOptions: {
