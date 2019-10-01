@@ -20,6 +20,15 @@ export default mountPath => {
     ),
   };
 
+  const years = {
+    routeName: 'yearly',
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/yearly`,
+    defaultRouteParams: { userAlias: 'my' },
+    Component: React.lazy(() =>
+      import(/* webpackChunkName: 'travel-Countries' */ './pages/YearCountryCityPage'),
+    ),
+  };
+
   const rides = {
     routeName: 'rides',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/rides`,
@@ -57,10 +66,11 @@ export default mountPath => {
   };
 
   return {
-    routes: [entry, visits, rides, trips, tripStory, location],
+    routes: [entry, visits, rides, years, trips, tripStory, location],
     menu: [
       { routeName: entry.routeName, caption: 'Об' },
       { routeName: visits.routeName, caption: 'По посещенным местам' },
+      { routeName: years.routeName, caption: 'По годам' },
       { routeName: rides.routeName, caption: 'По транспорту' },
       { routeName: trips.routeName, caption: 'По поездкам' },
     ],
