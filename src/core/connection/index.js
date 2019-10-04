@@ -1,12 +1,12 @@
-/* global __API_HOST__  */
+/* global __API_HOST__ __IS_DEV_MODE__ */
 import createRequestEngine from '@request-kit/engine-rest';
 import { middleware as authPlugin } from 'modules/auth';
-import createRequestApi from '@request-kit/preset-react-redux-entities'
+import createRequestApi from '@request-kit/preset-react-redux-entities';
 import endpointPlugin from 'modules/utilities/request-kit/plugins/endpoint';
 import adapterPlugin from 'modules/utilities/request-kit/plugins/adapter';
+import hardCachePlugin from 'modules/utilities/request-kit/plugins/hardCache';
 import responseAsJsonPlugin from 'modules/utilities/request-kit/plugins/responseAsJson';
-import { travelModels } from 'travel';
-import { literatureModels } from 'literature';
+import modelsDefinitions from '../models';
 
 const engine = createRequestEngine({
   presetOptions: {
@@ -17,6 +17,7 @@ const engine = createRequestEngine({
     authPlugin,
     adapterPlugin,
     endpointPlugin,
+    __IS_DEV_MODE__ && hardCachePlugin,
     // __IS_DEV_MODE__ && loggerPlugin,
     responseAsJsonPlugin,
   ].filter(Boolean),
@@ -26,37 +27,29 @@ const {
   reduxMiddleware: requestMiddleware,
   provide,
   reducer: requestReducer,
-  selectors: {
-    selectDict,
-    selectItem,
-    selectList,
-    selectMissingIds,
-    selectError,
-    selectIsError,
-    selectIsPending,
-    selectIsReady,
-    selectIsUnsent,
-    selectIsValid,
-    selectLastError,
-    selectPlaceholder,
-    selectReadyState,
-    selectResult,
-    selectProvisionStatus,
-  },
+  selectors,
 } = createRequestApi({
-  modelsConfig: {
-    modelsDefinitions: [
-      literatureModels.articles.model,
-      travelModels.countries.model,
-      travelModels.locations.model,
-      travelModels.geonames.model,
-      travelModels.rides.model,
-      travelModels.trips.model,
-      travelModels.visits.model,
-    ],
-  },
+  modelsConfig: { modelsDefinitions },
   requestHandler: (...args) => engine.request(...args),
 });
+
+const {
+  selectDict,
+  selectItem,
+  selectList,
+  selectMissingIds,
+  selectError,
+  selectIsError,
+  selectIsPending,
+  selectIsReady,
+  selectIsUnsent,
+  selectIsValid,
+  selectLastError,
+  selectPlaceholder,
+  selectReadyState,
+  selectResult,
+  selectProvisionStatus,
+} = selectors;
 
 export {
   requestMiddleware,
