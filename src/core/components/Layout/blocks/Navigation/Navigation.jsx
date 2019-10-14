@@ -98,12 +98,14 @@ class Navigation extends React.PureComponent {
     return (
       <div>
         <AppBar position="static" classes={{ root: classes.root }}>
-          <MainTabs
-            namedPaths={namedPaths}
-            onChangeUrl={this.handleChangeUrl}
-            packages={packages}
-            mainTabIndex={mainTabIndex}
-          />
+          {packages.length > 1 && (
+            <MainTabs
+              namedPaths={namedPaths}
+              onChangeUrl={this.handleChangeUrl}
+              packages={packages}
+              mainTabIndex={mainTabIndex}
+            />
+          )}
           {isAuthenticated && (
             <Typography variant="h6" color="inherit" className={classes.grow}>
               {authorizedUserAlias}
