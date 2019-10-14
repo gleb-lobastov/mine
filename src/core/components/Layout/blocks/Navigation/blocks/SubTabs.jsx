@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import {
@@ -14,6 +15,7 @@ class SubTabs extends React.PureComponent {
     packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
     mainTabIndex: PropTypes.number.isRequired,
     subTabIndex: PropTypes.number.isRequired,
+    classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
   resolveRoute(selectedSubTabIndex) {
@@ -38,19 +40,33 @@ class SubTabs extends React.PureComponent {
   };
 
   render() {
-    const { subTabIndex } = this.props;
+    const { subTabIndex, classes } = this.props;
     const currentRoutes = this.resolveRoutes();
     if (!currentRoutes.length) {
       return null;
     }
     return (
-      <Tabs value={subTabIndex} onChange={this.handleChangeSubTab}>
-        {currentRoutes.map(({ routeName, caption }) => (
-          <Tab key={routeName} label={caption} />
-        ))}
-      </Tabs>
+      <div className={classes.root}>
+        <Tabs
+          value={subTabIndex}
+          onChange={this.handleChangeSubTab}
+          variant="scrollable"
+          scrollButtons="auto"
+        >
+          {currentRoutes.map(({ routeName, caption }) => (
+            <Tab key={routeName} label={caption} />
+          ))}
+        </Tabs>
+      </div>
     );
   }
 }
 
-export default SubTabs;
+const styles = {
+  root: {
+    flexGrow: 1,
+    width: '100%',
+  },
+};
+
+export default withStyles(styles)(SubTabs);
