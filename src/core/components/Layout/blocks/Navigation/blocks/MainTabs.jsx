@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import withWidth, { isWidthUp } from '@material-ui/core/withWidth';
+import { withStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import {
@@ -14,7 +14,7 @@ class MainTabs extends React.PureComponent {
     onChangeUrl: PropTypes.func.isRequired,
     packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
     mainTabIndex: PropTypes.number.isRequired,
-    width: PropTypes.string.isRequired,
+    classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
   resolveMainTabsPath(nextMainTabIndex) {
@@ -32,11 +32,8 @@ class MainTabs extends React.PureComponent {
   };
 
   renderLabel(label) {
-    const { width } = this.props;
-    if (!isWidthUp('sm', width)) {
-      return undefined;
-    }
-    return label;
+    const { classes } = this.props;
+    return <span className={classes.label}>{label}</span>;
   }
 
   renderTab = ({ id, title: { caption, icon: IconComponent } = {} }) => {
@@ -56,11 +53,22 @@ class MainTabs extends React.PureComponent {
     const { mainTabIndex, packages } = this.props;
 
     return (
-      <Tabs value={mainTabIndex} onChange={this.handleChangeMainTab}>
+      <Tabs
+        value={mainTabIndex}
+        onChange={this.handleChangeMainTab}
+      >
         {packages.map(this.renderTab)}
       </Tabs>
     );
   }
 }
 
-export default withWidth()(MainTabs);
+const styles = theme => ({
+  [theme.breakpoints.down('xs')]: {
+    label: {
+      display: 'none',
+    },
+  },
+});
+
+export default withStyles(styles)(MainTabs);
