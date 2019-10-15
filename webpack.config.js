@@ -46,7 +46,10 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'M - I - N - E',
+      title: 'Глеб Лобастов',
+      meta: {
+        description: 'Статистика путешествий. Разработка програмного обеспечения. Рецензии на книги. Сорок два.',
+      },
       template: './src/index.html',
       favicon: './src/favicon.ico',
       chunksSortMode: 'none',
