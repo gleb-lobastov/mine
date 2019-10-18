@@ -95,10 +95,13 @@ class Navigation extends React.PureComponent {
       packageRoutes,
     );
 
+    const hasMainItemsToSelect =
+      packages.filter(({ title }) => title).length > 1;
+
     return (
       <div>
         <AppBar position="static" classes={{ root: classes.root }}>
-          {packages.length > 1 && (
+          {hasMainItemsToSelect && (
             <MainTabs
               namedPaths={namedPaths}
               onChangeUrl={this.handleChangeUrl}
