@@ -1,13 +1,17 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import compose from 'lodash/fp/compose';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import MUILink from '@material-ui/core/Link';
+import IconHome from '@material-ui/icons/Home';
 import { withPaths } from 'core/context/AppContext';
 import Article from './blocks/Article';
+
+const Link = props => <MUILink {...props} component={RouterLink} />;
 
 function Articles({
   classes,
@@ -18,53 +22,64 @@ function Articles({
 }) {
   const hasSummaryTag = !tag || tag === 'summary';
   const hasCodeTag = !tag || tag === 'code';
+  const selfRoutes = routes.literature || routes.code;
   return (
-    <div className={classes.container}>
-      <List
-        component="nav"
-        aria-label="articles"
-        classes={{ root: classes.slugList }}
-      >
-        {hasSummaryTag && (
-          <ListItem
-            button={true}
-            component={Link}
-            to={routes.literature.articles.toUrl({ slug: 'chaldini' })}
-          >
-            <ListItemText primary="&laquo;Психология убеждения&raquo; Чалдини" />
-          </ListItem>
-        )}
-        {hasSummaryTag && (
-          <ListItem
-            button={true}
-            component={Link}
-            to={routes.literature.articles.toUrl({ slug: 'blackSwan' })}
-          >
-            <ListItemText primary="&laquo;Черный лебедь&raquo; Талеба" />
-          </ListItem>
-        )}
-        {hasCodeTag && (
-          <ListItem
-            button={true}
-            component={Link}
-            to={routes.literature.articles.toUrl({ slug: 'importThis' })}
-          >
-            <ListItemText primary="19 принципов достижения дзена при написании компьютерных программ" />
-          </ListItem>
-        )}
-      </List>
-      {slug && (
-        <div>
-          <Article slug={slug} />
-        </div>
+    <>
+      {!routes.literature && (
+        <Link to={selfRoutes.entry.toUrl()} className={classes.iconHome}>
+          <IconHome />
+        </Link>
       )}
-    </div>
+      <div className={classes.container}>
+        <List
+          component="nav"
+          aria-label="articles"
+          classes={{ root: classes.slugList }}
+        >
+          {hasSummaryTag && (
+            <ListItem
+              button={true}
+              component={Link}
+              to={selfRoutes.articles.toUrl({ slug: 'chaldini' })}
+            >
+              <ListItemText primary="&laquo;Психология убеждения&raquo; Чалдини" />
+            </ListItem>
+          )}
+          {hasSummaryTag && (
+            <ListItem
+              button={true}
+              component={Link}
+              to={selfRoutes.articles.toUrl({ slug: 'blackSwan' })}
+            >
+              <ListItemText primary="&laquo;Черный лебедь&raquo; Талеба" />
+            </ListItem>
+          )}
+          {hasCodeTag && (
+            <ListItem
+              button={true}
+              component={Link}
+              to={selfRoutes.articles.toUrl({ slug: 'importThis' })}
+            >
+              <ListItemText primary="19 принципов достижения дзена при написании компьютерных программ" />
+            </ListItem>
+          )}
+        </List>
+        {slug && (
+          <div>
+            <Article slug={slug} />
+          </div>
+        )}
+      </div>
+    </>
   );
 }
 
 const styles = {
   container: {
     display: 'flex',
+  },
+  iconHome: {
+    padding: '0 16px',
   },
   slugList: {
     flex: '0 1 350px',
