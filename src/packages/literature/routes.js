@@ -11,17 +11,9 @@ export default mountPath => {
 
   const articles = {
     routeName: 'articles',
-    path: `${mountPath}/articles`,
+    path: `${mountPath}/articles/:tag(summary|code)?/:slug?`,
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'literature-Articles' */ './pages/Articles'),
-    ),
-  };
-
-  const article = {
-    routeName: 'article',
-    path: `${articles.path}/:slug`,
-    Component: React.lazy(() =>
-      import(/* webpackChunkName: 'literature-Article' */ './pages/Article'),
     ),
   };
 
@@ -43,7 +35,7 @@ export default mountPath => {
   };
 
   return {
-    routes: [entry, books, articles, article, blog],
+    routes: [entry, books, articles, blog],
     menu: [
       { routeName: 'entry', caption: 'Об' },
       { routeName: 'articles', caption: 'Статьи' },
