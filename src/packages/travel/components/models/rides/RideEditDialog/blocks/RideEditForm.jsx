@@ -4,7 +4,11 @@ import { withStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-import { DatePicker, TimePicker } from '@material-ui/pickers';
+import {
+  DatePicker,
+  KeyboardDatePicker,
+  TimePicker,
+} from '@material-ui/pickers';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import {
   RIDE_CLASSES,
@@ -159,14 +163,14 @@ const RideEditForm = ({
         />
       </div>
       <div className={classes.optionGroup}>
-        <DatePicker
+        <KeyboardDatePicker
           name="departureDateTime"
           autoOk={true}
           className={classes.option}
           label="Дата отправления"
           value={rideDepartureField.value}
           onChange={rideDepartureField.onChange}
-          format="eeeeee, d MMMM yyyy"
+          format="dd/MM/yyyy"
         />
         {isSameDateField.value ? (
           <FormControlLabel
@@ -181,14 +185,14 @@ const RideEditForm = ({
             label="Прибытие в тот же день"
           />
         ) : (
-          <DatePicker
+          <KeyboardDatePicker
             name="arrivalDateTime"
             autoOk={true}
             className={classes.option}
             label="Дата прибытия"
             value={rideArrivalField.value}
             onChange={rideArrivalField.onChange}
-            format="eeeeee, d MMMM yyyy"
+            format="dd/MM/yyyy"
           />
         )}
       </div>
