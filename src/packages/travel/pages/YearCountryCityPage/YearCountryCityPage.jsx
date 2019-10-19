@@ -11,7 +11,6 @@ import countriesPropTypes from 'travel/models/countries/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import {
   groupByYears,
-  uniqByLocations,
   enhanceVisitsWithCounters,
   fpEnhanceVisitsWithDates,
   orderByYears,
