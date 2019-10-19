@@ -63,7 +63,10 @@ module.exports = {
     }),
     new CopyWebpackPlugin(
       [
-        { from: 'src/static', to: 'static' },
+        {
+          from: 'src/static',
+          to: isDevelopmentMode ? 'mine/static' : 'static',
+        },
         !isDevelopmentMode && 'src/404.html',
       ].filter(Boolean),
     ),

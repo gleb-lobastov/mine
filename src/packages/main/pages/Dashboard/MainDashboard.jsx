@@ -73,7 +73,11 @@ function MainDashboard({
           </ListItem>
         </List>
       </div>
-      <img className={classes.avatar} src="/static/me.jpg" alt="Мое фото" />
+      <img
+        className={classes.avatar}
+        src="/mine/static/me.jpg"
+        alt="Мое фото"
+      />
     </div>
   );
 }
