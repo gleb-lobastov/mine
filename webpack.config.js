@@ -48,7 +48,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Глеб Лобастов',
       meta: {
-        description: 'Статистика путешествий. Разработка програмного обеспечения. Рецензии на книги. Сорок два.',
+        description:
+          'Статистика путешествий. Разработка програмного обеспечения. Рецензии на книги. Сорок два.',
       },
       template: './src/index.html',
       favicon: './src/favicon.ico',
@@ -60,7 +61,12 @@ module.exports = {
       __GOOGLE_MAP_API_KEY__: `"${GOOGLE_API_KEY}"`,
       __IS_DEV_MODE__: isDevelopmentMode,
     }),
-    !isDevelopmentMode && new CopyWebpackPlugin(['src/404.html']),
+    new CopyWebpackPlugin(
+      [
+        { from: 'src/static', to: 'static' },
+        !isDevelopmentMode && 'src/404.html',
+      ].filter(Boolean),
+    ),
     isDevelopmentMode && new webpack.HotModuleReplacementPlugin(),
   ].filter(Boolean),
   resolve: {
