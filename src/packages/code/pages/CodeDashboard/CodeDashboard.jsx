@@ -21,17 +21,28 @@ class CodeDashboard extends React.PureComponent {
       <List>
         <ListItem
           button={true}
-          component={Link}
-          to={articlesRoute.toUrl({ slug: 'importThis' })}
+          component="a"
+          target="_blank"
+          rel="nofollow noopener"
+          href="https://github.com/gleb-lobastov"
         >
-          <ListItemText primary="Статья &laquo;19 принципов достижения дзена при написании компьютерных программ&raquo;" />
+          <ListItemText primary="Гитхаб" />
         </ListItem>
         <ListItem
           button={true}
           component="a"
-          href="https://github.com/gleb-lobastov"
+          target="_blank"
+          rel="nofollow noopener"
+          href="https://www.linkedin.com/in/glebin"
         >
-          <ListItemText primary="Гитхаб" />
+          <ListItemText primary="Linkedin" />
+        </ListItem>
+        <ListItem
+          button={true}
+          component={Link}
+          to={articlesRoute.toUrl({ slug: 'importThis' })}
+        >
+          <ListItemText primary="Статья &laquo;19 принципов достижения дзена при написании компьютерных программ&raquo;" />
         </ListItem>
       </List>
     );
