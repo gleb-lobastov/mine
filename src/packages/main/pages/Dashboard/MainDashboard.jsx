@@ -1,41 +1,81 @@
 import React from 'react';
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import { makeStyles } from '@material-ui/core/styles';
+import { withPaths } from 'core/context/AppContext';
 
-const StyledArticle = styled.article`
-  margin-bottom: 16px;
-`;
+const useStyles = makeStyles(theme => ({
+  container: {
+    marginBottom: '16px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
+  title: {
+    margin: '0 0 32px',
+    fontSize: '5rem',
+  },
+  avatar: {
+    height: '216px',
+    borderRadius: '100%',
+    marginLeft: '72px',
+    display: 'block',
+  },
+  [theme.breakpoints.down('sm')]: {
+    title: {
+      fontSize: '4rem',
+    },
+    avatar: {
+      height: '180px',
+      marginLeft: '60px',
+    },
+  },
+  [theme.breakpoints.down('xs')]: {
+    title: {
+      fontSize: '2rem',
+    },
+    avatar: {
+      height: '108px',
+      marginLeft: '36px',
+    },
+  },
+}));
 
-const StyledH1 = styled.h1`
-  margin-top: 0;
-  padding-top: 0;
-`;
-
-function MainDashboard() {
+function MainDashboard({
+  namedPaths: {
+    code: { entry: codePath },
+    literature: { articles: articlesPath, books: booksPath },
+    travel: { entry: travelPath },
+  },
+}) {
+  const classes = useStyles();
   return (
-    <section>
-      <StyledArticle>
-        <StyledH1>Мое, персональное, в интернете</StyledH1>
-        <span>Я, Глеб. </span>
-        <a href="https://www.linkedin.com/in/glebin">Работаю</a>
-        &nbsp;
-        <a href="https://github.com/gleb-lobastov">программистом</a>
-        <span>. </span>
-        <a href="https://tripster.ru/lobastov/">Люблю</a>
-        &nbsp;
-        <a href="https://my.flightradar24.com/lobastov">быть</a>
-        &nbsp;
-        <span>в </span>
-        <a href="https://lobastov.livejournal.com/tag/%D0%9F%D1%83%D1%82%D0%B5%D1%88%D0%B5%D1%81%D1%82%D0%B2%D0%B8%D0%B5">
-          дороге
-        </a>
-        <span>. Это не все.</span>
-      </StyledArticle>
-      <StyledArticle>
-        Мудрость, которую можно усмотреть на этой странице в том, что большие
-        дела начинаются с малого.
-      </StyledArticle>
-    </section>
+    <div className={classes.container}>
+      <div>
+        <Typography variant="h1" className={classes.title}>
+          <span>Мое, персональное, в&nbsp;интернете</span>
+        </Typography>
+        <List>
+          <ListItem button={true} component={Link} to={codePath.toUrl()}>
+            <ListItemText primary="Кем работаю" />
+          </ListItem>
+          <ListItem button={true} component={Link} to={travelPath.toUrl()}>
+            <ListItemText primary="Где был и сколько раз" />
+          </ListItem>
+          <ListItem button={true} component={Link} to={booksPath.toUrl()}>
+            <ListItemText primary="Что читал" />
+          </ListItem>
+          <ListItem button={true} component={Link} to={articlesPath.toUrl()}>
+            <ListItemText primary="Что написал" />
+          </ListItem>
+        </List>
+      </div>
+      <img className={classes.avatar} src="/static/me.jpg" alt="Мое фото" />
+    </div>
   );
 }
 
-export default MainDashboard;
+export default withPaths(MainDashboard);
