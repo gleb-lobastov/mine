@@ -22,17 +22,10 @@ import {
 } from './utils';
 import CountriesByYear from './blocks/CountriesByYear';
 
-const enhanceVisits = memoizeOne((ridesDict, visitsList, onlyYear) =>
+const enhanceVisits = memoizeOne((ridesDict, visitsList) =>
   flow(
     fpEnhanceVisitsWithDates({ ridesDict }),
-    onlyYear
-      ? enhancedVisitsList => {
-          if (!enhancedVisitsList || !enhancedVisitsList.length) {
-            return {};
-          }
-          return { [onlyYear]: enhancedVisitsList };
-        }
-      : groupByYears,
+    groupByYears,
     fpMapValues(enhanceVisitsWithCounters),
     Object.values,
     orderByYears,
@@ -49,27 +42,24 @@ const YearCountryCityPage = ({
   namedPaths: {
     travel: { locationPath },
   },
-  match: {
-    params: { year },
-  },
 }) => {
   if (isVisitsComplete && isRidesComplete && !visitsList.length) {
     return <WelcomeScreen />;
   }
 
-  const visitsByYears = enhanceVisits(ridesDict, visitsList, year);
+  const visitsByYears = enhanceVisits(ridesDict, visitsList);
   return (
     <div>
       {visitsByYears.map(
         ({
-          year: visitYear,
+          year,
           visitsList: visitsListByYear,
           countriesCount,
           locationsCount,
         }) => (
-          <div key={`y${visitYear}`}>
+          <div key={`y${year}`}>
             <h1>
-              {visitYear || 'Год не указан'}, {countriesCount}{' '}
+              {year || 'Год не указан'}, {countriesCount}{' '}
               {plural(countriesCount, {
                 one: 'страна',
                 few: 'страны',
