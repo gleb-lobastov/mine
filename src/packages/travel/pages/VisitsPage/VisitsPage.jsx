@@ -1,10 +1,12 @@
 import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
 import groupBy from 'lodash/groupBy';
 import uniq from 'lodash/uniq';
 import property from 'lodash/property';
-import PropTypes from 'prop-types';
-import withProvision from 'core/connection/withProvision';
-import { selectDict, selectPlaceholder, selectIsReady } from 'core/connection';
+import withTripsData, {
+  DATA_CHUNKS,
+} from 'travel/components/common/withTripsData/withTripsData';
+import { selectDict, selectIsReady } from 'core/connection';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import countriesPropTypes from 'travel/models/countries/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
@@ -33,7 +35,7 @@ const byLocationsVisitsCount = (
 const VisitsPage = ({
   countriesDict,
   isVisitsComplete,
-  visits: { data: visitsList = [] } = {},
+  userVisits: { data: visitsList = [] } = {},
 }) => {
   if (isVisitsComplete && !visitsList.length) {
     return <WelcomeScreen />;
@@ -144,43 +146,12 @@ const mapStateToProps = state => ({
   isVisitsComplete: selectIsReady(state, 'visitsPage.visits'),
 });
 
-const mapStateToRequirements = (
-  state,
-  {
-    countriesDict,
-    match: {
-      params: { userAlias },
-    },
-  },
-) => {
-  const { data: userTripsIds = [] } =
-    selectPlaceholder(state, 'visitsPage.trips') || {};
-  return {
+export default withTripsData({
     domain: 'visitsPage',
-    request: {
-      countries: {
-        condition: !countriesDict || !Object.keys(countriesDict).length,
-        modelName: 'countries',
-        query: { navigation: { isDisabled: true } },
-      },
-      trips: {
-        modelName: 'trips',
-        observe: userAlias,
-        query: { userAlias, navigation: { isDisabled: true } },
-      },
-      visits: {
-        modelName: 'visits',
-        observe: userTripsIds,
-        condition: userTripsIds && userTripsIds.length,
-        query: {
-          filter: { trip_id: { comparator: 'in', value: userTripsIds } },
-          navigation: { isDisabled: true },
-        },
-      },
+    mapStateToProps,
+    requirementsConfig: {
+      [DATA_CHUNKS.COMMON.COUNTRIES]: true,
+      [DATA_CHUNKS.USER.TRIPS]: true,
+      [DATA_CHUNKS.USER.VISITS]: true,
     },
-  };
-};
-
-export default withProvision(mapStateToRequirements, mapStateToProps)(
-  VisitsPage,
-);
+  })(VisitsPage);

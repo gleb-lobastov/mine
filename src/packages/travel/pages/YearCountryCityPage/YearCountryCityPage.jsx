@@ -6,7 +6,9 @@ import fpReverse from 'lodash/fp/reverse';
 import PropTypes from 'prop-types';
 import { selectDict, selectIsReady } from 'core/connection';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
-import withTravels from 'travel/components/common/withTravels';
+import withTripsData, {
+  DATA_CHUNKS,
+} from 'travel/components/common/withTripsData/withTripsData';
 import countriesPropTypes from 'travel/models/countries/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import {
@@ -34,7 +36,7 @@ const YearCountryCityPage = ({
   ridesDict,
   isVisitsComplete,
   isRidesComplete,
-  visits: { data: visitsList = [] } = {},
+  userVisits: { data: visitsList = [] } = {},
 }) => {
   if (isVisitsComplete && isRidesComplete && !visitsList.length) {
     return <WelcomeScreen />;
@@ -94,6 +96,13 @@ const mapStateToProps = state => ({
   isRidesComplete: selectIsReady(state, 'yearCountryCity.rides'),
 });
 
-export default withTravels({ domain: 'yearCountryCity', mapStateToProps })(
-  YearCountryCityPage,
-);
+export default withTripsData({
+    domain: 'yearCountryCity',
+    mapStateToProps,
+    requirementsConfig: {
+      [DATA_CHUNKS.COMMON.COUNTRIES]: true,
+      [DATA_CHUNKS.USER.TRIPS]: true,
+      [DATA_CHUNKS.USER.VISITS]: true,
+      [DATA_CHUNKS.USER.RIDES]: true,
+    },
+  })(YearCountryCityPage);

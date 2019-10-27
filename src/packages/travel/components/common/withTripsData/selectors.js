@@ -1,9 +1,9 @@
 import uniq from 'lodash/uniq';
 import { selectDict, selectPlaceholder } from 'core/connection';
 
-export const selectUserTripsIds = state => {
+export const selectUserTripsIds = (state, domain) => {
   const { data: userTripsIds } =
-    selectPlaceholder(state, 'tripsPage.trips') || {};
+    selectPlaceholder(state, `${domain}.userTrips`) || {};
   return userTripsIds;
 };
 

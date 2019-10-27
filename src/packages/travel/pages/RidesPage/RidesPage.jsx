@@ -1,8 +1,10 @@
 import React from 'react';
 import groupBy from 'lodash/groupBy';
 import PropTypes from 'prop-types';
-import withProvision from 'core/connection/withProvision';
-import { selectPlaceholder, selectIsReady } from 'core/connection';
+import withTripsData, {
+  DATA_CHUNKS,
+} from 'travel/components/common/withTripsData/withTripsData';
+import { selectIsReady } from 'core/connection';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import ridesPropTypes from 'travel/models/rides/propTypes';
 import { VEHICLE_NAMES } from 'travel/components/models/rides/RideEditDialog/localization';
@@ -18,7 +20,7 @@ const byRidesCount = ([, ridesA], [, ridesB]) => ridesB.length - ridesA.length;
 
 const RidesPage = ({
   isRidesComplete,
-  rides: { data: ridesList = [] } = {},
+  userRides: { data: ridesList = [] } = {},
 }) => {
   if (isRidesComplete && !ridesList.length) {
     return <WelcomeScreen />;
@@ -52,37 +54,11 @@ const mapStateToProps = state => ({
   isRidesComplete: selectIsReady(state, 'ridesPage.rides'),
 });
 
-const mapStateToRequirements = (
-  state,
-  {
-    match: {
-      params: { userAlias },
-    },
+export default withTripsData({
+  domain: 'ridesPage',
+  mapStateToProps,
+  requirementsConfig: {
+    [DATA_CHUNKS.USER.TRIPS]: true,
+    [DATA_CHUNKS.USER.RIDES]: true,
   },
-) => {
-  const { data: userTripsIds = [] } =
-    selectPlaceholder(state, 'ridesPage.trips') || {};
-  return {
-    domain: 'ridesPage',
-    request: {
-      trips: {
-        modelName: 'trips',
-        observe: userAlias,
-        query: { userAlias, navigation: { isDisabled: true } },
-      },
-      rides: {
-        modelName: 'rides',
-        observe: userTripsIds,
-        condition: userTripsIds && userTripsIds.length,
-        query: {
-          filter: { trip_id: { comparator: 'in', value: userTripsIds } },
-          navigation: { isDisabled: true },
-        },
-      },
-    },
-  };
-};
-
-export default withProvision(mapStateToRequirements, mapStateToProps)(
-  RidesPage,
-);
+})(RidesPage);

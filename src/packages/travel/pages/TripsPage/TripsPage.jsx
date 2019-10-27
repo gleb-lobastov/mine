@@ -1,13 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
 import compose from 'lodash/fp/compose';
 import Button from '@material-ui/core/Button';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { selectDict, selectProvisionStatus } from 'core/connection';
-import withProvision from 'core/connection/withProvision';
 import { withPaths, pathsPropTypes } from 'core/context/AppContext';
 import { useAuthContext } from 'core/context/AuthContext';
+import withTripsData, {
+  DATA_CHUNKS,
+} from 'travel/components/common/withTripsData/withTripsData';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
 import locationsPropTypes from 'travel/models/locations/propTypes';
@@ -23,7 +24,6 @@ import {
   submitTrip,
   submitVisit,
 } from './actionCreators';
-import { selectUserTripsIds, selectLocationsIds } from './selectors';
 
 const memoizedGroupAndSortVisitsByTrips = memoizeByLastArgs(
   groupAndSortVisitsByTrips,
@@ -34,8 +34,8 @@ const TripsPage = ({
     params: { userAlias: visitedUserAlias },
   },
   isTripsComplete,
-  trips: { data: tripsList = [] } = {},
-  visits: { data: visitsList = [] } = {},
+  userTrips: { data: tripsList = [] } = {},
+  userVisits: { data: visitsList = [] } = {},
   countriesDict,
   locationsDict,
   namedPaths,
@@ -169,74 +169,21 @@ const mapStateToProps = state => ({
   countriesDict: selectDict(state, 'countries'),
   locationsDict: selectDict(state, 'locations'),
   ridesDict: selectDict(state, 'rides'),
-  isTripsComplete: selectProvisionStatus(state, 'tripsPage.trips').isComplete,
+  isTripsComplete: selectProvisionStatus(state, 'tripsPage.userTrips')
+    .isComplete,
 });
 
-const mapStateToRequirements = (
-  state,
-  {
-    countriesDict,
-    match: {
-      params: { userAlias },
-    },
-  },
-) => {
-  const userTripsIds = selectUserTripsIds(state);
-  const { requiredLocationsIds, missingLocationsIds } = selectLocationsIds(
-    state,
-    userTripsIds,
-  );
-
-  return {
-    domain: 'tripsPage',
-    request: {
-      countries: {
-        condition: !countriesDict || !Object.keys(countriesDict).length,
-        modelName: 'countries',
-        query: { navigation: { isDisabled: true } },
-      },
-      trips: {
-        modelName: 'trips',
-        observe: userAlias,
-        query: { userAlias, navigation: { isDisabled: true } },
-      },
-      locations: {
-        modelName: 'locations',
-        observe: requiredLocationsIds,
-        condition: missingLocationsIds.length,
-        query: {
-          filter: { id: { comparator: 'in', value: missingLocationsIds } },
-          navigation: { isDisabled: true },
-        },
-      },
-      rides: {
-        modelName: 'rides',
-        observe: userTripsIds,
-        condition: userTripsIds && userTripsIds.length,
-        query: {
-          filter: {
-            trip_id: { comparator: 'in', value: userTripsIds },
-          },
-          navigation: { isDisabled: true },
-        },
-      },
-      visits: {
-        modelName: 'visits',
-        observe: userTripsIds,
-        condition: userTripsIds && userTripsIds.length,
-        query: {
-          filter: {
-            trip_id: { comparator: 'in', value: userTripsIds },
-          },
-          navigation: { isDisabled: true },
-        },
-      },
-    },
-  };
-};
-
 export default compose(
-  withRouter,
   withPaths,
-  withProvision(mapStateToRequirements, mapStateToProps),
+  withTripsData({
+    domain: 'tripsPage',
+    mapStateToProps,
+    requirementsConfig: {
+      [DATA_CHUNKS.COMMON.COUNTRIES]: true,
+      [DATA_CHUNKS.USER.TRIPS]: true,
+      [DATA_CHUNKS.USER.LOCATIONS]: true,
+      [DATA_CHUNKS.USER.VISITS]: true,
+      [DATA_CHUNKS.USER.RIDES]: true,
+    },
+  }),
 )(TripsPage);
