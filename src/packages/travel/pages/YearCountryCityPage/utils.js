@@ -13,7 +13,10 @@ export const fpEnhanceVisitsWithDates = ({ ridesDict }) => visitsList =>
       ...visit,
       arrivalDateTime,
       departureDateTime,
-      year: arrivalDateTime ? arrivalDateTime.getFullYear() : NO_YEAR,
+      year:
+        (departureDateTime && departureDateTime.getFullYear()) ||
+        (arrivalDateTime && arrivalDateTime.getFullYear()) ||
+        NO_YEAR,
     };
   });
 

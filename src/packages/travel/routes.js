@@ -22,7 +22,7 @@ export default mountPath => {
 
   const years = {
     routeName: 'yearly',
-    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/yearly`,
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/yearly/:year?`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'travel-Countries' */ './pages/YearCountryCityPage'),

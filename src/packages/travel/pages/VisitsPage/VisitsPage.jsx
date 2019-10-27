@@ -1,8 +1,11 @@
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import groupBy from 'lodash/groupBy';
 import uniq from 'lodash/uniq';
 import property from 'lodash/property';
+import compose from 'lodash/fp/compose';
+import { withPaths } from 'core/context/AppContext';
 import withTripsData, {
   DATA_CHUNKS,
 } from 'travel/components/common/withTripsData/withTripsData';
@@ -36,6 +39,9 @@ const VisitsPage = ({
   countriesDict,
   isVisitsComplete,
   userVisits: { data: visitsList = [] } = {},
+  namedPaths: {
+    travel: { locationPath },
+  },
 }) => {
   if (isVisitsComplete && !visitsList.length) {
     return <WelcomeScreen />;
@@ -115,7 +121,13 @@ const VisitsPage = ({
                 ) => (
                   <div key={`id${locationId}`}>
                     <span>{`${locationIndex + 1}. `}</span>
-                    <span>{locationName}</span>
+                    <Link
+                      to={locationPath.toUrl({
+                        strLocationId: String(locationId),
+                      })}
+                    >
+                      {locationName}
+                    </Link>
                     {locationVisitsCount > 1 && (
                       <span>{` x${locationVisitsCount}`}</span>
                     )}
@@ -146,7 +158,9 @@ const mapStateToProps = state => ({
   isVisitsComplete: selectIsReady(state, 'visitsPage.visits'),
 });
 
-export default withTripsData({
+export default compose(
+  withPaths,
+  withTripsData({
     domain: 'visitsPage',
     mapStateToProps,
     requirementsConfig: {
@@ -154,4 +168,5 @@ export default withTripsData({
       [DATA_CHUNKS.USER.TRIPS]: true,
       [DATA_CHUNKS.USER.VISITS]: true,
     },
-  })(VisitsPage);
+  }),
+)(VisitsPage);

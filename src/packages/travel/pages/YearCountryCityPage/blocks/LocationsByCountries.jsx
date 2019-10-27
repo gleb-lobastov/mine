@@ -1,6 +1,5 @@
 import React from 'react';
-import format from 'date-fns/format';
-import ru from 'date-fns/locale/ru';
+import { Link } from 'react-router-dom';
 import fpGroupBy from 'lodash/fp/groupBy';
 import flow from 'lodash/flow';
 import fpMapValues from 'lodash/fp/mapValues';
@@ -9,7 +8,7 @@ import countriesPropTypes from 'travel/models/countries/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import VisitsByLocation from './VisitsByLocation';
 
-const LocationsByCountries = ({ visitsList }) => {
+const LocationsByCountries = ({ visitsList, locationPath }) => {
   const groupByLocations = fpGroupBy('locationId');
 
   const enhanceWithCounters = visitsList => ({
@@ -19,22 +18,26 @@ const LocationsByCountries = ({ visitsList }) => {
   const enhancedVisitsList = flow(
     groupByLocations,
     fpMapValues(enhanceWithCounters),
-    Object.values,
+    Object.entries,
   )(visitsList);
   return (
     <div>
       {enhancedVisitsList.map(
-        ({ locationName, visitsList: visitsListByLocation }) => (
+        ([
+          strLocationId,
+          { locationName, visitsList: visitsListByLocation },
+        ]) => (
           <div>
             <div
               style={{
-                fontSize: '21px',
                 display: 'inline',
                 marginRight: '4px',
-                lineHeight: '24px',
+                lineHeight: '20px',
               }}
             >
-              {locationName}
+              <Link to={locationPath.toUrl({ strLocationId })}>
+                {locationName}
+              </Link>
             </div>
             <VisitsByLocation visitsList={visitsListByLocation} />
           </div>

@@ -1,10 +1,12 @@
 import React from 'react';
 import memoizeOne from 'memoize-one';
+import compose from 'lodash/fp/compose';
 import fpMapValues from 'lodash/fp/mapValues';
 import flow from 'lodash/fp/flow';
 import fpReverse from 'lodash/fp/reverse';
 import PropTypes from 'prop-types';
 import { selectDict, selectIsReady } from 'core/connection';
+import { withPaths } from 'core/context/AppContext';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import withTripsData, {
   DATA_CHUNKS,
@@ -37,6 +39,9 @@ const YearCountryCityPage = ({
   isVisitsComplete,
   isRidesComplete,
   userVisits: { data: visitsList = [] } = {},
+  namedPaths: {
+    travel: { locationPath },
+  },
 }) => {
   if (isVisitsComplete && isRidesComplete && !visitsList.length) {
     return <WelcomeScreen />;
@@ -70,6 +75,7 @@ const YearCountryCityPage = ({
             <CountriesByYear
               visitsList={visitsListByYear}
               countriesDict={countriesDict}
+              locationPath={locationPath}
             />
           </div>
         ),
@@ -96,13 +102,23 @@ const mapStateToProps = state => ({
   isRidesComplete: selectIsReady(state, 'yearCountryCity.rides'),
 });
 
-export default withTripsData({
+export default compose(
+  withPaths,
+  withTripsData({
     domain: 'yearCountryCity',
     mapStateToProps,
-    requirementsConfig: {
+    requirementsConfig: (
+      state,
+      {
+        match: {
+          params: { year },
+        },
+      },
+    ) => ({
       [DATA_CHUNKS.COMMON.COUNTRIES]: true,
       [DATA_CHUNKS.USER.TRIPS]: true,
-      [DATA_CHUNKS.USER.VISITS]: true,
+      [DATA_CHUNKS.USER.VISITS]: { year },
       [DATA_CHUNKS.USER.RIDES]: true,
-    },
-  })(YearCountryCityPage);
+    }),
+  }),
+)(YearCountryCityPage);

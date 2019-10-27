@@ -10,7 +10,12 @@ import visitPropTypes from 'travel/models/visits/propTypes';
 import LocationsByCountries from './LocationsByCountries';
 import { uniqByLocations, plural } from '../utils';
 
-const CountriesByYear = ({ countriesDict, visitsList, classes }) => {
+const CountriesByYear = ({
+  countriesDict,
+  visitsList,
+  locationPath,
+  classes,
+}) => {
   const groupByCountries = fpGroupBy('countryId');
 
   const enhanceWithCounters = visitsList => ({
@@ -72,7 +77,10 @@ const CountriesByYear = ({ countriesDict, visitsList, classes }) => {
                   </span>
                 )}
               </span>
-              <LocationsByCountries visitsList={visitsListByCountry} />
+              <LocationsByCountries
+                visitsList={visitsListByCountry}
+                locationPath={locationPath}
+              />
             </div>
           );
         },
