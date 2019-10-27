@@ -18,7 +18,7 @@ export default next => options => {
   const queryHash = `qc:${hashString(query)}`;
   const cachedResponse = localStorage.getItem(queryHash);
   if (cachedResponse) {
-    console.log('cache catch', query);
+    console.log('cache catch', query, JSON.parse(cachedResponse));
     return Promise.resolve(JSON.parse(cachedResponse));
   }
   return next(options).then(response => {
