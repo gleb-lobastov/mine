@@ -71,7 +71,6 @@ export default mountPath => {
       { routeName: entry.routeName, caption: 'Об' },
       { routeName: visits.routeName, caption: 'По посещенным местам' },
       { routeName: years.routeName, caption: 'По годам' },
-      { routeName: rides.routeName, caption: 'По транспорту' },
       { routeName: trips.routeName, caption: 'По поездкам' },
     ],
   };
