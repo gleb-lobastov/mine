@@ -42,7 +42,10 @@ const valueToString = value => {
 
 const filterToServerAdapter = (filter = {}) =>
   Object.entries(filter)
-    .map(([fieldName, { comparator, value }]) => {
+    .map(([fieldName, { comparator, value } = {}]) => {
+      if (!comparator) {
+        return undefined;
+      }
       const stringifiedValue = valueToString(value);
       if (isUndefined(stringifiedValue)) {
         return undefined;
