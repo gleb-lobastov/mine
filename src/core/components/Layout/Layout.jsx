@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
 import { withPackages } from 'core/context/AppContext';
 import Navigation from './blocks/Navigation';
+import Footer from './blocks/Footer';
 import PendingRequestsIndicator from './blocks/PendingRequestsIndicator';
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +44,7 @@ function Layout({ packages, children }) {
       </Helmet>
       <Navigation packages={packages} />
       <div className={classes.content}>{children}</div>
+      <Footer className={classes.footer} />
       <div className={classes.statusBar}>
         <PendingRequestsIndicator />
       </div>

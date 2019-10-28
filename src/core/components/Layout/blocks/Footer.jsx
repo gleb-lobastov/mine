@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Social from './Social';
 
 class Footer extends React.PureComponent {
   static propTypes = {
@@ -15,8 +16,7 @@ class Footer extends React.PureComponent {
 
     return (
       <footer className={className}>
-        <hr />
-        <a href="https://vk.com/gleb.lobastov"> VK </a>
+        <Social />
       </footer>
     );
   }
