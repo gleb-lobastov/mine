@@ -40,6 +40,10 @@ const REFS = {
   },
 };
 
+const fbEvent = () => yaCounter50542867.reachGoal('fb');
+const vkEvent = () => yaCounter50542867.reachGoal('vk');
+const twEvent = () => yaCounter50542867.reachGoal('tw');
+const tlEvent = () => yaCounter50542867.reachGoal('tl');
 function Social({ location }) {
   const classes = useStyles();
 
@@ -63,7 +67,11 @@ function Social({ location }) {
 
   return (
     <div className={classes.container}>
-      <FacebookShareButton {...buttonProps} quote={title}>
+      <FacebookShareButton
+        {...buttonProps}
+        quote={title}
+        onShareWindowClose={fbEvent}
+      >
         <FacebookIcon {...iconProps} />
       </FacebookShareButton>
       <VKShareButton
@@ -71,13 +79,22 @@ function Social({ location }) {
         title={title}
         description={description}
         image="https://gleb-lobastov.github.io/mine/static/me.jpg"
+        onShareWindowClose={vkEvent}
       >
         <VKIcon {...iconProps} />
       </VKShareButton>
-      <TwitterShareButton {...buttonProps} title={title}>
+      <TwitterShareButton
+        {...buttonProps}
+        title={title}
+        onShareWindowClose={twEvent}
+      >
         <TwitterIcon {...iconProps} />
       </TwitterShareButton>
-      <TelegramShareButton {...buttonProps} title={title}>
+      <TelegramShareButton
+        {...buttonProps}
+        title={title}
+        onShareWindowClose={tlEvent}
+      >
         <TelegramIcon {...iconProps} />
       </TelegramShareButton>
     </div>
