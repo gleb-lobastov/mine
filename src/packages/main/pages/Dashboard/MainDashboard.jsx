@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -16,7 +17,9 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     margin: '0 0 32px',
-    fontSize: '5rem',
+    fontSize: '72px',
+    fontFamily: "'Press Start 2P', 'Roboto', sans-serif",
+    fontWeight: 900,
   },
   avatar: {
     height: '216px',
@@ -26,7 +29,7 @@ const useStyles = makeStyles(theme => ({
   },
   [theme.breakpoints.down('sm')]: {
     title: {
-      fontSize: '4rem',
+      fontSize: '48px',
     },
     avatar: {
       height: '180px',
@@ -35,7 +38,7 @@ const useStyles = makeStyles(theme => ({
   },
   [theme.breakpoints.down('xs')]: {
     title: {
-      fontSize: '2rem',
+      fontSize: '36px',
     },
     avatar: {
       height: '108px',
@@ -55,8 +58,14 @@ function MainDashboard({
   return (
     <div className={classes.container}>
       <div>
+        <Helmet>
+          <link
+            href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap&subset=cyrillic"
+            rel="stylesheet"
+          />
+        </Helmet>
         <Typography variant="h1" className={classes.title}>
-          <span>Мое, персональное, в&nbsp;интернете</span>
+          <span>Моя страница в&nbsp;сети интернет</span>
         </Typography>
         <List>
           <ListItem button={true} component={Link} to={codePath.toUrl()}>
