@@ -13,10 +13,9 @@ const useStyles = makeStyles(theme => ({
     marginBottom: '16px',
     display: 'flex',
     justifyContent: 'space-between',
-    overflow: 'hidden',
   },
   title: {
-    margin: '0 0 32px',
+    margin: '0 0 24px',
     fontSize: '72px',
     fontFamily: "'Press Start 2P', 'Roboto', sans-serif",
     fontWeight: 900,
@@ -24,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     height: '216px',
     borderRadius: '100%',
-    marginLeft: '72px',
+    marginLeft: '36px',
     display: 'block',
   },
   [theme.breakpoints.down('sm')]: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
       height: '180px',
-      marginLeft: '60px',
+      marginLeft: '24px',
     },
   },
   [theme.breakpoints.down('xs')]: {
@@ -42,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     },
     avatar: {
       height: '108px',
-      marginLeft: '36px',
+      marginLeft: '16px',
     },
   },
 }));

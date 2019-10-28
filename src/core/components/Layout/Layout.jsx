@@ -18,6 +18,7 @@ const useStyles = makeStyles(theme => ({
     boxSizing: 'border-box',
     flexGrow: 1,
     width: '100%',
+    overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
   },
   statusBar: {
