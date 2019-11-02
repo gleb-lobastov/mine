@@ -26,6 +26,14 @@ export default mountPath => {
   };
   // articles.preload = article;
 
+  const quotes = {
+    routeName: 'quotes',
+    path: `${mountPath}/quotes`,
+    Component: React.lazy(() =>
+      import(/* webpackChunkName: 'literature-Blog' */ './pages/Quotes'),
+    ),
+  };
+
   const blog = {
     routeName: 'blog',
     path: `${mountPath}/bolg`,
@@ -35,11 +43,12 @@ export default mountPath => {
   };
 
   return {
-    routes: [entry, books, articles, blog],
+    routes: [entry, books, articles, quotes, blog],
     menu: [
       { routeName: 'entry', caption: 'Об' },
       { routeName: 'articles', caption: 'Статьи' },
       { routeName: 'books', caption: 'Рецензии' },
+      // { routeName: 'quotes', caption: 'Цитаты' }, -- temporarily hidden
       { routeName: 'blog', caption: 'Болг' },
     ],
   };
