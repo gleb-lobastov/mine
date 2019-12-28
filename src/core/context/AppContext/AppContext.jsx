@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import reactComponentPropType from 'modules/customPropTypes/reactComponentPropType';
+import Path from 'modules/utilities/routing/Path';
 import collectPaths, { pathsPropTypes, pathPropType } from './collectPaths';
 
 const AppContext = React.createContext({});
@@ -52,6 +53,22 @@ export const packagePropTypes = {
     routes: PropTypes.arrayOf(PropTypes.shape(routeConfigPropTypes)),
     menu: PropTypes.arrayOf(PropTypes.shape(routesMenuConfigType)),
   }),
+};
+
+export const navigationPropTypes = {
+  menu: PropTypes.arrayOf(
+    PropTypes.shape({
+      route: PropTypes.instanceOf(Path),
+      caption: PropTypes.string,
+      icon: PropTypes.func,
+      menu: PropTypes.arrayOf(
+        PropTypes.shape({
+          route: PropTypes.instanceOf(Path),
+          caption: PropTypes.string,
+        }),
+      ),
+    }),
+  ),
 };
 
 export const configPropTypes = {

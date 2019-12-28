@@ -6,12 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
-import {
-  pathsPropTypes,
-  packagePropTypes,
-  withPaths,
-  withNavigation,
-} from 'core/context/AppContext';
+import { navigationPropTypes, withNavigation } from 'core/context/AppContext';
 import { authContextPropTypes, withAuth } from 'core/context/AuthContext';
 import { findTabIndex } from './utils';
 import MainTabs from './blocks/MainTabs';
@@ -40,22 +35,18 @@ class Navigation extends React.PureComponent {
     match: PropTypes.shape({
       params: PropTypes.objectOf(PropTypes.string),
     }).isRequired,
-    packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
-    namedPaths: pathsPropTypes.namedPaths.isRequired,
+    navigation: PropTypes.shape(navigationPropTypes).isRequired,
     isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
     userAlias: authContextPropTypes.userAlias.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
-  findMainTabIndex = memoizeByLastArgs((pathname, navigation) =>
-    findTabIndex(pathname, navigation),
-  );
+  findMainTabIndex = memoizeByLastArgs(findTabIndex);
 
-  findSubTabIndex = memoizeByLastArgs((pathname, navigation) =>
-    findTabIndex(pathname, navigation),
-  );
+  // different function for different cache
+  findSubTabIndex = memoizeByLastArgs(findTabIndex);
 
-  handleChangeUrl = (nextPath, currentPath) => {
+  handleChangeUrl = (event, currentPath, nextPath) => {
     const {
       history,
       location: { pathname },
@@ -66,51 +57,54 @@ class Navigation extends React.PureComponent {
     history.push(nextPath.toUrl({ ...params, ...pathParams }));
   };
 
-  render() {
+  renderAuthInfo() {
     const {
-      location: { pathname },
-      namedPaths,
-      navigation,
-      packages,
       isAuthenticated,
       userAlias: authorizedUserAlias,
       classes,
     } = this.props;
 
-    const mainTabIndex = this.findMainTabIndex(pathname, navigation?.menu);
-    const subTabIndex = this.findSubTabIndex(
-      pathname,
-      navigation.menu[mainTabIndex]?.menu,
-    );
+    if (!isAuthenticated) {
+      return null;
+    }
 
-    const hasMainItemsToSelect =
-      packages.filter(({ title }) => title).length > 1;
+    return (
+      <Typography variant="h6" color="inherit" className={classes.grow}>
+        {authorizedUserAlias}
+      </Typography>
+    );
+  }
+
+  render() {
+    const {
+      location: { pathname },
+      navigation: { menu: mainMenu },
+      classes,
+    } = this.props;
+
+    const mainTabIndex = this.findMainTabIndex(pathname, mainMenu);
+    const subMenu = mainMenu[mainTabIndex]?.menu;
+    const subTabIndex = this.findSubTabIndex(pathname, subMenu);
 
     return (
       <div>
         <AppBar position="static" classes={{ root: classes.root }}>
-          {hasMainItemsToSelect && (
+          {mainMenu.length >= 1 && (
             <MainTabs
-              namedPaths={namedPaths}
+              menu={mainMenu}
               onChangeUrl={this.handleChangeUrl}
-              packages={packages}
-              navigation={navigation}
-              mainTabIndex={mainTabIndex}
+              tabIndex={mainTabIndex}
             />
           )}
-          {isAuthenticated && (
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              {authorizedUserAlias}
-            </Typography>
-          )}
+          {this.renderAuthInfo()}
         </AppBar>
-        <SubTabs
-          namedPaths={namedPaths}
-          onChangeUrl={this.handleChangeUrl}
-          packages={packages}
-          mainTabIndex={mainTabIndex}
-          subTabIndex={subTabIndex}
-        />
+        {subMenu && (
+          <SubTabs
+            menu={subMenu}
+            onChangeUrl={this.handleChangeUrl}
+            tabIndex={subTabIndex}
+          />
+        )}
       </div>
     );
   }
@@ -118,7 +112,6 @@ class Navigation extends React.PureComponent {
 
 export default compose(
   withRouter,
-  withPaths,
   withNavigation,
   withAuth,
   withStyles(styles),

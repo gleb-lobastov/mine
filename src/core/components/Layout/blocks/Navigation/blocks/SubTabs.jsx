@@ -10,50 +10,32 @@ import {
 
 class SubTabs extends React.PureComponent {
   static propTypes = {
-    namedPaths: pathsPropTypes.namedPaths.isRequired,
     onChangeUrl: PropTypes.func.isRequired,
-    packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
-    mainTabIndex: PropTypes.number.isRequired,
-    subTabIndex: PropTypes.number.isRequired,
+    tabIndex: PropTypes.number.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
-  resolveRoute(selectedSubTabIndex) {
-    const { namedPaths, packages, mainTabIndex } = this.props;
-    const currentRoutes = this.resolveRoutes();
-    const { routeName } = currentRoutes[selectedSubTabIndex];
-    const { packageName: selectedPackageName } = packages[mainTabIndex];
-    return namedPaths[selectedPackageName][routeName];
-  }
-
-  resolveRoutes() {
-    const { packages, mainTabIndex } = this.props;
-    return packages[mainTabIndex].routing.menu || [];
-  }
-
-  handleChangeSubTab = (event, selectedSubTabIndex) => {
-    const { subTabIndex, onChangeUrl: handleChangeUrl } = this.props;
-    handleChangeUrl(
-      this.resolveRoute(selectedSubTabIndex),
-      this.resolveRoute(subTabIndex),
-    );
+  handleChangeSubTab = (event, nextTabIndex) => {
+    const { menu, tabIndex, onChangeUrl } = this.props;
+    const { route } = menu[tabIndex];
+    const { route: nextRoute } = menu[nextTabIndex];
+    onChangeUrl(event, route, nextRoute);
   };
 
   render() {
-    const { subTabIndex, classes } = this.props;
-    const currentRoutes = this.resolveRoutes();
-    if (!currentRoutes.length) {
+    const { tabIndex, classes, menu } = this.props;
+    if (!menu.length) {
       return null;
     }
     return (
       <div className={classes.root}>
         <Tabs
-          value={subTabIndex}
+          value={tabIndex}
           onChange={this.handleChangeSubTab}
           variant="scrollable"
           scrollButtons="auto"
         >
-          {currentRoutes.map(({ routeName, caption }) => (
+          {menu.map(({ routeName, caption }) => (
             <Tab key={routeName} label={caption} />
           ))}
         </Tabs>

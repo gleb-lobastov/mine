@@ -10,25 +10,16 @@ import {
 
 class MainTabs extends React.PureComponent {
   static propTypes = {
-    namedPaths: pathsPropTypes.namedPaths.isRequired,
     onChangeUrl: PropTypes.func.isRequired,
-    packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
-    mainTabIndex: PropTypes.number.isRequired,
+    tabIndex: PropTypes.number.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
-  resolveMainTabsPath(nextMainTabIndex) {
-    const { namedPaths, packages } = this.props;
-    const { packageName: selectedPackageName } = packages[nextMainTabIndex];
-    return namedPaths[selectedPackageName].entry;
-  }
-
-  handleChangeMainTab = (event, nextMainTabIndex) => {
-    const { mainTabIndex, onChangeUrl: handleChangeUrl } = this.props;
-    handleChangeUrl(
-      this.resolveMainTabsPath(nextMainTabIndex),
-      this.resolveMainTabsPath(mainTabIndex),
-    );
+  handleChangeMainTab = (event, nextTabIndex) => {
+    const { menu, tabIndex, onChangeUrl } = this.props;
+    const { route } = menu[tabIndex];
+    const { route: nextRoute } = menu[nextTabIndex];
+    onChangeUrl(event, route, nextRoute);
   };
 
   renderLabel(label) {
@@ -36,7 +27,7 @@ class MainTabs extends React.PureComponent {
     return <span className={classes.label}>{label}</span>;
   }
 
-  renderTab = ({ id, title: { caption, icon: IconComponent } = {} }) => {
+  renderTab = ({ id, caption, icon: IconComponent }) => {
     if (!caption && !IconComponent) {
       return null;
     }
@@ -50,14 +41,11 @@ class MainTabs extends React.PureComponent {
   };
 
   render() {
-    const { mainTabIndex, packages } = this.props;
+    const { tabIndex, menu } = this.props;
 
     return (
-      <Tabs
-        value={mainTabIndex}
-        onChange={this.handleChangeMainTab}
-      >
-        {packages.map(this.renderTab)}
+      <Tabs value={tabIndex} onChange={this.handleChangeMainTab}>
+        {menu.map(this.renderTab)}
       </Tabs>
     );
   }
