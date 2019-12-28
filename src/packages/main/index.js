@@ -13,5 +13,12 @@ export default ({ mountPath }) => ({
         Component: MainDashboard,
       },
     ],
+    routesDict: {
+      entry: {
+        routeName: 'entry',
+        path: mountPath,
+        Component: MainDashboard,
+      },
+    },
   },
 });

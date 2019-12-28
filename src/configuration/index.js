@@ -1,1 +1,2 @@
-export default {};
+/* eslint-disable import/prefer-default-export */
+export { default as configureNavigation } from './navigation';

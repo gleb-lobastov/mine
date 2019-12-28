@@ -43,6 +43,7 @@ export default mountPath => {
   };
 
   return {
+    routesDict: { entry, books, articles, quotes, blog },
     routes: [entry, books, articles, quotes, blog],
     menu: [
       { routeName: 'entry', caption: 'Об' },

@@ -66,7 +66,17 @@ export default mountPath => {
   };
 
   return {
-    routes: [entry, visits, rides, years, trips, tripStory, location],
+    routesDict: {
+      entry,
+      visits,
+      rides,
+      years,
+      trips,
+      tripStory,
+      tripEdit,
+      location,
+    },
+    routes: [entry, visits, rides, years, trips, tripStory, tripEdit, location],
     menu: [
       { routeName: entry.routeName, caption: 'Об' },
       { routeName: visits.routeName, caption: 'По посещенным местам' },

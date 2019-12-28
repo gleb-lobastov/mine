@@ -24,6 +24,7 @@ export default ({ mountPath }) => {
     packageName: 'code',
     title: { caption: 'Код', icon: IconCode },
     routing: {
+      routesDict: { entry, articles },
       routes: [entry, articles],
     },
   };

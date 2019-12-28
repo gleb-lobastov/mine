@@ -1,7 +1,10 @@
 /* eslint-disable import/prefer-default-export */
-export const findTabIndex = (pathname, array = [], getter) => {
-  const specificityLevels = array.map(item => {
-    const path = getter(item);
+export const findTabIndex = (pathname, menu) => {
+  if (!menu) {
+    return -1;
+  }
+  const specificityLevels = menu.map(item => {
+    const { route: path } = item;
     if (!path || !path.checkIsActive(pathname)) {
       return -1;
     }

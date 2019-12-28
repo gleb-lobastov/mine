@@ -10,6 +10,7 @@ import {
   pathsPropTypes,
   packagePropTypes,
   withPaths,
+  withNavigation,
 } from 'core/context/AppContext';
 import { authContextPropTypes, withAuth } from 'core/context/AuthContext';
 import { findTabIndex } from './utils';
@@ -46,21 +47,12 @@ class Navigation extends React.PureComponent {
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
-  findMainTabIndex = memoizeByLastArgs((pathname, packages, namedPaths) =>
-    findTabIndex(
-      pathname,
-      packages,
-      ({ packageName }) => namedPaths[packageName]?.entry,
-    ),
+  findMainTabIndex = memoizeByLastArgs((pathname, navigation) =>
+    findTabIndex(pathname, navigation),
   );
 
-  findSubTabIndex = memoizeByLastArgs(
-    (pathname, subMenuConfig, packageRoutes) =>
-      findTabIndex(
-        pathname,
-        subMenuConfig,
-        ({ routeName }) => packageRoutes?.[routeName],
-      ),
+  findSubTabIndex = memoizeByLastArgs((pathname, navigation) =>
+    findTabIndex(pathname, navigation),
   );
 
   handleChangeUrl = (nextPath, currentPath) => {
@@ -78,21 +70,17 @@ class Navigation extends React.PureComponent {
     const {
       location: { pathname },
       namedPaths,
+      navigation,
       packages,
       isAuthenticated,
       userAlias: authorizedUserAlias,
       classes,
     } = this.props;
 
-    const mainTabIndex = this.findMainTabIndex(pathname, packages, namedPaths);
-    const { routing: { menu: subMenuConfig } = {}, packageName } = packages[
-      mainTabIndex
-    ];
-    const packageRoutes = namedPaths[packageName];
+    const mainTabIndex = this.findMainTabIndex(pathname, navigation?.menu);
     const subTabIndex = this.findSubTabIndex(
       pathname,
-      subMenuConfig,
-      packageRoutes,
+      navigation.menu[mainTabIndex]?.menu,
     );
 
     const hasMainItemsToSelect =
@@ -106,6 +94,7 @@ class Navigation extends React.PureComponent {
               namedPaths={namedPaths}
               onChangeUrl={this.handleChangeUrl}
               packages={packages}
+              navigation={navigation}
               mainTabIndex={mainTabIndex}
             />
           )}
@@ -130,6 +119,7 @@ class Navigation extends React.PureComponent {
 export default compose(
   withRouter,
   withPaths,
+  withNavigation,
   withAuth,
   withStyles(styles),
 )(Navigation);

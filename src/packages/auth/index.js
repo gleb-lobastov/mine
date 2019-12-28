@@ -11,5 +11,12 @@ export default ({ mountPath }) => ({
         Component: LoginPage,
       },
     ],
+    routesDict: {
+      entry: {
+        routeName: 'entry',
+        path: mountPath,
+        Component: LoginPage,
+      },
+    },
   },
 });

@@ -24,6 +24,11 @@ export const withPaths = Component => props => (
     {({ packages }) => <Component {...props} {...collectPaths(packages)} />}
   </AppContext.Consumer>
 );
+export const withNavigation = Component => props => (
+  <AppContext.Consumer>
+    {({ navigation }) => <Component {...props} navigation={navigation} />}
+  </AppContext.Consumer>
+);
 
 export const routeConfigPropTypes = {
   routeName: PropTypes.string,
