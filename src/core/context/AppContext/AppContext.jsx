@@ -8,23 +8,12 @@ const AppContext = React.createContext({});
 
 export default AppContext;
 
-export const withConfig = Component => props => (
-  <AppContext.Consumer>
-    {config => <Component {...props} config={config} />}
-  </AppContext.Consumer>
-);
-
-export const withPackages = Component => props => (
-  <AppContext.Consumer>
-    {({ packages }) => <Component {...props} packages={packages} />}
-  </AppContext.Consumer>
-);
-
 export const withPaths = Component => props => (
   <AppContext.Consumer>
     {({ packages }) => <Component {...props} {...collectPaths(packages)} />}
   </AppContext.Consumer>
 );
+
 export const withNavigation = Component => props => (
   <AppContext.Consumer>
     {({ navigation }) => <Component {...props} navigation={navigation} />}

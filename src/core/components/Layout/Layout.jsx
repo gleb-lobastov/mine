@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import 'normalize.css';
 import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/core/styles';
-import { withPackages } from 'core/context/AppContext';
 import Navigation from './blocks/Navigation';
 import Footer from './blocks/Footer';
 import PendingRequestsIndicator from './blocks/PendingRequestsIndicator';
@@ -29,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function Layout({ packages, children }) {
+export default function Layout({ children }) {
   const classes = useStyles();
   return (
     <div className={classes.app}>
@@ -43,7 +42,7 @@ function Layout({ packages, children }) {
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;subset=cyrillic"
         />
       </Helmet>
-      <Navigation packages={packages} />
+      <Navigation />
       <div className={classes.content}>{children}</div>
       <Footer className={classes.footer} />
       <div className={classes.statusBar}>
@@ -53,12 +52,8 @@ function Layout({ packages, children }) {
   );
 }
 
-export default withPackages(Layout);
-
 Layout.propTypes = {
   children: PropTypes.node,
-  // eslint-disable-next-line react/forbid-prop-types
-  packages: PropTypes.array.isRequired, // here relevant only that it is array
 };
 
 Layout.defaultProps = {
