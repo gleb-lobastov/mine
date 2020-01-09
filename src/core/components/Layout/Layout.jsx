@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import 'normalize.css';
 import { Helmet } from 'react-helmet';
@@ -6,6 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Navigation from './blocks/Navigation';
 import Footer from './blocks/Footer';
 import PendingRequestsIndicator from './blocks/PendingRequestsIndicator';
+import { configureNavigationV2 } from 'configuration';
+import { usePackages } from 'modules/packages';
 
 const useStyles = makeStyles(theme => ({
   app: {
@@ -30,6 +32,10 @@ const useStyles = makeStyles(theme => ({
 
 export default function Layout({ children }) {
   const classes = useStyles();
+  const packages = usePackages();
+  const navigationConfig = useMemo(() => configureNavigationV2(packages), [
+    packages,
+  ]);
   return (
     <div className={classes.app}>
       <Helmet>
@@ -42,7 +48,7 @@ export default function Layout({ children }) {
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;subset=cyrillic"
         />
       </Helmet>
-      <Navigation />
+      <Navigation config={navigationConfig} />
       <div className={classes.content}>{children}</div>
       <Footer className={classes.footer} />
       <div className={classes.statusBar}>

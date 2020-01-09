@@ -45,12 +45,5 @@ export default mountPath => {
   return {
     routesDict: { entry, books, articles, quotes, blog },
     routes: [entry, books, articles, quotes, blog],
-    menu: [
-      { routeName: 'entry', caption: 'Об' },
-      { routeName: 'articles', caption: 'Статьи' },
-      { routeName: 'books', caption: 'Рецензии' },
-      // { routeName: 'quotes', caption: 'Цитаты' }, -- temporarily hidden
-      { routeName: 'blog', caption: 'Болг' },
-    ],
   };
 };

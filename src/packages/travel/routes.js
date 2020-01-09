@@ -47,6 +47,15 @@ export default mountPath => {
     ),
   };
 
+  const tripEdit = {
+    routeName: 'tripEdit',
+    path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId/edit`,
+    defaultRouteParams: { userAlias: 'my' },
+    Component: React.lazy(() =>
+      import(/* webpackChunkName: 'travel-Trips' */ './pages/TripStoryPage'),
+    ),
+  };
+
   const tripStory = {
     routeName: 'tripStory',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId`,
@@ -77,11 +86,5 @@ export default mountPath => {
       location,
     },
     routes: [entry, visits, rides, years, trips, tripStory, tripEdit, location],
-    menu: [
-      { routeName: entry.routeName, caption: 'Об' },
-      { routeName: visits.routeName, caption: 'По посещенным местам' },
-      { routeName: years.routeName, caption: 'По годам' },
-      { routeName: trips.routeName, caption: 'По поездкам' },
-    ],
   };
 };

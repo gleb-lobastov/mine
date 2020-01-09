@@ -7,11 +7,15 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
-import PlainLoader from 'modules/components/loaders/PlainLoader';
+import { Packages } from 'modules/packages';
+import { Main } from 'main';
+import { Code } from 'code';
+import { Literature } from 'literature';
+import { Travel } from 'travel';
+import { Auth } from 'auth';
 import AppContext, { configPropTypes } from '../../context/AppContext';
 import AuthContext from '../../context/AuthContext';
 import Layout from '../Layout';
-import Router from '../Router';
 
 const theme = createMuiTheme({
   palette: {
@@ -35,11 +39,13 @@ const Root = ({ store, config, appId }) => (
         <ThemeProvider theme={theme}>
           <AppContext.Provider value={config}>
             <AuthContext.Provider value={config}>
-              <Layout>
-                <React.Suspense fallback={<PlainLoader />}>
-                  <Router />
-                </React.Suspense>
-              </Layout>
+              <Packages Wrapper={Layout}>
+                <Auth mountPath="/auth" />
+                <Travel mountPath="/travel" />
+                <Literature mountPath="/liter" />
+                <Code mountPath="/code" />
+                <Main mountPath="/" />
+              </Packages>
             </AuthContext.Provider>
           </AppContext.Provider>
         </ThemeProvider>

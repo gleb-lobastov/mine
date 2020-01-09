@@ -1,7 +1,7 @@
-import React from 'react';
-import IconCode from '@material-ui/icons/Code';
+import React, { useMemo } from 'react';
+import { Package } from 'modules/packages';
 
-export default ({ mountPath }) => {
+export default function createPackage({ mountPath }) {
   const entry = {
     routeName: 'entry',
     path: mountPath,
@@ -22,10 +22,24 @@ export default ({ mountPath }) => {
   return {
     id: '9f7b3838-779c-452b-9da0-67db3fd4ece4',
     packageName: 'code',
-    title: { caption: 'Код', icon: IconCode },
     routing: {
       routesDict: { entry, articles },
       routes: [entry, articles],
     },
   };
-};
+}
+
+const {
+  routing: { routesDict: routes },
+} = createPackage({ mountPath: '' });
+
+export function Code({ mountPath, ...forwardingProps }) {
+  return (
+    <Package
+      name="code"
+      mountPath={mountPath}
+      routes={routes}
+      {...forwardingProps}
+    />
+  );
+}
