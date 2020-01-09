@@ -22,6 +22,7 @@ module.exports = {
       'error',
       { props: true, ignorePropertyModificationsFor: ['memo'] },
     ],
+    'no-use-before-define': ['error', { functions: false }],
     'import/extensions': [
       'error',
       'always',
