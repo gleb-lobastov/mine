@@ -16,6 +16,7 @@ import { Auth } from 'auth';
 import AppContext, { configPropTypes } from '../../context/AppContext';
 import AuthContext from '../../context/AuthContext';
 import Layout from '../Layout';
+import ErrorBoundary from '../ErrorBoundary';
 
 const theme = createMuiTheme({
   palette: {
@@ -33,25 +34,27 @@ const theme = createMuiTheme({
 });
 
 const Root = ({ store, config, appId }) => (
-  <Provider store={store} key={appId}>
-    <BrowserRouter basename={__ROUTES_BASENAME__}>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <ThemeProvider theme={theme}>
-          <AppContext.Provider value={config}>
-            <AuthContext.Provider value={config}>
-              <Packages Wrapper={Layout}>
-                <Auth mountPath="/auth" />
-                <Travel mountPath="/travel" />
-                <Literature mountPath="/liter" />
-                <Code mountPath="/code" />
-                <Main mountPath="/" />
-              </Packages>
-            </AuthContext.Provider>
-          </AppContext.Provider>
-        </ThemeProvider>
-      </MuiPickersUtilsProvider>
-    </BrowserRouter>
-  </Provider>
+  <ErrorBoundary>
+    <Provider store={store} key={appId}>
+      <BrowserRouter basename={__ROUTES_BASENAME__}>
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <ThemeProvider theme={theme}>
+            <AppContext.Provider value={config}>
+              <AuthContext.Provider value={config}>
+                <Packages Wrapper={Layout}>
+                  <Auth mountPath="/auth" />
+                  <Travel mountPath="/travel" />
+                  <Literature mountPath="/liter" />
+                  <Code mountPath="/code" />
+                  <Main mountPath="/" />
+                </Packages>
+              </AuthContext.Provider>
+            </AppContext.Provider>
+          </ThemeProvider>
+        </MuiPickersUtilsProvider>
+      </BrowserRouter>
+    </Provider>
+  </ErrorBoundary>
 );
 
 Root.propTypes = {
