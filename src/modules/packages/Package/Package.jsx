@@ -5,7 +5,7 @@ import { Switch, Route } from 'react-router';
 import PackageContext from '../PackagesContext';
 import { routeShape } from '../propTypes';
 
-function Package({ routes, mountPath, isActive }) {
+function Package({ name, routes, mountPath, isActive }) {
   const { registerPackage, unregisterPackage } = useContext(PackageContext);
   const routesRef = useRef(routes);
   useEffect(
@@ -15,10 +15,11 @@ function Package({ routes, mountPath, isActive }) {
         warning(false, `Package with routes ${routesStr} has no mountPath`);
         return undefined;
       }
-      registerPackage({ routes: routesRef.current, mountPath });
-      return () => unregisterPackage({ mountPath });
+      const packageKey = name || mountPath;
+      registerPackage(packageKey, { routes: routesRef.current, mountPath });
+      return () => unregisterPackage(packageKey);
     },
-    [mountPath],
+    [name, mountPath],
   );
 
   if (!isActive || !mountPath) {
@@ -49,11 +50,13 @@ Package.propTypes = {
   routes: PropTypes.objectOf(PropTypes.shape(routeShape)),
   mountPath: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
+  name: PropTypes.string,
 };
 
 Package.defaultProps = {
   routes: {},
   isActive: false,
+  name: undefined,
 };
 
 export default React.memo(Package);

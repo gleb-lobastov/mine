@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Navigation from './blocks/Navigation';
 import Footer from './blocks/Footer';
 import PendingRequestsIndicator from './blocks/PendingRequestsIndicator';
-import { configureNavigationV2 } from 'configuration';
+import { configureNavigation } from 'configuration';
 import { usePackages } from 'modules/packages';
 
 const useStyles = makeStyles(theme => ({
@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
 export default function Layout({ children }) {
   const classes = useStyles();
   const packages = usePackages();
-  const navigationConfig = useMemo(() => configureNavigationV2(packages), [
+  const navigationConfig = useMemo(() => configureNavigation(packages), [
     packages,
   ]);
   return (

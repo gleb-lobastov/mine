@@ -4,26 +4,26 @@ import warning from 'warning';
 export default () => {
   const [packages, setPackages] = useState({});
 
-  const registerPackage = useCallback(({ routes, mountPath }) => {
+  const registerPackage = useCallback((packageKey, packageData) => {
     setPackages(prevPackages => {
-      console.log('register package', mountPath);
+      console.log('register package', packageKey);
       warning(
-        !prevPackages[mountPath],
-        `Package with mountPath ${mountPath} is already registered`,
+        !prevPackages[packageKey],
+        `Package with key ${packageKey} is already registered`,
       );
       return {
         ...prevPackages,
-        [mountPath]: { routes, mountPath },
+        [packageKey]: packageData,
       };
     });
   }, []);
 
-  const unregisterPackage = useCallback(({ mountPath }) => {
-    console.log('unregister package', mountPath);
-    setPackages(({ [mountPath]: packageToUnregister, ...restPackages }) => {
+  const unregisterPackage = useCallback(packageKey => {
+    console.log('unregister package', packageKey);
+    setPackages(({ [packageKey]: packageToUnregister, ...restPackages }) => {
       warning(
         packageToUnregister,
-        `Can't unregister package: package with mountPath ${mountPath} is not registered`,
+        `Can't unregister package: package with key ${packageKey} is not registered`,
       );
       return restPackages;
     });

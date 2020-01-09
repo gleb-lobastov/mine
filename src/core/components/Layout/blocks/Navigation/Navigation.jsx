@@ -6,7 +6,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
-import { navigationPropTypes, withNavigation } from 'core/context/AppContext';
+import navigationShape from './navigationShape';
 import { authContextPropTypes, withAuth } from 'core/context/AuthContext';
 import { findTabIndex } from './utils';
 import MainTabs from './blocks/MainTabs';
@@ -35,7 +35,7 @@ class Navigation extends React.PureComponent {
     match: PropTypes.shape({
       params: PropTypes.objectOf(PropTypes.string),
     }).isRequired,
-    navigation: PropTypes.shape(navigationPropTypes).isRequired,
+    config: PropTypes.shape(navigationShape).isRequired,
     isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
     userAlias: authContextPropTypes.userAlias.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
@@ -78,7 +78,7 @@ class Navigation extends React.PureComponent {
   render() {
     const {
       location: { pathname },
-      navigation: { menu: mainMenu },
+      config: { menu: mainMenu },
       classes,
     } = this.props;
 
@@ -112,7 +112,6 @@ class Navigation extends React.PureComponent {
 
 export default compose(
   withRouter,
-  withNavigation,
   withAuth,
   withStyles(styles),
 )(Navigation);

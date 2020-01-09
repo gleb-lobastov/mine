@@ -1,13 +1,11 @@
 import '@babel/polyfill';
 import App from 'core/App';
-import { configureNavigation } from 'configuration';
 import definePackages from './packages/definePackages';
 
 const packages = definePackages();
 const app = App.create(
   {
     packages,
-    navigation: configureNavigation(packages),
   },
   module.hot && module.hot.data && module.hot.data.state,
 );
