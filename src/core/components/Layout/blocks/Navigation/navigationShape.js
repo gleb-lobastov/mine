@@ -5,12 +5,12 @@ import Path from 'modules/utilities/routing/Path';
 export default {
   menu: PropTypes.arrayOf(
     PropTypes.shape({
-      route: PropTypes.instanceOf(Path),
+      path: PropTypes.instanceOf(Path),
       caption: PropTypes.string,
       icon: PropTypes.func,
       menu: PropTypes.arrayOf(
         PropTypes.shape({
-          route: PropTypes.instanceOf(Path),
+          path: PropTypes.instanceOf(Path),
           caption: PropTypes.string,
         }),
       ),

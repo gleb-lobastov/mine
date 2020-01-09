@@ -1,26 +1,11 @@
-import React, { useEffect, useContext, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import warning from 'warning';
 import { Switch, Route } from 'react-router';
-import PackageContext from '../PackagesContext';
 import { routeShape } from '../propTypes';
+import usePackageLifecycleEffect from './usePackageLifecycleEffect';
 
 function Package({ name, routes, mountPath, isActive }) {
-  const { registerPackage, unregisterPackage } = useContext(PackageContext);
-  const routesRef = useRef(routes);
-  useEffect(
-    () => {
-      if (!mountPath) {
-        const routesStr = JSON.stringify(Object.keys(routesRef.current || {}));
-        warning(false, `Package with routes ${routesStr} has no mountPath`);
-        return undefined;
-      }
-      const packageKey = name || mountPath;
-      registerPackage(packageKey, { routes: routesRef.current, mountPath });
-      return () => unregisterPackage(packageKey);
-    },
-    [name, mountPath],
-  );
+  usePackageLifecycleEffect({ name, routes, mountPath });
 
   if (!isActive || !mountPath) {
     return null;

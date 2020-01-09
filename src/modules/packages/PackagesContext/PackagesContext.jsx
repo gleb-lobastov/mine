@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
+import packagesToPaths from './packagesToPaths';
 
 const PackagesContext = React.createContext({});
 
@@ -9,7 +10,8 @@ export const usePackages = () => {
   return packages;
 };
 
-export const withPackages = Component => props => {
-  const { packages } = useContext(PackagesContext);
-  return <Component {...props} packages={packages} />;
+export const usePaths = () => {
+  const packages = usePackages();
+  const paths = useMemo(() => packagesToPaths(packages), [packages]);
+  return paths;
 };

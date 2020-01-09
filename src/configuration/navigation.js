@@ -2,19 +2,14 @@ import IconCreate from '@material-ui/icons/Create';
 import IconCode from '@material-ui/icons/Code';
 import IconHome from '@material-ui/icons/Home';
 import IconPublic from '@material-ui/icons/Public';
-import Path from 'modules/utilities/routing/Path';
-
-const createPath = ({ path, defaultRouteParams, ...meta }, mountPath = '/') =>
-  Path.create(`${mountPath}${path}`, meta, defaultRouteParams);
 
 export default (packages = {}) => {
-  console.log('nav', Object.keys(packages));
   const { main, travel, literature, code } = packages;
   const navigationConfig = { menu: [] };
 
   if (main) {
     navigationConfig.menu.push({
-      route: createPath(main.routes.entry, main.mountPath),
+      path: main.routes.entry.path,
       caption: 'Главная',
       icon: IconHome,
     });
@@ -22,24 +17,24 @@ export default (packages = {}) => {
 
   if (travel) {
     navigationConfig.menu.push({
-      route: createPath(travel.routes.entry, travel.mountPath),
+      path: travel.routes.entry.path,
       caption: 'Путешествия',
       icon: IconPublic,
       menu: [
         {
-          route: createPath(travel.routes.entry, travel.mountPath),
+          path: travel.routes.entry.path,
           caption: 'Об',
         },
         {
-          route: createPath(travel.routes.visits, travel.mountPath),
+          path: travel.routes.visits.path,
           caption: 'По посещенным местам',
         },
         {
-          route: createPath(travel.routes.years, travel.mountPath),
+          path: travel.routes.years.path,
           caption: 'По годам',
         },
         {
-          route: createPath(travel.routes.trips, travel.mountPath),
+          path: travel.routes.trips.path,
           caption: 'По поездкам',
         },
       ],
@@ -48,25 +43,25 @@ export default (packages = {}) => {
 
   if (literature) {
     navigationConfig.menu.push({
-      route: createPath(literature.routes.entry, literature.mountPath),
+      path: literature.routes.entry.path,
       caption: 'Литература',
       icon: IconCreate,
       menu: [
         {
-          route: createPath(literature.routes.entry, literature.mountPath),
+          path: literature.routes.entry.path,
           caption: 'Об',
         },
         {
-          route: createPath(literature.routes.articles, literature.mountPath),
+          path: literature.routes.articles.path,
           caption: 'Статьи',
         },
         {
-          route: createPath(literature.routes.books, literature.mountPath),
+          path: literature.routes.books.path,
           caption: 'Рецензии',
         },
-        // { route: literature.routes.quotes, caption: 'Цитаты' }, -- temporarily hidden
+        // { path: literature.routes.quotes.path, caption: 'Цитаты' }, -- temporarily hidden
         {
-          route: createPath(literature.routes.blog, literature.mountPath),
+          path: literature.routes.blog.path,
           caption: 'Болг',
         },
       ],
@@ -75,7 +70,7 @@ export default (packages = {}) => {
 
   if (code) {
     navigationConfig.menu.push({
-      route: createPath(code.routes.entry, code.mountPath),
+      path: code.routes.entry.path,
       caption: 'Код',
       icon: IconCode,
     });

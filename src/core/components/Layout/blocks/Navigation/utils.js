@@ -4,7 +4,7 @@ export const findTabIndex = (pathname, menu) => {
     return -1;
   }
   const specificityLevels = menu.map(item => {
-    const { route: path } = item;
+    const { path } = item;
     if (!path || !path.checkIsActive(pathname)) {
       return -1;
     }
