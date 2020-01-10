@@ -9,14 +9,12 @@ export default function createPackage({ mountPath }) {
     routing: {
       routes: [
         {
-          routeName: 'entry',
           path: mountPath,
           Component: MainDashboard,
         },
       ],
       routesDict: {
         entry: {
-          routeName: 'entry',
           path: mountPath,
           Component: MainDashboard,
         },

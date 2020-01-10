@@ -1,26 +1,12 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import reactComponentPropType from 'modules/customPropTypes/reactComponentPropType';
-import collectPaths, { pathsPropTypes, pathPropType } from './collectPaths';
-
-const AppContext = React.createContext({});
-
-export default AppContext;
-
-export const withPaths = Component => props => (
-  <AppContext.Consumer>
-    {({ packages }) => <Component {...props} {...collectPaths(packages)} />}
-  </AppContext.Consumer>
-);
 
 export const routeConfigPropTypes = {
-  routeName: PropTypes.string,
   path: PropTypes.string,
   Component: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 };
 
 export const routesMenuConfigType = {
-  routeName: PropTypes.string,
   caption: PropTypes.string,
 };
 
@@ -40,5 +26,3 @@ export const packagePropTypes = {
 export const configPropTypes = {
   packages: PropTypes.arrayOf(PropTypes.shape(packagePropTypes)).isRequired,
 };
-
-export { pathsPropTypes, pathPropType };

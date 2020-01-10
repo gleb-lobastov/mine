@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import {
-  pathsPropTypes,
-  packagePropTypes,
-} from 'core/context/AppContext/AppContext';
 
 class SubTabs extends React.PureComponent {
   static propTypes = {
@@ -35,8 +31,8 @@ class SubTabs extends React.PureComponent {
           variant="scrollable"
           scrollButtons="auto"
         >
-          {menu.map(({ routeName, caption }) => (
-            <Tab key={routeName} label={caption} />
+          {menu.map(({ path, caption }) => (
+            <Tab key={path.toString()} label={caption} />
           ))}
         </Tabs>
       </div>

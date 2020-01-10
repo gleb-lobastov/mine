@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { toNumber } from 'modules/utilities/types/numbers';
 import { selectProvisionStatus, selectDict } from 'core/connection';
 import withProvision from 'core/connection/withProvision';
-import { withPaths } from 'core/context/AppContext';
+import { usePaths } from 'modules/packages';
 import locationPropTypes from 'travel/models/locations/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
@@ -30,7 +30,7 @@ const styles = {
 const renderOrderedAndCountedVisitsByYear = ({
   visitsList,
   ridesDict,
-  yearly,
+  yearlyPath,
 }) => {
   const visitsCountByYear = visitsList
     .map(({ arrivalRideId }) => {
@@ -51,7 +51,7 @@ const renderOrderedAndCountedVisitsByYear = ({
     .sort(([keyA], [keyB]) => keyA - keyB)
     .map(([key, value]) => (
       <>
-        <Link key={key} to={yearly.toUrl({ year: String(key) })}>
+        <Link key={key} to={yearlyPath.toUrl({ year: String(key) })}>
           {value > 1 ? `${key} x${value}` : key}
         </Link>{' '}
       </>
@@ -63,10 +63,11 @@ function LocationPage({
   location: { locationName, lat, lon } = {},
   visits: { data: visitsList = [] } = {},
   ridesDict,
-  namedPaths: {
-    travel: { yearly },
-  },
 }) {
+  const {
+    travel: { years: yearlyPath },
+  } = usePaths();
+
   const noDataNode = <div>Заметки о поездке не найдены</div>;
   if (!visitsList.length) {
     return noDataNode;
@@ -77,7 +78,7 @@ function LocationPage({
   const orderedAndCountedVisitsByYear = renderOrderedAndCountedVisitsByYear({
     visitsList,
     ridesDict,
-    yearly,
+    yearlyPath,
   });
   return (
     <div className={classes.container}>
@@ -160,6 +161,5 @@ const mapStateToRequirements = (
 
 export default compose(
   withStyles(styles),
-  withPaths,
   withProvision(mapStateToRequirements, mapStateToProps),
 )(LocationPage);

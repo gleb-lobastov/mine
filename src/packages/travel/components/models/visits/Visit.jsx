@@ -8,7 +8,7 @@ import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStatio
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DomainIcon from '@material-ui/icons/Domain';
 import EditIcon from '@material-ui/icons/Edit';
-import { pathPropType } from 'core/context/AppContext';
+import Path from 'modules/utilities/routing/Path';
 import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
 import visitPropTypes from 'travel/models/visits/propTypes';
 
@@ -83,7 +83,7 @@ Visit.propTypes = {
   isEditable: PropTypes.bool,
   onVisitUpdate: PropTypes.func.isRequired,
   visit: PropTypes.shape(visitPropTypes),
-  locationPath: pathPropType.isRequired,
+  locationPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 Visit.defaultProps = {

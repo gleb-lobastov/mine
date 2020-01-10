@@ -6,7 +6,7 @@ import flow from 'lodash/fp/flow';
 import fpReverse from 'lodash/fp/reverse';
 import PropTypes from 'prop-types';
 import { selectDict, selectIsReady } from 'core/connection';
-import { withPaths } from 'core/context/AppContext';
+import { usePaths } from 'modules/packages';
 import WelcomeScreen from 'travel/components/common/WelcomeScreen';
 import withTripsData, {
   DATA_CHUNKS,
@@ -39,10 +39,11 @@ const YearCountryCityPage = ({
   isVisitsComplete,
   isRidesComplete,
   userVisits: { data: visitsList = [] } = {},
-  namedPaths: {
-    travel: { locationPath },
-  },
 }) => {
+  const {
+    travel: { location: locationPath },
+  } = usePaths();
+
   if (isVisitsComplete && isRidesComplete && !visitsList.length) {
     return <WelcomeScreen />;
   }
@@ -103,7 +104,6 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
-  withPaths,
   withTripsData({
     domain: 'yearCountryCity',
     mapStateToProps,

@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import MUILink from '@material-ui/core/Link';
 import IconHome from '@material-ui/icons/Home';
-import { withPaths } from 'core/context/AppContext';
+import { usePaths } from 'modules/packages';
 import Article from './blocks/Article';
 
 const Link = props => <MUILink {...props} component={RouterLink} />;
@@ -20,13 +20,14 @@ function Articles({
     params: { slug, tag },
   },
 }) {
+  const { literature: literaturePaths, code: codePaths } = usePaths();
   const hasSummaryTag = !tag || tag === 'summary';
   const hasCodeTag = !tag || tag === 'code';
-  const selfRoutes = routes.literature || routes.code;
+  const selfPaths = literaturePaths || codePaths;
   return (
     <>
       {!routes.literature && (
-        <Link to={selfRoutes.entry.toUrl()} className={classes.iconHome}>
+        <Link to={selfPaths.entry.toUrl()} className={classes.iconHome}>
           <IconHome />
         </Link>
       )}
@@ -40,7 +41,7 @@ function Articles({
             <ListItem
               button={true}
               component={Link}
-              to={selfRoutes.articles.toUrl({ slug: 'chaldini' })}
+              to={selfPaths.articles.toUrl({ slug: 'chaldini' })}
             >
               <ListItemText primary="&laquo;Психология убеждения&raquo; Чалдини" />
             </ListItem>
@@ -49,7 +50,7 @@ function Articles({
             <ListItem
               button={true}
               component={Link}
-              to={selfRoutes.articles.toUrl({ slug: 'blackSwan' })}
+              to={selfPaths.articles.toUrl({ slug: 'blackSwan' })}
             >
               <ListItemText primary="&laquo;Черный лебедь&raquo; Талеба" />
             </ListItem>
@@ -58,7 +59,7 @@ function Articles({
             <ListItem
               button={true}
               component={Link}
-              to={selfRoutes.articles.toUrl({ slug: 'importThis' })}
+              to={selfPaths.articles.toUrl({ slug: 'importThis' })}
             >
               <ListItemText primary="19 принципов достижения дзена при написании компьютерных программ" />
             </ListItem>
@@ -88,6 +89,5 @@ const styles = {
 
 export default compose(
   withRouter,
-  withPaths,
   withStyles(styles),
 )(Articles);

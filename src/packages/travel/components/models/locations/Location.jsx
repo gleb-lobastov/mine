@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import { pathPropType } from 'core/context/AppContext';
+import Path from 'modules/utilities/routing/Path';
 import reactComponentPropType from 'modules/customPropTypes/reactComponentPropType';
 import locationPropTypes from 'travel/models/locations/propTypes';
 
@@ -43,7 +43,7 @@ Location.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   location: PropTypes.shape(locationPropTypes),
   Icon: reactComponentPropType,
-  locationPath: pathPropType,
+  locationPath: PropTypes.instanceOf(Path),
 };
 
 Location.defaultProps = {

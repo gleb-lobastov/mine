@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Route, Redirect, Switch } from 'react-router-dom';
-import compose from 'lodash/fp/compose';
 import Path from 'modules/utilities/routing/Path';
-import { withPaths } from 'core/context/AppContext';
+import { usePaths } from 'modules/packages';
 import { useAuthContext } from 'core/context/AuthContext';
 
 const WelcomeScreen = ({
@@ -11,8 +10,11 @@ const WelcomeScreen = ({
   match: {
     params: { userAlias: visitedUserAlias },
   },
-  namedPaths: { travel: { trips: tripsPath } = {} } = {},
 }) => {
+  const {
+    travel: { trips: tripsPath },
+  } = usePaths();
+
   const { userAlias: authenticatedUserAlias } = useAuthContext();
   if (visitedUserAlias !== authenticatedUserAlias) {
     return (
@@ -56,7 +58,4 @@ WelcomeScreen.defaultProps = {
   children: null,
 };
 
-export default compose(
-  withRouter,
-  withPaths,
-)(WelcomeScreen);
+export default withRouter(WelcomeScreen);

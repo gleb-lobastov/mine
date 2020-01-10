@@ -1,14 +1,20 @@
 import React from 'react';
 import Markdown from 'modules/components/Markdown';
-import { withPaths } from 'core/context/AppContext';
+import { usePaths } from 'modules/packages';
 
-export default withPaths(({ namedPaths }) => (
-  <Markdown
-    source={`
-Развлекаюсь написанием [рецензий](${namedPaths.literature.books.toUrl()})
+export default function LiteratureDashboard() {
+  const {
+    literature: { books: booksPath, articles: articlesPath, blog: blogPath },
+  } = usePaths();
+
+  return (
+    <Markdown
+      source={`
+Развлекаюсь написанием [рецензий](${booksPath.toUrl()})
 на прочитанные книги при помощи [твиттера](http://twitter.com/lobastov).
-Что-то побольше могу оформить [статьей](${namedPaths.literature.articles.toUrl()}),
-что-то поменьше отправить в [блог](${namedPaths.literature.blog.toUrl()})
+Что-то побольше могу оформить [статьей](${articlesPath.toUrl()}),
+что-то поменьше отправить в [блог](${blogPath.toUrl()})
   `}
-  />
-));
+    />
+  );
+}

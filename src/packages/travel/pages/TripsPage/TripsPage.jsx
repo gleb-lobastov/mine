@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import compose from 'lodash/fp/compose';
 import Button from '@material-ui/core/Button';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
+import { usePaths } from 'modules/packages';
 import { selectDict, selectProvisionStatus } from 'core/connection';
-import { withPaths, pathsPropTypes } from 'core/context/AppContext';
 import { useAuthContext } from 'core/context/AuthContext';
 import withTripsData, {
   DATA_CHUNKS,
@@ -29,7 +29,7 @@ const memoizedGroupAndSortVisitsByTrips = memoizeByLastArgs(
   groupAndSortVisitsByTrips,
 );
 
-const TripsPage = ({
+function TripsPage({
   match: {
     params: { userAlias: visitedUserAlias },
   },
@@ -38,15 +38,18 @@ const TripsPage = ({
   userVisits: { data: visitsList = [] } = {},
   countriesDict,
   locationsDict,
-  namedPaths,
   ridesDict,
   request,
   invalidateRequest,
-}) => {
+}) {
   const {
     isAuthenticated,
     userAlias: authenticatedUserAlias,
   } = useAuthContext();
+
+  const {
+    travel: { tripStory: tripStoryPath, location: locationPath },
+  } = usePaths();
 
   const isEditable =
     isAuthenticated && authenticatedUserAlias === visitedUserAlias;
@@ -135,15 +138,15 @@ const TripsPage = ({
               tripIndex={tripIndex}
               tripVisitsList={visitsGroupedByTrips[tripId]}
               isEditable={isEditable}
-              storyPath={namedPaths.travel.tripStory}
-              locationPath={namedPaths.travel.locationPath}
+              tripStoryPath={tripStoryPath}
+              locationPath={locationPath}
             />
           </div>
         );
       })}
     </>
   );
-};
+}
 
 TripsPage.propTypes = {
   match: PropTypes.shape({
@@ -151,7 +154,6 @@ TripsPage.propTypes = {
       userAlias: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
-  namedPaths: pathsPropTypes.namedPaths.isRequired,
   request: PropTypes.func.isRequired,
   isTripsComplete: PropTypes.bool.isRequired,
   trips: PropTypes.shape({
@@ -174,7 +176,6 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
-  withPaths,
   withTripsData({
     domain: 'tripsPage',
     mapStateToProps,

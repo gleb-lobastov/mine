@@ -3,7 +3,6 @@ import { Package } from 'modules/packages';
 
 export default function createPackage({ mountPath }) {
   const entry = {
-    routeName: 'entry',
     path: mountPath,
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'code-Dashboard' */ './pages/CodeDashboard'),
@@ -11,7 +10,6 @@ export default function createPackage({ mountPath }) {
   };
 
   const articles = {
-    routeName: 'articles',
     defaultRouteParams: { tag: 'code' },
     path: `${mountPath}/articles/:tag(code)/:slug?`,
     Component: React.lazy(() =>

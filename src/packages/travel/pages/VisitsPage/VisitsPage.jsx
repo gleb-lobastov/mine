@@ -5,7 +5,7 @@ import groupBy from 'lodash/groupBy';
 import uniq from 'lodash/uniq';
 import property from 'lodash/property';
 import compose from 'lodash/fp/compose';
-import { withPaths } from 'core/context/AppContext';
+import { usePaths } from 'modules/packages';
 import withTripsData, {
   DATA_CHUNKS,
 } from 'travel/components/common/withTripsData/withTripsData';
@@ -39,10 +39,11 @@ const VisitsPage = ({
   countriesDict,
   isVisitsComplete,
   userVisits: { data: visitsList = [] } = {},
-  namedPaths: {
-    travel: { locationPath },
-  },
 }) => {
+  const {
+    travel: { location: locationPath },
+  } = usePaths();
+
   if (isVisitsComplete && !visitsList.length) {
     return <WelcomeScreen />;
   }
@@ -159,7 +160,6 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
-  withPaths,
   withTripsData({
     domain: 'visitsPage',
     mapStateToProps,

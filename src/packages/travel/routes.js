@@ -4,7 +4,6 @@ const USER_ALIAS_TYPE = '[a-z0-9-]+';
 
 export default mountPath => {
   const entry = {
-    routeName: 'entry',
     path: mountPath,
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'travel-Dashboard' */ './pages/Dashboard'),
@@ -12,7 +11,6 @@ export default mountPath => {
   };
 
   const visits = {
-    routeName: 'countries',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/visits`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
@@ -21,7 +19,6 @@ export default mountPath => {
   };
 
   const years = {
-    routeName: 'yearly',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/yearly/:year?`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
@@ -30,7 +27,6 @@ export default mountPath => {
   };
 
   const rides = {
-    routeName: 'rides',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/rides`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
@@ -39,7 +35,6 @@ export default mountPath => {
   };
 
   const trips = {
-    routeName: 'trips',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/trips`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
@@ -48,7 +43,6 @@ export default mountPath => {
   };
 
   const tripEdit = {
-    routeName: 'tripEdit',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId/edit`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
@@ -57,7 +51,6 @@ export default mountPath => {
   };
 
   const tripStory = {
-    routeName: 'tripStory',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>
@@ -66,7 +59,6 @@ export default mountPath => {
   };
 
   const location = {
-    routeName: 'locationPath',
     path: `${mountPath}/:userAlias(${USER_ALIAS_TYPE})/visits/location/:strLocationId`,
     defaultRouteParams: { userAlias: 'my' },
     Component: React.lazy(() =>

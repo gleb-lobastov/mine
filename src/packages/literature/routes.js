@@ -2,7 +2,6 @@ import React from 'react';
 
 export default mountPath => {
   const entry = {
-    routeName: 'entry',
     path: mountPath,
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'literature-Dashboard' */ './pages/Dashboard'),
@@ -10,7 +9,6 @@ export default mountPath => {
   };
 
   const articles = {
-    routeName: 'articles',
     path: `${mountPath}/articles/:tag(summary|code)?/:slug?`,
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'literature-Articles' */ './pages/Articles'),
@@ -18,7 +16,6 @@ export default mountPath => {
   };
 
   const books = {
-    routeName: 'books',
     path: `${mountPath}/volume`,
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'literature-Books' */ './pages/Books'),
@@ -27,7 +24,6 @@ export default mountPath => {
   // articles.preload = article;
 
   const quotes = {
-    routeName: 'quotes',
     path: `${mountPath}/quotes`,
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'literature-Blog' */ './pages/Quotes'),
@@ -35,7 +31,6 @@ export default mountPath => {
   };
 
   const blog = {
-    routeName: 'blog',
     path: `${mountPath}/bolg`,
     Component: React.lazy(() =>
       import(/* webpackChunkName: 'literature-Blog' */ './pages/Blog'),

@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
-import {
-  pathsPropTypes,
-  packagePropTypes,
-} from 'core/context/AppContext/AppContext';
 
 class MainTabs extends React.PureComponent {
   static propTypes = {
@@ -27,13 +23,13 @@ class MainTabs extends React.PureComponent {
     return <span className={classes.label}>{label}</span>;
   }
 
-  renderTab = ({ id, caption, icon: IconComponent }) => {
+  renderTab = ({ path, caption, icon: IconComponent }) => {
     if (!caption && !IconComponent) {
       return null;
     }
     return (
       <Tab
-        key={id}
+        key={path.toString()}
         label={this.renderLabel(caption)}
         icon={<IconComponent />}
       />

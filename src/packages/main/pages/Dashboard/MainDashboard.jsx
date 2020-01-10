@@ -6,7 +6,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
-import { withPaths } from 'core/context/AppContext';
+import { usePaths } from 'modules/packages';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -46,14 +46,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function MainDashboard({
-  namedPaths: {
+export default function MainDashboard() {
+  const classes = useStyles();
+  const {
     code: { entry: codePath },
     literature: { articles: articlesPath, books: booksPath },
     travel: { entry: travelPath },
-  },
-}) {
-  const classes = useStyles();
+  } = usePaths();
+
   return (
     <div className={classes.container}>
       <div>
@@ -89,5 +89,3 @@ function MainDashboard({
     </div>
   );
 }
-
-export default withPaths(MainDashboard);

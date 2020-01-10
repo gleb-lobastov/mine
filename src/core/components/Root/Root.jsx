@@ -13,10 +13,10 @@ import { Code } from 'code';
 import { Literature } from 'literature';
 import { Travel } from 'travel';
 import { Auth } from 'auth';
-import AppContext, { configPropTypes } from '../../context/AppContext';
 import AuthContext from '../../context/AuthContext';
 import Layout from '../Layout';
 import ErrorBoundary from '../ErrorBoundary';
+import { configPropTypes } from './propTypes';
 
 const theme = createMuiTheme({
   palette: {
@@ -39,17 +39,15 @@ const Root = ({ store, config, appId }) => (
       <BrowserRouter basename={__ROUTES_BASENAME__}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <ThemeProvider theme={theme}>
-            <AppContext.Provider value={config}>
-              <AuthContext.Provider value={config}>
-                <Packages Wrapper={Layout}>
-                  <Auth mountPath="/auth" />
-                  <Travel mountPath="/travel" />
-                  <Literature mountPath="/liter" />
-                  <Code mountPath="/code" />
-                  <Main mountPath="/" />
-                </Packages>
-              </AuthContext.Provider>
-            </AppContext.Provider>
+            <AuthContext.Provider value={config}>
+              <Packages Wrapper={Layout}>
+                <Auth mountPath="/auth" />
+                <Travel mountPath="/travel" />
+                <Literature mountPath="/liter" />
+                <Code mountPath="/code" />
+                <Main mountPath="/" />
+              </Packages>
+            </AuthContext.Provider>
           </ThemeProvider>
         </MuiPickersUtilsProvider>
       </BrowserRouter>
