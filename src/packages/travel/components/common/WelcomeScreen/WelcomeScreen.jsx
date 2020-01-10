@@ -49,9 +49,6 @@ WelcomeScreen.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({ userAlias: PropTypes.string }),
   }).isRequired,
-  namedPaths: PropTypes.shape({
-    travel: PropTypes.shape({ trips: PropTypes.instanceOf(Path) }),
-  }).isRequired,
 };
 
 WelcomeScreen.defaultProps = {

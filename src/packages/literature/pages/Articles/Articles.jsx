@@ -15,7 +15,6 @@ const Link = props => <MUILink {...props} component={RouterLink} />;
 
 function Articles({
   classes,
-  namedPaths: routes,
   match: {
     params: { slug, tag },
   },
@@ -26,7 +25,7 @@ function Articles({
   const selfPaths = literaturePaths || codePaths;
   return (
     <>
-      {!routes.literature && (
+      {!literaturePaths && (
         <Link to={selfPaths.entry.toUrl()} className={classes.iconHome}>
           <IconHome />
         </Link>
