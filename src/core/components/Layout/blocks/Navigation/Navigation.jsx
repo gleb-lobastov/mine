@@ -86,7 +86,7 @@ class Navigation extends React.PureComponent {
     const subMenu = mainMenu[mainTabIndex]?.menu;
     const subTabIndex = this.findSubTabIndex(pathname, subMenu);
 
-    const mainMenuNode = mainMenu.length >= 1 && (
+    const mainMenuNode = mainMenu.length > 1 && (
       <MainTabs
         menu={mainMenu}
         onChangeUrl={this.handleChangeUrl}
