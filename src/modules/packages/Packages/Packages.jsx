@@ -1,22 +1,32 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router';
+import isString from 'lodash/isString';
 import PlainLoader from 'modules/components/loaders/PlainLoader';
 import PackagesContext from '../PackagesContext';
 import usePackagesContextValue from './usePackagesContextValue';
 
 export default function Packages({ children, Loader, Wrapper }) {
   const packagesContextValue = usePackagesContextValue();
+  const { packages } = packagesContextValue;
 
   const transformedChildrenNode = React.Children.map(children, child => {
-    const { mountPath } = child.props;
+    const { mountPath, alias } = child.props;
+    const packageKey = alias || mountPath;
+    const isRegistered = Boolean(packages[packageKey]);
+
+    if (!isString(mountPath)) {
+      return null;
+    }
+
     return (
       <React.Suspense fallback={<Loader />}>
         <Route key={mountPath} path={mountPath}>
           {routerProps =>
             React.cloneElement(child, {
               ...child.props,
-              isActive: routerProps.match !== null,
+              isActive: isRegistered && routerProps.match !== null,
+              packageKey,
             })
           }
         </Route>

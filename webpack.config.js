@@ -78,6 +78,7 @@ module.exports = {
       modules: path.resolve(__dirname, 'src/modules/'),
       core: path.resolve(__dirname, 'src/core/'),
       configuration: path.resolve(__dirname, 'src/configuration/'),
+      packages: path.resolve(__dirname, 'src/packages/'),
 
       // packages
       main: path.resolve(__dirname, 'src/packages/main/'),

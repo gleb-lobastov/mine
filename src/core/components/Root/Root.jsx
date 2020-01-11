@@ -8,11 +8,11 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import { Packages } from 'modules/packages';
-import { Main } from 'main';
-import { Code } from 'code';
-import { Literature } from 'literature';
-import { Travel } from 'travel';
-import { Auth } from 'auth';
+import Main from 'packages/main';
+import Code from 'packages/code';
+import Literature from 'packages/literature';
+import Travel from 'packages/travel';
+import Auth from 'packages/auth';
 import AuthContext from '../../context/AuthContext';
 import Layout from '../Layout';
 import ErrorBoundary from '../ErrorBoundary';
@@ -33,19 +33,32 @@ const theme = createMuiTheme({
   },
 });
 
-const Root = ({ store, config, appId }) => (
+const Root = ({
+  store,
+  config: {
+    packages: { auth, travel, literature, code, main },
+  },
+  appId,
+}) => (
   <ErrorBoundary>
     <Provider store={store} key={appId}>
       <BrowserRouter basename={__ROUTES_BASENAME__}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <ThemeProvider theme={theme}>
-            <AuthContext.Provider value={config}>
+            <AuthContext.Provider>
               <Packages Wrapper={Layout}>
-                <Auth mountPath="/auth" />
-                <Travel mountPath="/travel" />
-                <Literature mountPath="/liter" />
-                <Code mountPath="/code" />
-                <Main mountPath="/" />
+                {auth && <Auth mountPath={auth.mountPath} alias="auth" />}
+                {travel && (
+                  <Travel mountPath={travel.mountPath} alias="travel" />
+                )}
+                {literature && (
+                  <Literature
+                    mountPath={literature.mountPath}
+                    alias="literature"
+                  />
+                )}
+                {code && <Code mountPath={code.mountPath} alias="code" />}
+                {main && <Main mountPath={main.mountPath} alias="main" />}
               </Packages>
             </AuthContext.Provider>
           </ThemeProvider>

@@ -1,12 +1,9 @@
 import '@babel/polyfill';
 import App from 'core/App';
-import definePackages from './packages/definePackages';
+import definePackages from 'packages/definePackages';
 
-const packages = definePackages();
 const app = App.create(
-  {
-    packages,
-  },
+  { packages: definePackages() },
   module.hot && module.hot.data && module.hot.data.state,
 );
 app.render();

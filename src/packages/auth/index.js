@@ -2,38 +2,13 @@ import React from 'react';
 import { Package } from 'modules/packages';
 import LoginPage from './pages/LoginPage';
 
-export default function createPackage({ mountPath }) {
-  return {
-    id: '9f7b3838-779c-452b-9da0-67db3fd4ece4',
-    packageName: 'auth',
-    routing: {
-      routes: [
-        {
-          path: mountPath,
-          Component: LoginPage,
-        },
-      ],
-      routesDict: {
-        entry: {
-          path: mountPath,
-          Component: LoginPage,
-        },
-      },
-    },
-  };
-}
+const routes = {
+  entry: {
+    path: '/',
+    Component: LoginPage,
+  },
+};
 
-const {
-  routing: { routesDict: routes },
-} = createPackage({ mountPath: '' });
-
-export function Auth({ mountPath, ...forwardingProps }) {
-  return (
-    <Package
-      name="auth"
-      mountPath={mountPath}
-      routes={routes}
-      {...forwardingProps}
-    />
-  );
+export default function Auth(forwardingProps) {
+  return <Package name="auth" routes={routes} {...forwardingProps} />;
 }

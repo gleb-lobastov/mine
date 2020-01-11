@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router';
+import isString from 'lodash/isString';
 import { routeShape } from '../propTypes';
 import usePackageLifecycleEffect from './usePackageLifecycleEffect';
 
-function Package({ name, routes, mountPath, isActive }) {
-  usePackageLifecycleEffect({ name, routes, mountPath });
+function Package({ isActive, mountPath, packageKey, routes }) {
+  usePackageLifecycleEffect({ packageKey, routes, mountPath });
 
-  if (!isActive || !mountPath) {
+  if (!isActive || !isString(mountPath)) {
     return null;
   }
 
@@ -32,16 +33,15 @@ function Package({ name, routes, mountPath, isActive }) {
 }
 
 Package.propTypes = {
-  routes: PropTypes.objectOf(PropTypes.shape(routeShape)),
-  mountPath: PropTypes.string.isRequired,
   isActive: PropTypes.bool,
-  name: PropTypes.string,
+  mountPath: PropTypes.string.isRequired,
+  packageKey: PropTypes.string.isRequired,
+  routes: PropTypes.objectOf(PropTypes.shape(routeShape)),
 };
 
 Package.defaultProps = {
-  routes: {},
   isActive: false,
-  name: undefined,
+  routes: {},
 };
 
 export default React.memo(Package);
