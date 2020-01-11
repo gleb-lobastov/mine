@@ -17,7 +17,7 @@ const engine = createRequestEngine({
     authPlugin,
     adapterPlugin,
     endpointPlugin,
-    __IS_DEV_MODE__ && hardCachePlugin,
+    // __IS_DEV_MODE__ && hardCachePlugin,
     // __IS_DEV_MODE__ && loggerPlugin,
     responseAsJsonPlugin,
   ].filter(Boolean),

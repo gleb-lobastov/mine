@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
 import Path from 'modules/utilities/routing/Path';
+import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Visit from 'travel/components/models/visits/Visit';
 import Ride from './Ride';
+import DragHandler from './DragHandler';
 
 const styles = {
   alwaysVisible: {},
@@ -43,9 +45,17 @@ const VisitWithRides = ({
   visit: { visitId, arrivalRideId, departureRideId } = {},
   ridesDict,
   classes,
+  prevVisitId,
+  nextVisitId,
+  tripVisitsList,
   isEditable,
+  isSortable,
+  isSorting,
   isArrivalRideMatch,
   isDepartureRideMatch,
+  onRideUpdate: handleRideUpdate,
+  onVisitUpdate: handleVisitUpdate,
+  originLocation,
   locationPath,
 }) => {
   const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
@@ -54,29 +64,45 @@ const VisitWithRides = ({
   return (
     <div className={classes.container}>
       <Ride
+        availableVisits={tripVisitsList}
+        defaultDepartureVisitId={prevVisitId}
+        defaultArrivalVisitId={visitId}
         visitId={visitId}
+        isEditable={isEditable}
         className={cls(classes.ride, {
-          [classes.alwaysVisible]: !isDepartureRideMatch,
+          [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
           [classes.warning]: shouldWarnForArrivalRide,
         })}
         ride={ridesDict[arrivalRideId]}
-        showDetails={shouldWarnForArrivalRide}
+        showDetails={isSorting || shouldWarnForArrivalRide}
+        onRideUpdate={handleRideUpdate}
+        originLocation={originLocation}
       />
       <Visit
         classes={{ editIcon: classes.visibleOnlyOnHover }}
+        isEditable={isEditable}
+        onVisitUpdate={handleVisitUpdate}
         visit={visit}
         locationPath={locationPath}
       />
-      {!isDepartureRideMatch && (
+      {(!isDepartureRideMatch || isSorting) && (
         <Ride
           className={cls(classes.ride, {
-            [classes.alwaysVisible]: !isDepartureRideMatch,
+            [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
             [classes.warning]: shouldWarnForDepartureRide,
           })}
           ride={ridesDict[departureRideId]}
-          showDetails={shouldWarnForDepartureRide}
+          availableVisits={tripVisitsList}
+          defaultDepartureVisitId={visitId}
+          defaultArrivalVisitId={nextVisitId}
+          isEditable={isEditable && !isDepartureRideMatch}
+          showDetails={isSorting || shouldWarnForDepartureRide}
+          onRideUpdate={handleRideUpdate}
+          originLocation={originLocation}
         />
       )}
+      {isSortable &&
+        !isSorting && <DragHandler className={classes.visibleOnlyOnHover} />}
     </div>
   );
 };
@@ -86,7 +112,15 @@ VisitWithRides.propTypes = {
   isArrivalRideMatch: PropTypes.bool,
   isDepartureRideMatch: PropTypes.bool,
   isEditable: PropTypes.bool,
+  isSortable: PropTypes.bool,
+  isSorting: PropTypes.bool,
+  nextVisitId: PropTypes.number,
+  onRideUpdate: PropTypes.func.isRequired,
+  onVisitUpdate: PropTypes.func.isRequired,
+  originLocation: PropTypes.shape(locationsPropTypes).isRequired,
+  prevVisitId: PropTypes.number,
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
+  tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   visit: PropTypes.shape(visitPropTypes).isRequired,
   locationPath: PropTypes.instanceOf(Path).isRequired,
 };
@@ -95,6 +129,10 @@ VisitWithRides.defaultProps = {
   isArrivalRideMatch: true,
   isDepartureRideMatch: true,
   isEditable: false,
+  isSortable: false,
+  isSorting: false,
+  nextVisitId: null,
+  prevVisitId: null,
   tripVisitsList: [],
 };
 

@@ -24,6 +24,9 @@ import arrivalDepartureDateTimeToString from 'modules/utilities/dateTime/arrival
 import { VEHICLE_TYPES, RIDE_TYPES } from 'travel/models/rides/consts';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
+import visitPropTypes from 'travel/models/visits/propTypes';
+import initializeRide from 'travel/models/rides/initialize';
+import RideEditDialog from 'travel/components/models/rides/RideEditDialog';
 
 const resolveRideIconComponent = vehicleType => {
   switch (vehicleType) {
@@ -87,19 +90,48 @@ export const styles = {
 };
 
 const Ride = ({
+  availableVisits,
+  originLocation,
   classes,
   className,
+  defaultArrivalVisitId,
+  defaultDepartureVisitId,
+  isEditable,
+  onRideUpdate: handleRideUpdate,
+  ride,
   ride: { rideId, vehicleType, rideType, arrivalDateTime, departureDateTime },
   showDetails,
 }) => {
+  const rideInitialState = rideId
+    ? ride
+    : initializeRide({
+        defaultDepartureVisitId,
+        defaultArrivalVisitId,
+      });
+
   const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
+
+  const iconNode = <Icon className={classes.icon} />;
+  const rideNode = isEditable ? (
+    <RideEditDialog
+      className={classes.editDialogTrigger}
+      initialState={rideInitialState}
+      availableVisits={availableVisits}
+      onSubmit={updatedRide => handleRideUpdate({ ...ride, ...updatedRide })}
+      originLocation={originLocation}
+    >
+      {iconNode}
+    </RideEditDialog>
+  ) : (
+    iconNode
+  );
 
   return (
     <div className={cls(className, classes.container)}>
       {rideType === RIDE_TYPES.HITCH_HIKING && (
         <HichHikingIcon className={classes.icon} />
       )}
-      <Icon className={classes.icon} />
+      {rideNode}
       {Boolean(rideId && showDetails) && (
         <span className={classes.details}>
           {arrivalDepartureDateTimeToString(departureDateTime, arrivalDateTime)}
@@ -110,14 +142,24 @@ const Ride = ({
 };
 
 Ride.propTypes = {
+  availableVisits: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   className: PropTypes.string,
+  defaultArrivalVisitId: PropTypes.number,
+  defaultDepartureVisitId: PropTypes.number,
+  isEditable: PropTypes.bool,
+  onRideUpdate: PropTypes.func.isRequired,
+  originLocation: PropTypes.shape(locationsPropTypes).isRequired,
   ride: PropTypes.shape(ridePropTypes),
   showDetails: PropTypes.bool,
 };
 
 Ride.defaultProps = {
+  availableVisits: [],
   className: undefined,
+  defaultArrivalVisitId: undefined,
+  defaultDepartureVisitId: undefined,
+  isEditable: false,
   ride: {},
   showDetails: false,
 };

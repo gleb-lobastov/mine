@@ -2,14 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DomainIcon from '@material-ui/icons/Domain';
-import EditIcon from '@material-ui/icons/Edit';
 import Path from 'modules/utilities/routing/Path';
-import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
 import visitPropTypes from 'travel/models/visits/propTypes';
 
 const resolveVisitIconComponent = visitType => {
@@ -26,13 +23,7 @@ const resolveVisitIconComponent = visitType => {
   }
 };
 
-const Visit = ({
-  visit,
-  onVisitUpdate: handleVisitUpdate,
-  classes,
-  isEditable,
-  locationPath,
-}) => {
+const Visit = ({ visit, classes, locationPath }) => {
   if (!visit) {
     return 'Не указано';
   }
@@ -44,23 +35,6 @@ const Visit = ({
       <Link to={locationPath.toUrl({ strLocationId: String(locationId) })}>
         {locationName}
       </Link>
-      {isEditable && (
-        <VisitEditDialog
-          initialState={visit}
-          onSubmit={updatedVisit =>
-            handleVisitUpdate({ ...visit, ...updatedVisit })
-          }
-        >
-          <IconButton
-            data-sort-handler="disabled"
-            size="small"
-            variant="outlined"
-            color="primary"
-          >
-            <EditIcon className={classes.editIcon} />
-          </IconButton>
-        </VisitEditDialog>
-      )}
     </div>
   );
 };
@@ -80,14 +54,11 @@ const styles = {
 
 Visit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  isEditable: PropTypes.bool,
-  onVisitUpdate: PropTypes.func.isRequired,
   visit: PropTypes.shape(visitPropTypes),
   locationPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 Visit.defaultProps = {
-  isEditable: false,
   visit: {},
 };
 

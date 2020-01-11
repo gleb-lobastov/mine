@@ -18,13 +18,18 @@ import { groupAndSortVisitsByTrips } from 'travel/models/trips/utils';
 import tripPropTypes from 'travel/models/trips/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
 import Trip from './blocks/Trip';
-import { submitTrip } from './actionCreators';
+import {
+  submitRide,
+  submitOrderInTrip,
+  submitTrip,
+  submitVisit,
+} from './actionCreators';
 
 const memoizedGroupAndSortVisitsByTrips = memoizeByLastArgs(
   groupAndSortVisitsByTrips,
 );
 
-function TripsPage({
+function TripEditPage({
   match: {
     params: { userAlias: visitedUserAlias, strTripId },
   },
@@ -43,20 +48,27 @@ function TripsPage({
   } = useAuthContext();
 
   const {
-    travel: {
-      tripStory: tripStoryPath,
-      location: locationPath,
-      tripEdit: tripEditPath,
-    },
+    travel: { tripStory: tripStoryPath, location: locationPath },
   } = usePaths();
 
-  const specifiedTripId = parseInt(strTripId, 10);
-  const actualTripsList = specifiedTripId
-    ? tripsList.filter(({ tripId }) => tripId === specifiedTripId)
-    : tripsList;
+  const handleVisitsOrderUpdate = useCallback(
+    (event, { oldIndex, newIndex, collection }) => {
+      if (oldIndex !== newIndex) {
+        request(submitOrderInTrip({ oldIndex, newIndex, collection }));
+      }
+    },
+    [request],
+  );
 
-  const isEditable =
-    isAuthenticated && authenticatedUserAlias === visitedUserAlias;
+  const handleRideUpdate = useCallback(
+    ride =>
+      request(
+        submitRide({
+          ride,
+        }),
+      ),
+    [request],
+  );
 
   const handleTripUpdate = useCallback(
     trip =>
@@ -68,63 +80,51 @@ function TripsPage({
     [request],
   );
 
-  // changes of node, when used in WelcomeScreen lead to recreation of
-  // Message Component, so loosing all internal state of TripEditDialog
-  // actually it became hidden, after isOpen flag reset
-  const addTripNode = useMemo(
-    () => (
-      <TripEditDialog
-        initialState={initializeTrip()}
-        onSubmit={handleTripUpdate}
-      >
-        <Button size="small" variant="outlined" color="primary">
-          Добавить поездку
-        </Button>
-      </TripEditDialog>
-    ),
-    [handleTripUpdate],
+  const handleVisitUpdate = useCallback(
+    (visit, { indexInCollection, collection, tripId } = {}) =>
+      request(
+        submitVisit({
+          visit,
+          tripId,
+          indexInCollection,
+          collection,
+        }),
+      ).then(() => invalidateRequest({ domain: 'tripsPage.visits' })),
+    [request],
   );
-  if (isTripsComplete && !actualTripsList.length) {
-    return (
-      <WelcomeScreen shouldShowLinkToTrips={false}>{addTripNode}</WelcomeScreen>
-    );
+
+  const specifiedTripId = parseInt(strTripId, 10);
+  const tripToEdit =
+    specifiedTripId &&
+    tripsList.find(({ tripId }) => tripId === specifiedTripId);
+
+  const isEditable =
+    isAuthenticated && authenticatedUserAlias === visitedUserAlias;
+
+  if (!isTripsComplete || !tripToEdit || !isEditable) {
+    return null;
   }
 
   const visitsGroupedByTrips = memoizedGroupAndSortVisitsByTrips(visitsList);
+  const { tripId } = tripToEdit;
   return (
-    <>
-      {isEditable && addTripNode}
-      {actualTripsList.map((trip, tripIndex) => {
-        const { tripId } = trip;
-        return (
-          <div key={tripId}>
-            <Trip
-              locationsDict={locationsDict}
-              countriesDict={countriesDict}
-              onTripUpdate={handleTripUpdate}
-              ridesDict={ridesDict}
-              trip={trip}
-              tripIndex={tripIndex}
-              tripVisitsList={visitsGroupedByTrips[tripId]}
-              isEditable={isEditable}
-              tripStoryUrl={tripStoryPath.toUrl({
-                strTripId: String(tripId),
-                userAlias: visitedUserAlias,
-              })}
-              locationPath={locationPath}
-              tripEditUrl={tripEditPath.toUrl({
-                strTripId: String(tripId),
-                userAlias: visitedUserAlias,
-              })}
-            />
-          </div>
-        );
-      })}
-    </>
+    <Trip
+      locationsDict={locationsDict}
+      countriesDict={countriesDict}
+      onRideUpdate={handleRideUpdate}
+      onTripUpdate={handleTripUpdate}
+      onVisitUpdate={handleVisitUpdate}
+      onVisitsOrderUpdate={handleVisitsOrderUpdate}
+      ridesDict={ridesDict}
+      trip={tripToEdit}
+      tripVisitsList={visitsGroupedByTrips[tripId]}
+      tripStoryPath={tripStoryPath}
+      locationPath={locationPath}
+    />
   );
 }
 
-TripsPage.propTypes = {
+TripEditPage.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       userAlias: PropTypes.string.isRequired,
@@ -163,4 +163,4 @@ export default compose(
       [DATA_CHUNKS.USER.RIDES]: true,
     },
   }),
-)(TripsPage);
+)(TripEditPage);
