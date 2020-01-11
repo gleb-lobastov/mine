@@ -9,7 +9,7 @@ import { usePaths } from 'modules/packages';
 export default function CodeDashboard() {
   const {
     code: { articles: codeArticlesPath },
-    literature: { articles: articlesPath = codeArticlesPath },
+    literature: { articles: articlesPath = codeArticlesPath } = {},
   } = usePaths();
 
   return (
