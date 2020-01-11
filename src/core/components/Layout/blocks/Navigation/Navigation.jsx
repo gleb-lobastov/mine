@@ -86,25 +86,29 @@ class Navigation extends React.PureComponent {
     const subMenu = mainMenu[mainTabIndex]?.menu;
     const subTabIndex = this.findSubTabIndex(pathname, subMenu);
 
+    const mainMenuNode = mainMenu.length >= 1 && (
+      <MainTabs
+        menu={mainMenu}
+        onChangeUrl={this.handleChangeUrl}
+        tabIndex={mainTabIndex}
+      />
+    );
+
+    const subMenuNode = subMenu && (
+      <SubTabs
+        menu={subMenu}
+        onChangeUrl={this.handleChangeUrl}
+        tabIndex={subTabIndex}
+      />
+    );
+
     return (
       <div>
         <AppBar position="static" classes={{ root: classes.root }}>
-          {mainMenu.length >= 1 && (
-            <MainTabs
-              menu={mainMenu}
-              onChangeUrl={this.handleChangeUrl}
-              tabIndex={mainTabIndex}
-            />
-          )}
+          {mainMenuNode || subMenuNode}
           {this.renderAuthInfo()}
         </AppBar>
-        {subMenu && (
-          <SubTabs
-            menu={subMenu}
-            onChangeUrl={this.handleChangeUrl}
-            tabIndex={subTabIndex}
-          />
-        )}
+        {mainMenuNode && subMenuNode}
       </div>
     );
   }
