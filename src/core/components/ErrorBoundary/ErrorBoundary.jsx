@@ -15,7 +15,13 @@ export default class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    warning(false, JSON.stringify({ error, errorInfo }));
+    warning(
+      false,
+      `catch error in component three: ${
+        error.message
+      }. Check window.lastReactError for details`,
+    );
+    window.lastReactError = { error, errorInfo };
   }
 
   render() {
