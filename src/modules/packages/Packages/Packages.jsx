@@ -11,6 +11,10 @@ export default function Packages({ children, Loader, Wrapper }) {
   const { packages } = packagesContextValue;
 
   const transformedChildrenNode = React.Children.map(children, child => {
+    if (!child) {
+      return null;
+    }
+
     const { mountPath, alias } = child.props;
     const packageKey = alias || mountPath;
     const isRegistered = Boolean(packages[packageKey]);
