@@ -3,11 +3,15 @@ export const toClient = ({
   origin_location_id: rawOriginLocationId,
   trip_name: rawTripName,
   trip_type: rawTripType,
+  visits: rawVisits,
+  rides: rawRides,
 }) => ({
   originLocationId: rawOriginLocationId,
   tripId: rawTripId,
   tripName: rawTripName,
   tripType: rawTripType,
+  visits: rawVisits,
+  rides: rawRides,
 });
 
 export const toServer = (requestBody, { isProvision } = {}) => {

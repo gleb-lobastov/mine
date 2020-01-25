@@ -8,6 +8,6 @@ export default [
   travelModels.locations.model,
   travelModels.geonames.model,
   travelModels.rides.model,
-  travelModels.trips.model,
   travelModels.visits.model,
+  travelModels.trips.model,
 ];
