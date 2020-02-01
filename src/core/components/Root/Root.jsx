@@ -14,6 +14,8 @@ import Literature from 'packages/literature';
 import Travel from 'packages/travel';
 import Auth from 'packages/auth';
 import AuthContext from '../../context/AuthContext';
+import FilterContextProvider from '../../context/QueryFilterContext';
+import SidebarContextProvider from '../../context/SidebarContext';
 import Layout from '../Layout';
 import ErrorBoundary from '../ErrorBoundary';
 import { configPropTypes } from './propTypes';
@@ -45,22 +47,26 @@ const Root = ({
       <BrowserRouter basename={__ROUTES_BASENAME__}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <ThemeProvider theme={theme}>
-            <AuthContext.Provider>
-              <Packages Wrapper={Layout}>
-                {auth && <Auth mountPath={auth.mountPath} alias="auth" />}
-                {travel && (
-                  <Travel mountPath={travel.mountPath} alias="travel" />
-                )}
-                {literature && (
-                  <Literature
-                    mountPath={literature.mountPath}
-                    alias="literature"
-                  />
-                )}
-                {code && <Code mountPath={code.mountPath} alias="code" />}
-                {main && <Main mountPath={main.mountPath} alias="main" />}
-              </Packages>
-            </AuthContext.Provider>
+            <FilterContextProvider>
+              <SidebarContextProvider>
+                <AuthContext.Provider>
+                  <Packages Wrapper={Layout}>
+                    {auth && <Auth mountPath={auth.mountPath} alias="auth" />}
+                    {travel && (
+                      <Travel mountPath={travel.mountPath} alias="travel" />
+                    )}
+                    {literature && (
+                      <Literature
+                        mountPath={literature.mountPath}
+                        alias="literature"
+                      />
+                    )}
+                    {code && <Code mountPath={code.mountPath} alias="code" />}
+                    {main && <Main mountPath={main.mountPath} alias="main" />}
+                  </Packages>
+                </AuthContext.Provider>
+              </SidebarContextProvider>
+            </FilterContextProvider>
           </ThemeProvider>
         </MuiPickersUtilsProvider>
       </BrowserRouter>

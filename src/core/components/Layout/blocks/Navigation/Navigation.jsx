@@ -6,13 +6,14 @@ import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
-import navigationShape from './navigationShape';
 import { authContextPropTypes, withAuth } from 'core/context/AuthContext';
+import { withFilterContext } from 'core/context/QueryFilterContext';
+import navigationShape from './navigationShape';
 import { findTabIndex } from './utils';
 import MainTabs from './blocks/MainTabs';
 import SubTabs from './blocks/SubTabs';
 
-const styles = {
+const styles = () => ({
   root: {
     flexGrow: 1,
     flexDirection: 'row',
@@ -22,7 +23,7 @@ const styles = {
     textAlign: 'right',
     margin: '0 12px',
   },
-};
+});
 
 class Navigation extends React.PureComponent {
   static propTypes = {
@@ -35,10 +36,15 @@ class Navigation extends React.PureComponent {
     match: PropTypes.shape({
       params: PropTypes.objectOf(PropTypes.string),
     }).isRequired,
+    children: PropTypes.node,
     config: PropTypes.shape(navigationShape).isRequired,
     isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
     userAlias: authContextPropTypes.userAlias.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
+  };
+
+  static defaultProps = {
+    children: PropTypes.node
   };
 
   findMainTabIndex = memoizeByLastArgs(findTabIndex);
@@ -80,6 +86,7 @@ class Navigation extends React.PureComponent {
       location: { pathname },
       config: { menu: mainMenu },
       classes,
+      children,
     } = this.props;
 
     const mainTabIndex = this.findMainTabIndex(pathname, mainMenu);
@@ -105,6 +112,7 @@ class Navigation extends React.PureComponent {
     return (
       <div>
         <AppBar position="static" classes={{ root: classes.root }}>
+          {children}
           {mainMenuNode || subMenuNode}
           {this.renderAuthInfo()}
         </AppBar>
@@ -117,5 +125,6 @@ class Navigation extends React.PureComponent {
 export default compose(
   withRouter,
   withAuth,
+  withFilterContext,
   withStyles(styles),
 )(Navigation);
