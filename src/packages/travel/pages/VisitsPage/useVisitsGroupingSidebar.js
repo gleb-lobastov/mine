@@ -3,15 +3,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { useSidebar } from 'core/context/SidebarContext';
-
-export const KEY_GROUP_VISITS_BY = 'group';
-export const GROUP_VISITS_BY = {
-  LOCATIONS: 'loc',
-  COUNTRIES: 'c',
-  YEARS: 'yr',
-  YEARS_COUNTRIES: 'yr_c',
-  COUNTRIES_YEARS: 'c_yr',
-};
+import { GROUP_VISITS_BY, KEY_GROUP_VISITS_BY } from './consts';
 
 export default function(setQueryFilter, groupBy) {
   useSidebar(
@@ -70,6 +62,18 @@ export default function(setQueryFilter, groupBy) {
           selected={groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS}
         >
           <ListItemText primary="По странам и годам" />
+        </ListItem>
+        <ListItem
+          button={true}
+          key={GROUP_VISITS_BY.TRIPS}
+          onClick={() =>
+            setQueryFilter({
+              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.TRIPS,
+            })
+          }
+          selected={groupBy === GROUP_VISITS_BY.TRIPS}
+        >
+          <ListItemText primary="По поездкам" />
         </ListItem>
       </List>
     ),

@@ -1,21 +1,14 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { usePaths } from 'modules/packages';
-import { useTripsStats, useCountries } from 'travel/dataSource';
+import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import Year from './blocks/Year';
 import Country from './blocks/Country';
 import Location from './blocks/Location';
-import useVisitsGroupingSidebar, {
-  KEY_GROUP_VISITS_BY,
-  GROUP_VISITS_BY,
-} from './useVisitsGroupingSidebar';
-import {
-  compareLocations,
-  createCountriesComparator,
-  createYearsComparator,
-  createDatesAndCountriesComparator,
-  createCountriesAndDatesComparator,
-} from './sorting';
+import Trip from './blocks/Trip';
+import { KEY_GROUP_VISITS_BY, GROUP_VISITS_BY } from './consts';
+import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
+import switchSortingFn from './switchSortingFn';
 
 export default function VisitsPage({
   match: {
@@ -30,14 +23,15 @@ export default function VisitsPage({
   } = useQueryFilter();
   useVisitsGroupingSidebar(setQueryFilter, groupBy);
 
+  const provision = useTripsStats({ userAlias });
   const {
     isPending,
     isError,
     visitsIds,
     visitsDict,
-    locationsDict,
+    tripsDict,
     countriesDict,
-  } = useTripsStats({ userAlias });
+  } = provision;
 
   const {
     travel: { visits: visitsPaths },
@@ -50,7 +44,7 @@ export default function VisitsPage({
     return <div>...Loading</div>;
   }
 
-  const sortingFn = switchSortingFn(groupBy, countriesDict);
+  const sortingFn = switchSortingFn(groupBy, tripsDict, countriesDict);
   const visitsList = visitsIds
     .map(visitId => visitsDict[visitId])
     .filter(Boolean)
@@ -58,45 +52,35 @@ export default function VisitsPage({
 
   const nodes = visitsList.reduce((nodesMemo, visit, index) => {
     const prevVisit = index > 0 ? visitsList[index - 1] : {};
-    const { countryId: prevCountryId, locationId: prevLocationId } = prevVisit;
-    const { countryId, locationId } = visit;
+    const {
+      countryId: prevCountryId,
+      locationId: prevLocationId,
+      tripId: prevTripId,
+    } = prevVisit;
+    const { countryId, locationId, tripId } = visit;
 
     const prevYear = resolveArrivalYear(prevVisit);
     const year = resolveArrivalYear(visit);
 
+    const isGroupedByTrip = groupBy === GROUP_VISITS_BY.TRIPS;
     const isGroupedByYear = checkIsGroupedByYear(groupBy);
     const isGroupedByCountry = checkIsGroupedByCountry(groupBy);
 
-    const isYearChanged = isGroupedByYear && prevYear !== year;
-    const isCountryChanged = isGroupedByCountry && prevCountryId !== countryId;
-    const isLocationChanged = prevLocationId !== locationId;
+    const changes = {
+      isTripChanged: isGroupedByTrip && prevTripId !== tripId,
+      isYearChanged: isGroupedByYear && prevYear !== year,
+      isCountryChanged: isGroupedByCountry && prevCountryId !== countryId,
+      isLocationChanged: prevLocationId !== locationId,
+    };
 
-    const countryNode = isCountryChanged ? (
-      <Country
-        key={isGroupedByYear ? `c${countryId}_y${year}` : `c${countryId}`}
-        country={countriesDict[visit.countryId]}
-      />
-    ) : null;
-
-    const yearNode =
-      isYearChanged ||
-      (isCountryChanged && groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS) ? (
-        <Year
-          key={isGroupedByCountry ? `y${year}_c${countryId}` : `y${year}`}
-          year={year}
-        />
-      ) : null;
-
-    const locationNode =
-      isYearChanged || isCountryChanged || isLocationChanged ? (
-        <Location
-          key={isGroupedByYear ? `l${locationId}_y${year}` : `l${locationId}`}
-          location={locationsDict[locationId]}
-        />
-      ) : null;
+    const tripNode = renderTrip({ visit, changes, provision, groupBy });
+    const countryNode = renderCountry({ visit, changes, provision, groupBy });
+    const yearNode = renderYear({ visit, changes, provision, groupBy, year });
+    const locationNode = renderLocation({ visit, changes, provision, groupBy });
 
     const nodesToPush = switchNodesOrder(
       groupBy,
+      tripNode,
       countryNode,
       yearNode,
       locationNode,
@@ -111,6 +95,81 @@ export default function VisitsPage({
   return <div>{nodes}</div>;
 }
 
+function renderTrip({
+  visit: { visitId, tripId },
+  changes: { isTripChanged },
+  provision: { tripsDict },
+}) {
+  if (!isTripChanged) {
+    return null;
+  }
+  return <Trip key={`t${tripId}_v${visitId}`} trip={tripsDict[tripId]} />;
+}
+
+function renderCountry({
+  visit: { visitId, countryId },
+  changes: { isTripChanged, isCountryChanged },
+  provision: { countriesDict },
+  groupBy,
+}) {
+  const isGroupedByTrip = groupBy === GROUP_VISITS_BY.TRIPS;
+  const isGroupedByYearCountries = groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES;
+  const shouldRender = isCountryChanged || (isGroupedByTrip && isTripChanged);
+  if (!shouldRender) {
+    return null;
+  }
+  return (
+    <Country
+      key={`c${countryId}_v${visitId}`}
+      country={countriesDict[countryId]}
+      isSubgroup={isGroupedByTrip || isGroupedByYearCountries}
+    />
+  );
+}
+function renderYear({
+  visit: { visitId },
+  changes: { isYearChanged, isCountryChanged },
+  groupBy,
+  year,
+}) {
+  const isGroupedByCountriesYear = groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS;
+  const shouldRender =
+    isYearChanged || (isGroupedByCountriesYear && isCountryChanged);
+  if (!shouldRender) {
+    return null;
+  }
+  return (
+    <Year
+      key={`y${year}_v${visitId}`}
+      year={year}
+      isSubgroup={isGroupedByCountriesYear}
+    />
+  );
+}
+
+function renderLocation({
+  visit: { visitId, locationId },
+  changes: { isYearChanged, isCountryChanged, isLocationChanged },
+  provision: { locationsDict },
+  groupBy,
+}) {
+  const isGroupedByTrip = groupBy === GROUP_VISITS_BY.TRIPS;
+  const shouldRender =
+    isGroupedByTrip || // every visit in trip should be shown
+    isYearChanged || // in other grouping show only unique locations
+    isCountryChanged ||
+    isLocationChanged;
+  if (!shouldRender) {
+    return null;
+  }
+  return (
+    <Location
+      key={`l${locationId}_v${visitId}`}
+      location={locationsDict[locationId]}
+    />
+  );
+}
+
 function resolveArrivalYear({ arrivalDateTime }) {
   if (!arrivalDateTime) {
     return null;
@@ -118,24 +177,16 @@ function resolveArrivalYear({ arrivalDateTime }) {
   return arrivalDateTime.getFullYear(arrivalDateTime);
 }
 
-function switchSortingFn(groupBy, countriesDict) {
+function switchNodesOrder(
+  groupBy,
+  tripNode,
+  countryNode,
+  yearNode,
+  locationNode,
+) {
   switch (groupBy) {
-    case GROUP_VISITS_BY.COUNTRIES:
-      return createCountriesComparator(countriesDict, compareLocations);
-    case GROUP_VISITS_BY.YEARS:
-      return createYearsComparator(compareLocations);
-    case GROUP_VISITS_BY.YEARS_COUNTRIES:
-      return createDatesAndCountriesComparator(countriesDict);
-    case GROUP_VISITS_BY.COUNTRIES_YEARS:
-      return createCountriesAndDatesComparator(countriesDict);
-    case GROUP_VISITS_BY.LOCATIONS:
-    default:
-      return compareLocations;
-  }
-}
-
-function switchNodesOrder(groupBy, countryNode, yearNode, locationNode) {
-  switch (groupBy) {
+    case GROUP_VISITS_BY.TRIPS:
+      return [tripNode, countryNode, locationNode];
     case GROUP_VISITS_BY.COUNTRIES:
       return [countryNode, locationNode];
     case GROUP_VISITS_BY.YEARS:
@@ -161,6 +212,7 @@ function checkIsGroupedByYear(groupBy) {
 
 function checkIsGroupedByCountry(groupBy) {
   return (
+    groupBy === GROUP_VISITS_BY.TRIPS ||
     groupBy === GROUP_VISITS_BY.COUNTRIES ||
     groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS ||
     groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES

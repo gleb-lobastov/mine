@@ -5,11 +5,15 @@ export const toClient = ({
   trip_type: rawTripType,
   visits: rawVisits,
   rides: rawRides,
+  arrival_date_time: rawArrivalDateTime,
+  departure_date_time: rawDepartureDateTime,
 }) => ({
   originLocationId: rawOriginLocationId,
   tripId: rawTripId,
   tripName: rawTripName,
   tripType: rawTripType,
+  arrivalDateTime: new Date(rawArrivalDateTime),
+  departureDateTime: new Date(rawDepartureDateTime),
   visits: rawVisits,
   rides: rawRides,
 });
