@@ -8,7 +8,7 @@ import useStyles from './useStyles';
 export default function MobileSidebarContainer({
   children,
   isSidebarOpen,
-  onToggleSidebar,
+  onCloseSidebar,
 }) {
   const theme = useTheme();
   const classes = useStyles();
@@ -24,7 +24,7 @@ export default function MobileSidebarContainer({
           variant="temporary"
           anchor={theme.direction === 'rtl' ? 'right' : 'left'}
           open={isSidebarOpen}
-          onClose={onToggleSidebar}
+          onClose={onCloseSidebar}
           classes={{ paper: classes.drawerPaper }}
           ModalProps={{ keepMounted: true }}
         >
@@ -38,7 +38,7 @@ export default function MobileSidebarContainer({
 MobileSidebarContainer.propTypes = {
   children: PropTypes.node,
   isSidebarOpen: PropTypes.bool.isRequired,
-  onToggleSidebar: PropTypes.func.isRequired,
+  onCloseSidebar: PropTypes.func.isRequired,
 };
 
 MobileSidebarContainer.defaultProps = {

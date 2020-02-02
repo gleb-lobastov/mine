@@ -56,12 +56,11 @@ export default function Layout({ children }) {
   ]);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  const handleToggleMobileSidebar = () => {
-    setMobileSidebarOpen(prevIsMobileSidebarOpen => !prevIsMobileSidebarOpen);
-  };
+  const handleOpenMobileSidebar = () => setMobileSidebarOpen(true);
+  const handleCloseMobileSidebar = () => setMobileSidebarOpen(false);
 
   const sidebarContentNode = useSidebarContent({
-    closeSidebar: handleToggleMobileSidebar,
+    closeSidebar: handleCloseMobileSidebar,
   });
 
   return (
@@ -88,7 +87,7 @@ export default function Layout({ children }) {
           color="inherit"
           aria-label="open sidebar"
           edge="start"
-          onClick={handleToggleMobileSidebar}
+          onClick={handleOpenMobileSidebar}
           className={classes.menuButton}
         >
           <MenuIcon />
@@ -108,7 +107,7 @@ export default function Layout({ children }) {
       </div>
       <MobileSidebarContainer
         isSidebarOpen={isMobileSidebarOpen}
-        onToggleSidebar={handleToggleMobileSidebar}
+        onCloseSidebar={handleCloseMobileSidebar}
       >
         {sidebarContentNode}
       </MobileSidebarContainer>
