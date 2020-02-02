@@ -1,5 +1,10 @@
-import { connect as originalConnect } from 'react-redux';
-import createReactProvider from '../provisionReact';
+import {
+  connect as originalConnect,
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+import observeIsChanged from '../observeIsChanged';
+import { createProvider, createUseProvisionHook } from '../provisionReact';
 import {
   selectError,
   selectIsError,
@@ -76,7 +81,7 @@ const createReactReduxProvider = ({
         null, // dispatch method should be accessible through props
         ...forwardedParams,
       ),
-      createReactProvider({
+      createProvider({
         requirementsComparator: compareRequirements,
         // for provider internal use
         request: ({ dispatch, requirements }) =>
@@ -96,11 +101,54 @@ const createReactReduxProvider = ({
     )(WrappedComponent);
 };
 
+function connectUseProvisionHook({
+  requirementsComparator,
+  provisionSelector: selectProvision,
+}) {
+  const useProvision = createUseProvisionHook({
+    requirementsComparator,
+    requestHandler: ({ dispatch, requirements }) =>
+      dispatch(createRequestAction(requirements)),
+  });
+  return function useConnectedProvision(requirements) {
+    const dispatch = useDispatch();
+    const provision = useSelector(state =>
+      selectProvision(state, requirements),
+    );
+    return useProvision({
+      provision,
+      requirements,
+      requestParams: { dispatch },
+    });
+  };
+}
+
+const checkIsInvalidated = (prevProvision, nextProvision) => {
+  if (!prevProvision) {
+    return false;
+  }
+  const { isValid: prevIsValid = {} } = prevProvision || {};
+  const { isValid: nextIsValid = {} } = nextProvision || {};
+  return prevIsValid && !nextIsValid;
+};
+
+export const checkIsRequirementsChanged = (
+  { requirements: prevRequirements, provision: prevProvision },
+  { requirements: nextRequirements, provision: nextProvision },
+) =>
+  checkIsInvalidated(prevProvision, nextProvision) ||
+  observeIsChanged(prevRequirements, nextRequirements);
+
 export default ({
   provisionSelector,
+  provisionSelectorSimple,
   stateSelector,
   requirementsComparator,
 }) => ({
+  useProvision: connectUseProvisionHook({
+    requirementsComparator: checkIsRequirementsChanged,
+    provisionSelector: provisionSelectorSimple,
+  }),
   provide: createReactReduxProvider({
     provisionSelector,
     requirementsComparator,

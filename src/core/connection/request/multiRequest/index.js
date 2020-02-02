@@ -4,7 +4,7 @@ import mergeProvisionState, { mapValues } from '../mergeProvisionState';
 const DEFAULT_DOMAIN = '__unassigned';
 
 const checkIsNoop = requirements => {
-  const { isChanged, condition } = requirements;
+  const { isChanged, condition = true } = requirements;
   return Boolean(!condition || !isChanged);
 };
 

@@ -26,6 +26,7 @@ const engine = createRequestEngine({
 const {
   reduxMiddleware: requestMiddleware,
   provide,
+  useProvision,
   reducer: requestReducer,
   selectors,
 } = createRequestApi({
@@ -54,6 +55,7 @@ const {
 export {
   requestMiddleware,
   provide,
+  useProvision,
   requestReducer,
   selectProvisionStatus,
   selectError,

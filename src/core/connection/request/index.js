@@ -63,15 +63,22 @@ export default ({
     };
   };
 
+  const provisionSelectorSimple = (state, requirements) => {
+    const { domain = '__unassigned' } = requirements || {};
+    return selectDomainState(selectProvision(state), domain);
+  };
+
   const {
     reducer: provisionReducer,
     selectors: provisionSelectors,
     strategyEnhancer: provisionStrategyEnhancer,
     createMiddleware: createReduxMiddleware,
     provide,
+    useProvision,
   } = createReactReduxIntegration({
     requirementsComparator: multiCheckIsRequirementsChanged,
     provisionSelector,
+    provisionSelectorSimple,
     stateSelector: (state, domain) =>
       selectDomainState(selectProvision(state), domain),
   });
@@ -101,6 +108,8 @@ export default ({
         );
       },
     },
+    denormalize,
+    useProvision,
     reducer,
     submit,
   };
