@@ -2,11 +2,18 @@ import React from 'react';
 import Markdown from 'modules/components/Markdown';
 import Button from '@material-ui/core/Button';
 import { usePaths } from 'modules/packages';
+import { useTripsStats } from 'travel/dataSource';
 
 export default function TravelDashboard() {
   const {
     travel: { visits: visitsPaths },
   } = usePaths();
+
+  const { countriesIds, locationsIds, isLoading } = useTripsStats({
+    userAlias: 'my',
+  });
+  const countriesCounter = isLoading ? '...' : countriesIds.length;
+  const locationsCounter = isLoading ? '...' : locationsIds.length;
 
   return (
     <div>
@@ -16,8 +23,9 @@ export default function TravelDashboard() {
 
 В идеале здесь будет красивая инфографика, рассказы и фотки про 250 стран и
 территорий. В реальности же я побывал только в
-[40 странах](${visitsPaths.toUrl()}),
-а раз так, то и на инфографику забил.
+[${countriesCounter} странах](${visitsPaths.toUrl()}) и 
+[${locationsCounter} городах](${visitsPaths.toUrl()}),
+а раз так, то и на инфографику пока забил.
   `}
       />
       <div>

@@ -27,6 +27,10 @@ export default (packages = {}) => {
         },
         {
           path: travel.routes.visits.path,
+          caption: 'По посещениям',
+        },
+        {
+          path: travel.routes.deprecatedVisits.path,
           caption: 'По посещенным местам',
         },
         {
