@@ -1,10 +1,13 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-const SidebarContext = React.createContext({});
+const SidebarContext = React.createContext({
+  sidebarContentNode: null,
+  setSidebarContent: () => {},
+});
 
 export default function SidebarContextProvider({ children }) {
-  const [sidebarContentNode, setSidebarContent] = useState([]);
+  const [sidebarContentNode, setSidebarContent] = useState(null);
 
   const sidebarContextValue = useMemo(
     () => ({ sidebarContentNode, setSidebarContent }),
