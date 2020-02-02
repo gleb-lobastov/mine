@@ -25,16 +25,19 @@ SidebarContextProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export function useSidebarContent() {
+export function useSidebarContent({ closeSidebar }) {
   const { sidebarContentNode } = useContext(SidebarContext);
-  return sidebarContentNode;
+  if (!sidebarContentNode) {
+    return null;
+  }
+  return React.cloneElement(sidebarContentNode, { closeSidebar });
 }
 
-export function useSidebar(sidebarContentRenderer, inputs = []) {
+export function useSidebar(SidebarContentComponent, inputs = []) {
   const { setSidebarContent } = useContext(SidebarContext);
 
   useEffect(() => {
-    setSidebarContent(<div>{sidebarContentRenderer()}</div>);
+    setSidebarContent(<SidebarContentComponent />);
     return () => {
       setSidebarContent(null);
     };

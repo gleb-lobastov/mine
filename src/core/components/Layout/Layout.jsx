@@ -55,11 +55,14 @@ export default function Layout({ children }) {
     packages,
   ]);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const sidebarContentNode = useSidebarContent();
 
   const handleToggleMobileSidebar = () => {
     setMobileSidebarOpen(prevIsMobileSidebarOpen => !prevIsMobileSidebarOpen);
   };
+
+  const sidebarContentNode = useSidebarContent({
+    closeSidebar: handleToggleMobileSidebar,
+  });
 
   return (
     <div className={cls(classes.app, classes.root)}>

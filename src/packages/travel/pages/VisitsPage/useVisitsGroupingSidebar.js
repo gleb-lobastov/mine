@@ -7,14 +7,17 @@ import { GROUP_VISITS_BY, KEY_GROUP_VISITS_BY } from './consts';
 
 export default function(setQueryFilter, groupBy) {
   useSidebar(
-    () => (
+    ({ closeSidebar }) => (
       <List>
         <ListItem
           button={true}
           key={GROUP_VISITS_BY.LOCATIONS}
-          onClick={() =>
-            setQueryFilter({ [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.LOCATIONS })
-          }
+          onClick={() => {
+            closeSidebar();
+            setQueryFilter({
+              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.LOCATIONS,
+            });
+          }}
           selected={groupBy === GROUP_VISITS_BY.LOCATIONS}
         >
           <ListItemText primary="По городам" />
@@ -22,9 +25,12 @@ export default function(setQueryFilter, groupBy) {
         <ListItem
           button={true}
           key={GROUP_VISITS_BY.COUNTRIES}
-          onClick={() =>
-            setQueryFilter({ [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.COUNTRIES })
-          }
+          onClick={() => {
+            closeSidebar();
+            setQueryFilter({
+              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.COUNTRIES,
+            });
+          }}
           selected={groupBy === GROUP_VISITS_BY.COUNTRIES}
         >
           <ListItemText primary="По странам" />
@@ -32,9 +38,10 @@ export default function(setQueryFilter, groupBy) {
         <ListItem
           button={true}
           key={GROUP_VISITS_BY.YEARS}
-          onClick={() =>
-            setQueryFilter({ [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.YEARS })
-          }
+          onClick={() => {
+            closeSidebar();
+            setQueryFilter({ [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.YEARS });
+          }}
           selected={groupBy === GROUP_VISITS_BY.YEARS}
         >
           <ListItemText primary="По годам" />
@@ -42,11 +49,12 @@ export default function(setQueryFilter, groupBy) {
         <ListItem
           button={true}
           key={GROUP_VISITS_BY.YEARS_COUNTRIES}
-          onClick={() =>
+          onClick={() => {
+            closeSidebar();
             setQueryFilter({
               [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.YEARS_COUNTRIES,
-            })
-          }
+            });
+          }}
           selected={groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES}
         >
           <ListItemText primary="По годам и странам" />
@@ -54,11 +62,12 @@ export default function(setQueryFilter, groupBy) {
         <ListItem
           button={true}
           key={GROUP_VISITS_BY.COUNTRIES_YEARS}
-          onClick={() =>
+          onClick={() => {
+            closeSidebar();
             setQueryFilter({
               [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.COUNTRIES_YEARS,
-            })
-          }
+            });
+          }}
           selected={groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS}
         >
           <ListItemText primary="По странам и годам" />
@@ -66,11 +75,12 @@ export default function(setQueryFilter, groupBy) {
         <ListItem
           button={true}
           key={GROUP_VISITS_BY.TRIPS}
-          onClick={() =>
+          onClick={() => {
+            closeSidebar();
             setQueryFilter({
               [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.TRIPS,
-            })
-          }
+            });
+          }}
           selected={groupBy === GROUP_VISITS_BY.TRIPS}
         >
           <ListItemText primary="По поездкам" />
