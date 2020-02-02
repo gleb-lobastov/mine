@@ -1,6 +1,8 @@
 export const toClient = ({
   arrival_ride_id: rawArrivalRideId,
+  arrival_date_time: rawArrivalDateTime,
   departure_ride_id: rawDepartureRideId,
+  departure_date_time: rawDepartureDateTime,
   id: rawVisitId,
   location_id: rawLocationId,
   country_id: rawCountryId,
@@ -11,7 +13,9 @@ export const toClient = ({
   visit_comment: rawVisitComment,
 }) => ({
   arrivalRideId: rawArrivalRideId,
+  arrivalDateTime: new Date(rawArrivalDateTime),
   departureRideId: rawDepartureRideId,
+  departureDateTime: new Date(rawDepartureDateTime),
   countryId: rawCountryId,
   locationId: rawLocationId,
   locationName: rawLocationName,
