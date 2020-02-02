@@ -35,7 +35,7 @@ const byLocationsVisitsCount = (
   { locationName: locationNameB = '', visitsCount: visitsCountB = 0 },
 ) => visitsCountB - visitsCountA || locationNameA.localeCompare(locationNameB);
 
-const VisitsPage = ({
+const DeprecatedVisitsPage = ({
   countriesDict,
   isVisitsComplete,
   userVisits: { data: visitsList = [] } = {},
@@ -142,14 +142,14 @@ const VisitsPage = ({
     </div>
   );
 };
-VisitsPage.propTypes = {
+DeprecatedVisitsPage.propTypes = {
   countriesDict: PropTypes.shape(countriesPropTypes),
   isVisitsComplete: PropTypes.bool.isRequired,
   visits: PropTypes.shape({
     data: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   }),
 };
-VisitsPage.defaultProps = {
+DeprecatedVisitsPage.defaultProps = {
   countriesDict: {},
   visits: { data: [] },
 };
@@ -169,4 +169,4 @@ export default compose(
       [DATA_CHUNKS.USER.VISITS]: true,
     },
   }),
-)(VisitsPage);
+)(DeprecatedVisitsPage);

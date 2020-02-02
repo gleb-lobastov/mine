@@ -9,11 +9,11 @@ export const entry = {
   ),
 };
 
-export const visits = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/visits`,
+export const deprecatedVisits = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/visits_old`,
   defaultRouteParams: { userAlias: 'my' },
   Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-Countries' */ './pages/VisitsPage'),
+    import(/* webpackChunkName: 'travel-Countries' */ './pages/DeprecatedVisitsPage'),
   ),
 };
 
