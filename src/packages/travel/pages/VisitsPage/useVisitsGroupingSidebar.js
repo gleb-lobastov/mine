@@ -85,6 +85,19 @@ export default function(setQueryFilter, groupBy) {
         >
           <ListItemText primary="По поездкам" />
         </ListItem>
+        <ListItem
+          button={true}
+          key={GROUP_VISITS_BY.TRIPS_COUNTRIES}
+          onClick={() => {
+            closeSidebar();
+            setQueryFilter({
+              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.TRIPS_COUNTRIES,
+            });
+          }}
+          selected={groupBy === GROUP_VISITS_BY.TRIPS_COUNTRIES}
+        >
+          <ListItemText primary="По поездкам и странам" />
+        </ListItem>
       </List>
     ),
     [groupBy],

@@ -5,7 +5,7 @@ import useVisitsPageStyles from '../useVisitsPageStyles';
 export default function Trip({ trip: { tripName } = {} }) {
   const classes = useVisitsPageStyles();
   return (
-    <Typography variant="h4" className={classes.group}>
+    <Typography variant="h4" className={classes.group} paragraph={true}>
       {tripName}
     </Typography>
   );

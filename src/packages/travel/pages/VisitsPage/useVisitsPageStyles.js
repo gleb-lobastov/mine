@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles(theme => ({
   group: {
     '&:not(:first-of-type)': {
-      marginTop: theme.spacing(4),
+      marginTop: theme.spacing(5),
     },
 
     '& ~ $subgroup': {

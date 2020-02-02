@@ -3,7 +3,12 @@ import { GROUP_VISITS_BY } from './consts';
 export default function switchSortingFn(groupBy, tripsDict, countriesDict) {
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
-      return createTripsComparator(tripsDict, countriesDict);
+      return createTripsComparator(tripsDict);
+    case GROUP_VISITS_BY.TRIPS_COUNTRIES:
+      return createTripsComparator(
+        tripsDict,
+        createCountriesComparator(countriesDict, compareLocations),
+      );
     case GROUP_VISITS_BY.COUNTRIES:
       return createCountriesComparator(countriesDict, compareLocations);
     case GROUP_VISITS_BY.YEARS:
@@ -30,8 +35,7 @@ function compareLocations(visitA, visitB) {
   return 0;
 }
 
-function createTripsComparator(tripsDict, countriesDict) {
-  const compareCountries = createCountriesComparator(countriesDict);
+function createTripsComparator(tripsDict, fallbackComparator = () => 0) {
   return (visitA, visitB) => {
     const { tripId: tripIdA } = visitA;
     const { tripId: tripIdB } = visitB;
@@ -49,7 +53,7 @@ function createTripsComparator(tripsDict, countriesDict) {
     return (
       departureDateTimeB.getFullYear() - departureDateTimeA.getFullYear() ||
       fallbackToTripId ||
-      compareCountries(visitA, visitB)
+      fallbackComparator(visitA, visitB)
     );
   };
 }

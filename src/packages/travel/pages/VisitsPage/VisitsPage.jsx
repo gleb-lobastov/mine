@@ -62,7 +62,7 @@ export default function VisitsPage({
     const prevYear = resolveArrivalYear(prevVisit);
     const year = resolveArrivalYear(visit);
 
-    const isGroupedByTrip = groupBy === GROUP_VISITS_BY.TRIPS;
+    const isGroupedByTrip = checkIsGroupedByTrip(groupBy);
     const isGroupedByYear = checkIsGroupedByYear(groupBy);
     const isGroupedByCountry = checkIsGroupedByCountry(groupBy);
 
@@ -112,7 +112,7 @@ function renderCountry({
   provision: { countriesDict },
   groupBy,
 }) {
-  const isGroupedByTrip = groupBy === GROUP_VISITS_BY.TRIPS;
+  const isGroupedByTrip = groupBy === GROUP_VISITS_BY.TRIPS_COUNTRIES;
   const isGroupedByYearCountries = groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES;
   const shouldRender = isCountryChanged || (isGroupedByTrip && isTripChanged);
   if (!shouldRender) {
@@ -149,14 +149,20 @@ function renderYear({
 
 function renderLocation({
   visit: { visitId, locationId },
-  changes: { isYearChanged, isCountryChanged, isLocationChanged },
+  changes: {
+    isYearChanged,
+    isCountryChanged,
+    isTripChanged,
+    isLocationChanged,
+  },
   provision: { locationsDict },
   groupBy,
 }) {
-  const isGroupedByTrip = groupBy === GROUP_VISITS_BY.TRIPS;
+  const isGroupedByTripsOnly = groupBy === GROUP_VISITS_BY.TRIPS;
   const shouldRender =
-    isGroupedByTrip || // every visit in trip should be shown
-    isYearChanged || // in other grouping show only unique locations
+    isGroupedByTripsOnly || // every visit in trip should be shown
+    isTripChanged || // in other grouping show only unique locations
+    isYearChanged ||
     isCountryChanged ||
     isLocationChanged;
   if (!shouldRender) {
@@ -186,6 +192,8 @@ function switchNodesOrder(
 ) {
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
+      return [tripNode, locationNode];
+    case GROUP_VISITS_BY.TRIPS_COUNTRIES:
       return [tripNode, countryNode, locationNode];
     case GROUP_VISITS_BY.COUNTRIES:
       return [countryNode, locationNode];
@@ -202,6 +210,13 @@ function switchNodesOrder(
   }
 }
 
+function checkIsGroupedByTrip(groupBy) {
+  return (
+    groupBy === GROUP_VISITS_BY.TRIPS ||
+    groupBy === GROUP_VISITS_BY.TRIPS_COUNTRIES
+  );
+}
+
 function checkIsGroupedByYear(groupBy) {
   return (
     groupBy === GROUP_VISITS_BY.YEARS ||
@@ -212,7 +227,7 @@ function checkIsGroupedByYear(groupBy) {
 
 function checkIsGroupedByCountry(groupBy) {
   return (
-    groupBy === GROUP_VISITS_BY.TRIPS ||
+    groupBy === GROUP_VISITS_BY.TRIPS_COUNTRIES ||
     groupBy === GROUP_VISITS_BY.COUNTRIES ||
     groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS ||
     groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES

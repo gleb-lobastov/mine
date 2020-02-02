@@ -6,4 +6,5 @@ export const GROUP_VISITS_BY = {
   YEARS_COUNTRIES: 'yr_c',
   COUNTRIES_YEARS: 'c_yr',
   TRIPS: 't',
+  TRIPS_COUNTRIES: 't_с',
 };
