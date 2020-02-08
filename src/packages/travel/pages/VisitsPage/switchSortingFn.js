@@ -1,38 +1,51 @@
 import { GROUP_VISITS_BY } from './consts';
 
-export default function switchSortingFn(groupBy, tripsDict, countriesDict) {
+export default function switchSortingFn(
+  groupBy,
+  tripsDict,
+  countriesDict,
+  counters,
+) {
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
       return createTripsComparator(tripsDict);
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
       return createTripsComparator(
         tripsDict,
-        createCountriesComparator(countriesDict, compareLocations),
+        createCountriesComparator(
+          countriesDict,
+          createLocationsComparator(counters),
+        ),
       );
     case GROUP_VISITS_BY.COUNTRIES:
-      return createCountriesComparator(countriesDict, compareLocations);
+      return createCountriesComparator(
+        countriesDict,
+        createLocationsComparator(counters),
+      );
     case GROUP_VISITS_BY.YEARS:
-      return createYearsComparator(compareLocations);
+      return createYearsComparator(createLocationsComparator(counters));
     case GROUP_VISITS_BY.YEARS_COUNTRIES:
       return createDatesAndCountriesComparator(countriesDict);
     case GROUP_VISITS_BY.COUNTRIES_YEARS:
       return createCountriesAndDatesComparator(countriesDict);
     case GROUP_VISITS_BY.LOCATIONS:
     default:
-      return compareLocations;
+      return createLocationsComparator(counters);
   }
 }
 
-function compareLocations(visitA, visitB) {
-  const { locationName: locationNameA } = visitA;
-  const { locationName: locationNameB } = visitB;
-  if (locationNameA > locationNameB) {
-    return 1;
-  }
-  if (locationNameB > locationNameA) {
-    return -1;
-  }
-  return 0;
+function createLocationsComparator() {
+  return (visitA, visitB) => {
+    const { locationName: locationNameA } = visitA;
+    const { locationName: locationNameB } = visitB;
+    if (locationNameA > locationNameB) {
+      return 1;
+    }
+    if (locationNameB > locationNameA) {
+      return -1;
+    }
+    return 0;
+  };
 }
 
 function createTripsComparator(tripsDict, fallbackComparator = () => 0) {
@@ -103,7 +116,7 @@ function createDatesAndCountriesComparator(countriesDict) {
   return (visitA, visitB) =>
     compareYears(visitA, visitB) ||
     compareCountries(visitA, visitB) ||
-    compareLocations(visitA, visitB);
+    createLocationsComparator()(visitA, visitB);
 }
 
 function createCountriesAndDatesComparator(countriesDict) {
@@ -112,5 +125,5 @@ function createCountriesAndDatesComparator(countriesDict) {
   return (visitA, visitB) =>
     compareCountries(visitA, visitB) ||
     compareYears(visitA, visitB) ||
-    compareLocations(visitA, visitB);
+    createLocationsComparator()(visitA, visitB);
 }
