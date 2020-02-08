@@ -26,4 +26,7 @@ export default makeStyles(theme => ({
     color: 'gray',
     fontSize: 12,
   },
+  formControl: {
+    width: '100%',
+  },
 }));

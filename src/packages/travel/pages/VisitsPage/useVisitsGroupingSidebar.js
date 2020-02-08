@@ -1,102 +1,51 @@
 import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import { useSidebar } from 'core/context/SidebarContext';
 import { GROUP_VISITS_BY, KEY_GROUP_VISITS_BY } from './consts';
+import useVisitsPageStyles from './useVisitsPageStyles';
 
 export default function(setQueryFilter, groupBy) {
+  const classes = useVisitsPageStyles();
   useSidebar(
     ({ closeSidebar }) => (
       <List>
-        <ListItem
-          button={true}
-          key={GROUP_VISITS_BY.LOCATIONS}
-          onClick={() => {
-            closeSidebar();
-            setQueryFilter({
-              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.LOCATIONS,
-            });
-          }}
-          selected={groupBy === GROUP_VISITS_BY.LOCATIONS}
-        >
-          <ListItemText primary="По городам" />
-        </ListItem>
-        <ListItem
-          button={true}
-          key={GROUP_VISITS_BY.COUNTRIES}
-          onClick={() => {
-            closeSidebar();
-            setQueryFilter({
-              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.COUNTRIES,
-            });
-          }}
-          selected={groupBy === GROUP_VISITS_BY.COUNTRIES}
-        >
-          <ListItemText primary="По странам" />
-        </ListItem>
-        <ListItem
-          button={true}
-          key={GROUP_VISITS_BY.YEARS}
-          onClick={() => {
-            closeSidebar();
-            setQueryFilter({ [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.YEARS });
-          }}
-          selected={groupBy === GROUP_VISITS_BY.YEARS}
-        >
-          <ListItemText primary="По годам" />
-        </ListItem>
-        <ListItem
-          button={true}
-          key={GROUP_VISITS_BY.YEARS_COUNTRIES}
-          onClick={() => {
-            closeSidebar();
-            setQueryFilter({
-              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.YEARS_COUNTRIES,
-            });
-          }}
-          selected={groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES}
-        >
-          <ListItemText primary="По годам и странам" />
-        </ListItem>
-        <ListItem
-          button={true}
-          key={GROUP_VISITS_BY.COUNTRIES_YEARS}
-          onClick={() => {
-            closeSidebar();
-            setQueryFilter({
-              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.COUNTRIES_YEARS,
-            });
-          }}
-          selected={groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS}
-        >
-          <ListItemText primary="По странам и годам" />
-        </ListItem>
-        <ListItem
-          button={true}
-          key={GROUP_VISITS_BY.TRIPS}
-          onClick={() => {
-            closeSidebar();
-            setQueryFilter({
-              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.TRIPS,
-            });
-          }}
-          selected={groupBy === GROUP_VISITS_BY.TRIPS}
-        >
-          <ListItemText primary="По поездкам" />
-        </ListItem>
-        <ListItem
-          button={true}
-          key={GROUP_VISITS_BY.TRIPS_COUNTRIES}
-          onClick={() => {
-            closeSidebar();
-            setQueryFilter({
-              [KEY_GROUP_VISITS_BY]: GROUP_VISITS_BY.TRIPS_COUNTRIES,
-            });
-          }}
-          selected={groupBy === GROUP_VISITS_BY.TRIPS_COUNTRIES}
-        >
-          <ListItemText primary="По поездкам и странам" />
+        <ListItem>
+          <FormControl className={classes.formControl}>
+            <InputLabel shrink={true} id="select-groupBy-filter-label">
+              Сгруппировать
+            </InputLabel>
+            <Select
+              labelId="select-groupBy-filter-label"
+              autoWidth={true}
+              id="select-groupBy-filter"
+              value={groupBy}
+              onChange={event => {
+                closeSidebar();
+                setQueryFilter({
+                  [KEY_GROUP_VISITS_BY]: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={GROUP_VISITS_BY.LOCATIONS}>По городам</MenuItem>
+              <MenuItem value={GROUP_VISITS_BY.COUNTRIES}>По странам</MenuItem>
+              <MenuItem value={GROUP_VISITS_BY.YEARS}>По годам</MenuItem>
+              <MenuItem value={GROUP_VISITS_BY.YEARS_COUNTRIES}>
+                По годам и странам
+              </MenuItem>
+              <MenuItem value={GROUP_VISITS_BY.COUNTRIES_YEARS}>
+                По странам и годам
+              </MenuItem>
+              <MenuItem value={GROUP_VISITS_BY.TRIPS}>По поездкам</MenuItem>
+              <MenuItem value={GROUP_VISITS_BY.TRIPS_COUNTRIES}>
+                По поездкам и странам
+              </MenuItem>
+            </Select>
+          </FormControl>
         </ListItem>
       </List>
     ),
