@@ -12,6 +12,7 @@ export {
   selectPlaceholder,
   selectReadyState,
   selectResult,
+  selectUpdatesCounter,
 } from './selectors';
 export {
   createRequestAction,

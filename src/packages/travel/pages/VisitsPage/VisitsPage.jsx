@@ -27,6 +27,7 @@ export default function VisitsPage({
   const {
     isPending,
     isError,
+    updatesCounter,
     visitsIds,
     visitsDict,
     tripsDict,

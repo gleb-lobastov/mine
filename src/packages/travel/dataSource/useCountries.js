@@ -21,5 +21,6 @@ export default function useCountries() {
     isReady: selectIsReady(provision),
     isLoading: selectIsPending(provision),
     isError: selectIsError(provision),
+    counters: provision.counters,
   };
 }

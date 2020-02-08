@@ -10,4 +10,5 @@ export const EMPTY_STATE = {
   readyState: READY_STATE.UNSENT,
   isError: false,
   isValid: true,
+  counters: { sent: 0, fail: 0, success: 0 },
 };

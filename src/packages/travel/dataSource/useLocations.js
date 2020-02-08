@@ -35,5 +35,6 @@ export default function useLocations({
     isReady: selectIsReady(provision),
     isLoading: selectIsPending(provision),
     isError: selectIsError(provision),
+    counters: provision.counters,
   };
 }

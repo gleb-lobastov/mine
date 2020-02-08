@@ -32,6 +32,7 @@ export default (/* further configuration */) => (
     return {
       ...state,
       readyState,
+      counters: { ...state.counters, sent: state.counters.sent + 1 },
     };
   }
   if (readyState === READY_STATE.DONE) {
@@ -41,6 +42,7 @@ export default (/* further configuration */) => (
         readyState,
         lastError: error,
         isError: true,
+        counters: { ...state.counters, fail: state.counters.fail + 1 },
       };
     }
     return {
@@ -49,6 +51,7 @@ export default (/* further configuration */) => (
       lastResult: payload,
       isError: false,
       isValid: true,
+      counters: { ...state.counters, success: state.counters.success + 1 },
     };
   }
   return state;

@@ -24,3 +24,7 @@ export const selectError = ({ isError, lastError } = EMPTY_STATE) =>
   isError ? lastError : undefined;
 
 export const selectLastError = ({ lastError } = EMPTY_STATE) => lastError;
+
+export const selectUpdatesCounter = ({
+  counters: { success: updatesCounter },
+} = EMPTY_STATE) => updatesCounter;

@@ -1,6 +1,7 @@
 import { useSelector } from 'react-redux';
 import max from 'lodash/max';
 import min from 'lodash/min';
+import sum from 'lodash/sum';
 import { useProvision, selectDict } from 'core/connection';
 import {
   selectResult,
@@ -9,6 +10,7 @@ import {
   selectIsError,
   selectError,
   selectIsValid,
+  selectUpdatesCounter,
 } from 'core/connection/request/controllerRedux';
 import useCountries from './useCountries';
 import useLocations from './useLocations';
@@ -99,6 +101,7 @@ export function useTripsStats({ userAlias }) {
 
 function mergeProvisionsState(...provisions) {
   return {
+    updatesCounter: sum(provisions.map(selectUpdatesCounter)),
     isReady: provisions.every(selectIsReady),
     isPending: provisions.some(selectIsPending),
     isValid: provisions.every(selectIsValid),
