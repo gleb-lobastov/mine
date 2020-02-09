@@ -8,3 +8,25 @@ export const GROUP_VISITS_BY = {
   TRIPS: 't',
   TRIPS_COUNTRIES: 't_с',
 };
+
+export const KEY_SORT_VISITS_BY = 'sort';
+export const SORT_VISITS_BY = {
+  RATING_ALPHABET: 'r_a',
+  VISITS_ALPHABET: 'v_a',
+  ALPHABET: 'a',
+};
+
+export const COMPARATORS = {
+  VISIT: { ARRIVAL_YEAR: 'ARRIVAL_YEAR' },
+  TRIP: { DEPARTURE_TIME: 'TRIP_DEPARTURE_DATE', ID: 'TRIP_ID' },
+  COUNTRY: {
+    VISITS: 'COUNTRY_VISITS',
+    RATING: 'COUNTRY_RATING',
+    NAME_ID: 'COUNTRY_NAME_ID',
+  },
+  LOCATION: {
+    VISITS: 'LOCATION_VISITS',
+    RATING: 'LOCATION_RATING',
+    NAME_ID: 'LOCATION_NAME_ID',
+  },
+};

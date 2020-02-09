@@ -8,7 +8,6 @@ let lastCacheKey = null;
 let cachedResult = null;
 export default function calcCounters(visitsList, cacheKey) {
   if (cacheKey && cacheKey === lastCacheKey) {
-    console.log({ cacheKey });
     return cachedResult;
   }
 
@@ -59,7 +58,6 @@ export default function calcCounters(visitsList, cacheKey) {
 
   lastCacheKey = cacheKey;
   cachedResult = counters;
-  console.log({ counters });
 
   return counters;
 }
@@ -79,4 +77,30 @@ function inc(ref, refKey, counterName, counterKey) {
 
   const currentCount = counterRef[counterKey] || 0;
   counterRef[counterKey] = currentCount + 1;
+}
+
+export function getLocationVisitsCount(counters = {}, locationId) {
+  const { locations: { [locationId]: { visits = {} } = {} } = {} } = counters;
+  return Object.keys(visits).length;
+}
+
+export function getCountryVisitsCount(counters = {}, countryId) {
+  const { countries: { [countryId]: { visits = {} } = {} } = {} } = counters;
+  return Object.keys(visits).length;
+}
+
+export function getLocationVisitsByYearCount(counters, locationId, year) {
+  const {
+    years: {
+      [year]: {
+        locations: { [locationId]: locationVisitsByYearCount } = {},
+      } = {},
+    } = {},
+  } = counters;
+  return locationVisitsByYearCount;
+}
+
+export function getYearsOfVisits(counters, locationId) {
+  const { locations: { [locationId]: { years = {} } = {} } = {} } = counters;
+  return Object.keys(years);
 }

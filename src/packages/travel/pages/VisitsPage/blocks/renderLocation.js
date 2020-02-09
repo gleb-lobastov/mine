@@ -2,6 +2,11 @@ import React from 'react';
 import LocationInfo from 'travel/components/models/locations/LocationInfo';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
 import { GROUP_VISITS_BY } from '../consts';
+import {
+  getYearsOfVisits,
+  getLocationVisitsByYearCount,
+  getLocationVisitsCount,
+} from '../calcCounters';
 
 const GROUPS_TO_RENDER_COUNTRY = [
   GROUP_VISITS_BY.LOCATIONS,
@@ -106,25 +111,4 @@ function resolveVisitsCounter(visit, counters = {}, year, groupBy) {
     default:
       break;
   }
-}
-
-function getLocationVisitsCount(counters = {}, locationId) {
-  const { locations: { [locationId]: { visits = {} } = {} } = {} } = counters;
-  return Object.keys(visits).length;
-}
-
-function getLocationVisitsByYearCount(counters, locationId, year) {
-  const {
-    years: {
-      [year]: {
-        locations: { [locationId]: locationVisitsByYearCount } = {},
-      } = {},
-    } = {},
-  } = counters;
-  return locationVisitsByYearCount;
-}
-
-function getYearsOfVisits(counters, locationId) {
-  const { locations: { [locationId]: { years = {} } = {} } = {} } = counters;
-  return Object.keys(years);
 }

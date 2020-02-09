@@ -1,99 +1,149 @@
-import { GROUP_VISITS_BY } from './consts';
+import warning from 'warning';
+import memoize from 'lodash/memoize';
+import sum from 'lodash/sum';
+import memoizeOne from 'memoize-one';
+import { GROUP_VISITS_BY, SORT_VISITS_BY, COMPARATORS } from './consts';
+import { getLocationVisitsCount, getCountryVisitsCount } from './calcCounters';
 
-export default function switchSortingFn(
-  groupBy,
-  tripsDict,
-  countriesDict,
-  counters,
-) {
+const COMPARATOR_FUNCTIONS_MAPPING = {
+  [COMPARATORS.VISIT.ARRIVAL_YEAR]: createArrivalYearComparator,
+  [COMPARATORS.COUNTRY.NAME_ID]: createCountryNameIdComparator,
+  [COMPARATORS.COUNTRY.RATING]: createCountryRatingComparator,
+  [COMPARATORS.COUNTRY.VISITS]: createCountryVisitsComparator,
+  [COMPARATORS.LOCATION.NAME_ID]: createLocationNameIdComparator,
+  [COMPARATORS.LOCATION.RATING]: createLocationRatingComparator,
+  [COMPARATORS.LOCATION.VISITS]: createLocationVisitsComparator,
+  [COMPARATORS.TRIP.DEPARTURE_TIME]: createTripDepartureTimeComparator,
+  [COMPARATORS.TRIP.ID]: createTripIdComparator,
+};
+
+export default function switchSortingFn(queryFilter, dicts, counters) {
+  const { groupBy, sortBy } = queryFilter;
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
-      return createTripsComparator(tripsDict);
+      return createComparator(dicts, counters, [
+        COMPARATORS.TRIP.DEPARTURE_TIME,
+        COMPARATORS.TRIP.ID,
+        resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
+        COMPARATORS.LOCATION.NAME,
+      ]);
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
-      return createTripsComparator(
-        tripsDict,
-        createCountriesComparator(
-          countriesDict,
-          createLocationsComparator(counters),
-        ),
-      );
+      return createComparator(dicts, counters, [
+        COMPARATORS.TRIP.DEPARTURE_TIME,
+        COMPARATORS.TRIP.ID,
+        resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
+        COMPARATORS.COUNTRY.NAME_ID,
+        resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
+        COMPARATORS.LOCATION.NAME_ID,
+      ]);
     case GROUP_VISITS_BY.COUNTRIES:
-      return createCountriesComparator(
-        countriesDict,
-        createLocationsComparator(counters),
-      );
+      return createComparator(dicts, counters, [
+        resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
+        COMPARATORS.COUNTRY.NAME_ID,
+        resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
+        COMPARATORS.LOCATION.NAME_ID,
+      ]);
     case GROUP_VISITS_BY.YEARS:
-      return createYearsComparator(createLocationsComparator(counters));
+      return createComparator(dicts, counters, [
+        COMPARATORS.VISIT.ARRIVAL_YEAR,
+        resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
+        COMPARATORS.LOCATION.NAME_ID,
+      ]);
     case GROUP_VISITS_BY.YEARS_COUNTRIES:
-      return createDatesAndCountriesComparator(countriesDict);
+      return createComparator(dicts, counters, [
+        COMPARATORS.VISIT.ARRIVAL_YEAR,
+        resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
+        COMPARATORS.COUNTRY.NAME_ID,
+        resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
+        COMPARATORS.LOCATION.NAME_ID,
+      ]);
     case GROUP_VISITS_BY.COUNTRIES_YEARS:
-      return createCountriesAndDatesComparator(countriesDict);
+      return createComparator(dicts, counters, [
+        resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
+        COMPARATORS.COUNTRY.NAME_ID,
+        COMPARATORS.VISIT.ARRIVAL_YEAR,
+        resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
+        COMPARATORS.LOCATION.NAME_ID,
+      ]);
     case GROUP_VISITS_BY.LOCATIONS:
     default:
-      return createLocationsComparator(counters);
+      return createComparator(dicts, counters, [
+        resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
+        COMPARATORS.LOCATION.NAME_ID,
+      ]);
   }
 }
 
-function createLocationsComparator() {
+function resolveComparatorBySortFn(sortFn, ENTITY_COMPARATORS) {
+  switch (sortFn) {
+    case SORT_VISITS_BY.VISITS_ALPHABET:
+      return ENTITY_COMPARATORS?.VISITS;
+    case SORT_VISITS_BY.RATING_ALPHABET:
+      return ENTITY_COMPARATORS?.RATING;
+    default:
+      return undefined;
+  }
+}
+
+function createComparator(dicts, counters, comparatorsKeys) {
+  const comparatorFuncs = comparatorsKeys
+    .map(comparatorKey => {
+      const comparatorFnCreator = COMPARATOR_FUNCTIONS_MAPPING[comparatorKey];
+      warning(comparatorFnCreator, 'missing comparatorKey: %s', comparatorKey);
+      if (!comparatorFnCreator) {
+        return null;
+      }
+      return comparatorFnCreator(dicts, counters);
+    })
+    .filter(Boolean);
+
   return (visitA, visitB) => {
-    const { locationName: locationNameA } = visitA;
-    const { locationName: locationNameB } = visitB;
+    for (let fnIdx = 0; fnIdx < comparatorFuncs.length; fnIdx += 1) {
+      const comparisonResult = comparatorFuncs[fnIdx](visitA, visitB);
+      if (comparisonResult) {
+        return comparisonResult;
+      }
+    }
+    return 0;
+  };
+}
+
+function createLocationNameIdComparator() {
+  return (visitA, visitB) => {
+    const { locationId: locationIdA, locationName: locationNameA } = visitA;
+    const { locationId: locationIdB, locationName: locationNameB } = visitB;
     if (locationNameA > locationNameB) {
       return 1;
     }
     if (locationNameB > locationNameA) {
       return -1;
     }
-    return 0;
+    return locationIdA - locationIdB;
   };
 }
 
-function createTripsComparator(tripsDict, fallbackComparator = () => 0) {
+function createLocationRatingComparator({ locationsDict }) {
   return (visitA, visitB) => {
-    const { tripId: tripIdA } = visitA;
-    const { tripId: tripIdB } = visitB;
-    const { departureDateTime: departureDateTimeA } = tripsDict[tripIdA] || {};
-    const { departureDateTime: departureDateTimeB } = tripsDict[tripIdB] || {};
+    const { locationId: locationIdA } = visitA;
+    const { locationId: locationIdB } = visitB;
+    const { rating: ratingA } = locationsDict[locationIdA];
+    const { rating: ratingB } = locationsDict[locationIdB];
+    return ratingA - ratingB;
+  };
+}
 
-    const fallbackToTripId = tripIdA - tripIdB;
-    if (!departureDateTimeA && !departureDateTimeB) {
-      return fallbackToTripId;
-    }
-    if (!departureDateTimeA || !departureDateTimeB) {
-      // here also considered previous check: !arrivalDateTimeA && !arrivalDateTimeB
-      return departureDateTimeA ? -1 : 1;
-    }
+function createLocationVisitsComparator(_, counters) {
+  return (visitA, visitB) => {
+    const { locationId: locationIdA } = visitA;
+    const { locationId: locationIdB } = visitB;
     return (
-      departureDateTimeB.getFullYear() - departureDateTimeA.getFullYear() ||
-      fallbackToTripId ||
-      fallbackComparator(visitA, visitB)
+      getLocationVisitsCount(counters, locationIdB) -
+      getLocationVisitsCount(counters, locationIdA)
     );
   };
 }
 
-function createYearsComparator(fallbackComparator = () => 0) {
-  return (visitA, visitB) => {
-    const { arrivalDateTime: arrivalDateTimeA } = visitA;
-    const { arrivalDateTime: arrivalDateTimeB } = visitB;
-
-    if (!arrivalDateTimeA && !arrivalDateTimeB) {
-      return fallbackComparator(visitA, visitB);
-    }
-    if (!arrivalDateTimeA || !arrivalDateTimeB) {
-      // here also considered previous check: !arrivalDateTimeA && !arrivalDateTimeB
-      return arrivalDateTimeA ? -1 : 1;
-    }
-    return (
-      arrivalDateTimeB.getFullYear() - arrivalDateTimeA.getFullYear() ||
-      fallbackComparator(visitA, visitB)
-    );
-  };
-}
-
-function createCountriesComparator(
-  countriesDict,
-  fallbackComparator = () => 0,
-) {
+function createCountryNameIdComparator({ countriesDict }) {
   return (visitA, visitB) => {
     const { countryId: countryIdA } = visitA;
     const { countryId: countryIdB } = visitB;
@@ -106,24 +156,83 @@ function createCountriesComparator(
     if (countryNameB > countryNameA) {
       return -1;
     }
-    return fallbackComparator(visitA, visitB);
+    return countryIdA - countryIdB;
   };
 }
 
-function createDatesAndCountriesComparator(countriesDict) {
-  const compareCountries = createCountriesComparator(countriesDict);
-  const compareYears = createYearsComparator();
-  return (visitA, visitB) =>
-    compareYears(visitA, visitB) ||
-    compareCountries(visitA, visitB) ||
-    createLocationsComparator()(visitA, visitB);
+const resolveCountryRating = memoizeOne(locationsDict =>
+  memoize(countryId => {
+    const ratings = Object.values(locationsDict)
+      .filter(
+        ({ countryId: countryIdToCompare }) => countryId === countryIdToCompare,
+      )
+      .map(({ rating }) => rating);
+    if (!ratings.length) {
+      return 0;
+    }
+    return sum(ratings) / ratings.length;
+  }),
+);
+
+function createCountryRatingComparator({ locationsDict }) {
+  return (visitA, visitB) => {
+    const { countryId: countryIdA } = visitA;
+    const { countryId: countryIdB } = visitB;
+    const ratingResolver = resolveCountryRating(locationsDict);
+    return ratingResolver(countryIdA) - ratingResolver(countryIdB);
+  };
 }
 
-function createCountriesAndDatesComparator(countriesDict) {
-  const compareCountries = createCountriesComparator(countriesDict);
-  const compareYears = createYearsComparator();
-  return (visitA, visitB) =>
-    compareCountries(visitA, visitB) ||
-    compareYears(visitA, visitB) ||
-    createLocationsComparator()(visitA, visitB);
+function createCountryVisitsComparator(_, counters) {
+  return (visitA, visitB) => {
+    const { countryId: countryIdA } = visitA;
+    const { countryId: countryIdB } = visitB;
+    return (
+      getCountryVisitsCount(counters, countryIdB) -
+      getCountryVisitsCount(counters, countryIdA)
+    );
+  };
+}
+
+function createTripDepartureTimeComparator({ tripsDict }) {
+  return (visitA, visitB) => {
+    const { tripId: tripIdA } = visitA;
+    const { tripId: tripIdB } = visitB;
+    const { departureDateTime: departureDateTimeA } = tripsDict[tripIdA] || {};
+    const { departureDateTime: departureDateTimeB } = tripsDict[tripIdB] || {};
+
+    if (!departureDateTimeA && !departureDateTimeB) {
+      return 0;
+    }
+    if (!departureDateTimeA || !departureDateTimeB) {
+      // here also considered previous check: !arrivalDateTimeA && !arrivalDateTimeB
+      return departureDateTimeA ? -1 : 1;
+    }
+    return departureDateTimeB.getFullYear() - departureDateTimeA.getFullYear();
+  };
+}
+
+function createTripIdComparator() {
+  return (visitA, visitB) => {
+    const { tripId: tripIdA } = visitA;
+    const { tripId: tripIdB } = visitB;
+
+    return tripIdA - tripIdB;
+  };
+}
+
+function createArrivalYearComparator() {
+  return (visitA, visitB) => {
+    const { arrivalDateTime: arrivalDateTimeA } = visitA;
+    const { arrivalDateTime: arrivalDateTimeB } = visitB;
+
+    if (!arrivalDateTimeA && !arrivalDateTimeB) {
+      return 0;
+    }
+    if (!arrivalDateTimeA || !arrivalDateTimeB) {
+      // here also considered previous check: !arrivalDateTimeA && !arrivalDateTimeB
+      return arrivalDateTimeA ? -1 : 1;
+    }
+    return arrivalDateTimeB.getFullYear() - arrivalDateTimeA.getFullYear();
+  };
 }

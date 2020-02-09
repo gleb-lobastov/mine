@@ -7,7 +7,12 @@ import renderCountry from './blocks/renderCountry';
 import renderLocation from './blocks/renderLocation';
 import renderTrip from './blocks/renderTrip';
 import renderYear from './blocks/renderYear';
-import { KEY_GROUP_VISITS_BY, GROUP_VISITS_BY } from './consts';
+import {
+  KEY_GROUP_VISITS_BY,
+  GROUP_VISITS_BY,
+  KEY_SORT_VISITS_BY,
+  SORT_VISITS_BY,
+} from './consts';
 import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
@@ -23,10 +28,11 @@ export default function VisitsPage({
   const {
     queryFilter: {
       [KEY_GROUP_VISITS_BY]: groupBy = GROUP_VISITS_BY.LOCATIONS,
+      [KEY_SORT_VISITS_BY]: sortBy = SORT_VISITS_BY.ALPHABET,
     } = {},
     setQueryFilter,
   } = useQueryFilter();
-  useVisitsGroupingSidebar(setQueryFilter, groupBy);
+  useVisitsGroupingSidebar(setQueryFilter, { groupBy, sortBy });
 
   const provision = useTripsStats({ userAlias });
   const {
@@ -36,6 +42,7 @@ export default function VisitsPage({
     visitsIds,
     visitsDict,
     tripsDict,
+    locationsDict,
     countriesDict,
   } = provision;
 
@@ -56,9 +63,8 @@ export default function VisitsPage({
 
   const counters = calcCounters(unsortedVisitsList, updatesCounter);
   const sortingFn = switchSortingFn(
-    groupBy,
-    tripsDict,
-    countriesDict,
+    { groupBy, sortBy },
+    { locationsDict, tripsDict, countriesDict },
     counters,
   );
   const visitsList = unsortedVisitsList.sort(sortingFn);
