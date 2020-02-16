@@ -52,33 +52,35 @@ export default function(setQueryFilter, { groupBy, sortBy }) {
             </Select>
           </FormControl>
         </ListItem>
-        <ListItem>
-          <FormControl className={classes.formControl}>
-            <InputLabel shrink={true} id="select-sortBy-filter-label">
-              Сортировать
-            </InputLabel>
-            <Select
-              labelId="select-sortBy-filter-label"
-              autoWidth={true}
-              id="select-sortBy-filter"
-              value={sortBy}
-              onChange={event => {
-                closeSidebar();
-                setQueryFilter({
-                  [KEY_SORT_VISITS_BY]: event.target.value,
-                });
-              }}
-            >
-              <MenuItem value={SORT_VISITS_BY.ALPHABET}>По алфавиту</MenuItem>
-              <MenuItem value={SORT_VISITS_BY.VISITS_ALPHABET}>
-                По числу посещений
-              </MenuItem>
-              <MenuItem value={SORT_VISITS_BY.RATING_ALPHABET}>
-                По рейтингу
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </ListItem>
+        {groupBy !== GROUP_VISITS_BY.TRIPS && (
+          <ListItem>
+            <FormControl className={classes.formControl}>
+              <InputLabel shrink={true} id="select-sortBy-filter-label">
+                Сортировать
+              </InputLabel>
+              <Select
+                labelId="select-sortBy-filter-label"
+                autoWidth={true}
+                id="select-sortBy-filter"
+                value={sortBy}
+                onChange={event => {
+                  closeSidebar();
+                  setQueryFilter({
+                    [KEY_SORT_VISITS_BY]: event.target.value,
+                  });
+                }}
+              >
+                <MenuItem value={SORT_VISITS_BY.ALPHABET}>По алфавиту</MenuItem>
+                <MenuItem value={SORT_VISITS_BY.VISITS_ALPHABET}>
+                  По числу посещений
+                </MenuItem>
+                <MenuItem value={SORT_VISITS_BY.RATING_ALPHABET}>
+                  По рейтингу
+                </MenuItem>
+              </Select>
+            </FormControl>
+          </ListItem>
+        )}
       </List>
     ),
     [groupBy, sortBy],

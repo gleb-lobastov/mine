@@ -21,10 +21,10 @@ export default function switchSortingFn(queryFilter, dicts, counters) {
   const { groupBy, sortBy } = queryFilter;
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
+      // sorting is not applicable, as locations ordered chronologically
       return createComparator(dicts, counters, [
         COMPARATORS.TRIP.DEPARTURE_TIME,
         COMPARATORS.TRIP.ID,
-        resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
         COMPARATORS.LOCATION.NAME,
       ]);
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
