@@ -75,6 +75,7 @@ export default ({
     createMiddleware: createReduxMiddleware,
     provide,
     useProvision,
+    useRequest,
   } = createReactReduxIntegration({
     requirementsComparator: multiCheckIsRequirementsChanged,
     provisionSelector,
@@ -110,6 +111,7 @@ export default ({
     },
     denormalize,
     useProvision,
+    useRequest,
     reducer,
     submit,
   };

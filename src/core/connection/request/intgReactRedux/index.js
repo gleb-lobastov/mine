@@ -1,8 +1,10 @@
+import { useState, useEffect } from 'react';
 import {
   connect as originalConnect,
   useDispatch,
   useSelector,
 } from 'react-redux';
+import merge from 'lodash/merge';
 import observeIsChanged from '../observeIsChanged';
 import { createProvider, createUseProvisionHook } from '../provisionReact';
 import {
@@ -123,6 +125,28 @@ function connectUseProvisionHook({
   };
 }
 
+function makeRequest({ provisionSelector: selectProvision }) {
+  return function useRequest(preRequirements) {
+    const [requirements, setRequirements] = useState();
+    const dispatch = useDispatch();
+    const provision = useSelector(state =>
+      selectProvision(state, requirements),
+    );
+    useEffect(
+      () => {
+        if (!requirements) {
+          return;
+        }
+        dispatch(
+          createRequestAction(merge({}, requirements, preRequirements || {})),
+        );
+      },
+      [requirements],
+    );
+    return [setRequirements, provision];
+  };
+}
+
 const checkIsInvalidated = (prevProvision, nextProvision) => {
   if (!prevProvision) {
     return false;
@@ -147,6 +171,9 @@ export default ({
 }) => ({
   useProvision: connectUseProvisionHook({
     requirementsComparator: checkIsRequirementsChanged,
+    provisionSelector: provisionSelectorSimple,
+  }),
+  useRequest: makeRequest({
     provisionSelector: provisionSelectorSimple,
   }),
   provide: createReactReduxProvider({

@@ -27,6 +27,7 @@ const {
   reduxMiddleware: requestMiddleware,
   provide,
   useProvision,
+  useRequest,
   reducer: requestReducer,
   selectors,
 } = createRequestApi({
@@ -56,6 +57,7 @@ export {
   requestMiddleware,
   provide,
   useProvision,
+  useRequest,
   requestReducer,
   selectProvisionStatus,
   selectError,
