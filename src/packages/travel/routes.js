@@ -65,10 +65,10 @@ export const tripStory = {
   ),
 };
 
-export const location = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/visits/location/:strLocationId`,
+export const locations = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/visits/locations/:strLocationId?`,
   defaultRouteParams: { userAlias: 'my' },
   Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-TripStory' */ './pages/LocationPage'),
+    import(/* webpackChunkName: 'travel-TripStory' */ './pages/LocationsPage'),
   ),
 };

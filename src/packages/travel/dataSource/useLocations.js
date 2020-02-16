@@ -1,5 +1,9 @@
 import { useSelector } from 'react-redux';
-import { useProvision, selectDict } from 'core/connection';
+import {
+  useProvision,
+  useRequest,
+  selectDict,
+} from 'core/connection';
 import {
   selectIsPending,
   selectIsError,
@@ -36,5 +40,18 @@ export default function useLocations({
     isLoading: selectIsPending(provision),
     isError: selectIsError(provision),
     counters: provision.counters,
+  };
+}
+
+export function useLocationRatingRequest({ domain }) {
+  const [submitLocationRating, provision] = useRequest({
+    domain,
+    modelName: 'locations',
+    method: 'POST',
+  });
+
+  return {
+    ...provision,
+    submitLocationRating,
   };
 }
