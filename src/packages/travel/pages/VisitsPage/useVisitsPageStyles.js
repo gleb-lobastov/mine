@@ -29,4 +29,6 @@ export default makeStyles(theme => ({
   formControl: {
     width: '100%',
   },
+  ratingBlock: { display: 'inline-flex', alignItems: 'center' },
+  ratingIcon: { color: 'gray', fontSize: 12 },
 }));

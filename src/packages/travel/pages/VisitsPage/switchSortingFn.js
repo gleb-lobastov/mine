@@ -122,12 +122,12 @@ function createLocationNameIdComparator() {
   };
 }
 
-function createLocationRatingComparator({ locationsDict }) {
+function createLocationRatingComparator({ locationsRating }) {
   return (visitA, visitB) => {
     const { locationId: locationIdA } = visitA;
     const { locationId: locationIdB } = visitB;
-    const { rating: ratingA } = locationsDict[locationIdA];
-    const { rating: ratingB } = locationsDict[locationIdB];
+    const ratingA = locationsRating[locationIdA];
+    const ratingB = locationsRating[locationIdB];
     return ratingA - ratingB;
   };
 }

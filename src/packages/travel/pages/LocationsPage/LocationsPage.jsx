@@ -21,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const domain = 'LocationsPage';
+const domain = 'travel.LocationsPage';
 export default function LocationsPage({
   match: {
     params: { userAlias, strLocationId },

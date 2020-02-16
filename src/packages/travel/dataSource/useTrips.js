@@ -12,6 +12,7 @@ import {
   selectIsValid,
   selectUpdatesCounter,
 } from 'core/connection/request/controllerRedux';
+import useUser from './useUser';
 import useCountries from './useCountries';
 import useLocations from './useLocations';
 
@@ -27,6 +28,11 @@ export default function useTrips({ userAlias }) {
 
 export function useTripsStats({ userAlias }) {
   const tripsProvision = useTrips({ userAlias });
+  const { user: { locationsRating = {} } = {}, ...userProvision } = useUser({
+    domain: `travel.trips-${userAlias}.user`,
+    userAlias,
+  });
+
   const { data: tripsIds = [] } = selectResult(tripsProvision) || {};
 
   const {
@@ -69,6 +75,7 @@ export function useTripsStats({ userAlias }) {
 
   const commonProvisionState = mergeProvisionsState(
     tripsProvision,
+    userProvision,
     countriesProvision,
     locationsProvision,
   );
@@ -94,6 +101,7 @@ export function useTripsStats({ userAlias }) {
     ridesStats: calcRidesStats(ridesIds, ridesDict),
     locationsIds,
     locationsDict,
+    locationsRating,
     countriesIds,
     countriesDict,
   };

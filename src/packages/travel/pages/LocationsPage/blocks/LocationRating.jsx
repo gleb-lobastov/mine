@@ -5,29 +5,18 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-
-const RATING = {
-  PLACE_TO_LIVE: 1,
-  FEW_PER_YEAR: 2,
-  ONCE_PER_YEAR: 3,
-  ONCE_PER_TWO_YEARS: 4,
-  ONCE_PER_FIVE_YEARS: 5,
-  ONCE_PER_DECADE: 6,
-  TWICE_PER_LIVE: 7,
-  ONCE_PER_LIVE: 8,
-  NEVER: 9,
-};
+import { LOCATION_RATING } from 'travel/models/users/consts';
 
 const RATING_LOCALIZATION = {
-  [RATING.PLACE_TO_LIVE]: 'Жил бы здесь',
-  [RATING.FEW_PER_YEAR]: 'Несколько раз в год',
-  [RATING.ONCE_PER_YEAR]: 'Раз в год',
-  [RATING.ONCE_PER_TWO_YEARS]: 'Раз в пару лет',
-  [RATING.ONCE_PER_FIVE_YEARS]: 'Раз в пять лет',
-  [RATING.ONCE_PER_DECADE]: 'Раз в десятилетие',
-  [RATING.TWICE_PER_LIVE]: 'Пару раз в жизни',
-  [RATING.ONCE_PER_LIVE]: 'Раз в жизни',
-  [RATING.NEVER]: 'Никогда',
+  [LOCATION_RATING.PLACE_TO_LIVE]: 'Жил бы здесь',
+  [LOCATION_RATING.FEW_PER_YEAR]: 'Несколько раз в год',
+  [LOCATION_RATING.ONCE_PER_YEAR]: 'Раз в год',
+  [LOCATION_RATING.ONCE_PER_TWO_YEARS]: 'Раз в пару лет',
+  [LOCATION_RATING.ONCE_PER_FIVE_YEARS]: 'Раз в пять лет',
+  [LOCATION_RATING.ONCE_PER_DECADE]: 'Раз в десятилетие',
+  [LOCATION_RATING.TWICE_PER_LIVE]: 'Пару раз в жизни',
+  [LOCATION_RATING.ONCE_PER_LIVE]: 'Раз в жизни',
+  [LOCATION_RATING.NEVER]: 'Никогда',
 };
 
 const useStyles = makeStyles({
@@ -59,32 +48,32 @@ export default function LocationRating({
           onSubmitLocationRating(event, locationId, event.target.value);
         }}
       >
-        <MenuItem value={RATING.PLACE_TO_LIVE}>
-          {RATING_LOCALIZATION[RATING.PLACE_TO_LIVE]}
+        <MenuItem value={LOCATION_RATING.PLACE_TO_LIVE}>
+          {RATING_LOCALIZATION[LOCATION_RATING.PLACE_TO_LIVE]}
         </MenuItem>
-        <MenuItem value={RATING.FEW_PER_YEAR}>
-          {RATING_LOCALIZATION[RATING.FEW_PER_YEAR]}
+        <MenuItem value={LOCATION_RATING.FEW_PER_YEAR}>
+          {RATING_LOCALIZATION[LOCATION_RATING.FEW_PER_YEAR]}
         </MenuItem>
-        <MenuItem value={RATING.ONCE_PER_YEAR}>
-          {RATING_LOCALIZATION[RATING.ONCE_PER_YEAR]}
+        <MenuItem value={LOCATION_RATING.ONCE_PER_YEAR}>
+          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_YEAR]}
         </MenuItem>
-        <MenuItem value={RATING.ONCE_PER_TWO_YEARS}>
-          {RATING_LOCALIZATION[RATING.ONCE_PER_TWO_YEARS]}
+        <MenuItem value={LOCATION_RATING.ONCE_PER_TWO_YEARS}>
+          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_TWO_YEARS]}
         </MenuItem>
-        <MenuItem value={RATING.ONCE_PER_FIVE_YEARS}>
-          {RATING_LOCALIZATION[RATING.ONCE_PER_FIVE_YEARS]}
+        <MenuItem value={LOCATION_RATING.ONCE_PER_FIVE_YEARS}>
+          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_FIVE_YEARS]}
         </MenuItem>
-        <MenuItem value={RATING.ONCE_PER_DECADE}>
-          {RATING_LOCALIZATION[RATING.ONCE_PER_DECADE]}
+        <MenuItem value={LOCATION_RATING.ONCE_PER_DECADE}>
+          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_DECADE]}
         </MenuItem>
-        <MenuItem value={RATING.TWICE_PER_LIVE}>
-          {RATING_LOCALIZATION[RATING.TWICE_PER_LIVE]}
+        <MenuItem value={LOCATION_RATING.TWICE_PER_LIVE}>
+          {RATING_LOCALIZATION[LOCATION_RATING.TWICE_PER_LIVE]}
         </MenuItem>
-        <MenuItem value={RATING.ONCE_PER_LIVE}>
-          {RATING_LOCALIZATION[RATING.ONCE_PER_LIVE]}
+        <MenuItem value={LOCATION_RATING.ONCE_PER_LIVE}>
+          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_LIVE]}
         </MenuItem>
-        <MenuItem value={RATING.NEVER}>
-          {RATING_LOCALIZATION[RATING.NEVER]}
+        <MenuItem value={LOCATION_RATING.NEVER}>
+          {RATING_LOCALIZATION[LOCATION_RATING.NEVER]}
         </MenuItem>
       </Select>
     </FormControl>

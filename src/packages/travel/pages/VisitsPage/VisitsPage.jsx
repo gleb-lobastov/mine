@@ -1,5 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import MUILink from '@material-ui/core/Link';
 import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
@@ -43,11 +45,12 @@ export default function VisitsPage({
     visitsDict,
     tripsDict,
     locationsDict,
+    locationsRating,
     countriesDict,
   } = provision;
 
   const {
-    travel: { visits: visitsPaths },
+    travel: { locations: locationsPath },
   } = usePaths();
 
   if (isError) {
@@ -64,7 +67,7 @@ export default function VisitsPage({
   const counters = calcCounters(unsortedVisitsList, updatesCounter);
   const sortingFn = switchSortingFn(
     { groupBy, sortBy },
-    { locationsDict, tripsDict, countriesDict },
+    { locationsDict, tripsDict, countriesDict, locationsRating },
     counters,
   );
   const visitsList = unsortedVisitsList.sort(sortingFn);
@@ -97,6 +100,7 @@ export default function VisitsPage({
       classes,
       counters,
       groupBy,
+      sortBy,
       provision,
       visit,
       year,
@@ -120,9 +124,12 @@ export default function VisitsPage({
 
   const titleNode = (
     <Typography variant="h6" paragraph={true}>
-      {`Всего ${Object.keys(counters?.locations || {}).length} городов из ${
-        Object.keys(counters?.countries || {}).length
-      } стран `}
+      <span>Всего </span>
+      <MUILink to={locationsPath.toUrl({ userAlias })} component={Link}>
+        {`${Object.keys(counters?.locations || {}).length} городов `}
+      </MUILink>
+      <span>из </span>
+      <span>{`${Object.keys(counters?.countries || {}).length} стран `}</span>
     </Typography>
   );
 

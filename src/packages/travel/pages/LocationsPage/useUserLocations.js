@@ -8,11 +8,8 @@ export default function useUserLocations({ domain, userAlias }) {
     isPending,
     locationsDict,
     locationsIds = [],
+    locationsRating,
   } = useTripsStats({
-    userAlias,
-  });
-  const { user: { locationsRating = [] } = {} } = useUser({
-    domain,
     userAlias,
   });
   const { submitLocationRating } = useLocationRatingRequest({ domain });

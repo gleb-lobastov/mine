@@ -1,7 +1,11 @@
 import React from 'react';
+import IconStar from '@material-ui/icons/StarBorder';
+import IconThumbDown from '@material-ui/icons/ThumbDownOutlined';
+import IconThumbsUpDown from '@material-ui/icons/ThumbsUpDownOutlined';
 import LocationInfo from 'travel/components/models/locations/LocationInfo';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
-import { GROUP_VISITS_BY } from '../consts';
+import { LOCATION_RATING } from 'travel/models/users/consts';
+import { GROUP_VISITS_BY, SORT_VISITS_BY } from '../consts';
 import {
   getYearsOfVisits,
   getLocationVisitsByYearCount,
@@ -29,8 +33,9 @@ export default function renderLocation({
     isLocationChanged,
   },
   year,
-  provision: { locationsDict, countriesDict },
+  provision: { locationsDict, locationsRating, countriesDict },
   groupBy,
+  sortBy,
   counters,
 }) {
   const isGroupedByTripsOnly = groupBy === GROUP_VISITS_BY.TRIPS;
@@ -69,7 +74,16 @@ export default function renderLocation({
     </span>
   ) : null;
 
+  const ratingNode =
+    sortBy === SORT_VISITS_BY.RATING_ALPHABET
+      ? renderAlignedRatingNode({
+          classes,
+          locationRating: locationsRating?.[locationId],
+        })
+      : null;
+
   const childrenNodes = joinNodes(
+    ratingNode,
     countryDetailNode,
     visitsDetailNode,
     yearsOfVisitDetailNode,
@@ -84,6 +98,62 @@ export default function renderLocation({
       {childrenNodes}
     </LocationInfo>
   );
+}
+
+function renderAlignedRatingNode({ locationRating, classes }) {
+  return (
+    <div className={classes.ratingBlock}>
+      {renderRatingNode({ locationRating, classes })}
+    </div>
+  );
+}
+
+function renderRatingNode({ locationRating, classes }) {
+  switch (locationRating) {
+    case LOCATION_RATING.PLACE_TO_LIVE:
+      return (
+        <>
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+        </>
+      );
+    case LOCATION_RATING.FEW_PER_YEAR:
+    case LOCATION_RATING.ONCE_PER_YEAR:
+      return (
+        <>
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+        </>
+      );
+    case LOCATION_RATING.ONCE_PER_TWO_YEARS:
+    case LOCATION_RATING.ONCE_PER_FIVE_YEARS:
+      return (
+        <>
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+        </>
+      );
+    case LOCATION_RATING.ONCE_PER_DECADE:
+    case LOCATION_RATING.TWICE_PER_LIVE:
+      return (
+        <>
+          <IconStar className={classes.ratingIcon} />
+          <IconStar className={classes.ratingIcon} />
+        </>
+      );
+    case LOCATION_RATING.ONCE_PER_LIVE:
+      return <IconStar className={classes.ratingIcon} />;
+    case LOCATION_RATING.NEVER:
+      return <IconThumbDown className={classes.ratingIcon} />;
+    default:
+      return <IconThumbsUpDown className={classes.ratingIcon} />;
+  }
 }
 
 function joinNodes(...nodes) {
