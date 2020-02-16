@@ -17,22 +17,6 @@ export const visits = {
   ),
 };
 
-export const deprecatedVisits = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/visits_old`,
-  defaultRouteParams: { userAlias: 'my' },
-  Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-Countries' */ './pages/DeprecatedVisitsPage'),
-  ),
-};
-
-export const years = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/yearly/:year?`,
-  defaultRouteParams: { userAlias: 'my' },
-  Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-Countries' */ './pages/YearCountryCityPage'),
-  ),
-};
-
 export const rides = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/rides`,
   defaultRouteParams: { userAlias: 'my' },
