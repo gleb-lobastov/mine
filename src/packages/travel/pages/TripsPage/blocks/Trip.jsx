@@ -53,7 +53,7 @@ const Trip = ({
   tripVisitsList,
   tripEditUrl,
   tripStoryUrl,
-  locationPath,
+  locationsPath,
 }) => {
   const addVisitControlIndex = tripVisitsList.length;
 
@@ -73,7 +73,7 @@ const Trip = ({
         ridesDict={ridesDict}
         isEditable={isEditable}
         visit={visit}
-        locationPath={locationPath}
+        locationsPath={locationsPath}
       />
     );
   });
@@ -82,7 +82,7 @@ const Trip = ({
     <Location
       location={locationsDict[originLocationId]}
       Icon={IconHome}
-      locationPath={locationPath}
+      locationsPath={locationsPath}
     />
   );
 
@@ -146,7 +146,7 @@ Trip.propTypes = {
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   trip: PropTypes.shape(tripPropTypes).isRequired,
   tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
-  locationPath: PropTypes.instanceOf(Path).isRequired,
+  locationsPath: PropTypes.instanceOf(Path).isRequired,
   tripEditUrl: PropTypes.string.isRequired,
   tripStoryUrl: PropTypes.string.isRequired,
 };

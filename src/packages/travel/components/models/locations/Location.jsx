@@ -20,12 +20,12 @@ export const styles = {
 
 const Location = ({
   location: { locationId, locationName = 'unknown' },
-  locationPath,
+  locationsPath,
   Icon,
   classes,
 }) => {
-  const locationNode = locationPath ? (
-    <Link to={locationPath.toUrl({ strLocationId: String(locationId) })}>
+  const locationNode = locationsPath ? (
+    <Link to={locationsPath.toUrl({ strLocationId: String(locationId) })}>
       {locationName}
     </Link>
   ) : (
@@ -43,13 +43,13 @@ Location.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   location: PropTypes.shape(locationPropTypes),
   Icon: reactComponentPropType,
-  locationPath: PropTypes.instanceOf(Path),
+  locationsPath: PropTypes.instanceOf(Path),
 };
 
 Location.defaultProps = {
   location: {},
   Icon: undefined,
-  locationPath: undefined,
+  locationsPath: undefined,
 };
 
 export default withStyles(styles)(Location);

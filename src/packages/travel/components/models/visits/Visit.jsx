@@ -23,7 +23,7 @@ const resolveVisitIconComponent = visitType => {
   }
 };
 
-const Visit = ({ visit, classes, locationPath }) => {
+const Visit = ({ visit, classes, locationsPath }) => {
   if (!visit) {
     return 'Не указано';
   }
@@ -32,7 +32,7 @@ const Visit = ({ visit, classes, locationPath }) => {
   return (
     <div className={classes.container}>
       {Icon && <Icon className={classes.icon} />}
-      <Link to={locationPath.toUrl({ strLocationId: String(locationId) })}>
+      <Link to={locationsPath.toUrl({ strLocationId: String(locationId) })}>
         {locationName}
       </Link>
     </div>
@@ -55,7 +55,7 @@ const styles = {
 Visit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   visit: PropTypes.shape(visitPropTypes),
-  locationPath: PropTypes.instanceOf(Path).isRequired,
+  locationsPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 Visit.defaultProps = {

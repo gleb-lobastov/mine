@@ -45,7 +45,7 @@ function TripsPage({
   const {
     travel: {
       tripStory: tripStoryPath,
-      location: locationPath,
+      locations: locationsPath,
       tripEdit: tripEditPath,
     },
   } = usePaths();
@@ -111,7 +111,7 @@ function TripsPage({
                 strTripId: String(tripId),
                 userAlias: visitedUserAlias,
               })}
-              locationPath={locationPath}
+              locationsPath={locationsPath}
               tripEditUrl={tripEditPath.toUrl({
                 strTripId: String(tripId),
                 userAlias: visitedUserAlias,

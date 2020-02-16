@@ -56,7 +56,7 @@ const VisitWithRides = ({
   onRideUpdate: handleRideUpdate,
   onVisitUpdate: handleVisitUpdate,
   originLocation,
-  locationPath,
+  locationsPath,
 }) => {
   const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
   const shouldWarnForDepartureRide = isEditable && !isDepartureRideMatch;
@@ -83,7 +83,7 @@ const VisitWithRides = ({
         isEditable={isEditable}
         onVisitUpdate={handleVisitUpdate}
         visit={visit}
-        locationPath={locationPath}
+        locationsPath={locationsPath}
       />
       {(!isDepartureRideMatch || isSorting) && (
         <Ride
@@ -122,7 +122,7 @@ VisitWithRides.propTypes = {
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   visit: PropTypes.shape(visitPropTypes).isRequired,
-  locationPath: PropTypes.instanceOf(Path).isRequired,
+  locationsPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 VisitWithRides.defaultProps = {

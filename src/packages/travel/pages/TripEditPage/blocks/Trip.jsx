@@ -65,7 +65,7 @@ const Trip = ({
   tripVisitsList,
   onTripUpdate: handleTripUpdate,
   onVisitUpdate: handleVisitUpdate,
-  locationPath,
+  locationsPath,
 }) => {
   const [isSorting, setIsSorting] = useState(false);
   const [addVisitControlIndex, setAddVisitControlIndex] = useState(
@@ -137,7 +137,7 @@ const Trip = ({
         ridesDict={ridesDict}
         tripVisitsList={tripVisitsList}
         visit={visit}
-        locationPath={locationPath}
+        locationsPath={locationsPath}
       />
     );
   });
@@ -158,7 +158,7 @@ const Trip = ({
     <Location
       location={locationsDict[originLocationId]}
       Icon={IconHome}
-      locationPath={locationPath}
+      locationsPath={locationsPath}
     />
   );
 
@@ -233,7 +233,7 @@ Trip.propTypes = {
   trip: PropTypes.shape(tripPropTypes).isRequired,
   tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   tripStoryPath: PropTypes.instanceOf(Path).isRequired,
-  locationPath: PropTypes.instanceOf(Path).isRequired,
+  locationsPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 Trip.defaultProps = {

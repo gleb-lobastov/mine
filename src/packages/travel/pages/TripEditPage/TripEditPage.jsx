@@ -48,7 +48,7 @@ function TripEditPage({
   } = useAuthContext();
 
   const {
-    travel: { tripStory: tripStoryPath, location: locationPath },
+    travel: { tripStory: tripStoryPath, locations: locationsPath },
   } = usePaths();
 
   const handleVisitsOrderUpdate = useCallback(
@@ -119,7 +119,7 @@ function TripEditPage({
       trip={tripToEdit}
       tripVisitsList={visitsGroupedByTrips[tripId]}
       tripStoryPath={tripStoryPath}
-      locationPath={locationPath}
+      locationsPath={locationsPath}
     />
   );
 }

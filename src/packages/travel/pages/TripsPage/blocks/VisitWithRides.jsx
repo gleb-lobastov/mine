@@ -46,7 +46,7 @@ const VisitWithRides = ({
   isEditable,
   isArrivalRideMatch,
   isDepartureRideMatch,
-  locationPath,
+  locationsPath,
 }) => {
   const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
   const shouldWarnForDepartureRide = isEditable && !isDepartureRideMatch;
@@ -65,7 +65,7 @@ const VisitWithRides = ({
       <Visit
         classes={{ editIcon: classes.visibleOnlyOnHover }}
         visit={visit}
-        locationPath={locationPath}
+        locationsPath={locationsPath}
       />
       {!isDepartureRideMatch && (
         <Ride
@@ -88,7 +88,7 @@ VisitWithRides.propTypes = {
   isEditable: PropTypes.bool,
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   visit: PropTypes.shape(visitPropTypes).isRequired,
-  locationPath: PropTypes.instanceOf(Path).isRequired,
+  locationsPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 VisitWithRides.defaultProps = {
