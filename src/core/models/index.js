@@ -4,6 +4,7 @@ import { literatureModels } from 'literature';
 export default [
   literatureModels.articles.model,
   literatureModels.quotes.model,
+  travelModels.users.model,
   travelModels.countries.model,
   travelModels.locations.model,
   travelModels.geonames.model,
