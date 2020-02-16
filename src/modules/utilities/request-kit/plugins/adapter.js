@@ -8,20 +8,22 @@ const queryParamsAdapter = ({ userAlias, ...forwardingParams }) => ({
 export default next => requirements => {
   const {
     isProvision,
+    method: originalMethod,
     query: { id, body, filter, sorting, navigation, ...queryParams } = {},
     toServerAdapter,
     ...restOptions
   } = requirements;
 
-  let method;
-  if (isProvision) {
-    method = 'GET';
-  } else if (id) {
-    method = 'PATCH';
-  } else {
-    method = 'POST';
+  let method = originalMethod;
+  if (!method) {
+    if (isProvision) {
+      method = 'GET';
+    } else if (id) {
+      method = 'PATCH';
+    } else {
+      method = 'POST';
+    }
   }
-
   const shouldPrepareQuery =
     !id && method === 'GET' && Boolean(filter || sorting || navigation);
   const actualQueryParams = shouldPrepareQuery
