@@ -61,13 +61,13 @@ export default function renderLocation({
 
   const visitsCount = resolveVisitsCounter(visit, counters, year, groupBy);
   const visitsDetailNode =
-    visitsCount > 1 ? (
+    sortBy !== SORT_VISITS_BY.RATING_ALPHABET && visitsCount > 1 ? (
       <span className={classes.detail}>{`${visitsCount} визитов`}</span>
     ) : null;
 
-  const shouldRenderYearOfVisit = GROUPS_TO_RENDER_YEARS_OF_VISIT.includes(
-    groupBy,
-  );
+  const shouldRenderYearOfVisit =
+    sortBy !== SORT_VISITS_BY.RATING_ALPHABET &&
+    GROUPS_TO_RENDER_YEARS_OF_VISIT.includes(groupBy);
   const yearsOfVisitDetailNode = shouldRenderYearOfVisit ? (
     <span className={classes.detail}>
       {`в ${getYearsOfVisits(counters, locationId).join(', ')}`}
@@ -83,8 +83,8 @@ export default function renderLocation({
       : null;
 
   const childrenNodes = joinNodes(
-    ratingNode,
     countryDetailNode,
+    ratingNode,
     visitsDetailNode,
     yearsOfVisitDetailNode,
   );
