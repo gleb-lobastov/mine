@@ -20,6 +20,7 @@ import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
 import switchNodesOrder from './switchNodesOrder';
 import calcCounters from './calcCounters';
+import calcCountriesRating from './calcCountriesRating';
 
 export default function VisitsPage({
   match: {
@@ -44,6 +45,7 @@ export default function VisitsPage({
     visitsIds,
     visitsDict,
     tripsDict,
+    locationsIds,
     locationsDict,
     locationsRating,
     countriesDict,
@@ -65,9 +67,20 @@ export default function VisitsPage({
     .filter(Boolean);
 
   const counters = calcCounters(unsortedVisitsList, updatesCounter);
+  const countriesRating = calcCountriesRating(
+    locationsIds,
+    locationsDict,
+    locationsRating,
+  );
   const sortingFn = switchSortingFn(
     { groupBy, sortBy },
-    { locationsDict, tripsDict, countriesDict, locationsRating },
+    {
+      locationsDict,
+      tripsDict,
+      countriesDict,
+      locationsRating,
+      countriesRating,
+    },
     counters,
   );
   const visitsList = unsortedVisitsList.sort(sortingFn);

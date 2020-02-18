@@ -126,8 +126,8 @@ function createLocationRatingComparator({ locationsRating }) {
   return (visitA, visitB) => {
     const { locationId: locationIdA } = visitA;
     const { locationId: locationIdB } = visitB;
-    const ratingA = locationsRating[locationIdA];
-    const ratingB = locationsRating[locationIdB];
+    const ratingA = locationsRating[locationIdA] || 10;
+    const ratingB = locationsRating[locationIdB] || 10;
     return ratingA - ratingB;
   };
 }
@@ -174,12 +174,13 @@ const resolveCountryRating = memoizeOne(locationsDict =>
   }),
 );
 
-function createCountryRatingComparator({ locationsDict }) {
+function createCountryRatingComparator({ countriesRating }) {
   return (visitA, visitB) => {
     const { countryId: countryIdA } = visitA;
     const { countryId: countryIdB } = visitB;
-    const ratingResolver = resolveCountryRating(locationsDict);
-    return ratingResolver(countryIdA) - ratingResolver(countryIdB);
+    const ratingA = countriesRating[countryIdA] || 10;
+    const ratingB = countriesRating[countryIdB] || 10;
+    return ratingA - ratingB;
   };
 }
 
