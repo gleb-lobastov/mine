@@ -4,7 +4,6 @@ export default makeStyles(theme => ({
   group: {
     backgroundColor: 'white',
     top: 0,
-    position: 'sticky',
     '&:not(:first-of-type)': {
       marginTop: theme.spacing(5),
     },
@@ -19,7 +18,6 @@ export default makeStyles(theme => ({
   },
   subgroup: {
     backgroundColor: 'white',
-    position: 'sticky',
     top: 38,
   },
   detail: {
