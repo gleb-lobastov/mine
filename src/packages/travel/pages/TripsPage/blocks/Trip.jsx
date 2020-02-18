@@ -49,7 +49,6 @@ const Trip = ({
   locationsDict,
   ridesDict,
   trip: { originLocationId, tripName, tripType },
-  tripIndex,
   tripVisitsList,
   tripEditUrl,
   tripStoryUrl,
@@ -111,13 +110,13 @@ const Trip = ({
   return (
     <>
       <h1 className={classes.container}>
-        {`${tripIndex + 1}. ${resolveTripCaption(
+        {resolveTripCaption(
           tripVisitsList,
           countriesDict,
           locationsDict[originLocationId] &&
             locationsDict[originLocationId].countryId,
           tripName,
-        )}`}
+        )}
         {isEditable && tripEditControlsNode}
       </h1>
       {originLocationNode}
@@ -138,11 +137,9 @@ const Trip = ({
 };
 Trip.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  tripIndex: PropTypes.number.isRequired,
   isEditable: PropTypes.bool,
   locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
     .isRequired,
-  onTripUpdate: PropTypes.func.isRequired,
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   trip: PropTypes.shape(tripPropTypes).isRequired,
   tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
