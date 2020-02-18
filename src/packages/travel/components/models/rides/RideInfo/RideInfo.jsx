@@ -1,7 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import cls from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import BikeIcon from '@material-ui/icons/DirectionsBike';
 import BoatIcon from '@material-ui/icons/DirectionsBoat';
 import BusIcon from '@material-ui/icons/DirectionsBus';
@@ -20,11 +18,30 @@ import SubwayIcon from '@material-ui/icons/Subway';
 import SeatIcon from '@material-ui/icons/AirlineSeatReclineNormal';
 import HichHikingIcon from '@material-ui/icons/ThumbUp';
 import UnknownRideIcon from '@material-ui/icons/NotListedLocation';
-import { rideDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 import { VEHICLE_TYPES, RIDE_TYPES } from 'travel/models/rides/consts';
-import ridePropTypes from 'travel/models/rides/propTypes';
 
-const resolveRideIconComponent = vehicleType => {
+const useStyles = makeStyles({
+  icon: { color: 'gray', fontSize: 16, height: 16 },
+  detail: { color: 'gray', fontSize: 12 },
+});
+
+export default function RideInfo({
+  ride: { rideId, vehicleType, rideType } = {},
+}) {
+  const classes = useStyles();
+  const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
+
+  return (
+    <>
+      {rideType === RIDE_TYPES.HITCH_HIKING && (
+        <HichHikingIcon className={classes.icon} />
+      )}
+      <Icon className={classes.icon} />
+    </>
+  );
+}
+
+function resolveRideIconComponent(vehicleType) {
   switch (vehicleType) {
     case VEHICLE_TYPES.CAR:
       return CarIcon;
@@ -66,62 +83,4 @@ const resolveRideIconComponent = vehicleType => {
     default:
       return CustomTransportIcon;
   }
-};
-
-export const styles = {
-  container: {
-    display: 'inline-block',
-  },
-  icon: {
-    marginRight: '4px',
-    display: 'inline-block',
-    verticalAlign: 'text-bottom',
-  },
-  details: {
-    marginRight: '4px',
-  },
-  editDialogTrigger: {
-    display: 'inline-block',
-  },
-};
-
-const Ride = ({
-  classes,
-  className,
-  ride: { rideId, vehicleType, rideType, arrivalDateTime, departureDateTime },
-  showDetails,
-}) => {
-  const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
-
-  return (
-    <div className={cls(className, classes.container)}>
-      {rideType === RIDE_TYPES.HITCH_HIKING && (
-        <HichHikingIcon className={classes.icon} />
-      )}
-      <Icon className={classes.icon} />
-      {Boolean(rideId && showDetails) && (
-        <span className={classes.details}>
-          {rideDateTimePeriodToString({
-            departureDateTime,
-            arrivalDateTime,
-          })}
-        </span>
-      )}
-    </div>
-  );
-};
-
-Ride.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  className: PropTypes.string,
-  ride: PropTypes.shape(ridePropTypes),
-  showDetails: PropTypes.bool,
-};
-
-Ride.defaultProps = {
-  className: undefined,
-  ride: {},
-  showDetails: false,
-};
-
-export default withStyles(styles)(Ride);
+}

@@ -1,7 +1,11 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import IconStar from '@material-ui/icons/StarBorder';
 import IconThumbDown from '@material-ui/icons/ThumbDownOutlined';
 import IconThumbsUpDown from '@material-ui/icons/ThumbsUpDownOutlined';
+import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
+import RideInfo from 'travel/components/models/rides/RideInfo';
 import LocationInfo from 'travel/components/models/locations/LocationInfo';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
 import { LOCATION_RATING } from 'travel/models/users/consts';
@@ -24,7 +28,7 @@ const GROUPS_TO_RENDER_YEARS_OF_VISIT = [
 
 export default function renderLocation({
   visit,
-  visit: { visitId, locationId, countryId },
+  visit: { visitId, locationId, countryId, departureRideId },
   classes,
   changes: {
     isYearChanged,
@@ -33,7 +37,13 @@ export default function renderLocation({
     isLocationChanged,
   },
   year,
-  provision: { locationsDict, locationsRating, countriesDict },
+  provision: {
+    locationsDict,
+    locationsRating,
+    countriesDict,
+    visitsDict,
+    ridesDict,
+  },
   groupBy,
   sortBy,
   counters,
@@ -94,8 +104,21 @@ export default function renderLocation({
       key={`l${locationId}_v${visitId}`}
       location={locationsDict[locationId]}
       country={countriesDict[countryId]}
+      shouldJustifyContent={isGroupedByTripsOnly}
     >
       {childrenNodes}
+      {isGroupedByTripsOnly && (
+        <Grid container={true}>
+          <Grid item={true}>
+            <Typography className={classes.detail}>
+              {visitDateTimePeriodToString(visitsDict[visitId])}
+            </Typography>
+          </Grid>
+          <Grid item={true}>
+            <RideInfo ride={ridesDict[departureRideId]} />
+          </Grid>
+        </Grid>
+      )}
     </LocationInfo>
   );
 }

@@ -20,7 +20,7 @@ import SubwayIcon from '@material-ui/icons/Subway';
 import SeatIcon from '@material-ui/icons/AirlineSeatReclineNormal';
 import HichHikingIcon from '@material-ui/icons/ThumbUp';
 import UnknownRideIcon from '@material-ui/icons/NotListedLocation';
-import arrivalDepartureDateTimeToString from 'modules/utilities/dateTime/arrivalDepartureDateTimeToString';
+import { rideDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 import { VEHICLE_TYPES, RIDE_TYPES } from 'travel/models/rides/consts';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
@@ -134,7 +134,7 @@ const Ride = ({
       {rideNode}
       {Boolean(rideId && showDetails) && (
         <span className={classes.details}>
-          {arrivalDepartureDateTimeToString(departureDateTime, arrivalDateTime)}
+          {rideDateTimePeriodToString({ departureDateTime, arrivalDateTime })}
         </span>
       )}
     </div>

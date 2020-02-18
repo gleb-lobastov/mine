@@ -5,10 +5,10 @@ import MUILink from '@material-ui/core/Link';
 import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
-import renderCountry from './blocks/renderCountry';
-import renderLocation from './blocks/renderLocation';
-import renderTrip from './blocks/renderTrip';
-import renderYear from './blocks/renderYear';
+import renderCountry from "./blocks/renderCountry";
+import renderLocation from "./blocks/renderLocation";
+import renderTrip from "./blocks/renderTrip";
+import renderYear from "./blocks/renderYear";
 import {
   KEY_GROUP_VISITS_BY,
   GROUP_VISITS_BY,
