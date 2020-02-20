@@ -5,10 +5,6 @@ import MUILink from '@material-ui/core/Link';
 import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
-import renderCountry from "./blocks/renderCountry";
-import renderLocation from "./blocks/renderLocation";
-import renderTrip from "./blocks/renderTrip";
-import renderYear from "./blocks/renderYear";
 import {
   KEY_GROUP_VISITS_BY,
   GROUP_VISITS_BY,
@@ -18,7 +14,7 @@ import {
 import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
-import switchNodesOrder from './switchNodesOrder';
+import renderNodesInOrder from './blocks/renderNodesInOrder';
 import calcCounters from './calcCounters';
 import calcCountriesRating from './calcCountriesRating';
 
@@ -92,6 +88,9 @@ export default function VisitsPage({
       locationId: prevLocationId,
       tripId: prevTripId,
     } = prevVisit;
+    const nextVisit =
+      index < visitsList.length - 1 ? visitsList[index + 1] : {};
+    const { tripId: nextTripId } = nextVisit;
     const { countryId, locationId, tripId } = visit;
 
     const prevYear = resolveArrivalYear(prevVisit);
@@ -103,12 +102,13 @@ export default function VisitsPage({
 
     const changes = {
       isTripChanged: isGroupedByTrip && prevTripId !== tripId,
+      willTripChange: isGroupedByTrip && nextTripId !== tripId,
       isYearChanged: isGroupedByYear && prevYear !== year,
       isCountryChanged: isGroupedByCountry && prevCountryId !== countryId,
       isLocationChanged: prevLocationId !== locationId,
     };
 
-    const renderProps = {
+    const nodesToPush = renderNodesInOrder({
       changes,
       classes,
       counters,
@@ -117,17 +117,7 @@ export default function VisitsPage({
       provision,
       visit,
       year,
-    };
-
-    const nodesToPush = switchNodesOrder(
-      {
-        tripNode: renderTrip(renderProps),
-        countryNode: renderCountry(renderProps),
-        yearNode: renderYear(renderProps),
-        locationNode: renderLocation(renderProps),
-      },
-      groupBy,
-    ).filter(Boolean);
+    }).filter(Boolean);
 
     nodesToPush.forEach(nodeToPush => {
       nodesMemo.push(nodeToPush);
