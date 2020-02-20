@@ -115,7 +115,7 @@ export default function renderLocation({
             </Typography>
           </Grid>
           <Grid item={true}>
-            <RideInfo ride={ridesDict[departureRideId]} />
+            <RideInfo ride={ridesDict[departureRideId]} className={classes.halfDown}/>
           </Grid>
         </Grid>
       )}

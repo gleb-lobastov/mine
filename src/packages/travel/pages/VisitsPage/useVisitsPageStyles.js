@@ -29,4 +29,5 @@ export default makeStyles(theme => ({
   },
   ratingBlock: { display: 'inline-flex', alignItems: 'center' },
   ratingIcon: { color: 'gray', fontSize: 12 },
+  halfDown: { position: 'relative', top: 12 },
 }));
