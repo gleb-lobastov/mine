@@ -1,5 +1,5 @@
 /* global __API_HOST__ __IS_DEV_MODE__ */
-import createRequestEngine from '@request-kit/engine-rest';
+import createRequestEngine from '@request-kit/engine-rest/lib';
 import { middleware as authPlugin } from 'modules/auth';
 import endpointPlugin from 'modules/utilities/request-kit/plugins/endpoint';
 import adapterPlugin from 'modules/utilities/request-kit/plugins/adapter';
