@@ -29,10 +29,6 @@ export default (packages = {}) => {
           path: travel.routes.visits.path,
           caption: 'По посещениям',
         },
-        {
-          path: travel.routes.trips.path,
-          caption: 'По поездкам',
-        },
       ],
     });
   }
