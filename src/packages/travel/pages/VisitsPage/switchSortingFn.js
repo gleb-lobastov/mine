@@ -17,18 +17,18 @@ const COMPARATOR_FUNCTIONS_MAPPING = {
   [COMPARATORS.TRIP.ID]: createTripIdComparator,
 };
 
-export default function switchSortingFn(queryFilter, dicts, counters) {
+export default function switchSortingFn(queryFilter, provision, counters) {
   const { groupBy, sortBy } = queryFilter;
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
       // sorting is not applicable, as locations ordered chronologically
-      return createComparator(dicts, counters, [
+      return createComparator(provision, counters, [
         COMPARATORS.TRIP.DEPARTURE_TIME,
         COMPARATORS.TRIP.ID,
         COMPARATORS.LOCATION.NAME,
       ]);
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
-      return createComparator(dicts, counters, [
+      return createComparator(provision, counters, [
         COMPARATORS.TRIP.DEPARTURE_TIME,
         COMPARATORS.TRIP.ID,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
@@ -37,20 +37,20 @@ export default function switchSortingFn(queryFilter, dicts, counters) {
         COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.COUNTRIES:
-      return createComparator(dicts, counters, [
+      return createComparator(provision, counters, [
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
         COMPARATORS.COUNTRY.NAME_ID,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
         COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.YEARS:
-      return createComparator(dicts, counters, [
+      return createComparator(provision, counters, [
         COMPARATORS.VISIT.ARRIVAL_YEAR,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
         COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.YEARS_COUNTRIES:
-      return createComparator(dicts, counters, [
+      return createComparator(provision, counters, [
         COMPARATORS.VISIT.ARRIVAL_YEAR,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
         COMPARATORS.COUNTRY.NAME_ID,
@@ -58,7 +58,7 @@ export default function switchSortingFn(queryFilter, dicts, counters) {
         COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.COUNTRIES_YEARS:
-      return createComparator(dicts, counters, [
+      return createComparator(provision, counters, [
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
         COMPARATORS.COUNTRY.NAME_ID,
         COMPARATORS.VISIT.ARRIVAL_YEAR,
@@ -67,7 +67,7 @@ export default function switchSortingFn(queryFilter, dicts, counters) {
       ]);
     case GROUP_VISITS_BY.LOCATIONS:
     default:
-      return createComparator(dicts, counters, [
+      return createComparator(provision, counters, [
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
         COMPARATORS.LOCATION.NAME_ID,
       ]);

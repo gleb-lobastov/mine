@@ -14,7 +14,6 @@ import switchSortingFn from './switchSortingFn';
 import renderNodesInOrder from './blocks/renderNodesInOrder';
 import renderTitle from './blocks/renderTitle';
 import calcCounters from './calcCounters';
-import calcCountriesRating from './calcCountriesRating';
 
 export default function VisitsPage({
   match: {
@@ -32,18 +31,7 @@ export default function VisitsPage({
   useVisitsGroupingSidebar(setQueryFilter, { groupBy, sortBy });
 
   const provision = useTripsStats({ userAlias });
-  const {
-    isPending,
-    isError,
-    updatesCounter,
-    visitsIds,
-    visitsDict,
-    tripsDict,
-    locationsIds,
-    locationsDict,
-    locationsRating,
-    countriesDict,
-  } = provision;
+  const { isPending, isError } = provision;
 
   const {
     travel: { locations: locationsPath },
@@ -56,77 +44,43 @@ export default function VisitsPage({
     return <div>...Loading</div>;
   }
 
+  const { visitsIds, visitsDict } = provision;
   const unsortedVisitsList = visitsIds
     .map(visitId => visitsDict[visitId])
     .filter(Boolean);
 
+  const { updatesCounter } = provision;
   const counters = calcCounters(unsortedVisitsList, updatesCounter);
-  const countriesRating = calcCountriesRating(
-    locationsIds,
-    locationsDict,
-    locationsRating,
-  );
-  const sortingFn = switchSortingFn(
-    { groupBy, sortBy },
-    {
-      locationsDict,
-      tripsDict,
-      countriesDict,
-      locationsRating,
-      countriesRating,
-    },
-    counters,
-  );
-  const visitsList = unsortedVisitsList.sort(sortingFn);
 
   const titleNode = renderTitle({
     locationsUrl: locationsPath.toUrl({ userAlias }),
     locationsCount: Object.keys(counters?.locations || {}).length,
     countriesCount: Object.keys(counters?.countries || {}).length,
   });
+
+  const visitsList = unsortedVisitsList.sort(
+    switchSortingFn({ groupBy, sortBy }, provision, counters),
+  );
   const nodes = visitsList.reduce(
-    (nodesMemo, visit, index) => {
+    (nodesAccumulator, visit, index) => {
       const prevVisit = index > 0 ? visitsList[index - 1] : {};
-      const {
-        countryId: prevCountryId,
-        locationId: prevLocationId,
-        tripId: prevTripId,
-      } = prevVisit;
       const nextVisit =
         index < visitsList.length - 1 ? visitsList[index + 1] : {};
-      const { tripId: nextTripId } = nextVisit;
-      const { countryId, locationId, tripId } = visit;
 
-      const prevYear = resolveArrivalYear(prevVisit);
-      const year = resolveArrivalYear(visit);
-
-      const isGroupedByTrip = checkIsGroupedByTrip(groupBy);
-      const isGroupedByYear = checkIsGroupedByYear(groupBy);
-      const isGroupedByCountry = checkIsGroupedByCountry(groupBy);
-
-      const changes = {
-        isTripChanged: isGroupedByTrip && prevTripId !== tripId,
-        willTripChange: isGroupedByTrip && nextTripId !== tripId,
-        isYearChanged: isGroupedByYear && prevYear !== year,
-        isCountryChanged: isGroupedByCountry && prevCountryId !== countryId,
-        isLocationChanged: prevLocationId !== locationId,
-      };
-
-      const nodesToPush = renderNodesInOrder({
-        changes,
+      renderNodesInOrder({
+        prevVisit,
+        visit,
+        nextVisit,
+        provision,
         classes,
         counters,
         groupBy,
         sortBy,
-        provision,
-        visit,
-        year,
-      }).filter(Boolean);
+      })
+        .filter(Boolean)
+        .forEach(node => nodesAccumulator.push(node));
 
-      nodesToPush.forEach(nodeToPush => {
-        nodesMemo.push(nodeToPush);
-      });
-      return nodesMemo;
+      return nodesAccumulator;
     },
     [titleNode],
   );
@@ -135,38 +89,7 @@ export default function VisitsPage({
   // when group_by changed from trips to something other, then trips nodes still
   // rendering in three, but because of nodes keys collisions only
   // originalLocations is remaining on top of the list
-  return <div key={groupBy}>{nodes}</div>;
-}
-
-function resolveArrivalYear({ arrivalDateTime }) {
-  if (!arrivalDateTime) {
-    return null;
-  }
-  return arrivalDateTime.getFullYear(arrivalDateTime);
-}
-
-function checkIsGroupedByTrip(groupBy) {
-  return (
-    groupBy === GROUP_VISITS_BY.TRIPS ||
-    groupBy === GROUP_VISITS_BY.TRIPS_COUNTRIES
-  );
-}
-
-function checkIsGroupedByYear(groupBy) {
-  return (
-    groupBy === GROUP_VISITS_BY.YEARS ||
-    groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS ||
-    groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES
-  );
-}
-
-function checkIsGroupedByCountry(groupBy) {
-  return (
-    groupBy === GROUP_VISITS_BY.TRIPS_COUNTRIES ||
-    groupBy === GROUP_VISITS_BY.COUNTRIES ||
-    groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS ||
-    groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES
-  );
+  return <div key={`${groupBy}_${sortBy}`}>{nodes}</div>;
 }
 
 /*

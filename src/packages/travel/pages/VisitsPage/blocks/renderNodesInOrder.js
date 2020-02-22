@@ -1,24 +1,66 @@
+import {
+  resolveArrivalYear,
+  checkIsGroupedByCountry,
+  checkIsGroupedByTrip,
+  checkIsGroupedByYear,
+} from '../utils';
+import { GROUP_VISITS_BY } from '../consts';
 import renderCountry from './renderCountry';
 import renderLocation from './renderLocation';
-import renderOriginLocation from './renderOriginLocation';
+import renderDepartureLocation from './renderDepartureLocation';
+import renderArrivalLocation from './renderArrivalLocation';
 import renderTrip from './renderTrip';
 import renderYear from './renderYear';
-import { GROUP_VISITS_BY } from '../consts';
 
-export default function renderNodesInOrder(renderProps) {
+export default function renderNodesInOrder({
+  prevVisit,
+  visit,
+  nextVisit,
+  classes,
+  counters,
+  groupBy,
+  provision,
+  sortBy,
+}) {
   const {
+    countryId: prevCountryId,
+    locationId: prevLocationId,
+    tripId: prevTripId,
+  } = prevVisit;
+  const { tripId: nextTripId } = nextVisit;
+  const { countryId, locationId, tripId } = visit;
+
+  const prevYear = resolveArrivalYear(prevVisit);
+  const year = resolveArrivalYear(visit);
+
+  const isGroupedByTrip = checkIsGroupedByTrip(groupBy);
+  const isGroupedByYear = checkIsGroupedByYear(groupBy);
+  const isGroupedByCountry = checkIsGroupedByCountry(groupBy);
+
+  const renderProps = {
+    changes: {
+      isTripChanged: isGroupedByTrip && prevTripId !== tripId,
+      willTripChange: isGroupedByTrip && nextTripId !== tripId,
+      isYearChanged: isGroupedByYear && prevYear !== year,
+      isCountryChanged: isGroupedByCountry && prevCountryId !== countryId,
+      isLocationChanged: prevLocationId !== locationId,
+    },
+    classes,
+    counters,
     groupBy,
-    changes: { isTripChanged, willTripChange },
-  } = renderProps;
+    sortBy,
+    provision,
+    visit,
+    year,
+  };
+
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
       return [
         renderTrip(renderProps),
-        isTripChanged &&
-          renderOriginLocation({ ...renderProps, shouldRenderRide: true }),
+        renderDepartureLocation(renderProps),
         renderLocation(renderProps),
-        willTripChange &&
-          renderOriginLocation({ ...renderProps, shouldRenderRide: false }),
+        renderArrivalLocation(renderProps),
       ];
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
       return [

@@ -1,20 +1,7 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import IconStar from '@material-ui/icons/StarBorder';
-import IconThumbDown from '@material-ui/icons/ThumbDownOutlined';
-import IconThumbsUpDown from '@material-ui/icons/ThumbsUpDownOutlined';
-import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
-import RideInfo from 'travel/components/models/rides/RideInfo';
 import LocationInfo from 'travel/components/models/locations/LocationInfo';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
-import { LOCATION_RATING } from 'travel/models/users/consts';
-import { GROUP_VISITS_BY, SORT_VISITS_BY } from '../consts';
-import {
-  getYearsOfVisits,
-  getLocationVisitsByYearCount,
-  getLocationVisitsCount,
-} from '../calcCounters';
+import { GROUP_VISITS_BY } from '../consts';
 
 const GROUPS_TO_RENDER_COUNTRY = [
   GROUP_VISITS_BY.LOCATIONS,
@@ -23,16 +10,13 @@ const GROUPS_TO_RENDER_COUNTRY = [
 ];
 
 export default function renderOriginLocation({
-  visit: { tripId, arrivalRideId },
+  keyBase,
+  children,
   classes,
-  changes: { isTripChanged, willTripChange },
-  provision: { tripsDict, locationsDict, countriesDict, ridesDict },
+  visit: { tripId },
+  provision: { tripsDict, locationsDict, countriesDict },
   groupBy,
-  shouldRenderRide,
 }) {
-  if (!isTripChanged && !willTripChange) {
-    return null;
-  }
   const trip = tripsDict[tripId];
   if (!trip) {
     return null;
@@ -54,22 +38,15 @@ export default function renderOriginLocation({
     />
   ) : null;
 
-  const childrenNodes = countryDetailNode;
-
   return (
     <LocationInfo
-      key={`t${tripId}_ol${originLocationId}`}
+      key={`${keyBase}_t${tripId}_ol${originLocationId}`}
       location={locationsDict[originLocationId]}
       country={countriesDict[countryId]}
-      shouldJustifyContent={shouldRenderRide}
+      shouldJustifyContent={children != null}
     >
-      {childrenNodes}
-      {shouldRenderRide && (
-        <RideInfo
-          ride={ridesDict[arrivalRideId]}
-          className={classes.halfDown}
-        />
-      )}
+      {countryDetailNode}
+      {children}
     </LocationInfo>
   );
 }
