@@ -2,6 +2,7 @@ import React from 'react';
 import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
+import { useAuthContext } from 'core/context/AuthContext';
 import {
   KEY_GROUP_VISITS_BY,
   GROUP_VISITS_BY,
@@ -20,6 +21,9 @@ export default function VisitsPage({
     params: { userAlias },
   },
 }) {
+  const { userAlias: authenticatedUserAlias } = useAuthContext();
+  const hasEditRights = userAlias === authenticatedUserAlias;
+
   const classes = useVisitsPageStyles();
   const {
     queryFilter: {
@@ -33,9 +37,8 @@ export default function VisitsPage({
   const provision = useTripsStats({ userAlias });
   const { isPending, isError } = provision;
 
-  const {
-    travel: { locations: locationsPath },
-  } = usePaths();
+  const { travel: travelPaths } = usePaths();
+  const { locations: locationsPath, tripCreate: tripCreatePath } = travelPaths;
 
   if (isError) {
     return <div>...Error</div>;
@@ -54,8 +57,10 @@ export default function VisitsPage({
 
   const titleNode = renderTitle({
     locationsUrl: locationsPath.toUrl({ userAlias }),
+    createTripUrl: tripCreatePath.toUrl({ userAlias }),
     locationsCount: Object.keys(counters?.locations || {}).length,
     countriesCount: Object.keys(counters?.countries || {}).length,
+    groupBy,
   });
 
   const visitsList = unsortedVisitsList.sort(
@@ -76,6 +81,9 @@ export default function VisitsPage({
         counters,
         groupBy,
         sortBy,
+        hasEditRights,
+        travelPaths,
+        userAlias,
       })
         .filter(Boolean)
         .forEach(node => nodesAccumulator.push(node));

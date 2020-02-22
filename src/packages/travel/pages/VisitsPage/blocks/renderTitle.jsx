@@ -3,12 +3,23 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import MUILink from '@material-ui/core/Link';
+import { checkIsGroupedByTrip } from '../utils';
 
 export default function renderTitle({
+  createTripUrl,
   locationsUrl,
   locationsCount,
   countriesCount,
+  groupBy,
 }) {
+  const linkToCreateTripNode = checkIsGroupedByTrip(groupBy) ? (
+    <div>
+      <MUILink to={createTripUrl} component={Link}>
+        Добавить поездку
+      </MUILink>
+    </div>
+  ) : null;
+
   return (
     <Typography variant="h6" paragraph={true}>
       <span>Всего </span>
@@ -17,6 +28,7 @@ export default function renderTitle({
       </MUILink>
       <span>из </span>
       <span>{`${countriesCount} стран `}</span>
+      {linkToCreateTripNode}
     </Typography>
   );
 }

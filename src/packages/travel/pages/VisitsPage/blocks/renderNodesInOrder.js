@@ -16,11 +16,8 @@ export default function renderNodesInOrder({
   prevVisit,
   visit,
   nextVisit,
-  classes,
-  counters,
   groupBy,
-  provision,
-  sortBy,
+  ...forwardedProps
 }) {
   const {
     countryId: prevCountryId,
@@ -38,6 +35,9 @@ export default function renderNodesInOrder({
   const isGroupedByCountry = checkIsGroupedByCountry(groupBy);
 
   const renderProps = {
+    visit,
+    groupBy,
+    year,
     changes: {
       isTripChanged: isGroupedByTrip && prevTripId !== tripId,
       willTripChange: isGroupedByTrip && nextTripId !== tripId,
@@ -45,13 +45,7 @@ export default function renderNodesInOrder({
       isCountryChanged: isGroupedByCountry && prevCountryId !== countryId,
       isLocationChanged: prevLocationId !== locationId,
     },
-    classes,
-    counters,
-    groupBy,
-    sortBy,
-    provision,
-    visit,
-    year,
+    ...forwardedProps,
   };
 
   switch (groupBy) {

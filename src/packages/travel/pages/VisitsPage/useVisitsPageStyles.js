@@ -1,6 +1,14 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(theme => ({
+  visibilityTrigger: {
+    '&:hover $visibleOnlyOnHover': {
+      visibility: 'visible',
+    },
+  },
+  visibleOnlyOnHover: {
+    visibility: 'hidden',
+  },
   group: {
     backgroundColor: 'white',
     top: 0,

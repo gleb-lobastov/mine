@@ -41,6 +41,14 @@ export const tripEdit = {
   ),
 };
 
+export const tripCreate = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/createTrip`,
+  defaultRouteParams: { userAlias: 'my' },
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'travel-Trips' */ './pages/TripEditPage'),
+  ),
+};
+
 export const tripStory = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId`,
   defaultRouteParams: { userAlias: 'my' },

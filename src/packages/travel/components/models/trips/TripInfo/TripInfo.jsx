@@ -1,12 +1,15 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import useVisitsPageStyles from '../../../../pages/VisitsPage/useVisitsPageStyles';
 
-export default function TripInfo({ trip: { tripName } = {} }) {
-  const classes = useVisitsPageStyles();
+export default function TripInfo({
+  trip: { tripName } = {},
+  children,
+  className,
+}) {
   return (
-    <Typography variant="h4" className={classes.group} paragraph={true}>
-      {tripName}
+    <Typography variant="h4" className={className} paragraph={true}>
+      <span>{tripName}</span>
+      {children}
     </Typography>
   );
 }
