@@ -17,14 +17,6 @@ export const visits = {
   ),
 };
 
-export const rides = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/rides`,
-  defaultRouteParams: { userAlias: 'my' },
-  Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-Countries' */ './pages/RidesPage'),
-  ),
-};
-
 export const trips = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId?`,
   defaultRouteParams: { userAlias: 'my' },
