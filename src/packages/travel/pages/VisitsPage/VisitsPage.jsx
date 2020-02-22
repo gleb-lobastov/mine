@@ -1,7 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Typography from '@material-ui/core/Typography';
-import MUILink from '@material-ui/core/Link';
 import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
@@ -15,6 +12,7 @@ import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
 import renderNodesInOrder from './blocks/renderNodesInOrder';
+import renderTitle from './blocks/renderTitle';
 import calcCounters from './calcCounters';
 import calcCountriesRating from './calcCountriesRating';
 
@@ -81,67 +79,63 @@ export default function VisitsPage({
   );
   const visitsList = unsortedVisitsList.sort(sortingFn);
 
-  const nodes = visitsList.reduce((nodesMemo, visit, index) => {
-    const prevVisit = index > 0 ? visitsList[index - 1] : {};
-    const {
-      countryId: prevCountryId,
-      locationId: prevLocationId,
-      tripId: prevTripId,
-    } = prevVisit;
-    const nextVisit =
-      index < visitsList.length - 1 ? visitsList[index + 1] : {};
-    const { tripId: nextTripId } = nextVisit;
-    const { countryId, locationId, tripId } = visit;
+  const titleNode = renderTitle({
+    locationsUrl: locationsPath.toUrl({ userAlias }),
+    locationsCount: Object.keys(counters?.locations || {}).length,
+    countriesCount: Object.keys(counters?.countries || {}).length,
+  });
+  const nodes = visitsList.reduce(
+    (nodesMemo, visit, index) => {
+      const prevVisit = index > 0 ? visitsList[index - 1] : {};
+      const {
+        countryId: prevCountryId,
+        locationId: prevLocationId,
+        tripId: prevTripId,
+      } = prevVisit;
+      const nextVisit =
+        index < visitsList.length - 1 ? visitsList[index + 1] : {};
+      const { tripId: nextTripId } = nextVisit;
+      const { countryId, locationId, tripId } = visit;
 
-    const prevYear = resolveArrivalYear(prevVisit);
-    const year = resolveArrivalYear(visit);
+      const prevYear = resolveArrivalYear(prevVisit);
+      const year = resolveArrivalYear(visit);
 
-    const isGroupedByTrip = checkIsGroupedByTrip(groupBy);
-    const isGroupedByYear = checkIsGroupedByYear(groupBy);
-    const isGroupedByCountry = checkIsGroupedByCountry(groupBy);
+      const isGroupedByTrip = checkIsGroupedByTrip(groupBy);
+      const isGroupedByYear = checkIsGroupedByYear(groupBy);
+      const isGroupedByCountry = checkIsGroupedByCountry(groupBy);
 
-    const changes = {
-      isTripChanged: isGroupedByTrip && prevTripId !== tripId,
-      willTripChange: isGroupedByTrip && nextTripId !== tripId,
-      isYearChanged: isGroupedByYear && prevYear !== year,
-      isCountryChanged: isGroupedByCountry && prevCountryId !== countryId,
-      isLocationChanged: prevLocationId !== locationId,
-    };
+      const changes = {
+        isTripChanged: isGroupedByTrip && prevTripId !== tripId,
+        willTripChange: isGroupedByTrip && nextTripId !== tripId,
+        isYearChanged: isGroupedByYear && prevYear !== year,
+        isCountryChanged: isGroupedByCountry && prevCountryId !== countryId,
+        isLocationChanged: prevLocationId !== locationId,
+      };
 
-    const nodesToPush = renderNodesInOrder({
-      changes,
-      classes,
-      counters,
-      groupBy,
-      sortBy,
-      provision,
-      visit,
-      year,
-    }).filter(Boolean);
+      const nodesToPush = renderNodesInOrder({
+        changes,
+        classes,
+        counters,
+        groupBy,
+        sortBy,
+        provision,
+        visit,
+        year,
+      }).filter(Boolean);
 
-    nodesToPush.forEach(nodeToPush => {
-      nodesMemo.push(nodeToPush);
-    });
-    return nodesMemo;
-  }, []);
-
-  const titleNode = (
-    <Typography variant="h6" paragraph={true}>
-      <span>Всего </span>
-      <MUILink to={locationsPath.toUrl({ userAlias })} component={Link}>
-        {`${Object.keys(counters?.locations || {}).length} городов `}
-      </MUILink>
-      <span>из </span>
-      <span>{`${Object.keys(counters?.countries || {}).length} стран `}</span>
-    </Typography>
+      nodesToPush.forEach(nodeToPush => {
+        nodesMemo.push(nodeToPush);
+      });
+      return nodesMemo;
+    },
+    [titleNode],
   );
 
-  return (
-    <div>
-      {titleNode}
-      {nodes}
-    </div>
-  );
+  // without key there is strange bug with reconciling:
+  // when group_by changed from trips to something other, then trips nodes still
+  // rendering in three, but because of nodes keys collisions only
+  // originalLocations is remaining on top of the list
+  return <div key={groupBy}>{nodes}</div>;
 }
 
 function resolveArrivalYear({ arrivalDateTime }) {
