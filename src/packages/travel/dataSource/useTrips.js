@@ -17,18 +17,32 @@ import useUser from './useUser';
 import useCountries from './useCountries';
 import useLocations from './useLocations';
 
-export default function useTrips({ userAlias }) {
+export default function useTrips({ userAlias, tripsIds: requiredTripsIds }) {
+  const { tripsDict } = useSelector(state => ({
+    tripsDict: selectDict(state, 'trips') || {},
+  }));
+  const shouldRequireAllTrips = !requiredTripsIds;
+  const missingTripsIds =
+    !shouldRequireAllTrips &&
+    requiredTripsIds.filter(tripId => !tripsDict[tripId]);
+
   return useProvision({
     domain: `travel.trips-${userAlias}`,
     isProvision: true,
     modelName: 'trips',
     observe: userAlias,
-    query: { userAlias, navigation: { isDisabled: true } },
+    query: {
+      userAlias,
+      navigation: { isDisabled: true },
+      filter: shouldRequireAllTrips
+        ? {}
+        : { id: { comparator: 'in', value: missingTripsIds } },
+    },
   });
 }
 
-export function useTripsStats({ userAlias }) {
-  const tripsProvision = useTrips({ userAlias });
+export function useTripsStats({ userAlias, tripsIds: requiredTripsIds }) {
+  const tripsProvision = useTrips({ userAlias, tripsIds: requiredTripsIds });
   const { user: { locationsRating = {} } = {}, ...userProvision } = useUser({
     domain: `travel.trips-${userAlias}.user`,
     userAlias,

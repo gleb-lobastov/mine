@@ -1,51 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import TripEditCard, { useTripState } from './blocks/TripEditCard';
 
-const TripEditDialog = ({ initialState, children, onSubmit: handleSubmit }) => {
+const TripEditDialog = ({ initialState, onSubmit: handleSubmit }) => {
   const { tripState, setTripState } = useTripState(initialState);
-  const [isOpen, setOpen] = React.useState(false);
-  const handleClickOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleSubmitInternal = () => {
-    handleSubmit(tripState);
-    handleClose(false);
-  };
 
-  return (
-    <>
-      {React.cloneElement(children, { onClick: handleClickOpen })}
-      {isOpen && (
-        <Dialog
-          transitionDuration={500}
-          open={isOpen}
-          onClose={handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">Поездка</DialogTitle>
-          <DialogContent>
-            <DialogContentText>Редактирование поездки</DialogContentText>
-            <TripEditCard tripState={tripState} setTripState={setTripState} />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">
-              Отмена
-            </Button>
-            <Button onClick={handleSubmitInternal} color="primary">
-              Сохранить
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-    </>
-  );
+  return <TripEditCard tripState={tripState} setTripState={setTripState} />;
 };
 
 TripEditDialog.propTypes = {

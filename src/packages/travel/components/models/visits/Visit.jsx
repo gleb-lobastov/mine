@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DomainIcon from '@material-ui/icons/Domain';
-import Path from 'modules/utilities/routing/Path';
 import visitPropTypes from 'travel/models/visits/propTypes';
 
 const resolveVisitIconComponent = visitType => {
@@ -23,18 +21,16 @@ const resolveVisitIconComponent = visitType => {
   }
 };
 
-const Visit = ({ visit, classes, locationsPath }) => {
+const Visit = ({ visit, classes }) => {
   if (!visit) {
     return 'Не указано';
   }
-  const { locationName, visitType, locationId } = visit;
+  const { locationName, visitType } = visit;
   const Icon = resolveVisitIconComponent(visitType);
   return (
     <div className={classes.container}>
       {Icon && <Icon className={classes.icon} />}
-      <Link to={locationsPath.toUrl({ strLocationId: String(locationId) })}>
-        {locationName}
-      </Link>
+      {locationName}
     </div>
   );
 };
@@ -55,7 +51,6 @@ const styles = {
 Visit.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   visit: PropTypes.shape(visitPropTypes),
-  locationsPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 Visit.defaultProps = {

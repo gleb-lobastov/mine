@@ -96,11 +96,9 @@ const Ride = ({
   className,
   defaultArrivalVisitId,
   defaultDepartureVisitId,
-  isEditable,
   onRideUpdate: handleRideUpdate,
   ride,
   ride: { rideId, vehicleType, rideType, arrivalDateTime, departureDateTime },
-  showDetails,
 }) => {
   const rideInitialState = rideId
     ? ride
@@ -112,7 +110,7 @@ const Ride = ({
   const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
 
   const iconNode = <Icon className={classes.icon} />;
-  const rideNode = isEditable ? (
+  const rideNode = (
     <RideEditDialog
       className={classes.editDialogTrigger}
       initialState={rideInitialState}
@@ -122,8 +120,6 @@ const Ride = ({
     >
       {iconNode}
     </RideEditDialog>
-  ) : (
-    iconNode
   );
 
   return (
@@ -132,7 +128,7 @@ const Ride = ({
         <HichHikingIcon className={classes.icon} />
       )}
       {rideNode}
-      {Boolean(rideId && showDetails) && (
+      {Boolean(rideId) && (
         <span className={classes.details}>
           {rideDateTimePeriodToString({ departureDateTime, arrivalDateTime })}
         </span>
@@ -147,11 +143,9 @@ Ride.propTypes = {
   className: PropTypes.string,
   defaultArrivalVisitId: PropTypes.number,
   defaultDepartureVisitId: PropTypes.number,
-  isEditable: PropTypes.bool,
   onRideUpdate: PropTypes.func.isRequired,
   originLocation: PropTypes.shape(locationsPropTypes).isRequired,
   ride: PropTypes.shape(ridePropTypes),
-  showDetails: PropTypes.bool,
 };
 
 Ride.defaultProps = {
@@ -159,9 +153,7 @@ Ride.defaultProps = {
   className: undefined,
   defaultArrivalVisitId: undefined,
   defaultDepartureVisitId: undefined,
-  isEditable: false,
   ride: {},
-  showDetails: false,
 };
 
 export default withStyles(styles)(Ride);

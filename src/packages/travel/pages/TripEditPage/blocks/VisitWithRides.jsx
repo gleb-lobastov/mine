@@ -48,18 +48,14 @@ const VisitWithRides = ({
   prevVisitId,
   nextVisitId,
   tripVisitsList,
-  isEditable,
-  isSortable,
-  isSorting,
   isArrivalRideMatch,
   isDepartureRideMatch,
   onRideUpdate: handleRideUpdate,
   onVisitUpdate: handleVisitUpdate,
   originLocation,
-  locationsPath,
 }) => {
-  const shouldWarnForArrivalRide = isEditable && !isArrivalRideMatch;
-  const shouldWarnForDepartureRide = isEditable && !isDepartureRideMatch;
+  const shouldWarnForArrivalRide = !isArrivalRideMatch;
+  const shouldWarnForDepartureRide = !isDepartureRideMatch;
 
   return (
     <div className={classes.container}>
@@ -68,41 +64,33 @@ const VisitWithRides = ({
         defaultDepartureVisitId={prevVisitId}
         defaultArrivalVisitId={visitId}
         visitId={visitId}
-        isEditable={isEditable}
         className={cls(classes.ride, {
-          [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
+          [classes.alwaysVisible]: true,
           [classes.warning]: shouldWarnForArrivalRide,
         })}
         ride={ridesDict[arrivalRideId]}
-        showDetails={isSorting || shouldWarnForArrivalRide}
         onRideUpdate={handleRideUpdate}
         originLocation={originLocation}
       />
       <Visit
         classes={{ editIcon: classes.visibleOnlyOnHover }}
-        isEditable={isEditable}
         onVisitUpdate={handleVisitUpdate}
         visit={visit}
-        locationsPath={locationsPath}
       />
-      {(!isDepartureRideMatch || isSorting) && (
-        <Ride
-          className={cls(classes.ride, {
-            [classes.alwaysVisible]: isSorting || !isDepartureRideMatch,
-            [classes.warning]: shouldWarnForDepartureRide,
-          })}
-          ride={ridesDict[departureRideId]}
-          availableVisits={tripVisitsList}
-          defaultDepartureVisitId={visitId}
-          defaultArrivalVisitId={nextVisitId}
-          isEditable={isEditable && !isDepartureRideMatch}
-          showDetails={isSorting || shouldWarnForDepartureRide}
-          onRideUpdate={handleRideUpdate}
-          originLocation={originLocation}
-        />
-      )}
-      {isSortable &&
-        !isSorting && <DragHandler className={classes.visibleOnlyOnHover} />}
+      <Ride
+        className={cls(classes.ride, {
+          [classes.alwaysVisible]: true,
+          [classes.warning]: shouldWarnForDepartureRide,
+        })}
+        ride={ridesDict[departureRideId]}
+        availableVisits={tripVisitsList}
+        defaultDepartureVisitId={visitId}
+        defaultArrivalVisitId={nextVisitId}
+        isEditable={!isDepartureRideMatch}
+        onRideUpdate={handleRideUpdate}
+        originLocation={originLocation}
+      />
+      <DragHandler className={classes.visibleOnlyOnHover} />
     </div>
   );
 };
@@ -111,9 +99,6 @@ VisitWithRides.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
   isArrivalRideMatch: PropTypes.bool,
   isDepartureRideMatch: PropTypes.bool,
-  isEditable: PropTypes.bool,
-  isSortable: PropTypes.bool,
-  isSorting: PropTypes.bool,
   nextVisitId: PropTypes.number,
   onRideUpdate: PropTypes.func.isRequired,
   onVisitUpdate: PropTypes.func.isRequired,
@@ -122,15 +107,11 @@ VisitWithRides.propTypes = {
   ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   visit: PropTypes.shape(visitPropTypes).isRequired,
-  locationsPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 VisitWithRides.defaultProps = {
   isArrivalRideMatch: true,
   isDepartureRideMatch: true,
-  isEditable: false,
-  isSortable: false,
-  isSorting: false,
   nextVisitId: null,
   prevVisitId: null,
   tripVisitsList: [],

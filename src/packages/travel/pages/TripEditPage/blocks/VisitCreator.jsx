@@ -19,12 +19,8 @@ const styles = {
   },
 };
 
-const VisitCreator = ({
-  classes,
-  isSorting,
-  onVisitUpdate: handleVisitUpdate,
-}) => (
-  <div className={cls({ [classes.draggableContainer]: !isSorting })}>
+const VisitCreator = ({ classes, onVisitUpdate: handleVisitUpdate }) => (
+  <div className={classes.draggableContainer}>
     <VisitEditDialog
       initialState={initializeVisit()}
       onSubmit={handleVisitUpdate}
@@ -44,12 +40,9 @@ const VisitCreator = ({
 
 VisitCreator.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  isSorting: PropTypes.bool,
   onVisitUpdate: PropTypes.func.isRequired,
 };
 
-VisitCreator.defaultProps = {
-  isSorting: false,
-};
+VisitCreator.defaultProps = {};
 
 export default withStyles(styles)(VisitCreator);

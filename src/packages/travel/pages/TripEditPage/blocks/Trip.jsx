@@ -1,35 +1,18 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import IconButton from '@material-ui/core/IconButton';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import IconHome from '@material-ui/icons/Home';
-import EditIcon from '@material-ui/icons/Edit';
-import checkIsNodeNotSortable from 'modules/utilities/dom/checkIsNodeNotSortable';
-import { withItem } from 'modules/utilities/types/array';
-import Path from 'modules/utilities/routing/Path';
 import checkIsVisitsConnectedByRide from 'travel/utils/checkIsVisitsConnectedByRide';
-import locationPropTypes from 'travel/models/locations/propTypes';
-import ridePropTypes from 'travel/models/rides/propTypes';
 import tripPropTypes from 'travel/models/trips/propTypes';
-import { TRIP_TYPES } from 'travel/models/trips/consts';
-import { resolveTripCaption } from 'travel/models/trips/utils';
-import visitPropTypes from 'travel/models/visits/propTypes';
 import Location from 'travel/components/models/locations/Location';
 import TripEditDialog from 'travel/components/models/trips/TripEditDialog';
+import useNodeInsertion from '../useNodeInsertion';
+import Sortable from '../Sortable';
 import VisitWithRides from './VisitWithRides';
-import Ride from './Ride';
 import VisitCreator from './VisitCreator';
+import TripEditTitle from './TripEditTitle';
 
-const SortableTrip = SortableContainer(({ children }) => <div>{children}</div>);
-const SortableVisitWithRides = SortableElement(
-  ({ replaceWithNode, onVisitUpdate: handleVisitUpdate, ...props }) =>
-    replaceWithNode || (
-      <VisitWithRides onVisitUpdate={handleVisitUpdate} {...props} />
-    ),
-);
-
-const styles = {
+const useStyles = makeStyles({
   container: {
     '&:hover $visibleOnlyOnHover': {
       visibility: 'visible',
@@ -38,206 +21,112 @@ const styles = {
   visibleOnlyOnHover: {
     visibility: 'hidden',
   },
-};
-
-const resolveVisitsWindow = (tripVisitsList, indexOfVisit, overstepIndex) => {
-  const prevVisitIndex =
-    indexOfVisit - 1 - (indexOfVisit > overstepIndex ? 1 : 0);
-  const nextVisitIndex =
-    indexOfVisit + 1 - (indexOfVisit + 1 > overstepIndex ? 1 : 0);
-  const prevVisit = prevVisitIndex >= 0 ? tripVisitsList[prevVisitIndex] : null;
-  const nextVisit =
-    nextVisitIndex < tripVisitsList.length
-      ? tripVisitsList[nextVisitIndex]
-      : null;
-  return [prevVisit, nextVisit];
-};
+});
 
 const Trip = ({
-  classes,
-  countriesDict,
-  locationsDict,
-  onRideUpdate: handleRideUpdate,
-  onVisitsOrderUpdate: handleVisitsOrderUpdate,
-  ridesDict,
+  onRideUpdate,
+  onTripUpdate,
+  onVisitsOrderUpdate,
+  onVisitUpdate,
+  provision,
   trip,
-  trip: { tripId, originLocationId, tripName, tripType },
-  tripVisitsList,
-  onTripUpdate: handleTripUpdate,
-  onVisitUpdate: handleVisitUpdate,
-  locationsPath,
 }) => {
-  const [isSorting, setIsSorting] = useState(false);
-  const [addVisitControlIndex, setAddVisitControlIndex] = useState(
-    tripVisitsList.length,
-  );
-  const handleSortEnd = (data, event) => {
-    setIsSorting(false);
-    const { oldIndex, newIndex } = data;
-    if (oldIndex === addVisitControlIndex) {
-      setAddVisitControlIndex(newIndex);
-    } else {
-      handleVisitsOrderUpdate(event, {
-        oldIndex: oldIndex > addVisitControlIndex ? oldIndex - 1 : oldIndex,
-        newIndex: newIndex > addVisitControlIndex ? newIndex - 1 : newIndex,
-        collection: tripVisitsList,
-      });
-    }
-  };
+  const { locationsDict, visitsDict, ridesDict } = provision;
+  const { visits: tripVisitsIds, originLocationId } = trip;
+  const tripVisitsList = tripVisitsIds
+    .map(visitId => visitsDict[visitId])
+    .filter(Boolean);
 
-  const actualTripVisitsList = withItem(
-    tripVisitsList,
-    { isItVisitCreatorControl: true },
-    addVisitControlIndex,
-  );
+  const classes = useStyles();
 
-  const visitsNodes = actualTripVisitsList.map((visit, indexOfVisit) => {
-    const { isItVisitCreatorControl, visitId } = visit;
-    if (isItVisitCreatorControl) {
-      return (
-        <SortableVisitWithRides
-          key="visitCreator"
-          index={indexOfVisit}
-          replaceWithNode={
-            <VisitCreator
-              isSorting={isSorting}
-              onVisitUpdate={newVisit =>
-                handleVisitUpdate(newVisit, {
-                  indexInCollection: addVisitControlIndex,
-                  collection: tripVisitsList,
-                  tripId,
-                })
-              }
-            />
-          }
-        />
-      );
-    }
-    const [prevVisit, nextVisit] = resolveVisitsWindow(
-      tripVisitsList,
-      indexOfVisit,
-      addVisitControlIndex,
-    );
+  const visitsNodes = tripVisitsList.flatMap((visit, indexOfVisit) => {
+    const { visitId } = visit || {};
+    const prevVisit = tripVisitsList[indexOfVisit - 1] || null;
+    const nextVisit = tripVisitsList[indexOfVisit + 1] || null;
     const { visitId: prevVisitId } = prevVisit || {};
     const { visitId: nextVisitId } = nextVisit || {};
     return (
-      <SortableVisitWithRides
-        index={indexOfVisit /* for SortableVisitWithRides */}
+      <VisitWithRides
+        index={indexOfVisit /* for SortableNode */}
         isArrivalRideMatch={checkIsVisitsConnectedByRide(prevVisit, visit)}
         isDepartureRideMatch={checkIsVisitsConnectedByRide(visit, nextVisit)}
-        isEditable={true}
-        isSortable={true}
-        isSorting={isSorting}
         key={visitId}
         nextVisitId={nextVisitId}
-        onRideUpdate={handleRideUpdate}
-        onVisitUpdate={handleVisitUpdate}
-        originLocation={locationsDict[originLocationId]}
+        onRideUpdate={onRideUpdate}
+        onVisitUpdate={onVisitUpdate}
         prevVisitId={prevVisitId}
         ridesDict={ridesDict}
         tripVisitsList={tripVisitsList}
         visit={visit}
-        locationsPath={locationsPath}
       />
     );
   });
 
-  const wrappedVisitsNodes = (
-    <SortableTrip
-      onSortEnd={handleSortEnd}
-      shouldCancelStart={checkIsNodeNotSortable}
-      updateBeforeSortStart={() => setIsSorting(true)}
-      lockAxis="y"
-      lockToContainerEdges={true}
-    >
-      {visitsNodes}
-    </SortableTrip>
-  );
-
-  const originLocationNode = (
-    <Location
-      location={locationsDict[originLocationId]}
-      Icon={IconHome}
-      locationsPath={locationsPath}
-    />
-  );
-
-  const tripEditControlsNode = (
-    <TripEditDialog
-      initialState={trip}
-      onSubmit={updatedTrip => handleTripUpdate({ ...trip, ...updatedTrip })}
-    >
-      <IconButton
-        data-sort-handler="disabled"
-        size="small"
-        variant="outlined"
-        color="primary"
-      >
-        <EditIcon className={classes.visibleOnlyOnHover} />
-      </IconButton>
-    </TripEditDialog>
-  );
-
-  const lastVisit = tripVisitsList[tripVisitsList.length - 1];
-  const lastButOneVisit = tripVisitsList[tripVisitsList.length - 2];
-  const { departureRideId: rideToOriginId, visitId: recentVisitId } =
-    lastVisit || {};
-
-  const isRelocation = tripType === TRIP_TYPES.RELOCATION;
-  const rideToOriginNode = isRelocation ? null : (
-    <Ride
-      availableVisits={tripVisitsList}
-      defaultDepartureVisitId={recentVisitId}
-      isEditable={true}
-      onRideUpdate={handleRideUpdate}
-      originLocation={locationsDict[originLocationId]}
-      ride={ridesDict[rideToOriginId]}
-      showDetails={
-        isSorting || checkIsVisitsConnectedByRide(lastButOneVisit, lastVisit)
+  const [
+    visitsNodesWithVisitCreatorNode,
+    visitCreatorNodeIndex,
+    setVisitCreatorNodeIndex,
+  ] = useNodeInsertion(
+    visitsNodes,
+    <VisitCreator
+      key="visitCreator"
+      onVisitUpdate={newVisit =>
+        onVisitUpdate(newVisit, {
+          indexInCollection: visitCreatorNodeIndex,
+          collection: tripVisitsList,
+        })
       }
-    />
+    />,
+  );
+
+  const handleSortEnd = useCallback(
+    (data, event) => {
+      const { oldIndex, newIndex } = data;
+      const isVisitCreatorNodeMoved = oldIndex === visitCreatorNodeIndex;
+      if (isVisitCreatorNodeMoved) {
+        setVisitCreatorNodeIndex(newIndex);
+      } else {
+        onVisitsOrderUpdate(event, {
+          oldIndex: oldIndex > visitCreatorNodeIndex ? oldIndex - 1 : oldIndex,
+          newIndex: newIndex > visitCreatorNodeIndex ? newIndex - 1 : newIndex,
+          collection: tripVisitsList,
+        });
+      }
+    },
+    [visitCreatorNodeIndex, onVisitsOrderUpdate],
   );
 
   return (
     <>
-      <h1 className={classes.container}>
-        {resolveTripCaption(
-          tripVisitsList,
-          countriesDict,
-          locationsDict[originLocationId] &&
-            locationsDict[originLocationId].countryId,
-          tripName,
-        )}
-        {tripEditControlsNode}
-      </h1>
-      {originLocationNode}
-      {wrappedVisitsNodes}
-      {!isRelocation && (
-        <>
-          {rideToOriginNode}
-          {originLocationNode}
-        </>
-      )}
+      <TripEditTitle
+        className={classes.container}
+        provision={provision}
+        tripVisitsList={tripVisitsList}
+        trip={trip}
+      >
+        <TripEditDialog
+          initialState={trip}
+          onSubmit={updatedTrip => onTripUpdate({ ...trip, ...updatedTrip })}
+        />
+      </TripEditTitle>
+      <Location location={locationsDict[originLocationId]} Icon={IconHome} />
+      <Sortable onSortEnd={handleSortEnd}>
+        {visitsNodesWithVisitCreatorNode}
+      </Sortable>
     </>
   );
 };
+
 Trip.propTypes = {
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  tripIndex: PropTypes.number.isRequired,
-  locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
-    .isRequired,
   onRideUpdate: PropTypes.func.isRequired,
   onTripUpdate: PropTypes.func.isRequired,
   onVisitsOrderUpdate: PropTypes.func.isRequired,
-  ridesDict: PropTypes.objectOf(PropTypes.shape(ridePropTypes)).isRequired,
   trip: PropTypes.shape(tripPropTypes).isRequired,
-  tripVisitsList: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
-  tripStoryPath: PropTypes.instanceOf(Path).isRequired,
-  locationsPath: PropTypes.instanceOf(Path).isRequired,
 };
 
 Trip.defaultProps = {
   tripVisitsList: [],
 };
 
-export default withStyles(styles)(Trip);
+export default Trip;
