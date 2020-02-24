@@ -73,9 +73,7 @@ const resolveRideIconComponent = vehicleType => {
 };
 
 export const styles = {
-  container: {
-    display: 'inline-block',
-  },
+  container: {},
   icon: {
     marginRight: '4px',
     display: 'inline-block',
@@ -89,33 +87,23 @@ export const styles = {
   },
 };
 
-const Ride = ({
+const Ride = ({formikProps,
   availableVisits,
   originLocation,
   classes,
   className,
-  defaultArrivalVisitId,
-  defaultDepartureVisitId,
   onRideUpdate: handleRideUpdate,
   ride,
   ride: { rideId, vehicleType, rideType, arrivalDateTime, departureDateTime },
 }) => {
-  const rideInitialState = rideId
-    ? ride
-    : initializeRide({
-        defaultDepartureVisitId,
-        defaultArrivalVisitId,
-      });
-
   const Icon = rideId ? resolveRideIconComponent(vehicleType) : UnknownRideIcon;
 
   const iconNode = <Icon className={classes.icon} />;
   const rideNode = (
     <RideEditDialog
       className={classes.editDialogTrigger}
-      initialState={rideInitialState}
+      formikProps={formikProps}
       availableVisits={availableVisits}
-      onSubmit={updatedRide => handleRideUpdate({ ...ride, ...updatedRide })}
       originLocation={originLocation}
     >
       {iconNode}
@@ -124,9 +112,6 @@ const Ride = ({
 
   return (
     <div className={cls(className, classes.container)}>
-      {rideType === RIDE_TYPES.HITCH_HIKING && (
-        <HichHikingIcon className={classes.icon} />
-      )}
       {rideNode}
       {Boolean(rideId) && (
         <span className={classes.details}>

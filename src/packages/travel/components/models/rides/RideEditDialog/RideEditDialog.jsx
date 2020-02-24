@@ -9,17 +9,15 @@ import RideEditForm from './blocks/RideEditForm';
 
 const RideEditDialog = ({
   availableVisits,
-  initialState,
+  formikProps,
   children,
   className,
-  onSubmit: handleSubmit,
   originLocation,
 }) => {
   const [isOpen, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleSubmitInternal = values => {
-    handleSubmit(values);
     handleClose(false);
   };
 

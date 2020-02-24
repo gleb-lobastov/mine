@@ -7,7 +7,7 @@ import compose from 'lodash/fp/compose';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import ProvisionedSuggest, {
   QUERY_FORMATS,
-} from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
+} from 'modules/components/muiExtended/SuggestOld/modifications/ProvisionedSuggest';
 import { selectDict } from 'core/connection';
 import { TRIP_TYPES } from 'travel/models/trips/consts';
 import { TRIP_TYPE_NAMES } from '../localization';

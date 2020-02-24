@@ -5,7 +5,7 @@ import TextField from '@material-ui/core/TextField';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import ProvisionedSuggest, {
   QUERY_FORMATS,
-} from 'modules/components/muiExtended/Suggest/modifications/ProvisionedSuggest';
+} from 'modules/components/muiExtended/SuggestOld/modifications/ProvisionedSuggest';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
 import { VISIT_TYPE_NAMES } from '../localization';
 

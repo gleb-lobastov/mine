@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Typography from '@material-ui/core/Typography';
+import { Formik } from 'formik';
 import { useAuthContext } from 'core/context/AuthContext';
 import { useTripsStats } from 'travel/dataSource';
 import { initializeTrip } from 'travel/models/trips';
-import Trip from './blocks/Trip';
+import TripVisitsAndRidesEditForm from './blocks/TripEditForm/TripVisitsAndRidesEditForm';
 import useTripEditRequests from './useTripEditRequests';
 
 function TripEditPage({
@@ -30,7 +30,7 @@ function TripEditPage({
     handleSubmitRide,
     handleSubmitTrip,
     handleSubmitVisit,
-    handleSubmitVisitsOrder,
+    handleSubmitVisitOrder,
   } = useTripEditRequests();
 
   const { isError, isReady, isPending } = provision;
@@ -47,22 +47,37 @@ function TripEditPage({
     return <div>...Loading</div>;
   }
 
+  if (!trip) {
+    return <div>...Error, no trip is provided</div>;
+  }
+
+  const { visitsDict, ridesDict } = provision;
+  const { visits: tripVisitsIds, rides: tripRidesIds } = trip;
+  const tripVisitsList = tripVisitsIds
+    .map(visitId => visitsDict[visitId])
+    .filter(Boolean);
+  const tripRidesList = tripRidesIds
+    .map(rideId => ridesDict[rideId])
+    .filter(Boolean);
+
   return (
-    <>
-      <Typography>
-        {isCreation ? 'Создание поездки' : 'Редактирование поездки'}
-      </Typography>
-      {trip && (
-        <Trip
+    <Formik
+      initialValues={{ trip, visits: tripVisitsList, rides: tripRidesList }}
+      onSubmit={(values, actions) => {
+        setTimeout(() => {
+          alert(JSON.stringify(values, null, 2));
+          actions.setSubmitting(false);
+        }, 100);
+      }}
+    >
+      {formikProps => (
+        <TripVisitsAndRidesEditForm
+          isCreation={isCreation}
+          formikProps={formikProps}
           provision={provision}
-          onRideUpdate={handleSubmitRide}
-          onTripUpdate={handleSubmitTrip}
-          onVisitUpdate={handleSubmitVisit}
-          onVisitsOrderUpdate={handleSubmitVisitsOrder}
-          trip={trip}
         />
       )}
-    </>
+    </Formik>
   );
 }
 

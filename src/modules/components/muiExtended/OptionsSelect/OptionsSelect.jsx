@@ -8,9 +8,7 @@ import Select from '@material-ui/core/Select';
 
 const styles = {
   container: {
-    display: 'inline-block',
-    flexGrow: '1',
-    flexBasis: '0',
+    display: 'block',
   },
   selectRoot: {
     display: 'block',

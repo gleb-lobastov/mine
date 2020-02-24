@@ -22,6 +22,8 @@ const resolveVisitIconComponent = visitType => {
 };
 
 const Visit = ({ visit, classes }) => {
+  console.log({ visit });
+
   if (!visit) {
     return 'Не указано';
   }

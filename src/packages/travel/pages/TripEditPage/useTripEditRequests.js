@@ -13,7 +13,7 @@ export default function useTripEditRequests() {
     domain: `${domain}.order`,
     modelName: 'visits',
   });
-  const handleSubmitVisitsOrder = useCallback(
+  const handleSubmitVisitOrder = useCallback(
     (event, { oldIndex, newIndex, collection }) => {
       if (oldIndex !== newIndex) {
         submitVisitsOrder({
@@ -88,6 +88,6 @@ export default function useTripEditRequests() {
     handleSubmitRide,
     handleSubmitTrip,
     handleSubmitVisit,
-    handleSubmitVisitsOrder,
+    handleSubmitVisitOrder,
   };
 }
