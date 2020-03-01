@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { FieldArray } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
-import DragHandler from 'modules/components/DragHandler';
 import checkIsVisitsConnectedByRide from 'travel/utils/checkIsVisitsConnectedByRide';
 import Sortable from 'modules/components/Sortable';
 import VisitCreator from './blocks/VisitCreator';
@@ -117,27 +116,16 @@ export default function VisitsAndRidesFormSection({
               return visitAndRidesFormSectionNode;
             }
 
-            const creatorsNode = (
-              <div
-                style={{ zIndex: formVisitsIds.length + 1 }}
-                className={classes.creatorsContainer}
-              >
-                <VisitCreator
-                  key="visitCreator"
-                  onVisitUpdate={newVisit => {}}
-                />
-                <DragHandler />
-                <VisitCreator
-                  key="rideCreator"
-                  onVisitUpdate={newVisit => {}}
-                />
+            const visitCreatorNode = (
+              <div style={{ zIndex: formVisitsIds.length + 1 }}>
+                <VisitCreator key="visitCreator" showDialog={showDialog} />
               </div>
             );
 
             if (shouldInsertCreatorsNodeBeforeFormSection) {
-              return [creatorsNode, visitAndRidesFormSectionNode];
+              return [visitCreatorNode, visitAndRidesFormSectionNode];
             }
-            return [visitAndRidesFormSectionNode, creatorsNode];
+            return [visitAndRidesFormSectionNode, visitCreatorNode];
           })}
         </Sortable>
       )}

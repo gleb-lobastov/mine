@@ -1,46 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cls from 'classnames';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import initializeVisit from 'travel/models/visits/initialize';
-import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
+import DragHandler from 'modules/components/DragHandler';
+import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogsState';
 
-const styles = {
-  visibleOnlyOnHover: {
-    visibility: 'hidden',
-  },
-  draggableContainer: {
+const useStyles = makeStyles({
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    margin: '12px 0',
+    cursor: 'grab',
+    background: '#fff',
+    padding: '12px',
+    border: '1px solid #ccc',
+    boxShadow: '0 2px 8px 0 rgba(0, 0, 0, 0.1), 0 0 1px 0 rgba(0, 0, 0, 0.2)',
     position: 'relative',
     '&:hover $visibleOnlyOnHover': {
       visibility: 'visible',
     },
   },
-};
+  visibleOnlyOnHover: {
+    visibility: 'hidden',
+  },
+});
 
-const VisitCreator = ({ classes, onVisitUpdate: handleVisitUpdate }) => (
-  <div className={classes.draggableContainer}>
-    <VisitEditDialog
-      initialState={initializeVisit()}
-      onSubmit={handleVisitUpdate}
-    >
+export default function VisitCreator({ showDialog }) {
+  const classes = useStyles();
+  return (
+    <div className={classes.container} data-sort-handler="enabled">
       <Button
         data-sort-handler="disabled"
         size="small"
         variant="outlined"
         color="primary"
+        onClick={() => showDialog(DIALOG_NAMES.VISIT_CREATE)}
       >
         <span>Добавить посещение</span>
       </Button>
-    </VisitEditDialog>
-  </div>
-);
+      <DragHandler className={classes.visibleOnlyOnHover} />
+    </div>
+  );
+}
 
 VisitCreator.propTypes = {
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  onVisitUpdate: PropTypes.func.isRequired,
+  showDialog: PropTypes.func.isRequired,
 };
 
 VisitCreator.defaultProps = {};
-
-export default withStyles(styles)(VisitCreator);

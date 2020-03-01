@@ -7,11 +7,6 @@ import IconDragHandle from '@material-ui/icons/DragHandle';
 const useStyles = makeStyles({
   dragHandler: {
     cursor: 'grab',
-    marginLeft: '4px',
-    position: 'absolute',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    display: 'inline-block',
   },
 });
 
