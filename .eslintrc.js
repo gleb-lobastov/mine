@@ -20,7 +20,10 @@ module.exports = {
     // only allowed in reducers
     'no-param-reassign': [
       'error',
-      { props: true, ignorePropertyModificationsFor: ['memo'] },
+      {
+        props: true,
+        ignorePropertyModificationsFor: ['memo', 'accumulator'],
+      },
     ],
     'no-use-before-define': ['error', { functions: false }],
     'import/extensions': [
