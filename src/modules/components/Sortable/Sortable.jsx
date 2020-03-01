@@ -5,8 +5,8 @@ import {
 } from 'react-sortable-hoc';
 import checkIsNodeNotSortable from 'modules/utilities/dom/checkIsNodeNotSortable';
 
-const SortableContainer = SortableContainerHOC(({ children }) => (
-  <div>{children}</div>
+const SortableContainer = SortableContainerHOC(({ children, className }) => (
+  <div className={className}>{children}</div>
 ));
 const SortableElement = SortableElementHOC(({ node }) => node);
 

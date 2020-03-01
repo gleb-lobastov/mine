@@ -16,6 +16,9 @@ const useStyles = makeStyles({
   isCompact: {
     marginTop: '-52px',
   },
+  resetFlow: {
+    transform: 'translate(0, 0)',
+  },
 });
 
 function checkIsRidesMatch(
@@ -57,6 +60,7 @@ export default function VisitsAndRidesFormSection({
       name="trip.visits"
       render={arrayHelpers => (
         <Sortable
+          className={classes.resetFlow}
           updateBeforeSortStart={() => setIsSorting(true)}
           onSortEnd={data => {
             setIsSorting(false);
