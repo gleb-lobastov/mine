@@ -4,7 +4,7 @@ import { Form } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TripEditFormSection from './blocks/TripEditFormSection';
-import VisitsAndRidesFormSection from './blocks/VisitsAndRidesFormSection';
+import VisitsAndRidesFormSection from './blocks/VisitsAndRidesFormSection/VisitsAndRidesFormSection';
 import TripEditTitle from './blocks/TripEditTitle';
 
 const useStyles = makeStyles({
@@ -18,7 +18,12 @@ const useStyles = makeStyles({
   },
 });
 
-const TripVisitsAndRidesEditForm = ({ isCreation, provision, formikProps }) => {
+const TripEditForm = ({
+  isCreation,
+  showDialog,
+  provision,
+  formikProps,
+}) => {
   const classes = useStyles();
 
   return (
@@ -33,6 +38,7 @@ const TripVisitsAndRidesEditForm = ({ isCreation, provision, formikProps }) => {
         <TripEditFormSection formikProps={formikProps} provision={provision} />
         <VisitsAndRidesFormSection
           classes={classes}
+          showDialog={showDialog}
           formikProps={formikProps}
           provision={provision}
         />
@@ -45,10 +51,10 @@ const TripVisitsAndRidesEditForm = ({ isCreation, provision, formikProps }) => {
   );
 };
 
-TripVisitsAndRidesEditForm.propTypes = {
+TripEditForm.propTypes = {
   isCreation: PropTypes.bool.isRequired,
 };
 
-TripVisitsAndRidesEditForm.defaultProps = {};
+TripEditForm.defaultProps = {};
 
-export default TripVisitsAndRidesEditForm;
+export default TripEditForm;

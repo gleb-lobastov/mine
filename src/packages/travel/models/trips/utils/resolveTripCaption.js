@@ -2,23 +2,30 @@ import groupBy from 'lodash/groupBy';
 import uniqTrimAndJoin from 'modules/utilities/text/uniqTrimAndJoin';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
 
-export default (tripVisitsList, countriesDict, originCountryId, fallback) => {
-  if (!tripVisitsList.length) {
+export default (
+  visitsIds,
+  visitsDict,
+  countriesDict,
+  originCountryId,
+  fallback,
+) => {
+  if (!visitsIds.length) {
     return fallback;
   }
   const visitsByCountries = Object.keys(
     groupBy(
-      tripVisitsList.filter(
-        ({ visitType }) => visitType !== VISIT_TYPES.TRANSIT,
+      visitsIds.filter(
+        visitId => visitsDict[visitId]?.visitType !== VISIT_TYPES.TRANSIT,
       ),
       'countryId',
     ),
   );
   if (visitsByCountries.length === 1) {
     return (
-      uniqTrimAndJoin(tripVisitsList.map(({ locationName }) => locationName), {
-        maxLength: 4,
-      }) || fallback
+      uniqTrimAndJoin(
+        visitsIds.map(visitId => visitsDict[visitId]?.locationName),
+        { maxLength: 4 },
+      ) || fallback
     );
   }
   return (

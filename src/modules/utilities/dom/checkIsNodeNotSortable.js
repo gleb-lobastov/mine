@@ -2,9 +2,18 @@
 export default event => {
   let element = event.target;
   while (element) {
-    if (element.dataset && element.dataset.sortHandler === 'enabled') {
-      return false;
+    const { dataset } = element;
+
+    if (dataset) {
+      const { sortHandler } = dataset;
+      if (sortHandler === 'enabled') {
+        return false;
+      }
+      if (sortHandler === 'disabled') {
+        return true;
+      }
     }
+
     element = element.parentNode;
   }
   return true;

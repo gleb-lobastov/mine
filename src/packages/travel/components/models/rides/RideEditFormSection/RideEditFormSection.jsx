@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -21,8 +21,8 @@ import {
   RIDE_CLASSES_NAMES,
   RIDE_TYPES_NAMES,
   RIDE_OCCUPATION_NAMES,
-} from '../localization';
-import tieDateTimeFields from '../tieDateTimeFields';
+} from '../RideEditDialog/localization';
+import tieDateTimeFields from '../RideEditDialog/tieDateTimeFields';
 
 // if ride was started/ended in origin, then it has no corresponding
 // related visit. Relation is null. So this is not a magic, but real value
@@ -37,32 +37,34 @@ const renderRideClass = ({ option: rideClass }) =>
 const renderRideOccupation = ({ option: rideOccupation }) =>
   rideOccupation ? RIDE_OCCUPATION_NAMES[rideOccupation] : 'Не указан';
 
-const styles = {
+const useStyles = makeStyles({
   optionGroup: {
     display: 'flex',
   },
   option: {
     flexGrow: '1',
   },
-};
+});
 
-const RideEditForm = ({
-  classes,
-  availableVisits,
-  originLocation,
-  values: {
-    departureVisitId,
-    arrivalVisitId,
-    vehicleType,
-    rideType,
-    rideComment,
-    rideClass,
-    rideOccupation,
-    departureDateTime,
-    arrivalDateTime,
+const RideEditFormSection = ({
+  availableVisits = [],
+  originLocation = {},
+  formikProps: {
+    values: {
+      departureVisitId,
+      arrivalVisitId,
+      vehicleType,
+      rideType,
+      rideComment,
+      rideClass,
+      rideOccupation,
+      departureDateTime,
+      arrivalDateTime,
+    },
+    handleChange,
   },
-  handleChange,
 }) => {
+  const classes = useStyles();
   const availableVisitsIds = availableVisits.map(({ visitId }) => visitId);
   const visitsDict = Object.fromEntries(
     availableVisits.map(visit => {
@@ -232,12 +234,12 @@ const RideEditForm = ({
   );
 };
 
-RideEditForm.propTypes = {
+RideEditFormSection.propTypes = {
   className: PropTypes.string,
   classes: PropTypes.objectOf(PropTypes.string).isRequired,
 };
-RideEditForm.defaultProps = {
+RideEditFormSection.defaultProps = {
   className: undefined,
 };
 
-export default withStyles(styles)(RideEditForm);
+export default RideEditFormSection;

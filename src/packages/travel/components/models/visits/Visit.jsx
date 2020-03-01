@@ -1,11 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import LocationCityIcon from '@material-ui/icons/LocationCity';
 import TransferWithinAStationIcon from '@material-ui/icons/TransferWithinAStation';
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import DomainIcon from '@material-ui/icons/Domain';
 import visitPropTypes from 'travel/models/visits/propTypes';
+
+const useStyles = makeStyles({
+  container: {
+    display: 'inline-block',
+    marginRight: '4px',
+  },
+  icon: {
+    marginRight: '4px',
+    display: 'inline-block',
+    verticalAlign: 'text-bottom',
+  },
+  editIcon: {},
+});
 
 const resolveVisitIconComponent = visitType => {
   switch (visitType) {
@@ -21,13 +34,12 @@ const resolveVisitIconComponent = visitType => {
   }
 };
 
-const Visit = ({ visit, classes }) => {
-  console.log({ visit });
-
-  if (!visit) {
+const Visit = ({ formVisit }) => {
+  const classes = useStyles();
+  if (!formVisit) {
     return 'Не указано';
   }
-  const { locationName, visitType } = visit;
+  const { locationName, visitType } = formVisit;
   const Icon = resolveVisitIconComponent(visitType);
   return (
     <div className={classes.container}>
@@ -35,19 +47,6 @@ const Visit = ({ visit, classes }) => {
       {locationName}
     </div>
   );
-};
-
-const styles = {
-  container: {
-    display: 'inline-block',
-    marginRight: '4px',
-  },
-  icon: {
-    marginRight: '4px',
-    display: 'inline-block',
-    verticalAlign: 'text-bottom',
-  },
-  editIcon: {},
 };
 
 Visit.propTypes = {
@@ -59,4 +58,4 @@ Visit.defaultProps = {
   visit: {},
 };
 
-export default withStyles(styles)(Visit);
+export default Visit;

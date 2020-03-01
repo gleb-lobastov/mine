@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import IconButton from '@material-ui/core/IconButton';
 import DialogWithForm from 'modules/components/muiExtended/DialogWithForm';
 import locationsPropTypes from 'travel/models/locations/propTypes';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
-import RideEditFormSection from '../RideEditFormSection';
+import RideEditForm from './blocks/RideEditForm';
 
-const RideEditDialog = ({ children, className }) => {
+const RideDeleteDialog = ({ ride }) => {
   const [isOpen, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -23,17 +24,20 @@ const RideEditDialog = ({ children, className }) => {
           enableReinitialize={true}
           onSubmit={handleSubmitInternal}
           onReject={handleClose}
-          title="Транспорт"
-          description="Как вы добрались в место назначения и как уехали из него?"
+          title="Удаление маршрута"
+          description="Вы действительно хотите удалить маршрут?"
         >
-          <RideEditFormSection availableVisits={[]} originLocation={{}} />
+          <RideEditForm
+            availableVisits={availableVisits}
+            originLocation={originLocation}
+          />
         </DialogWithForm>
       )}
     </div>
   );
 };
 
-RideEditDialog.propTypes = {
+RideDeleteDialog.propTypes = {
   availableVisits: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
   initialState: PropTypes.shape(ridePropTypes).isRequired,
   children: PropTypes.node.isRequired,
@@ -41,9 +45,9 @@ RideEditDialog.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   originLocation: PropTypes.shape(locationsPropTypes).isRequired,
 };
-RideEditDialog.defaultProps = {
+RideDeleteDialog.defaultProps = {
   className: undefined,
   availableVisits: [],
 };
 
-export default RideEditDialog;
+export default RideDeleteDialog;

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   SortableContainer as SortableContainerHOC,
   SortableElement as SortableElementHOC,
@@ -10,13 +10,13 @@ const SortableContainer = SortableContainerHOC(({ children }) => (
 ));
 const SortableElement = SortableElementHOC(({ node }) => node);
 
-export default function Sortable({ children, onSortEnd }) {
+export default function Sortable({ children, ...forwardingProps }) {
   return (
     <SortableContainer
-      onSortEnd={onSortEnd}
       shouldCancelStart={checkIsNodeNotSortable}
       lockAxis="y"
       lockToContainerEdges={true}
+      {...forwardingProps}
     >
       {React.Children.map(children, (node, index) => (
         <SortableElement node={node} index={index} />

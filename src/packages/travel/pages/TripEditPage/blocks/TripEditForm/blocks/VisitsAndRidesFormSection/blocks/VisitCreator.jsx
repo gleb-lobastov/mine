@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import initializeVisit from 'travel/models/visits/initialize';
 import VisitEditDialog from 'travel/components/models/visits/VisitEditDialog';
-import DragHandler from 'modules/components/DragHandler';
 
 const styles = {
   visibleOnlyOnHover: {
@@ -34,7 +33,6 @@ const VisitCreator = ({ classes, onVisitUpdate: handleVisitUpdate }) => (
         <span>Добавить посещение</span>
       </Button>
     </VisitEditDialog>
-    <DragHandler className={classes.visibleOnlyOnHover} />
   </div>
 );
 
