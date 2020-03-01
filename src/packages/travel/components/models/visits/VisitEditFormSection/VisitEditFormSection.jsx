@@ -74,7 +74,7 @@ export default function VisitEditFormSection({
       </div>
       <div className={classes.optionGroup}>
         <OptionsSelect
-          name="arrivalVisitId"
+          name="arrivalRideId"
           caption="Прибытие"
           inputId="RideEditCard-arrivalVisitId"
           hasNullOption={false}
@@ -84,7 +84,7 @@ export default function VisitEditFormSection({
           value={arrivalRideId}
         />
         <OptionsSelect
-          name="departureVisitId"
+          name="departureRideId"
           caption="Отправление"
           inputId="RideEditCard-departureVisitId"
           optionRender={renderRide}

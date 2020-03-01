@@ -40,7 +40,7 @@ export default function({
             <Button onClick={onReset} color="secondary">
               Отмена
             </Button>
-            <Button onClick={onSubmit} color="primary">
+            <Button onClick={formikProps.handleSubmit} color="primary">
               Сохранить
             </Button>
           </DialogActions>
