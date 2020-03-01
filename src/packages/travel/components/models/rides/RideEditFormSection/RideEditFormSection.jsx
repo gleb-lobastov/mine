@@ -104,28 +104,6 @@ const RideEditFormSection = ({
     <>
       <div className={classes.optionGroup}>
         <OptionsSelect
-          name="departureVisitId"
-          caption="Отправление из"
-          inputId="RideEditCard-departureVisitId"
-          optionRender={renderVisit}
-          hasNullOption={false}
-          options={[ORIGIN_OF_TRIP, ...availableVisitsIds]}
-          value={departureVisitId}
-          onChange={handleChange}
-        />
-        <OptionsSelect
-          name="arrivalVisitId"
-          caption="Прибытие в"
-          inputId="RideEditCard-arrivalVisitId"
-          hasNullOption={false}
-          optionRender={renderVisit}
-          options={[...availableVisitsIds, ORIGIN_OF_TRIP]}
-          onChange={handleChange}
-          value={arrivalVisitId}
-        />
-      </div>
-      <div className={classes.optionGroup}>
-        <OptionsSelect
           name="vehicleType"
           caption="Транспорт"
           inputId="RideEditCard-VehicleTypeOptions"

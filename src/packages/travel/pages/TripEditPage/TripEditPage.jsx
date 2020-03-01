@@ -148,6 +148,8 @@ function TripEditPage({
             ? 'Создание посешения'
             : 'Редактирование посещения'
         }
+        availableRidesIds={trip.rides}
+        ridesDict={ridesDict}
       />
     </>
   );

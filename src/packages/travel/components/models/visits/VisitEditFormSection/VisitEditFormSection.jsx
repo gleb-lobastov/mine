@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import Suggest, { QUERY_FORMATS } from 'modules/components/muiExtended/Suggest';
+import RideInfo from 'travel/components/models/rides/RideInfo';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
 
 export const VISIT_TYPE_NAMES = {
@@ -27,14 +28,27 @@ const useStyles = makeStyles({
 });
 
 export default function VisitEditFormSection({
+  availableRidesIds,
+  ridesDict,
   formikProps: {
-    values: { locationName, visitType, visitComment },
+    values: {
+      locationName,
+      visitType,
+      visitComment,
+      arrivalRideId,
+      departureRideId,
+    },
     handleChange,
     handleBlur,
     setFieldValue,
   },
 }) {
   const classes = useStyles();
+
+  const renderRide = useCallback(
+    ({ option: rideId }) => <RideInfo ride={ridesDict[rideId]} isLong={true} />,
+    [ridesDict],
+  );
 
   return (
     <>
@@ -56,6 +70,28 @@ export default function VisitEditFormSection({
           }}
           transformSuggestionToOption={transformSuggestionToOption}
           triggerProps={{ label: 'Старт из' }}
+        />
+      </div>
+      <div className={classes.optionGroup}>
+        <OptionsSelect
+          name="arrivalVisitId"
+          caption="Прибытие"
+          inputId="RideEditCard-arrivalVisitId"
+          hasNullOption={false}
+          optionRender={renderRide}
+          options={availableRidesIds}
+          onChange={handleChange}
+          value={arrivalRideId}
+        />
+        <OptionsSelect
+          name="departureVisitId"
+          caption="Отправление"
+          inputId="RideEditCard-departureVisitId"
+          optionRender={renderRide}
+          hasNullOption={false}
+          options={availableRidesIds}
+          value={departureRideId}
+          onChange={handleChange}
         />
       </div>
       <div className={classes.optionGroup}>
