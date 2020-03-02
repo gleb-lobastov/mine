@@ -137,6 +137,7 @@ function mergeProvisionsState(...provisions) {
     isValid: provisions.every(selectIsValid),
     error: provisions.find(selectIsError),
     errors: provisions.map(selectError).filter(Boolean),
+    invalidate: () => provisions.forEach(({ invalidate }) => invalidate()),
   };
 }
 

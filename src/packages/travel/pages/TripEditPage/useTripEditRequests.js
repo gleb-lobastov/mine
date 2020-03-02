@@ -8,27 +8,7 @@ const calcOrder = createOrderCalculator({
 
 const domain = 'travel.TripEditPage';
 
-export default function useTripEditRequests() {
-  const [submitVisitsOrder] = useRequest({
-    domain: `${domain}.order`,
-    modelName: 'visits',
-  });
-  const handleSubmitVisitOrder = useCallback(
-    (event, { oldIndex, newIndex, collection }) => {
-      if (oldIndex !== newIndex) {
-        submitVisitsOrder({
-          query: {
-            id: collection[oldIndex].visitId,
-            body: {
-              orderInTrip: calcOrder({ index: newIndex, collection }),
-            },
-          },
-        });
-      }
-    },
-    [],
-  );
-
+export default function useTripEditRequests(invalidate) {
   const [submitRide] = useRequest({
     domain: `${domain}.rides`,
     modelName: 'rides',
@@ -40,7 +20,7 @@ export default function useTripEditRequests() {
           id: ride.rideId,
           body: ride,
         },
-      }),
+      }).then(invalidate),
     [],
   );
 
@@ -55,8 +35,7 @@ export default function useTripEditRequests() {
           id: trip.tripId,
           body: trip,
         },
-      }),
-    //.then(() => invalidateRequest({ domain: 'tripsPage.trips' })),
+      }).then(invalidate),
     [],
   );
 
@@ -66,21 +45,13 @@ export default function useTripEditRequests() {
   });
 
   const handleSubmitVisit = useCallback(
-    (visit, { indexInCollection, collection, tripId } = {}) =>
+    visit =>
       submitVisit({
         query: {
-          id: visitId,
-          body: {
-            ...visit,
-            tripId,
-            orderInTrip:
-              indexInCollection || indexInCollection === 0
-                ? calcOrder({ index: indexInCollection, collection })
-                : undefined,
-          },
+          id: visit.visitId,
+          body: visit,
         },
-      }),
-    //.then(() => invalidateRequest({ domain: 'tripsPage.visits' })),
+      }).then(invalidate),
     [],
   );
 
@@ -88,6 +59,5 @@ export default function useTripEditRequests() {
     handleSubmitRide,
     handleSubmitTrip,
     handleSubmitVisit,
-    handleSubmitVisitOrder,
   };
 }

@@ -18,12 +18,7 @@ const useStyles = makeStyles({
   },
 });
 
-const TripEditForm = ({
-  isCreation,
-  showDialog,
-  provision,
-  formikProps,
-}) => {
+const TripEditForm = ({ isCreation, showDialog, provision, formikProps }) => {
   const classes = useStyles();
 
   return (
@@ -45,7 +40,6 @@ const TripEditForm = ({
         <Button type="submit" color="primary">
           Сохранить
         </Button>
-        <pre>{JSON.stringify(formikProps.values, null, 2)}</pre>
       </Form>
     </>
   );

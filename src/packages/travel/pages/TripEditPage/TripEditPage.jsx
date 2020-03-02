@@ -37,15 +37,14 @@ function TripEditPage({
     userAlias,
     tripsIds: tripId ? [tripId] : [],
   });
-  const { tripsDict, ridesDict, visitsDict } = provision;
+  const { tripsDict, ridesDict, visitsDict, tripsProvision } = provision;
   const trip = isCreation ? initializeTrip() : tripsDict[tripId];
 
   const {
     handleSubmitRide,
     handleSubmitTrip,
     handleSubmitVisit,
-    handleSubmitVisitOrder,
-  } = useTripEditRequests();
+  } = useTripEditRequests(tripsProvision.invalidate);
 
   const {
     rideIdToEdit,
@@ -89,24 +88,11 @@ function TripEditPage({
     return <div>...Error, no trip is provided</div>;
   }
 
-  const { visits: tripVisitsIds, rides: tripRidesIds } = trip;
-  const actualVisitsDict = resolveInitialValues(visitsDict, tripVisitsIds, {});
-  const actualRidesDict = resolveInitialValues(ridesDict, tripRidesIds, {});
-
   return (
     <>
       <Formik
-        initialValues={{
-          trip,
-          visitsDict: actualVisitsDict,
-          ridesDict: actualRidesDict,
-        }}
-        onSubmit={(values, actions) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 100);
-        }}
+        initialValues={{ trip }}
+        onSubmit={values => handleSubmitTrip(values.trip)}
       >
         {formikProps => (
           <TripEditForm
@@ -120,12 +106,7 @@ function TripEditPage({
       <RideEditDialog
         initialValues={initialRideValues}
         isOpen={isRideEditDialogShown}
-        onSubmit={(values, actions) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 100);
-        }}
+        onSubmit={values => handleSubmitRide(values)}
         onReset={hideDialog}
         title={
           shownDialogName === DIALOG_NAMES.RIDE_CREATE
@@ -136,12 +117,7 @@ function TripEditPage({
       <VisitEditDialog
         initialValues={initialVisitValues}
         isOpen={isVisitEditDialogShown}
-        onSubmit={(values, actions) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 100);
-        }}
+        onSubmit={values => handleSubmitVisit(values)}
         onReset={hideDialog}
         title={
           shownDialogName === DIALOG_NAMES.VISIT_CREATE

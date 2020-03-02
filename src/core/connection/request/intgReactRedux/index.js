@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   connect as originalConnect,
   useDispatch,
@@ -111,6 +111,8 @@ function connectUseProvisionHook({
     requirementsComparator,
     requestHandler: ({ dispatch, requirements }) =>
       dispatch(createRequestAction(requirements)),
+    invalidateRequestHandler: ({ dispatch, requirements: { domain } }) =>
+      dispatch(createInvalidateRequestAction({ domain })),
   });
   return function useConnectedProvision(requirements) {
     const dispatch = useDispatch();
@@ -125,6 +127,18 @@ function connectUseProvisionHook({
   };
 }
 
+const createControlledPromise = () => {
+  // This fields will be initialized synchronously in promise constructor
+  let resolver = null;
+  let rejector = null;
+
+  const promise = new Promise((resolve, reject) => {
+    resolver = resolve;
+    rejector = reject;
+  });
+  return { promise, resolver, rejector };
+};
+
 function makeRequest({ provisionSelector: selectProvision }) {
   return function useRequest(preRequirements) {
     const [requirements, setRequirements] = useState();
@@ -132,18 +146,34 @@ function makeRequest({ provisionSelector: selectProvision }) {
     const provision = useSelector(state =>
       selectProvision(state, requirements),
     );
+
+    const controlledPromiseRef = useRef(null);
     useEffect(
       () => {
         if (!requirements) {
           return;
         }
-        dispatch(
+        const promise = dispatch(
           createRequestAction(merge({}, requirements, preRequirements || {})),
         );
+        if (controlledPromiseRef.current) {
+          promise.then(
+            controlledPromiseRef.current.resolver,
+            controlledPromiseRef.current.rejector,
+          );
+        }
       },
       [requirements],
     );
-    return [setRequirements, provision];
+    const request = useCallback(nextRequirements => {
+      setRequirements(nextRequirements);
+      if (controlledPromiseRef.current) {
+        controlledPromiseRef.current.rejector();
+      }
+      controlledPromiseRef.current = createControlledPromise();
+      return controlledPromiseRef.current.promise;
+    });
+    return [request, provision];
   };
 }
 

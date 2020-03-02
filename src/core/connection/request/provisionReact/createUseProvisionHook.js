@@ -4,6 +4,7 @@ import debounce from 'lodash/debounce';
 export default function createUseProvisionHook({
   requirementsComparator: compareRequirements,
   requestHandler,
+  invalidateRequestHandler,
 }) {
   return function useProvision({ requirements, provision, requestParams }) {
     const { debounceRequest } = requirements;
@@ -43,6 +44,14 @@ export default function createUseProvisionHook({
       [requirements, provision],
     );
 
-    return provision;
+    const actualProvision = useMemo(
+      () => ({
+        ...provision,
+        invalidate: () =>
+          invalidateRequestHandler({ ...requestParams, requirements }),
+      }),
+      [provision, requirements.domain],
+    );
+    return actualProvision;
   };
 }
