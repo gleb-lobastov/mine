@@ -25,17 +25,17 @@ const useStyles = makeStyles({
   },
 });
 
-const Visit = ({ formVisit, showDialog }) => {
+const Visit = ({ visit, showDialog }) => {
   const classes = useStyles();
-  if (!formVisit) {
+  if (!visit) {
     return 'Не указано';
   }
 
-  const { visitId, locationName } = formVisit;
+  const { visitId, locationName } = visit;
 
   return (
     <div className={classes.container}>
-      <VisitIcon visit={formVisit} className={classes.icon} />
+      <VisitIcon visit={visit} className={classes.icon} />
       {locationName}
       <Actions
         className={classes.visibleOnHover}

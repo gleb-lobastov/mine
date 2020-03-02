@@ -27,16 +27,16 @@ export const useStyles = makeStyles({
   },
 });
 
-const Ride = ({ className, formRide, showDialog }) => {
+const Ride = ({ className, ride, showDialog }) => {
   const classes = useStyles();
-  const { rideId, arrivalDateTime, departureDateTime } = formRide || {};
+  const { rideId, arrivalDateTime, departureDateTime } = ride || {};
   const isRideExists = Boolean(rideId);
 
   return (
     <div className={cls(className, classes.container)}>
       {isRideExists && (
         <>
-          <RideIcon ride={formRide} className={classes.icon} />
+          <RideIcon ride={ride} className={classes.icon} />
           <span className={classes.details}>
             {rideDateTimePeriodToString({ departureDateTime, arrivalDateTime })}
           </span>
@@ -57,12 +57,12 @@ const Ride = ({ className, formRide, showDialog }) => {
 
 Ride.propTypes = {
   className: PropTypes.string,
-  formRide: PropTypes.shape(ridePropTypes),
+  ride: PropTypes.shape(ridePropTypes),
 };
 
 Ride.defaultProps = {
   className: undefined,
-  formRide: {},
+  ride: {},
 };
 
 export default Ride;

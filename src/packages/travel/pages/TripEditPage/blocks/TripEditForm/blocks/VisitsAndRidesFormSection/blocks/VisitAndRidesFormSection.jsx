@@ -44,7 +44,7 @@ const useStyles = makeStyles({
 export default function VisitAndRidesFormSection({
   style,
   className,
-  formVisit,
+  visit,
   showDialog,
   isArrivalRideMatch,
   isDepartureRideMatch,
@@ -54,13 +54,11 @@ export default function VisitAndRidesFormSection({
   const classes = useStyles();
 
   const { ridesDict } = provision;
-  const {
-    values: { ridesDict: formRidesDict },
-  } = formikProps;
+
   const {
     arrivalRideId: formArrivalRideId,
     departureRideId: formDepartureVisitId,
-  } = formVisit || {};
+  } = visit || {};
 
   return (
     <div
@@ -74,14 +72,13 @@ export default function VisitAndRidesFormSection({
           [classes.warning]: !isArrivalRideMatch,
         })}
         ride={ridesDict[formArrivalRideId]}
-        formRide={formRidesDict[formArrivalRideId]}
         formikProps={formikProps}
         provision={provision}
       />
       <Visit
         showDialog={showDialog}
         classes={{ editIcon: classes.visibleOnlyOnHover }}
-        formVisit={formVisit}
+        visit={visit}
         formikProps={formikProps}
         provision={provision}
       />
@@ -91,7 +88,6 @@ export default function VisitAndRidesFormSection({
           [classes.warning]: !isDepartureRideMatch,
         })}
         ride={ridesDict[formDepartureVisitId]}
-        formRide={formRidesDict[formDepartureVisitId]}
         formikProps={formikProps}
         provision={provision}
       />

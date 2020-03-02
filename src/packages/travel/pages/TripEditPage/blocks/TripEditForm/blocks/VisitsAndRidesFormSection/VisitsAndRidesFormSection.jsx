@@ -45,8 +45,9 @@ export default function VisitsAndRidesFormSection({
   const { values } = formikProps;
   const {
     trip: { visits: formVisitsIds },
-    visitsDict: formVisitsDict,
   } = values;
+
+  const { visitsDict } = provision;
 
   const classes = useStyles();
 
@@ -77,15 +78,15 @@ export default function VisitsAndRidesFormSection({
             const formPrevVisitId = formVisitsIds[indexOfVisit - 1] || null;
             const formNextVisitId = formVisitsIds[indexOfVisit + 1] || null;
 
-            const formPrevVisit =
-              (formPrevVisitId && formVisitsDict[formPrevVisitId]) || null;
-            const formVisit = formVisitsDict[formVisitId] || null;
-            const formNextVisit =
-              (formNextVisitId && formVisitsDict[formNextVisitId]) || null;
+            const prevVisit =
+              (formPrevVisitId && visitsDict[formPrevVisitId]) || null;
+            const visit = visitsDict[formVisitId] || null;
+            const nextVisit =
+              (formNextVisitId && visitsDict[formNextVisitId]) || null;
             const {
               isArrivalRideMatch,
               isDepartureRideMatch,
-            } = checkIsRidesMatch(formPrevVisit, formVisit, formNextVisit);
+            } = checkIsRidesMatch(prevVisit, visit, nextVisit);
             const visitAndRidesFormSectionNode = (
               <VisitAndRidesFormSection
                 key={`v${formVisitId}`}
@@ -101,7 +102,7 @@ export default function VisitsAndRidesFormSection({
                 showDialog={showDialog}
                 isArrivalRideMatch={isArrivalRideMatch}
                 isDepartureRideMatch={isDepartureRideMatch}
-                formVisit={formVisit}
+                visit={visit}
                 formikProps={formikProps}
                 provision={provision}
               />
