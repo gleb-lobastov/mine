@@ -49,7 +49,6 @@ const Ride = ({ className, ride, showDialog }) => {
         isEntityExist={isRideExists}
         onCreateClick={() => showDialog(DIALOG_NAMES.RIDE_CREATE)}
         onEditClick={() => showDialog(DIALOG_NAMES.RIDE_EDIT, rideId)}
-        onDeleteClick={() => showDialog(DIALOG_NAMES.RIDE_DELETE, rideId)}
       />
     </div>
   );
