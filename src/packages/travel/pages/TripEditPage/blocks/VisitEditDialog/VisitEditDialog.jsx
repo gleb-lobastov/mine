@@ -2,8 +2,9 @@ import React from 'react';
 import FormDialog from 'modules/components/FormDialog';
 import VisitEditFormSection from 'travel/components/models/visits/VisitEditFormSection';
 
-export default function RideEditDialog({
+export default function VisitEditDialog({
   availableRidesIds,
+  isCreation,
   ridesDict,
   ...forwardingProps
 }) {
@@ -12,6 +13,7 @@ export default function RideEditDialog({
       <VisitEditFormSection
         formikProps={null /* will be passed in FormDialog */}
         availableRidesIds={availableRidesIds}
+        isCreation={isCreation}
         ridesDict={ridesDict}
       />
     </FormDialog>

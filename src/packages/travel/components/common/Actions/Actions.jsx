@@ -20,7 +20,7 @@ export default function Actions({
 }) {
   const classes = useStyles();
   const hasCreateAction = !isEntityExist && Boolean(onCreateClick);
-  const hasEditAction = Boolean(onEditClick);
+  const hasEditAction = isEntityExist && Boolean(onEditClick);
   const hasDeleteAction = isEntityExist && Boolean(onDeleteClick);
   return (
     <div

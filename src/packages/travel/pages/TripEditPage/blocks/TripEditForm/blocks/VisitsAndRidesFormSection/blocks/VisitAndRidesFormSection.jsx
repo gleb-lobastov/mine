@@ -56,6 +56,7 @@ export default function VisitAndRidesFormSection({
   const { ridesDict } = provision;
 
   const {
+    visitId,
     arrivalRideId: formArrivalRideId,
     departureRideId: formDepartureVisitId,
   } = visit || {};
@@ -67,7 +68,9 @@ export default function VisitAndRidesFormSection({
       data-sort-handler="enabled"
     >
       <Ride
-        showDialog={showDialog}
+        showDialog={(dialogName, rideId) =>
+          showDialog(dialogName, rideId, { arrivalVisitId: visitId })
+        }
         className={cls(classes.ride, {
           [classes.warning]: !isArrivalRideMatch,
         })}
@@ -83,7 +86,10 @@ export default function VisitAndRidesFormSection({
         provision={provision}
       />
       <Ride
-        showDialog={showDialog}
+        showDialog={(dialogName, rideId) =>
+          showDialog(dialogName, rideId, { departureVisitId: visitId })
+        }
+        visitId={visitId}
         className={cls(classes.ride, {
           [classes.warning]: !isDepartureRideMatch,
         })}

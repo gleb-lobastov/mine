@@ -29,6 +29,7 @@ const useStyles = makeStyles({
 
 export default function VisitEditFormSection({
   availableRidesIds,
+  isCreation,
   ridesDict,
   formikProps: {
     values: {
@@ -57,7 +58,7 @@ export default function VisitEditFormSection({
           inputProps={{ placeholder: 'Место посещения...' }}
           initialInputValue={locationName}
           onChange={({ suggestion: { geonameId } }) =>
-            setFieldValue('trip.originGeonameId', geonameId)
+            setFieldValue('geonameId', geonameId)
           }
           onBlur={handleBlur}
           sourceProps={{
@@ -72,28 +73,30 @@ export default function VisitEditFormSection({
           triggerProps={{ label: 'Старт из' }}
         />
       </div>
-      <div className={classes.optionGroup}>
-        <OptionsSelect
-          name="arrivalRideId"
-          caption="Прибытие"
-          inputId="RideEditCard-arrivalVisitId"
-          hasNullOption={false}
-          optionRender={renderRide}
-          options={availableRidesIds}
-          onChange={handleChange}
-          value={arrivalRideId}
-        />
-        <OptionsSelect
-          name="departureRideId"
-          caption="Отправление"
-          inputId="RideEditCard-departureVisitId"
-          optionRender={renderRide}
-          hasNullOption={false}
-          options={availableRidesIds}
-          value={departureRideId}
-          onChange={handleChange}
-        />
-      </div>
+      {!isCreation && (
+        <div className={classes.optionGroup}>
+          <OptionsSelect
+            name="arrivalRideId"
+            caption="Прибытие"
+            inputId="RideEditCard-arrivalVisitId"
+            hasNullOption={false}
+            optionRender={renderRide}
+            options={availableRidesIds}
+            onChange={handleChange}
+            value={arrivalRideId}
+          />
+          <OptionsSelect
+            name="departureRideId"
+            caption="Отправление"
+            inputId="RideEditCard-departureVisitId"
+            optionRender={renderRide}
+            hasNullOption={false}
+            options={availableRidesIds}
+            value={departureRideId}
+            onChange={handleChange}
+          />
+        </div>
+      )}
       <div className={classes.optionGroup}>
         <OptionsSelect
           name="visitType"

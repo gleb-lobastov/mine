@@ -52,6 +52,7 @@ function TripEditPage({
     shownDialogName,
     showDialog,
     hideDialog,
+    initialValues,
   } = useTripEditPageDialogsState();
 
   const isRideEditDialogShown =
@@ -62,12 +63,30 @@ function TripEditPage({
     shownDialogName === DIALOG_NAMES.VISIT_CREATE;
 
   const initialRideValues = useMemo(
-    () => (rideIdToEdit ? ridesDict[rideIdToEdit] : initializeRide()),
-    [rideIdToEdit],
+    () => {
+      const values = rideIdToEdit ? ridesDict[rideIdToEdit] : initializeRide();
+      return {
+        ...values,
+        ...initialValues,
+        tripId,
+      };
+    },
+    [ridesDict, rideIdToEdit, tripId, initialValues],
   );
 
+  // todo order in trip
   const initialVisitValues = useMemo(
-    () => (visitIdToEdit ? visitsDict[visitIdToEdit] : initializeVisit()),
+    () => {
+      const values = visitIdToEdit
+        ? visitsDict[visitIdToEdit]
+        : initializeVisit();
+      return {
+        ...values,
+        ...initialValues,
+        tripId,
+      };
+    },
+    [visitsDict, visitIdToEdit, tripId, initialValues],
   );
 
   const { isError, isReady, isPending } = provision;
@@ -106,24 +125,32 @@ function TripEditPage({
       <RideEditDialog
         initialValues={initialRideValues}
         isOpen={isRideEditDialogShown}
-        onSubmit={values => handleSubmitRide(values)}
+        onSubmit={values => {
+          handleSubmitRide(values);
+          hideDialog();
+        }}
         onReset={hideDialog}
         title={
           shownDialogName === DIALOG_NAMES.RIDE_CREATE
             ? 'Создание маршрута'
             : 'Редактирование маршрута'
         }
+        isCreation={shownDialogName === DIALOG_NAMES.RIDE_CREATE}
       />
       <VisitEditDialog
         initialValues={initialVisitValues}
         isOpen={isVisitEditDialogShown}
-        onSubmit={values => handleSubmitVisit(values)}
+        onSubmit={values => {
+          handleSubmitVisit(values);
+          hideDialog();
+        }}
         onReset={hideDialog}
         title={
           shownDialogName === DIALOG_NAMES.VISIT_CREATE
             ? 'Создание посешения'
             : 'Редактирование посещения'
         }
+        isCreation={shownDialogName === DIALOG_NAMES.VISIT_CREATE}
         availableRidesIds={trip.rides}
         ridesDict={ridesDict}
       />

@@ -26,14 +26,17 @@ const DIALOG_TO_ENTITY_MAPPING = {
 export default function useTripEditPageDialogsState() {
   const [shownDialogName, setShownDialog] = useState(null);
   const [entityIdToEdit, setEntityIdToEdit] = useState(null);
+  const [initialValues, setInitialValues] = useState(null);
 
-  const showDialog = useCallback((dialogName, entityId) => {
+  const showDialog = useCallback((dialogName, entityId, initialValuesToSet) => {
     setShownDialog(dialogName);
+    setInitialValues(initialValuesToSet);
     setEntityIdToEdit(entityId || null);
   });
 
   const hideDialog = useCallback(() => {
     setShownDialog(null);
+    setInitialValues(null);
     setEntityIdToEdit(null);
   });
 
@@ -43,6 +46,7 @@ export default function useTripEditPageDialogsState() {
     shownDialogName,
     showDialog,
     hideDialog,
+    initialValues,
   };
 }
 
