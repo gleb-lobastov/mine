@@ -65,6 +65,9 @@ export default function VisitsAndRidesFormSection({
       orderInTrip: calculateOrderInTripBetweenTwoVisits(prevVisit, visit),
     });
   };
+  if (!formVisitsIds.length) {
+    return <VisitCreator key="visitCreator" showDialog={showCreationDialog} />;
+  }
   return (
     <FieldArray
       name="trip.visits"
