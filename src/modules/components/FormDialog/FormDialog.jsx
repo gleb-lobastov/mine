@@ -21,7 +21,7 @@ export default function({
         <Dialog
           description={description}
           onClose={onReset}
-          open={isOpen}
+          isOpen={isOpen}
           primaryButtonCaption="Сохранить"
           primaryButtonHandler={formikProps.handleSubmit}
           secondaryButtonCaption="Отмена"
