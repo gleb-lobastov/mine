@@ -56,6 +56,15 @@ export default function VisitsAndRidesFormSection({
   );
   const [isSorting, setIsSorting] = useState(false);
 
+  const showCreationDialog = (dialogName, entityId, initialValues) => {
+    const [prevVisit, visit] = neighbors(formVisitsIds, creatorsNodeIndex).map(
+      visitId => (visitId && visitsDict[visitId]) || null,
+    );
+    showDialog(dialogName, entityId, {
+      ...initialValues,
+      orderInTrip: calculateOrderInTripBetweenTwoVisits(prevVisit, visit),
+    });
+  };
   return (
     <FieldArray
       name="trip.visits"
@@ -75,14 +84,11 @@ export default function VisitsAndRidesFormSection({
           }}
         >
           {formVisitsIds.flatMap((formVisitId, indexOfVisit) => {
-            const formPrevVisitId = formVisitsIds[indexOfVisit - 1] || null;
-            const formNextVisitId = formVisitsIds[indexOfVisit + 1] || null;
+            const [prevVisit, visit, nextVisit] = neighbors(
+              formVisitsIds,
+              indexOfVisit,
+            ).map(visitId => (visitId && visitsDict[visitId]) || null);
 
-            const prevVisit =
-              (formPrevVisitId && visitsDict[formPrevVisitId]) || null;
-            const visit = visitsDict[formVisitId] || null;
-            const nextVisit =
-              (formNextVisitId && visitsDict[formNextVisitId]) || null;
             const {
               isArrivalRideMatch,
               isDepartureRideMatch,
@@ -123,7 +129,10 @@ export default function VisitsAndRidesFormSection({
 
             const visitCreatorNode = (
               <div style={{ zIndex: formVisitsIds.length + 1 }}>
-                <VisitCreator key="visitCreator" showDialog={showDialog} />
+                <VisitCreator
+                  key="visitCreator"
+                  showDialog={showCreationDialog}
+                />
               </div>
             );
 
@@ -142,26 +151,23 @@ VisitsAndRidesFormSection.propTypes = {};
 
 VisitsAndRidesFormSection.defaultProps = {};
 
-/*
+function calculateOrderInTripBetweenTwoVisits(prevVisit, nextVisit) {
+  const { orderInTrip: prevOrderInTrip } = prevVisit || {};
+  const { orderInTrip: nextOrderInTrip } = nextVisit || {};
+  if (!prevVisit) {
+    return nextOrderInTrip - 1;
+  }
+  if (!nextVisit) {
+    return prevOrderInTrip + 1;
+  }
+  const randomness =
+    ((Math.random() - 0.5) * (nextOrderInTrip - prevOrderInTrip)) / 2;
+  return (prevOrderInTrip + nextOrderInTrip) / 2 + randomness;
+}
 
-rb-v-rf
-vb-r-vf
-
-o-r1-v1
-o-r2-v2
-
-r1-v1-r2-v2-r1
-
-r1-v1-r2
-   v2-r2-v3
-   v3-r2-v4
-
-r1-v1-r2
-   v1-r3-v3
-   v1-r4-v4
-
-o-r1-v1-r2-v2-r3-v3-r4-o
-o-r1-o o-r2-o v1 v2
-o-r1-v1-r2-o o-r1-v2-r2-o
-o-r2-v1-r1-o o-r1-v2-r2-o
- */
+function neighbors(array, index, mapFn) {
+  const prevValue = array[index - 1] || null;
+  const value = array[index] || null;
+  const nextValue = array[index + 1] || null;
+  return [prevValue, value, nextValue];
+}
