@@ -167,7 +167,7 @@ function calculateOrderInTripBetweenTwoVisits(prevVisit, nextVisit) {
   return (prevOrderInTrip + nextOrderInTrip) / 2 + randomness;
 }
 
-function neighbors(array, index, mapFn) {
+function neighbors(array, index) {
   const prevValue = array[index - 1] || null;
   const value = array[index] || null;
   const nextValue = array[index + 1] || null;

@@ -55,9 +55,26 @@ export default function useTripEditRequests(invalidate) {
     [],
   );
 
+  const [deleteVisit] = useRequest({
+    domain: `${domain}.visits`,
+    modelName: 'visits',
+  });
+
+  const handleDeleteVisit = useCallback(
+    visitId =>
+      deleteVisit({
+        method: 'DELETE',
+        query: {
+          id: visitId,
+        },
+      }).then(invalidate),
+    [],
+  );
+
   return {
     handleSubmitRide,
     handleSubmitTrip,
     handleSubmitVisit,
+    handleDeleteVisit,
   };
 }

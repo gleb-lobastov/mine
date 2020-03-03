@@ -9,17 +9,11 @@ import { initializeVisit } from 'travel/models/visits';
 import TripEditForm from './blocks/TripEditForm';
 import RideEditDialog from './blocks/RideEditDialog';
 import VisitEditDialog from './blocks/VisitEditDialog';
+import VisitDeleteDialog from './blocks/VisitDeleteDialog';
 import useTripEditRequests from './useTripEditRequests';
 import useTripEditPageDialogsState, {
   DIALOG_NAMES,
 } from './useTripEditPageDialogsState';
-
-function resolveInitialValues(dict, ids, defaultValue) {
-  return ids.reduce((accumulator, id) => {
-    accumulator[id] = dict[id] || defaultValue;
-    return accumulator;
-  }, {});
-}
 
 function TripEditPage({
   match: {
@@ -44,6 +38,7 @@ function TripEditPage({
     handleSubmitRide,
     handleSubmitTrip,
     handleSubmitVisit,
+    handleDeleteVisit,
   } = useTripEditRequests(tripsProvision.invalidate);
 
   const {
@@ -153,6 +148,15 @@ function TripEditPage({
         isCreation={shownDialogName === DIALOG_NAMES.VISIT_CREATE}
         availableRidesIds={trip.rides}
         ridesDict={ridesDict}
+      />
+      <VisitDeleteDialog
+        visit={visitsDict[visitIdToEdit]}
+        isOpen={shownDialogName === DIALOG_NAMES.VISIT_DELETE}
+        onSubmit={(event, { visitId }) => {
+          handleDeleteVisit(visitId);
+          hideDialog();
+        }}
+        onReset={hideDialog}
       />
     </>
   );
