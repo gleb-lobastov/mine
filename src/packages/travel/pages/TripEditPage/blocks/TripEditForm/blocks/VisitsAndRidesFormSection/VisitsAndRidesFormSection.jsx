@@ -89,6 +89,7 @@ export default function VisitsAndRidesFormSection({
               indexOfVisit,
             ).map(visitId => (visitId && visitsDict[visitId]) || null);
 
+            const { arrivalRideId } = visit;
             const {
               isArrivalRideMatch,
               isDepartureRideMatch,
@@ -103,6 +104,7 @@ export default function VisitsAndRidesFormSection({
                     indexOfVisit >= 1 &&
                     !isSorting &&
                     isArrivalRideMatch &&
+                    arrivalRideId &&
                     creatorsNodeIndex !== indexOfVisit,
                 })}
                 showDialog={showDialog}
