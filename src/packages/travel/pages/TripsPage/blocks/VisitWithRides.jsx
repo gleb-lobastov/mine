@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Path from 'modules/utilities/routing/Path';
 import ridePropTypes from 'travel/models/rides/propTypes';
 import visitPropTypes from 'travel/models/visits/propTypes';
-import Visit from 'travel/components/models/visits/Visit';
+import VisitInfo from 'travel/components/models/visits/VisitInfo';
 import Ride from './Ride';
 
 const styles = {
@@ -62,7 +62,7 @@ const VisitWithRides = ({
         ride={ridesDict[arrivalRideId]}
         showDetails={shouldWarnForArrivalRide}
       />
-      <Visit
+      <VisitInfo
         classes={{ editIcon: classes.visibleOnlyOnHover }}
         visit={visit}
         locationsPath={locationsPath}
