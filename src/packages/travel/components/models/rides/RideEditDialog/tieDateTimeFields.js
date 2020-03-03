@@ -16,11 +16,11 @@ const mixDateTime = ({ dateFrom, timeFrom }) =>
     timeFrom.getSeconds(),
   );
 
-export default ({ values: { rideDeparture, rideArrival }, handleChange }) => {
+export default ({ values: { rideDeparture, rideArrival }, setFieldValue }) => {
   const setRideDeparture = nextRideDeparture =>
-    handleChange('departureDateTime')(nextRideDeparture);
+    setFieldValue('departureDateTime', nextRideDeparture);
   const setRideArrival = nextRideArrival =>
-    handleChange('arrivalDateTime')(nextRideArrival);
+    setFieldValue('arrivalDateTime', nextRideArrival);
 
   const isSameDay = checkIsSameDay(rideDeparture, rideArrival);
 

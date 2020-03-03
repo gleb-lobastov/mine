@@ -47,12 +47,8 @@ const useStyles = makeStyles({
 });
 
 const RideEditFormSection = ({
-  availableVisits = [],
-  originLocation = {},
   formikProps: {
     values: {
-      departureVisitId,
-      arrivalVisitId,
       vehicleType,
       rideType,
       rideComment,
@@ -62,16 +58,10 @@ const RideEditFormSection = ({
       arrivalDateTime,
     },
     handleChange,
+    setFieldValue,
   },
 }) => {
   const classes = useStyles();
-  const availableVisitsIds = availableVisits.map(({ visitId }) => visitId);
-  const visitsDict = Object.fromEntries(
-    availableVisits.map(visit => {
-      const { visitId } = visit;
-      return [visitId, visit];
-    }),
-  );
 
   const {
     rideArrivalField,
@@ -82,24 +72,9 @@ const RideEditFormSection = ({
       rideDeparture: departureDateTime,
       rideArrival: arrivalDateTime,
     },
-    handleChange,
+    setFieldValue,
   });
 
-  const renderVisit = useCallback(
-    ({ option: visitId }) => {
-      if (visitId === ORIGIN_OF_TRIP) {
-        const { locationName } = originLocation;
-        return locationName;
-      }
-      const visit = visitsDict[visitId];
-      if (!visit) {
-        return 'Не указано';
-      }
-      const { locationName } = visit;
-      return locationName;
-    },
-    [visitsDict],
-  );
   return (
     <>
       <div className={classes.optionGroup}>
