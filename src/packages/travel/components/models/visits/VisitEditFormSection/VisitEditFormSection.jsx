@@ -66,11 +66,9 @@ export default function VisitEditFormSection({
             modelName: 'geonames',
             filterField: 'locationName',
             queryFormat: QUERY_FORMATS.SEARCH,
-            resolveDetails: ({ countryName, regionName }) =>
-              [countryName, regionName].filter(Boolean).join(', '),
           }}
           transformSuggestionToOption={transformSuggestionToOption}
-          triggerProps={{ label: 'Старт из' }}
+          triggerProps={{ label: 'Место посещения' }}
         />
       </div>
       {!isCreation && (
@@ -134,10 +132,10 @@ VisitEditFormSection.defaultProps = {
 };
 
 function transformSuggestionToOption(suggestion) {
-  const { locationName, countryName } = suggestion;
+  const { locationName, countryName, regionName } = suggestion;
   return {
     label: locationName,
-    detail: countryName,
+    details: [countryName, regionName].filter(Boolean).join(', '),
     suggestion,
   };
 }
