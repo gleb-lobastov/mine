@@ -17,14 +17,6 @@ export const visits = {
   ),
 };
 
-export const trips = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId?`,
-  defaultRouteParams: { userAlias: 'my' },
-  Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-Trips' */ './pages/TripsPage'),
-  ),
-};
-
 export const tripEdit = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId/edit`,
   defaultRouteParams: { userAlias: 'my' },
@@ -38,14 +30,6 @@ export const tripCreate = {
   defaultRouteParams: { userAlias: 'my', action: 'create' },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-Trips' */ './pages/TripEditPage'),
-  ),
-};
-
-export const tripStory = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId`,
-  defaultRouteParams: { userAlias: 'my' },
-  Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-TripStory' */ './pages/TripStoryPage'),
   ),
 };
 
