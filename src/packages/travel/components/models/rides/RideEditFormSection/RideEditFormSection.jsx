@@ -4,11 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-import {
-  DatePicker,
-  KeyboardDatePicker,
-  TimePicker,
-} from '@material-ui/pickers';
+import { KeyboardDatePicker, TimePicker } from '@material-ui/pickers';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import {
   RIDE_CLASSES,
@@ -21,8 +17,8 @@ import {
   RIDE_CLASSES_NAMES,
   RIDE_TYPES_NAMES,
   RIDE_OCCUPATION_NAMES,
-} from '../RideEditDialog/localization';
-import tieDateTimeFields from '../RideEditDialog/tieDateTimeFields';
+} from './localization';
+import tieDateTimeFields from './tieDateTimeFields';
 
 // if ride was started/ended in origin, then it has no corresponding
 // related visit. Relation is null. So this is not a magic, but real value
