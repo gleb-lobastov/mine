@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Actions from 'travel/components/common/Actions';
 import VisitIcon from 'travel/components/models/visits/VisitIcon';
 import visitPropTypes from 'travel/models/visits/propTypes';
-import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogsState';
+import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogs';
 
 const useStyles = makeStyles({
   container: {
@@ -31,7 +31,7 @@ const Visit = ({ visit, showDialog }) => {
     return 'Не указано';
   }
 
-  const { visitId, locationName } = visit;
+  const { locationName } = visit;
 
   return (
     <div className={classes.container}>
@@ -40,8 +40,8 @@ const Visit = ({ visit, showDialog }) => {
       <Actions
         className={classes.visibleOnHover}
         isEntityExist={true}
-        onEditClick={() => showDialog(DIALOG_NAMES.VISIT_EDIT, visitId)}
-        onDeleteClick={() => showDialog(DIALOG_NAMES.VISIT_DELETE, visitId)}
+        onEditClick={() => showDialog(DIALOG_NAMES.VISIT_EDIT, visit)}
+        onDeleteClick={() => showDialog(DIALOG_NAMES.VISIT_DELETE, visit)}
       />
     </div>
   );

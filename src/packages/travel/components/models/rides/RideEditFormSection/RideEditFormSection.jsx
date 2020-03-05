@@ -183,12 +183,7 @@ const RideEditFormSection = ({
   );
 };
 
-RideEditFormSection.propTypes = {
-  className: PropTypes.string,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-};
-RideEditFormSection.defaultProps = {
-  className: undefined,
-};
+RideEditFormSection.propTypes = {};
+RideEditFormSection.defaultProps = {};
 
 export default RideEditFormSection;

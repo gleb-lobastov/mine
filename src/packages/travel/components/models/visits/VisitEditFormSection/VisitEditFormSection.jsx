@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import Suggest, { QUERY_FORMATS } from 'modules/components/muiExtended/Suggest';
-import RideInfo from 'travel/components/models/rides/RideInfo';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
 
 export const VISIT_TYPE_NAMES = {
@@ -28,28 +27,14 @@ const useStyles = makeStyles({
 });
 
 export default function VisitEditFormSection({
-  availableRidesIds,
-  isCreation,
-  ridesDict,
   formikProps: {
-    values: {
-      locationName,
-      visitType,
-      visitComment,
-      arrivalRideId,
-      departureRideId,
-    },
+    values: { locationName, visitType, visitComment },
     handleChange,
     handleBlur,
     setFieldValue,
   },
 }) {
   const classes = useStyles();
-
-  const renderRide = useCallback(
-    ({ option: rideId }) => <RideInfo ride={ridesDict[rideId]} isLong={true} />,
-    [ridesDict],
-  );
 
   return (
     <>
@@ -71,30 +56,6 @@ export default function VisitEditFormSection({
           triggerProps={{ label: 'Место посещения' }}
         />
       </div>
-      {!isCreation && (
-        <div className={classes.optionGroup}>
-          <OptionsSelect
-            name="arrivalRideId"
-            caption="Прибытие"
-            inputId="RideEditCard-arrivalVisitId"
-            hasNullOption={false}
-            optionRender={renderRide}
-            options={availableRidesIds}
-            onChange={handleChange}
-            value={arrivalRideId}
-          />
-          <OptionsSelect
-            name="departureRideId"
-            caption="Отправление"
-            inputId="RideEditCard-departureVisitId"
-            optionRender={renderRide}
-            hasNullOption={false}
-            options={availableRidesIds}
-            value={departureRideId}
-            onChange={handleChange}
-          />
-        </div>
-      )}
       <div className={classes.optionGroup}>
         <OptionsSelect
           name="visitType"
@@ -123,13 +84,8 @@ export default function VisitEditFormSection({
   );
 }
 
-VisitEditFormSection.propTypes = {
-  className: PropTypes.string,
-};
-
-VisitEditFormSection.defaultProps = {
-  className: undefined,
-};
+VisitEditFormSection.propTypes = {};
+VisitEditFormSection.defaultProps = {};
 
 function transformSuggestionToOption(suggestion) {
   const { locationName, countryName, regionName } = suggestion;

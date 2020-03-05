@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DragHandler from 'modules/components/DragHandler';
-import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogsState';
+import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogs';
 
 const useStyles = makeStyles({
   container: {

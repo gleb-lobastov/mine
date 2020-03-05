@@ -68,8 +68,8 @@ export default function VisitAndRidesFormSection({
       data-sort-handler="enabled"
     >
       <Ride
-        showDialog={(dialogName, rideId) =>
-          showDialog(dialogName, rideId, { arrivalVisitId: visitId })
+        showDialog={(dialogName, dialogParams) =>
+          showDialog(dialogName, { ...dialogParams, arrivalVisitId: visitId })
         }
         className={cls(classes.ride, {
           [classes.warning]: !isArrivalRideMatch,
@@ -86,8 +86,8 @@ export default function VisitAndRidesFormSection({
         provision={provision}
       />
       <Ride
-        showDialog={(dialogName, rideId) =>
-          showDialog(dialogName, rideId, { departureVisitId: visitId })
+        showDialog={(dialogName, dialogParams) =>
+          showDialog(dialogName, { ...dialogParams, departureVisitId: visitId })
         }
         visitId={visitId}
         className={cls(classes.ride, {

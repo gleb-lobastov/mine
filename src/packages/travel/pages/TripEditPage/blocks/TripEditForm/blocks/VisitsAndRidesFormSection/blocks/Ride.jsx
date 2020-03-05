@@ -6,7 +6,7 @@ import { rideDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimeP
 import ridePropTypes from 'travel/models/rides/propTypes';
 import RideIcon from 'travel/components/models/rides/RideIcon';
 import Actions from 'travel/components/common/Actions';
-import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogsState';
+import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogs';
 
 export const useStyles = makeStyles({
   container: {
@@ -48,7 +48,7 @@ const Ride = ({ className, ride, showDialog }) => {
         })}
         isEntityExist={isRideExists}
         onCreateClick={() => showDialog(DIALOG_NAMES.RIDE_CREATE)}
-        onEditClick={() => showDialog(DIALOG_NAMES.RIDE_EDIT, rideId)}
+        onEditClick={() => showDialog(DIALOG_NAMES.RIDE_EDIT, ride)}
       />
     </div>
   );

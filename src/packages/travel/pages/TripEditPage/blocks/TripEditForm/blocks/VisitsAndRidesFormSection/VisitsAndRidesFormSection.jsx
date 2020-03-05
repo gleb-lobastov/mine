@@ -56,15 +56,16 @@ export default function VisitsAndRidesFormSection({
   );
   const [isSorting, setIsSorting] = useState(false);
 
-  const showCreationDialog = (dialogName, entityId, initialValues) => {
+  const showCreationDialog = (dialogName, dialogParams) => {
     const [prevVisit, visit] = neighbors(formVisitsIds, creatorsNodeIndex).map(
       visitId => (visitId && visitsDict[visitId]) || null,
     );
-    showDialog(dialogName, entityId, {
-      ...initialValues,
+    showDialog(dialogName, {
+      ...dialogParams,
       orderInTrip: calculateOrderInTripBetweenTwoVisits(prevVisit, visit),
     });
   };
+
   if (!formVisitsIds.length) {
     return <VisitCreator key="visitCreator" showDialog={showCreationDialog} />;
   }
