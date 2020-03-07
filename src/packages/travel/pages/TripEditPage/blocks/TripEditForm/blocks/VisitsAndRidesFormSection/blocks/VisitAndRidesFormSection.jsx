@@ -44,11 +44,13 @@ const useStyles = makeStyles({
 export default function VisitAndRidesFormSection({
   style,
   className,
+  prevVisit,
   visit,
+  nextVisit,
   showDialog,
   isArrivalRideMatch,
   isDepartureRideMatch,
-  formikProps,
+  tripId,
   provision,
 }) {
   const classes = useStyles();
@@ -61,6 +63,9 @@ export default function VisitAndRidesFormSection({
     departureRideId: formDepartureVisitId,
   } = visit || {};
 
+  const { visitId: prevVisitId } = prevVisit || {};
+  const { visitId: nextVisitId } = nextVisit || {};
+
   return (
     <div
       className={cls(classes.container, className)}
@@ -69,32 +74,37 @@ export default function VisitAndRidesFormSection({
     >
       <Ride
         showDialog={(dialogName, dialogParams) =>
-          showDialog(dialogName, { ...dialogParams, arrivalVisitId: visitId })
+          showDialog(dialogName, {
+            ...dialogParams,
+            departureVisitId: isArrivalRideMatch ? prevVisitId : undefined,
+            arrivalVisitId: visitId,
+          })
         }
         className={cls(classes.ride, {
           [classes.warning]: !isArrivalRideMatch,
         })}
         ride={ridesDict[formArrivalRideId]}
-        formikProps={formikProps}
         provision={provision}
       />
       <Visit
         showDialog={showDialog}
         classes={{ editIcon: classes.visibleOnlyOnHover }}
         visit={visit}
-        formikProps={formikProps}
         provision={provision}
       />
       <Ride
         showDialog={(dialogName, dialogParams) =>
-          showDialog(dialogName, { ...dialogParams, departureVisitId: visitId })
+          showDialog(dialogName, {
+            ...dialogParams,
+            departureVisitId: visitId,
+            arrivalVisitId: isDepartureRideMatch ? nextVisitId : undefined,
+          })
         }
         visitId={visitId}
         className={cls(classes.ride, {
           [classes.warning]: !isDepartureRideMatch,
         })}
         ride={ridesDict[formDepartureVisitId]}
-        formikProps={formikProps}
         provision={provision}
       />
     </div>

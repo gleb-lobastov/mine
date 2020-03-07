@@ -97,22 +97,25 @@ export default function VisitsAndRidesFormSection({
               isArrivalRideMatch,
               isDepartureRideMatch,
             } = checkIsRidesMatch(prevVisit, visit, nextVisit);
+
+            const shouldCollapseRides =
+              indexOfVisit >= 1 &&
+              !isSorting &&
+              isArrivalRideMatch &&
+              creatorsNodeIndex !== indexOfVisit;
+
             const visitAndRidesFormSectionNode = (
               <VisitAndRidesFormSection
                 key={`v${formVisitId}`}
                 index={indexOfVisit /* for SortableNode */}
                 style={{ zIndex: formVisitsIds.length - indexOfVisit }}
-                className={cls({
-                  [classes.isCompact]:
-                    indexOfVisit >= 1 &&
-                    !isSorting &&
-                    isArrivalRideMatch &&
-                    creatorsNodeIndex !== indexOfVisit,
-                })}
+                className={cls({ [classes.isCompact]: shouldCollapseRides })}
                 showDialog={showDialog}
                 isArrivalRideMatch={isArrivalRideMatch}
                 isDepartureRideMatch={isDepartureRideMatch}
+                prevVisit={prevVisit}
                 visit={visit}
+                nextVisit={nextVisit}
                 formikProps={formikProps}
                 provision={provision}
               />
