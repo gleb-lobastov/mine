@@ -13,9 +13,10 @@ export default function TripEditAssociatedDialogs({
   handleSubmitRide,
   handleSubmitVisit,
   handleDeleteVisit,
-  tripId,
+  trip,
 }) {
   const { ridesDict, visitsDict } = provision;
+  const { tripId, visits: tripVisitsIds, rides: tripRidesIds } = trip;
   const { dialogName, dialogParams = {} } = dialogsState;
 
   const initialRideValues = useMemo(
@@ -51,6 +52,7 @@ export default function TripEditAssociatedDialogs({
     <>
       <RideEditDialog
         initialValues={initialRideValues}
+        tripVisitsIds={tripVisitsIds}
         isOpen={isRideEditDialogShown}
         onSubmit={values => {
           handleSubmitRide(values);
@@ -58,9 +60,11 @@ export default function TripEditAssociatedDialogs({
         }}
         onReset={hideDialog}
         isCreation={dialogName === DIALOG_NAMES.RIDE_CREATE}
+        visitsDict={visitsDict}
       />
       <VisitEditDialog
         initialValues={initialVisitValues}
+        tripRidesIds={tripRidesIds}
         isOpen={isVisitEditDialogShown}
         onSubmit={values => {
           handleSubmitVisit(values);

@@ -77,7 +77,7 @@ function TripEditPage({
         handleSubmitRide={handleSubmitRide}
         handleSubmitVisit={handleSubmitVisit}
         handleDeleteVisit={handleDeleteVisit}
-        tripId={tripId}
+        trip={trip}
       />
     </>
   );

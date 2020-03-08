@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import Suggest, { QUERY_FORMATS } from 'modules/components/muiExtended/Suggest';
+import RideInfo from 'travel/components/models/rides/RideInfo';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
 
 export const VISIT_TYPE_NAMES = {
@@ -13,6 +14,9 @@ export const VISIT_TYPE_NAMES = {
   [VISIT_TYPES.RELOCATION]: 'Переезд',
 };
 
+const renderRide = ridesDict => ({ option: rideId }) => (
+  <RideInfo ride={ridesDict[rideId]} isLong={true} />
+);
 const renderVisitType = ({ option: visitType }) =>
   visitType ? VISIT_TYPE_NAMES[visitType] : 'Не указан';
 
@@ -27,15 +31,23 @@ const useStyles = makeStyles({
 });
 
 export default function VisitEditFormSection({
+  tripRidesIds,
+  ridesDict,
   formikProps: {
-    values: { locationName, visitType, visitComment },
+    values: {
+      locationName,
+      visitType,
+      visitComment,
+      arrivalRideId,
+      departureRideId,
+    },
     handleChange,
     handleBlur,
     setFieldValue,
   },
 }) {
   const classes = useStyles();
-
+  const isTripHasRides = tripRidesIds && tripRidesIds.length > 0;
   return (
     <>
       <div className={classes.optionGroup}>
@@ -56,6 +68,30 @@ export default function VisitEditFormSection({
           triggerProps={{ label: 'Место посещения' }}
         />
       </div>
+      {isTripHasRides && (
+        <div className={classes.optionGroup}>
+          <OptionsSelect
+            name="arrivalRideId"
+            caption="Прибытие"
+            inputId="RideEditCard-arrivalVisitId"
+            hasNullOption={false}
+            optionRender={renderRide(ridesDict)}
+            options={tripRidesIds}
+            onChange={handleChange}
+            value={arrivalRideId}
+          />
+          <OptionsSelect
+            name="departureRideId"
+            caption="Отправление"
+            inputId="RideEditCard-departureVisitId"
+            optionRender={renderRide(ridesDict)}
+            hasNullOption={false}
+            options={tripRidesIds}
+            value={departureRideId}
+            onChange={handleChange}
+          />
+        </div>
+      )}
       <div className={classes.optionGroup}>
         <OptionsSelect
           name="visitType"

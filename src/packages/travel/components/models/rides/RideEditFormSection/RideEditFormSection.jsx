@@ -6,6 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import { KeyboardDatePicker, TimePicker } from '@material-ui/pickers';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
+import VisitInfo from 'travel/components/models/visits/VisitInfo';
 import {
   RIDE_CLASSES,
   RIDE_OCCUPATION,
@@ -24,6 +25,12 @@ import tieDateTimeFields from './tieDateTimeFields';
 // related visit. Relation is null. So this is not a magic, but real value
 const ORIGIN_OF_TRIP = null;
 
+const renderVisit = visitsDict => ({ option: visitId }) => {
+  if (visitId === ORIGIN_OF_TRIP) {
+    return 'Пункт отправления';
+  }
+  return <VisitInfo visit={visitsDict[visitId]} />;
+};
 const renderVehicleType = ({ option: vehicleType }) =>
   vehicleType ? VEHICLE_NAMES[vehicleType] : 'Не указан';
 const renderRideType = ({ option: rideType }) =>
@@ -43,6 +50,8 @@ const useStyles = makeStyles({
 });
 
 const RideEditFormSection = ({
+  tripVisitsIds,
+  visitsDict,
   formikProps: {
     values: {
       vehicleType,
@@ -50,7 +59,9 @@ const RideEditFormSection = ({
       rideComment,
       rideClass,
       rideOccupation,
+      departureVisitId,
       departureDateTime,
+      arrivalVisitId,
       arrivalDateTime,
     },
     handleChange,
@@ -58,7 +69,7 @@ const RideEditFormSection = ({
   },
 }) => {
   const classes = useStyles();
-
+  const isTripHasVisits = tripVisitsIds && tripVisitsIds.length > 0;
   const {
     rideArrivalField,
     rideDepartureField,
@@ -73,6 +84,30 @@ const RideEditFormSection = ({
 
   return (
     <>
+      {isTripHasVisits && (
+        <div className={classes.optionGroup}>
+          <OptionsSelect
+            name="departureVisitId"
+            caption="Отправление из"
+            inputId="RideEditCard-departureVisitId"
+            optionRender={renderVisit(visitsDict)}
+            hasNullOption={false}
+            options={[ORIGIN_OF_TRIP, ...tripVisitsIds]}
+            value={departureVisitId}
+            onChange={handleChange}
+          />
+          <OptionsSelect
+            name="arrivalVisitId"
+            caption="Прибытие в"
+            inputId="RideEditCard-arrivalVisitId"
+            hasNullOption={false}
+            optionRender={renderVisit(visitsDict)}
+            options={[...tripVisitsIds, ORIGIN_OF_TRIP]}
+            onChange={handleChange}
+            value={arrivalVisitId}
+          />
+        </div>
+      )}
       <div className={classes.optionGroup}>
         <OptionsSelect
           name="vehicleType"
