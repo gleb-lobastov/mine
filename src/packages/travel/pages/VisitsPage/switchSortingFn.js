@@ -13,6 +13,7 @@ const COMPARATOR_FUNCTIONS_MAPPING = {
   [COMPARATORS.LOCATION.NAME_ID]: createLocationNameIdComparator,
   [COMPARATORS.LOCATION.RATING]: createLocationRatingComparator,
   [COMPARATORS.LOCATION.VISITS]: createLocationVisitsComparator,
+  [COMPARATORS.TRIP.PRESERVE_ORDER]: createTripPreserveOrderComparator,
   [COMPARATORS.TRIP.DEPARTURE_TIME]: createTripDepartureTimeComparator,
   [COMPARATORS.TRIP.ID]: createTripIdComparator,
 };
@@ -23,12 +24,14 @@ export default function switchSortingFn(queryFilter, provision, counters) {
     case GROUP_VISITS_BY.TRIPS:
       // sorting is not applicable, as locations ordered chronologically
       return createComparator(provision, counters, [
+        COMPARATORS.TRIP.PRESERVE_ORDER,
         COMPARATORS.TRIP.DEPARTURE_TIME,
         COMPARATORS.TRIP.ID,
         COMPARATORS.LOCATION.NAME,
       ]);
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
       return createComparator(provision, counters, [
+        COMPARATORS.TRIP.PRESERVE_ORDER,
         COMPARATORS.TRIP.DEPARTURE_TIME,
         COMPARATORS.TRIP.ID,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
@@ -85,7 +88,7 @@ function resolveComparatorBySortFn(sortFn, ENTITY_COMPARATORS) {
   }
 }
 
-function createComparator(dicts, counters, comparatorsKeys) {
+function createComparator(provision, counters, comparatorsKeys) {
   const comparatorFuncs = comparatorsKeys
     .map(comparatorKey => {
       const comparatorFnCreator = COMPARATOR_FUNCTIONS_MAPPING[comparatorKey];
@@ -93,7 +96,7 @@ function createComparator(dicts, counters, comparatorsKeys) {
       if (!comparatorFnCreator) {
         return null;
       }
-      return comparatorFnCreator(dicts, counters);
+      return comparatorFnCreator(provision, counters);
     })
     .filter(Boolean);
 
@@ -192,6 +195,28 @@ function createCountryVisitsComparator(_, counters) {
       getCountryVisitsCount(counters, countryIdB) -
       getCountryVisitsCount(counters, countryIdA)
     );
+  };
+}
+
+function createTripPreserveOrderComparator({ tripsIds }) {
+  return (visitA, visitB) => {
+    if (!tripsIds) {
+      return 0;
+    }
+    const { tripId: tripIdA } = visitA;
+    const { tripId: tripIdB } = visitB;
+    const indexA = tripsIds.indexOf(tripIdA);
+    const indexB = tripsIds.indexOf(tripIdB);
+    if (indexA < 0 || indexB < 0) {
+      if (indexA < 0 && indexB < 0) {
+        return 0;
+      }
+      if (indexB < 0) {
+        return -1;
+      }
+      return 1;
+    }
+    return indexA - indexB;
   };
 }
 
