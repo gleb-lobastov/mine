@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
@@ -21,12 +22,8 @@ const renderVisitType = ({ option: visitType }) =>
   visitType ? VISIT_TYPE_NAMES[visitType] : 'Не указан';
 
 const useStyles = makeStyles({
-  optionGroup: {
-    display: 'flex',
-    minWidth: '400px',
-  },
-  suggest: {
-    flexGrow: 1,
+  option: {
+    width: '100%',
   },
 });
 
@@ -49,8 +46,8 @@ export default function VisitEditFormSection({
   const classes = useStyles();
   const isTripHasRides = tripRidesIds && tripRidesIds.length > 0;
   return (
-    <>
-      <div className={classes.optionGroup}>
+    <Grid container={true} spacing={3} alignItems="center">
+      <Grid item={true} xs={12}>
         <Suggest
           inputProps={{ placeholder: 'Место посещения...' }}
           initialInputValue={locationName}
@@ -67,32 +64,36 @@ export default function VisitEditFormSection({
           transformSuggestionToOption={transformSuggestionToOption}
           triggerProps={{ label: 'Место посещения' }}
         />
-      </div>
+      </Grid>
       {isTripHasRides && (
-        <div className={classes.optionGroup}>
-          <OptionsSelect
-            name="arrivalRideId"
-            caption="Прибытие"
-            inputId="RideEditCard-arrivalVisitId"
-            hasNullOption={false}
-            optionRender={renderRide(ridesDict)}
-            options={tripRidesIds}
-            onChange={handleChange}
-            value={arrivalRideId}
-          />
-          <OptionsSelect
-            name="departureRideId"
-            caption="Отправление"
-            inputId="RideEditCard-departureVisitId"
-            optionRender={renderRide(ridesDict)}
-            hasNullOption={false}
-            options={tripRidesIds}
-            value={departureRideId}
-            onChange={handleChange}
-          />
-        </div>
+        <>
+          <Grid item={true} xs={6}>
+            <OptionsSelect
+              name="arrivalRideId"
+              caption="Прибытие"
+              inputId="RideEditCard-arrivalVisitId"
+              hasNullOption={false}
+              optionRender={renderRide(ridesDict)}
+              options={tripRidesIds}
+              onChange={handleChange}
+              value={arrivalRideId}
+            />
+          </Grid>
+          <Grid item={true} xs={6}>
+            <OptionsSelect
+              name="departureRideId"
+              caption="Отправление"
+              inputId="RideEditCard-departureVisitId"
+              optionRender={renderRide(ridesDict)}
+              hasNullOption={false}
+              options={tripRidesIds}
+              value={departureRideId}
+              onChange={handleChange}
+            />
+          </Grid>
+        </>
       )}
-      <div className={classes.optionGroup}>
+      <Grid item={true} xs={6}>
         <OptionsSelect
           name="visitType"
           value={visitType}
@@ -103,9 +104,10 @@ export default function VisitEditFormSection({
           options={Object.values(VISIT_TYPES)}
           hasNullOption={true}
         />
-      </div>
-      <div className={classes.optionGroup}>
+      </Grid>
+      <Grid item={true} xs={12}>
         <TextField
+          className={classes.option}
           name="visitComment"
           value={visitComment}
           onChange={handleChange}
@@ -115,8 +117,8 @@ export default function VisitEditFormSection({
           rows={1}
           rowsMax={12}
         />
-      </div>
-    </>
+      </Grid>
+    </Grid>
   );
 }
 

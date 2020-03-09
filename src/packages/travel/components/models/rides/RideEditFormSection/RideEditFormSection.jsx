@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
@@ -41,11 +42,8 @@ const renderRideOccupation = ({ option: rideOccupation }) =>
   rideOccupation ? RIDE_OCCUPATION_NAMES[rideOccupation] : 'Не указан';
 
 const useStyles = makeStyles({
-  optionGroup: {
-    display: 'flex',
-  },
   option: {
-    flexGrow: '1',
+    width: '100%',
   },
 });
 
@@ -83,32 +81,36 @@ const RideEditFormSection = ({
   });
 
   return (
-    <>
+    <Grid container={true} spacing={3} alignItems="center">
       {isTripHasVisits && (
-        <div className={classes.optionGroup}>
-          <OptionsSelect
-            name="departureVisitId"
-            caption="Отправление из"
-            inputId="RideEditCard-departureVisitId"
-            optionRender={renderVisit(visitsDict)}
-            hasNullOption={false}
-            options={[ORIGIN_OF_TRIP, ...tripVisitsIds]}
-            value={departureVisitId}
-            onChange={handleChange}
-          />
-          <OptionsSelect
-            name="arrivalVisitId"
-            caption="Прибытие в"
-            inputId="RideEditCard-arrivalVisitId"
-            hasNullOption={false}
-            optionRender={renderVisit(visitsDict)}
-            options={[...tripVisitsIds, ORIGIN_OF_TRIP]}
-            onChange={handleChange}
-            value={arrivalVisitId}
-          />
-        </div>
+        <>
+          <Grid item={true} xs={6}>
+            <OptionsSelect
+              name="departureVisitId"
+              caption="Отправление из"
+              inputId="RideEditCard-departureVisitId"
+              optionRender={renderVisit(visitsDict)}
+              hasNullOption={false}
+              options={[ORIGIN_OF_TRIP, ...tripVisitsIds]}
+              value={departureVisitId}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item={true} xs={6}>
+            <OptionsSelect
+              name="arrivalVisitId"
+              caption="Прибытие в"
+              inputId="RideEditCard-arrivalVisitId"
+              hasNullOption={false}
+              optionRender={renderVisit(visitsDict)}
+              options={[...tripVisitsIds, ORIGIN_OF_TRIP]}
+              onChange={handleChange}
+              value={arrivalVisitId}
+            />
+          </Grid>
+        </>
       )}
-      <div className={classes.optionGroup}>
+      <Grid item={true} xs={6}>
         <OptionsSelect
           name="vehicleType"
           caption="Транспорт"
@@ -118,6 +120,8 @@ const RideEditFormSection = ({
           onChange={handleChange}
           value={vehicleType}
         />
+      </Grid>
+      <Grid item={true} xs={6}>
         <OptionsSelect
           name="rideType"
           caption="Тип поездки"
@@ -127,8 +131,8 @@ const RideEditFormSection = ({
           onChange={handleChange}
           value={rideType}
         />
-      </div>
-      <div className={classes.optionGroup}>
+      </Grid>
+      <Grid item={true} xs={6}>
         <OptionsSelect
           name="rideClass"
           caption="Класс поездки"
@@ -138,6 +142,8 @@ const RideEditFormSection = ({
           onChange={handleChange}
           value={rideClass}
         />
+      </Grid>
+      <Grid item={true} xs={6}>
         <OptionsSelect
           name="rideOccupation"
           caption="Роль"
@@ -147,8 +153,8 @@ const RideEditFormSection = ({
           onChange={handleChange}
           value={rideOccupation}
         />
-      </div>
-      <div className={classes.optionGroup}>
+      </Grid>
+      <Grid item={true} xs={6}>
         <KeyboardDatePicker
           name="departureDateTime"
           autoOk={true}
@@ -158,6 +164,8 @@ const RideEditFormSection = ({
           onChange={rideDepartureField.onChange}
           format="dd/MM/yyyy"
         />
+      </Grid>
+      <Grid item={true} xs={6}>
         {isSameDateField.value ? (
           <FormControlLabel
             control={
@@ -181,8 +189,8 @@ const RideEditFormSection = ({
             format="dd/MM/yyyy"
           />
         )}
-      </div>
-      <div className={classes.optionGroup}>
+      </Grid>
+      <Grid item={true} xs={6}>
         <TimePicker
           name="departureDateTime"
           ampm={false}
@@ -192,6 +200,8 @@ const RideEditFormSection = ({
           value={rideDepartureField.value}
           onChange={rideDepartureField.onChange}
         />
+      </Grid>
+      <Grid item={true} xs={6}>
         <TimePicker
           name="arrivalDateTime"
           ampm={false}
@@ -201,8 +211,8 @@ const RideEditFormSection = ({
           value={rideArrivalField.value}
           onChange={rideArrivalField.onChange}
         />
-      </div>
-      <div className={classes.optionGroup}>
+      </Grid>
+      <Grid item={true} xs={12}>
         <TextField
           name="rideComment"
           className={classes.option}
@@ -213,8 +223,8 @@ const RideEditFormSection = ({
           rowsMax={12}
           value={rideComment}
         />
-      </div>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 
