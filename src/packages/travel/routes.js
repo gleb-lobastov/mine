@@ -1,5 +1,4 @@
 import React from 'react';
-import { VISITS_SECTIONS } from './pages/VisitsPage/consts';
 const USER_ALIAS_TYPE = '[a-z0-9-]+';
 
 export const entry = {
@@ -11,9 +10,9 @@ export const entry = {
 
 export const visits = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/:section?`,
-  defaultRouteParams: { userAlias: 'my', section: VISITS_SECTIONS.TRIPS },
+  defaultRouteParams: { userAlias: 'my', section: 'trips' },
   Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-TripStory' */ './pages/VisitsPage'),
+    import(/* webpackChunkName: 'travel-VisitsPage' */ './pages/VisitsPage'),
   ),
 };
 
@@ -21,7 +20,7 @@ export const tripEdit = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/trips/:strTripId(\\d+)/edit`,
   defaultRouteParams: { userAlias: 'my' },
   Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-Trips' */ './pages/TripEditPage'),
+    import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/TripEditPage'),
   ),
 };
 
@@ -29,7 +28,7 @@ export const tripCreate = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/trips/:action`,
   defaultRouteParams: { userAlias: 'my', action: 'create' },
   Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-Trips' */ './pages/TripEditPage'),
+    import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/TripEditPage'),
   ),
 };
 
@@ -37,6 +36,6 @@ export const locations = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/locations/edit/:strLocationId?`,
   defaultRouteParams: { userAlias: 'my' },
   Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-TripStory' */ './pages/LocationsPage'),
+    import(/* webpackChunkName: 'travel-LocationsPage' */ './pages/LocationsPage'),
   ),
 };
