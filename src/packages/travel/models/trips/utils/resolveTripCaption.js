@@ -7,7 +7,7 @@ export default (
   visitsDict,
   countriesDict,
   originCountryId,
-  fallback,
+  fallback = 'Без названия',
 ) => {
   if (!visitsIds.length) {
     return fallback;
