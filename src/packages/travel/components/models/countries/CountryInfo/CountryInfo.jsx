@@ -14,10 +14,7 @@ export default function CountryInfo({
     return <span className={className}>{countryName}</span>;
   }
   return (
-    <Typography
-      variant={isSubgroup ? 'h5' : 'h4'}
-      className={isSubgroup ? classes.subgroup : classes.group}
-    >
+    <Typography variant={isSubgroup ? 'h5' : 'h4'} className={className}>
       {countryName} {children}
     </Typography>
   );

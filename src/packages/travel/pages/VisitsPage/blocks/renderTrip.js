@@ -1,4 +1,5 @@
 import React from 'react';
+import cls from 'classnames';
 import IconButton from '@material-ui/core/IconButton';
 import IconEdit from '@material-ui/icons/Edit';
 import TripInfo from 'travel/components/models/trips/TripInfo';
@@ -29,7 +30,7 @@ export default function renderTrip({
   return (
     <TripInfo
       key={`t${tripId}_v${visitId}`}
-      className={classes.visibilityTrigger}
+      className={cls(classes.visibilityTrigger, classes.group)}
       trip={tripsDict[tripId]}
     >
       {tripEditButtonNode}

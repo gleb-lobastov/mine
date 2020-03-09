@@ -41,11 +41,14 @@ export default function renderCountry({
     default:
       break;
   }
+
+  const isSubgroup = isGroupedByTrip || isGroupedByYearCountries;
   return (
     <CountryInfo
       key={`c${countryId}_v${visitId}`}
       country={countriesDict[countryId]}
-      isSubgroup={isGroupedByTrip || isGroupedByYearCountries}
+      isSubgroup={isSubgroup}
+      className={isSubgroup ? classes.subgroup : classes.group}
     >
       {locationsCounter > 2 && (
         <span className={classes.detail}>{`${locationsCounter} мест`}</span>
