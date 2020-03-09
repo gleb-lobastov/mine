@@ -3,12 +3,6 @@ import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
-import {
-  KEY_GROUP_VISITS_BY,
-  GROUP_VISITS_BY,
-  KEY_SORT_VISITS_BY,
-  SORT_VISITS_BY,
-} from './consts';
 import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
@@ -18,21 +12,19 @@ import calcCounters from './calcCounters';
 
 export default function VisitsPage({
   match: {
-    params: { userAlias },
+    params: { userAlias, section },
   },
 }) {
   const { userAlias: authenticatedUserAlias } = useAuthContext();
   const hasEditRights = userAlias === authenticatedUserAlias;
 
   const classes = useVisitsPageStyles();
-  const {
-    queryFilter: {
-      [KEY_GROUP_VISITS_BY]: groupBy = GROUP_VISITS_BY.LOCATIONS,
-      [KEY_SORT_VISITS_BY]: sortBy = SORT_VISITS_BY.ALPHABET,
-    } = {},
+  const { queryFilter, setQueryFilter } = useQueryFilter();
+  const { groupBy, sortBy } = useVisitsGroupingSidebar(
     setQueryFilter,
-  } = useQueryFilter();
-  useVisitsGroupingSidebar(setQueryFilter, { groupBy, sortBy });
+    queryFilter,
+    section,
+  );
 
   const provision = useTripsStats({ userAlias });
   const { isPending, isError } = provision;

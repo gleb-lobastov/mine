@@ -9,13 +9,28 @@ import { useSidebar } from 'core/context/SidebarContext';
 import {
   GROUP_VISITS_BY,
   KEY_GROUP_VISITS_BY,
+  GROUP_VISITS_BY_DEFAULTS,
+  VISITS_SECTION_DEFAULT,
+  VISITS_SECTIONS,
+  VISITS_SECTIONS_GROUPS,
   SORT_VISITS_BY,
   KEY_SORT_VISITS_BY,
+  SORT_VISITS_BY_DEFAULT,
 } from './consts';
 import useVisitsPageStyles from './useVisitsPageStyles';
 
-export default function(setQueryFilter, { groupBy, sortBy }) {
+export default function(setQueryFilter, queryFilter, section) {
   const classes = useVisitsPageStyles();
+  const {
+    [KEY_GROUP_VISITS_BY]: groupByQuery,
+    [KEY_SORT_VISITS_BY]: sortByQuery,
+  } = queryFilter || {};
+  const sortBy = resolveActualSortBy(sortByQuery);
+  const [groupBy, visitsSectionGroups] = resolveActualGroupBy(
+    groupByQuery,
+    section,
+  );
+
   useSidebar(
     ({ closeSidebar }) => (
       <List>
@@ -36,19 +51,14 @@ export default function(setQueryFilter, { groupBy, sortBy }) {
                 });
               }}
             >
-              <MenuItem value={GROUP_VISITS_BY.LOCATIONS}>По городам</MenuItem>
-              <MenuItem value={GROUP_VISITS_BY.COUNTRIES}>По странам</MenuItem>
-              <MenuItem value={GROUP_VISITS_BY.YEARS}>По годам</MenuItem>
-              <MenuItem value={GROUP_VISITS_BY.YEARS_COUNTRIES}>
-                По годам и странам
-              </MenuItem>
-              <MenuItem value={GROUP_VISITS_BY.COUNTRIES_YEARS}>
-                По странам и годам
-              </MenuItem>
-              <MenuItem value={GROUP_VISITS_BY.TRIPS}>По поездкам</MenuItem>
-              <MenuItem value={GROUP_VISITS_BY.TRIPS_COUNTRIES}>
-                По поездкам и странам
-              </MenuItem>
+              {visitsSectionGroups.map(visitsSectionGroup => (
+                <MenuItem
+                  key={visitsSectionGroup.key}
+                  value={visitsSectionGroup.key}
+                >
+                  {visitsSectionGroup.l10n}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </ListItem>
@@ -85,4 +95,22 @@ export default function(setQueryFilter, { groupBy, sortBy }) {
     ),
     [groupBy, sortBy],
   );
+
+  return { groupBy, sortBy };
+}
+
+function resolveActualSortBy(sortByQuery) {
+  return Object.values(SORT_VISITS_BY).includes(sortByQuery)
+    ? sortByQuery
+    : SORT_VISITS_BY_DEFAULT;
+}
+function resolveActualGroupBy(groupByQuery, section) {
+  const actualSection = Object.values(VISITS_SECTIONS).includes(section)
+    ? section
+    : VISITS_SECTION_DEFAULT;
+  const visitsSectionGroups = VISITS_SECTIONS_GROUPS[actualSection] || [];
+  const groupBy = visitsSectionGroups.find(({ key }) => key === groupByQuery)
+    ? groupByQuery
+    : GROUP_VISITS_BY_DEFAULTS[actualSection];
+  return [groupBy, visitsSectionGroups];
 }

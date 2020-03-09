@@ -23,11 +23,17 @@ export default (packages = {}) => {
       menu: [
         {
           path: travel.routes.entry.path,
-          caption: 'Об',
+          caption: 'О разделе',
         },
         {
           path: travel.routes.visits.path,
-          caption: 'По посещениям',
+          caption: 'Места',
+          params: { section: 'locations' },
+        },
+        {
+          path: travel.routes.visits.path,
+          caption: 'Путешествия',
+          params: { section: undefined },
         },
       ],
     });
@@ -41,7 +47,7 @@ export default (packages = {}) => {
       menu: [
         {
           path: literature.routes.entry.path,
-          caption: 'Об',
+          caption: 'О разделе',
         },
         {
           path: literature.routes.articles.path,

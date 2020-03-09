@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { VISITS_SECTIONS } from './pages/VisitsPage/consts';
 const USER_ALIAS_TYPE = '[a-z0-9-]+';
 
 export const entry = {
@@ -10,8 +10,8 @@ export const entry = {
 };
 
 export const visits = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/visits`,
-  defaultRouteParams: { userAlias: 'my' },
+  path: `/:userAlias(${USER_ALIAS_TYPE})/visits/:section?`,
+  defaultRouteParams: { userAlias: 'my', section: VISITS_SECTIONS.TRIPS },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-TripStory' */ './pages/VisitsPage'),
   ),
