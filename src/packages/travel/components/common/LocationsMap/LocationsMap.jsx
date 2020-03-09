@@ -9,15 +9,14 @@ import useMarkers from './useMarkers';
 const useStyles = makeStyles({
   googleMapContainer: {
     margin: '12px 0',
-    width: '800px',
     maxWidth: '100%',
-    height: '400px',
+    height: ({ height }) => height,
     maxHeight: '100%',
   },
 });
 
-export default function LocationsMap({ locationsDict, locationsIds }) {
-  const classes = useStyles();
+export default function LocationsMap({ locationsDict, locationsIds, height }) {
+  const classes = useStyles({ height });
 
   const { handleGoogleApiLoaded } = useMarkers(
     locationsIds.map(
@@ -41,4 +40,9 @@ LocationsMap.propTypes = {
   locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
     .isRequired,
   locationsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  height: PropTypes.string,
+};
+
+LocationsMap.defaultProps = {
+  height: '400px',
 };

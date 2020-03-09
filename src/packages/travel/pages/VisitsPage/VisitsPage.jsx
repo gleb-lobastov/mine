@@ -58,7 +58,11 @@ export default function VisitsPage({
 
   const { locationsDict, locationsIds } = provision;
   const mapsNode = (
-    <LocationsMap locationsDict={locationsDict} locationsIds={locationsIds} />
+    <LocationsMap
+      locationsDict={locationsDict}
+      locationsIds={locationsIds}
+      height={300}
+    />
   );
 
   const visitsList = unsortedVisitsList.sort(
