@@ -1,11 +1,9 @@
-/* globals __GOOGLE_MAP_API_KEY__ */
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import GoogleMapReact from 'google-map-react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from 'core/context/AuthContext';
+import LocationsMap from 'travel/components/common/LocationsMap';
 import LocationRating from './blocks/LocationRating';
-import useMarkers from './useMarkers';
 import useUserLocations from './useUserLocations';
 
 const useStyles = makeStyles({
@@ -55,12 +53,6 @@ export default function LocationsPage({
     },
   );
 
-  const { handleGoogleApiLoaded } = useMarkers(
-    actualLocationsIds.map(
-      locationIdToShowMarker => locationsDict[locationIdToShowMarker],
-    ),
-  );
-
   if (isError) {
     return <div>...Error</div>;
   }
@@ -76,14 +68,10 @@ export default function LocationsPage({
   const isEditable = isAuthenticated && authenticatedUserAlias === userAlias;
   return (
     <div className={classes.container}>
-      <div className={classes.googleMapContainer}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: __GOOGLE_MAP_API_KEY__ }}
-          center={{ lat: 0, lng: 0 }}
-          zoom={11}
-          onGoogleApiLoaded={handleGoogleApiLoaded}
-        />
-      </div>
+      <LocationsMap
+        locationsDict={locationsDict}
+        locationsIds={actualLocationsIds}
+      />
       {actualLocationsIds.map(locationsIdToRender => {
         const location = locationsDict[locationsIdToRender];
         if (!location) {

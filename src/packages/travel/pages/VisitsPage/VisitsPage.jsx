@@ -3,6 +3,7 @@ import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
+import LocationsMap from 'travel/components/common/LocationsMap';
 import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
@@ -55,6 +56,11 @@ export default function VisitsPage({
     groupBy,
   });
 
+  const { locationsDict, locationsIds } = provision;
+  const mapsNode = (
+    <LocationsMap locationsDict={locationsDict} locationsIds={locationsIds} />
+  );
+
   const visitsList = unsortedVisitsList.sort(
     switchSortingFn({ groupBy, sortBy }, provision, counters),
   );
@@ -82,7 +88,7 @@ export default function VisitsPage({
 
       return nodesAccumulator;
     },
-    [titleNode],
+    [titleNode, mapsNode],
   );
 
   // without key there is strange bug with reconciling:
