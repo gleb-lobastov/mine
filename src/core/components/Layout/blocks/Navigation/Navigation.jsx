@@ -44,7 +44,7 @@ class Navigation extends React.PureComponent {
   };
 
   static defaultProps = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   findMainTabIndex = memoizeByLastArgs(findTabIndex);
@@ -52,7 +52,7 @@ class Navigation extends React.PureComponent {
   // different function for different cache
   findSubTabIndex = memoizeByLastArgs(findTabIndex);
 
-  handleChangeUrl = (event, currentPath, nextPath) => {
+  handleChangeUrl = (event, currentPath, nextPath, nextPathParams) => {
     const {
       history,
       location: { pathname },
@@ -60,7 +60,9 @@ class Navigation extends React.PureComponent {
     } = this.props;
     const match = matchPath(pathname, { path: currentPath.toString() });
     const { params: pathParams } = match || {};
-    history.push(nextPath.toUrl({ ...params, ...pathParams }));
+    history.push(
+      nextPath.toUrl({ ...params, ...pathParams, ...nextPathParams }),
+    );
   };
 
   renderAuthInfo() {

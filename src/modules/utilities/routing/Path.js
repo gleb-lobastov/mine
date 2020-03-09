@@ -1,4 +1,6 @@
 import pathToRegexp from 'path-to-regexp';
+import isUndefined from 'lodash/isUndefined';
+import omitBy from 'lodash/omitBy';
 
 export default class Path {
   static create = (path, meta, defaultRouteParams) =>
@@ -7,7 +9,10 @@ export default class Path {
   constructor(path, meta, defaultRouteParams) {
     this.path = path;
     this.compiledPath = pathToRegexp.compile(path);
-    this.regexp = pathToRegexp(path, [], { end: false });
+    this.matchPath = pathToRegexp.match(path, {
+      decode: decodeURIComponent,
+      end: false,
+    });
     this.meta = meta;
     this.defaultRouteParams = defaultRouteParams;
   }
@@ -31,10 +36,21 @@ export default class Path {
   }
 
   toUrl(routeParams) {
-    return this.compiledPath({ ...this.defaultRouteParams, ...routeParams });
+    return this.compiledPath(
+      omitBy({ ...this.defaultRouteParams, ...routeParams }, isUndefined),
+    );
   }
 
-  checkIsActive(pathname = window.location.href) {
-    return this.regexp.test(pathname);
+  checkIsActive(pathname = window.location.href, requiredParams) {
+    const match = this.matchPath(pathname);
+    if (!match) {
+      return false;
+    }
+    if (!requiredParams) {
+      return true;
+    }
+    return Object.entries(requiredParams).every(
+      ([key, value]) => match.params[key] === value,
+    );
   }
 }
