@@ -1,31 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import withProvision from 'core/connection/withProvision';
-import articlePropTypes from 'literature/models/articles/propTypes';
+import { useSelector } from 'react-redux';
+import { useProvision, selectDict } from 'core/connection';
 import Posts from './blocks/Posts';
 
-class Blog extends React.PureComponent {
-  static propTypes = {
-    articles: PropTypes.shape({
-      data: PropTypes.arrayOf(PropTypes.shape(articlePropTypes)),
-    }).isRequired,
-  };
-
-  render() {
-    const { articles: { data: articlesList = [] } = {} } = this.props;
-
-    return <Posts source={articlesList} />;
-  }
+export default function Blog() {
+  const { provision = {} } = useProvision({
+    domain: 'literature.blogPosts',
+    isProvision: true,
+    modelName: 'articles',
+    query: { navigation: { isDisabled: true } },
+  });
+  const { data: articlesIds = [] } = provision;
+  const articlesDict = useSelector(state => selectDict(state, 'articles'));
+  const articlesList = articlesIds.map(articlesId => articlesId[articlesDict]);
+  return <Posts source={articlesList} />;
 }
-
-const mapStateToRequirements = () => ({
-  domain: 'blogPage',
-  request: {
-    articles: {
-      modelName: 'articles',
-      query: { navigation: { isDisabled: true } },
-    },
-  },
-});
-
-export default withProvision(mapStateToRequirements)(Blog);

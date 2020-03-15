@@ -1,31 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import withProvision from 'core/connection/withProvision';
-import articlePropTypes from 'literature/models/articles/propTypes';
+import { useSelector } from 'react-redux';
+import { useProvision, selectDict } from 'core/connection';
 import Posts from 'literature/pages/Blog/blocks/Posts';
 
-class Quotes extends React.PureComponent {
-  static propTypes = {
-    quotes: PropTypes.shape({
-      data: PropTypes.arrayOf(PropTypes.shape(articlePropTypes)),
-    }).isRequired,
-  };
-
-  render() {
-    const { quotes: { data: quotesList = [] } = {} } = this.props;
-
-    return <Posts source={quotesList} />;
-  }
+export default function Quotes() {
+  const { provision = {} } = useProvision({
+    domain: 'literature.quotesPage',
+    isProvision: true,
+    modelName: 'quotes',
+    query: { navigation: { isDisabled: true } },
+  });
+  const { data: quotesIds = [] } = provision;
+  const articlesDict = useSelector(state => selectDict(state, 'articles'));
+  const quotesList = quotesIds.map(articlesId => articlesId[articlesDict]);
+  return <Posts source={quotesList} />;
 }
-
-const mapStateToRequirements = () => ({
-  domain: 'quotesPage',
-  request: {
-    quotes: {
-      modelName: 'quotes',
-      query: { navigation: { isDisabled: true } },
-    },
-  },
-});
-
-export default withProvision(mapStateToRequirements)(Quotes);
