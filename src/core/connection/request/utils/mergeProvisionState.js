@@ -6,12 +6,7 @@ import {
   selectIsPending,
   selectIsValid,
 } from '../controllerRedux';
-
-export const mapValues = (object, iteratee) =>
-  Object.entries(object).reduce((memo, [key, value]) => {
-    memo[key] = iteratee(value, key, object);
-    return memo;
-  }, {});
+import { mapValues } from './common';
 
 export default (
   provisionStateMapping = {},

@@ -1,2 +1,2 @@
-export { default as createProvider } from './createProvider';
-export { default as createUseProvisionHook } from './createUseProvisionHook';
+export { default as makeProvisionHook } from './makeProvisionHook';
+export { default as makeRequestHook } from './makeRequestHook';

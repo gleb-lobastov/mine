@@ -1,12 +1,16 @@
 import { useEffect, useMemo, useRef } from 'react';
 import debounce from 'lodash/debounce';
+import { checkIsRequirementsChanged } from '../utils';
 
-export default function createUseProvisionHook({
-  requirementsComparator: compareRequirements,
+export default function makeProvisionHook({
   requestHandler,
   invalidateRequestHandler,
 }) {
-  return function useProvision({ requirements, provision, requestParams }) {
+  return function useProvision({
+    requirements,
+    provision,
+    ...forwardingRequestParams
+  }) {
     const { debounceRequest } = requirements;
 
     const handleRequest = useMemo(
@@ -27,14 +31,14 @@ export default function createUseProvisionHook({
           provision: prevProvision,
         } = previousRef.current;
 
-        const comparisonResult = compareRequirements(
+        const comparisonResult = checkIsRequirementsChanged(
           { requirements: prevRequirements, provision: prevProvision },
           { requirements, provision },
         );
 
         if (comparisonResult) {
           handleRequest({
-            ...requestParams,
+            ...forwardingRequestParams,
             requirements: { ...requirements, comparisonResult },
           });
         }
