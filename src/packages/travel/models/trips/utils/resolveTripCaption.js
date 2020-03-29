@@ -6,7 +6,12 @@ import { VISIT_TYPES } from 'travel/models/visits/consts';
 import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 
 const FALLBACK = 'Без названия';
-export default (trip, visitsDict, countriesDict, locationsDict) => {
+export default function resolveTripCaption(
+  trip,
+  visitsDict,
+  countriesDict,
+  locationsDict,
+) {
   const {
     visits: visitsIds,
     originLocationId,
@@ -61,4 +66,4 @@ export default (trip, visitsDict, countriesDict, locationsDict) => {
     { maxLength: 4 },
   );
   return `${countriesNames || FALLBACK}, ${periodStr}`;
-};
+}

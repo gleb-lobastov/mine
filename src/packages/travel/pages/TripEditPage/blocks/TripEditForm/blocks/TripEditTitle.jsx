@@ -8,8 +8,8 @@ export default function TripEditTitle({
   provision,
   formikProps: { values },
 }) {
-  const { trip: formTrip, visitsDict: formVisitsDict } = values;
-  const { countriesDict, locationsDict } = provision;
+  const { trip: formTrip } = values;
+  const { visitsDict, countriesDict, locationsDict } = provision;
 
   const modeCaption = isCreation
     ? 'Создание поездки'
@@ -17,7 +17,7 @@ export default function TripEditTitle({
 
   const tripName = resolveTripCaption(
     formTrip,
-    formVisitsDict,
+    visitsDict,
     countriesDict,
     locationsDict,
   );
