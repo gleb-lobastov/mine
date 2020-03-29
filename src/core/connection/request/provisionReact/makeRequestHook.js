@@ -35,6 +35,6 @@ export default function makeRequestHook({ requestHandler }) {
       return controlledPromiseRef.current.promise;
     }, []);
 
-    return request;
+    return [request, requirements];
   };
 }

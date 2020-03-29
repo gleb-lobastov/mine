@@ -52,7 +52,10 @@ export default function makeProvisionHook({
       () => ({
         ...provision,
         invalidate: () =>
-          invalidateRequestHandler({ ...requestParams, requirements }),
+          invalidateRequestHandler({
+            ...forwardingRequestParams,
+            requirements,
+          }),
       }),
       [provision, requirements.domain],
     );
