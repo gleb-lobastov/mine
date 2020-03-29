@@ -7,7 +7,7 @@ import TripInfo from 'travel/components/models/trips/TripInfo';
 export default function renderTrip({
   visit: { visitId, tripId },
   changes: { isTripChanged },
-  provision: { tripsDict },
+  provision: { tripsDict, visitsDict, countriesDict, locationsDict },
   travelPaths: { tripEdit: tripEditPath },
   hasEditRights,
   userAlias,
@@ -32,6 +32,9 @@ export default function renderTrip({
       key={`t${tripId}_v${visitId}`}
       className={cls(classes.visibilityTrigger, classes.group)}
       trip={tripsDict[tripId]}
+      visitsDict={visitsDict}
+      countriesDict={countriesDict}
+      locationsDict={locationsDict}
     >
       {tripEditButtonNode}
     </TripInfo>
