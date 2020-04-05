@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
+import { usePaths } from 'modules/packages';
 import { useAuthContext } from 'core/context/AuthContext';
 import { useTripsStats } from 'travel/dataSource';
 import { initializeTrip } from 'travel/models/trips';
@@ -14,6 +16,10 @@ function TripEditPage({
     params: { userAlias, strTripId, action },
   },
 }) {
+  const {
+    travel: { tripEdit: tripEditPath },
+  } = usePaths();
+  const history = useHistory();
   const isCreation = action === 'create';
   const {
     isAuthenticated,
@@ -59,7 +65,18 @@ function TripEditPage({
     <>
       <Formik
         initialValues={{ trip }}
-        onSubmit={values => handleSubmitTrip(values.trip)}
+        onSubmit={values => {
+          return handleSubmitTrip(values.trip).then(newTripId => {
+            if (tripId || !newTripId) {
+              return;
+            }
+            const tripEditPageUrl = tripEditPath.toUrl({
+              userAlias,
+              strTripId: String(newTripId),
+            });
+            history.push(tripEditPageUrl);
+          });
+        }}
       >
         {formikProps => (
           <TripEditForm

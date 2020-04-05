@@ -35,7 +35,7 @@ export default function useTripEditRequests(invalidate) {
           id: trip.tripId,
           body: trip,
         },
-      }).then(invalidate),
+      }).finally(invalidate),
     [],
   );
 

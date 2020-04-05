@@ -15,8 +15,8 @@ export const toClient = ({
   tripType: rawTripType,
   arrivalDateTime: new Date(rawArrivalDateTime),
   departureDateTime: new Date(rawDepartureDateTime),
-  visits: rawVisits,
-  rides: rawRides,
+  visits: rawVisits || [],
+  rides: rawRides || [],
 });
 
 export const toServer = (requestBody, { isProvision } = {}) => {
