@@ -1,6 +1,7 @@
 import React from 'react';
 import FormDialog from 'modules/components/FormDialog';
 import VisitEditFormSection from 'travel/components/models/visits/VisitEditFormSection';
+import * as locators from '../../../../locators';
 
 export default function VisitEditDialog({
   isCreation,
@@ -10,7 +11,8 @@ export default function VisitEditDialog({
 }) {
   return (
     <FormDialog
-      title={isCreation ? 'Создание посешения' : 'Редактирование посещения'}
+      data-locator={locators.VISIT_DIALOG}
+      title={isCreation ? 'Создание посещения' : 'Редактирование посещения'}
       {...forwardingProps}
     >
       <VisitEditFormSection

@@ -1,6 +1,7 @@
 import React from 'react';
 import FormDialog from 'modules/components/FormDialog';
 import RideEditFormSection from 'travel/components/models/rides/RideEditFormSection';
+import * as locators from '../../../../locators';
 
 export default function RideEditDialog({
   isCreation,
@@ -10,6 +11,7 @@ export default function RideEditDialog({
 }) {
   return (
     <FormDialog
+      data-locator={locators.RIDE_DIALOG}
       title={isCreation ? 'Создание маршрута' : 'Редактирование маршрута'}
       {...forwardingProps}
     >

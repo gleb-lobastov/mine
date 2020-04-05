@@ -26,6 +26,7 @@ const defaultItemToString = item => {
 
 // export default ({ inputProps, classes, ref, ...other }) => {};
 export default function Select({
+  'data-locator': dataLocator,
   classes: customClasses,
   options,
   inputProps,
@@ -34,7 +35,7 @@ export default function Select({
 }) {
   const classes = { ...useStyles(), ...customClasses };
   return (
-    <div className={classes.root}>
+    <div data-locator={dataLocator} className={classes.root}>
       <Downshift itemToString={defaultItemToString} {...downshiftProps}>
         {({
           getInputProps,

@@ -1,4 +1,7 @@
 .google_api_key
+.testcredentials
+
+testCredentials.js
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template

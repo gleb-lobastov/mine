@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DragHandler from 'modules/components/DragHandler';
 import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogs';
+import * as locators from '../../../../../locators';
 
 const useStyles = makeStyles({
   container: {
@@ -31,6 +32,7 @@ export default function VisitCreator({ showDialog }) {
   return (
     <div className={classes.container} data-sort-handler="enabled">
       <Button
+        data-locator={locators.ADD_VISIT_BUTTON}
         data-sort-handler="disabled"
         size="small"
         variant="outlined"

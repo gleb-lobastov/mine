@@ -3,6 +3,7 @@ import { Formik } from 'formik';
 import Dialog from '../Dialog';
 
 export default function({
+  'data-locator': dataLocator,
   initialValues,
   isOpen,
   onSubmit,
@@ -19,6 +20,7 @@ export default function({
     >
       {formikProps => (
         <Dialog
+          data-locator={dataLocator}
           description={description}
           onClose={onReset}
           isOpen={isOpen}

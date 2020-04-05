@@ -12,6 +12,7 @@ const useStyles = makeStyles({
 });
 
 export default function Actions({
+  'data-locator': dataLocator,
   className,
   isEntityExist,
   onEditClick,
@@ -24,6 +25,7 @@ export default function Actions({
   const hasDeleteAction = isEntityExist && Boolean(onDeleteClick);
   return (
     <div
+      data-locator={dataLocator}
       data-sort-handler="disabled"
       className={cls(classes.actions, className)}
     >

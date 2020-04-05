@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import MUILink from '@material-ui/core/Link';
 import { checkIsGroupedByTrip } from '../utils';
+import * as locators from '../locators';
 
 export default function renderTitle({
   createTripUrl,
@@ -14,7 +15,11 @@ export default function renderTitle({
 }) {
   const linkToCreateTripNode = checkIsGroupedByTrip(groupBy) ? (
     <div>
-      <MUILink to={createTripUrl} component={Link}>
+      <MUILink
+        to={createTripUrl}
+        component={Link}
+        data-locator={locators.ADD_TRIP_BUTTON}
+      >
         Добавить поездку
       </MUILink>
     </div>

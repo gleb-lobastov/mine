@@ -16,6 +16,7 @@ const styles = {
 };
 
 const OptionsSelect = ({
+  'data-locator': dataLocator,
   caption,
   classes,
   hasNullOption,
@@ -26,7 +27,7 @@ const OptionsSelect = ({
   options,
   value,
 }) => (
-  <div className={classes.container}>
+  <div data-locator={dataLocator} className={classes.container}>
     <InputLabel component="label" shrink={true} htmlFor={inputId}>
       {caption}
     </InputLabel>
@@ -37,14 +38,15 @@ const OptionsSelect = ({
       onChange={handleChange}
       input={<Input id={inputId} />}
       className={classes.selectRoot}
+      MenuProps={{ 'data-locator': `options-${inputId}` }}
     >
       {hasNullOption && (
-        <MenuItem key={null} value={null}>
+        <MenuItem data-locator="option-null" key={null} value={null}>
           {optionRender({ option: null, index: -1, options })}
         </MenuItem>
       )}
       {options.map((option, index) => (
-        <MenuItem key={option} value={option}>
+        <MenuItem data-locator={`option-${option}`} key={option} value={option}>
           {optionRender({ option, index, options })}
         </MenuItem>
       ))}

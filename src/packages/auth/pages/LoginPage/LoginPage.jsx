@@ -2,6 +2,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { setAccessToken } from 'modules/auth/tokens';
+import * as locators from './locators';
 
 const SUBMIT_STATUS = {
   NONE: 'NONE',
@@ -53,11 +54,23 @@ class LoginPage extends React.Component {
           <div style={{ color: 'red' }}>Ошибка авторизации</div>
         )}
         <div>Логин</div>
-        <input type="text" ref={this.loginRef} />
+        <input
+          data-locator={locators.LOGIN_INPUT}
+          type="text"
+          ref={this.loginRef}
+        />
         <div>Пароль</div>
-        <input type="password" ref={this.passwordRef} />
+        <input
+          data-locator={locators.PASSWORD_INPUT}
+          type="password"
+          ref={this.passwordRef}
+        />
         <div>
-          <button type="submit" onClick={this.handleSubmit}>
+          <button
+            data-locator={locators.SUBMIT_BUTTON}
+            type="submit"
+            onClick={this.handleSubmit}
+          >
             Это я!
           </button>
         </div>

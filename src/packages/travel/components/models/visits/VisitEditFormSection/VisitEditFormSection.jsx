@@ -7,6 +7,7 @@ import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import Suggest, { QUERY_FORMATS } from 'modules/components/muiExtended/Suggest';
 import RideInfo from 'travel/components/models/rides/RideInfo';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
+import * as locators from './locators';
 
 export const VISIT_TYPE_NAMES = {
   [VISIT_TYPES.TRANSIT]: 'Транзит',
@@ -49,7 +50,10 @@ export default function VisitEditFormSection({
     <Grid container={true} spacing={3} alignItems="center">
       <Grid item={true} xs={12}>
         <Suggest
-          inputProps={{ placeholder: 'Место посещения...' }}
+          data-locator={locators.LOCATION_SUGGEST}
+          inputProps={{
+            placeholder: 'Место посещения...',
+          }}
           initialInputValue={locationName}
           onChange={({ suggestion: { geonameId } }) =>
             setFieldValue('geonameId', geonameId)
@@ -95,6 +99,7 @@ export default function VisitEditFormSection({
       )}
       <Grid item={true} xs={6}>
         <OptionsSelect
+          data-locator={locators.VISIT_TYPE_SELECT}
           name="visitType"
           value={visitType}
           onChange={handleChange}

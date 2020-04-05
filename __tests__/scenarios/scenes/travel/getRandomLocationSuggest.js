@@ -1,0 +1,83 @@
+const LOCATIONS_TO_SUGGEST = [
+  'Шанха',
+  'Пеки',
+  'Карач',
+  'Гуанчжо',
+  'Стамбу',
+  'Токи',
+  'Москв',
+  'Мумба',
+  'Сан-Паул',
+  'Киншас',
+  'Дел',
+  'Каи',
+  'Сеу',
+  'Джакарт',
+  'Лим',
+  'Мехик',
+  'Хошими',
+  'Дакк',
+  'Лондо',
+  'Бангко',
+  'Нью-Йор',
+  'Тегера',
+  'Богот',
+  'Гонкон',
+  'Багда',
+  'Рио-де-Жанейр',
+  'Сантьяг',
+  'Эр-Рия',
+  'Ахмедаба',
+  'Сингапу',
+  'Санкт-Петербур',
+  'Касаблан',
+  'Калькутт',
+  'Йоханнесбу',
+  'Тайбэ',
+  'Лос-Андж',
+  'Кейпта',
+  'Берли',
+  'Мадри',
+  'Найро',
+  'Аддис',
+  'Буэнос-Ай',
+  'Праг',
+  'Пари',
+  'Рим',
+  'Уфа',
+  'Владиво',
+  'Мурма',
+  'Волгог',
+  'Самар',
+  'Будапе',
+  'Белгра',
+  'Сарае',
+  'Подгор',
+  'Минс',
+  'Барсел',
+  'Лиссаб',
+  'Порто',
+  'Вен',
+  'Хельси',
+  'Осл',
+  'Мальм',
+  'Копен',
+  'Бухаре',
+  'Бартис',
+  'Цюри',
+  'Варша',
+];
+
+export default function getRandomLocationSuggest(exceptions) {
+  const availableLocations = exceptions
+    ? LOCATIONS_TO_SUGGEST.filter(
+        locationName =>
+          !exceptions.some(exception => exception.startsWith(locationName)),
+      )
+    : LOCATIONS_TO_SUGGEST;
+  return pickRandomItem(availableLocations);
+}
+
+function pickRandomItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}

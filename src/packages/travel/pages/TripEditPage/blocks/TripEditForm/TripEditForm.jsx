@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import TripEditFormSection from './blocks/TripEditFormSection';
 import VisitsAndRidesFormSection from './blocks/VisitsAndRidesFormSection/VisitsAndRidesFormSection';
 import TripEditTitle from './blocks/TripEditTitle';
+import * as locators from '../../locators';
 
 const useStyles = makeStyles({
   container: {
@@ -37,7 +38,11 @@ const TripEditForm = ({ isCreation, showDialog, provision, formikProps }) => {
           formikProps={formikProps}
           provision={provision}
         />
-        <Button type="submit" color="primary">
+        <Button
+          data-locator={locators.SUBMIT_TRIP_BUTTON}
+          type="submit"
+          color="primary"
+        >
           Сохранить
         </Button>
       </Form>

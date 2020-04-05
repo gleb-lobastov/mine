@@ -9,5 +9,10 @@ module.exports = function(api) {
       '@babel/plugin-proposal-export-default-from',
       '@babel/plugin-proposal-optional-chaining',
     ],
+    env: {
+      test: {
+        plugins: [['@babel/plugin-transform-runtime', { regenerator: true }]],
+      },
+    },
   };
 };

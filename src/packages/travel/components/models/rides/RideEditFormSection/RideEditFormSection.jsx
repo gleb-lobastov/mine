@@ -21,6 +21,7 @@ import {
   RIDE_OCCUPATION_NAMES,
 } from './localization';
 import tieDateTimeFields from './tieDateTimeFields';
+import * as locators from './locators';
 
 // if ride was started/ended in origin, then it has no corresponding
 // related visit. Relation is null. So this is not a magic, but real value
@@ -86,6 +87,7 @@ const RideEditFormSection = ({
         <>
           <Grid item={true} xs={6}>
             <OptionsSelect
+              data-locator={locators.DEPARTURE_VISIT_SELECT}
               name="departureVisitId"
               caption="Отправление из"
               inputId="RideEditCard-departureVisitId"
@@ -98,6 +100,7 @@ const RideEditFormSection = ({
           </Grid>
           <Grid item={true} xs={6}>
             <OptionsSelect
+              data-locator={locators.ARRIVAL_VISIT_SELECT}
               name="arrivalVisitId"
               caption="Прибытие в"
               inputId="RideEditCard-arrivalVisitId"
@@ -112,6 +115,7 @@ const RideEditFormSection = ({
       )}
       <Grid item={true} xs={6}>
         <OptionsSelect
+          data-locator={locators.VEHICLE_TYPE_SELECT}
           name="vehicleType"
           caption="Транспорт"
           inputId="RideEditCard-VehicleTypeOptions"
@@ -123,6 +127,7 @@ const RideEditFormSection = ({
       </Grid>
       <Grid item={true} xs={6}>
         <OptionsSelect
+          data-locator={locators.RIDE_TYPE_SELECT}
           name="rideType"
           caption="Тип поездки"
           inputId="RideEditCard-RideTypeOptions"
@@ -134,6 +139,7 @@ const RideEditFormSection = ({
       </Grid>
       <Grid item={true} xs={6}>
         <OptionsSelect
+          data-locator={locators.RIDE_CLASS_SELECT}
           name="rideClass"
           caption="Класс поездки"
           inputId="RideEditCard-RideClassOptions"
@@ -145,6 +151,7 @@ const RideEditFormSection = ({
       </Grid>
       <Grid item={true} xs={6}>
         <OptionsSelect
+          data-locator={locators.RIDE_OCCUPATION_SELECT}
           name="rideOccupation"
           caption="Роль"
           inputId="RideEditCard-RideOccupationOptions"
@@ -156,6 +163,7 @@ const RideEditFormSection = ({
       </Grid>
       <Grid item={true} xs={6}>
         <KeyboardDatePicker
+          data-locator={locators.DEPARTURE_DATE_PICKER}
           name="departureDateTime"
           autoOk={true}
           className={classes.option}
@@ -180,6 +188,7 @@ const RideEditFormSection = ({
           />
         ) : (
           <KeyboardDatePicker
+            data-locator={locators.ARRIVAL_DATE_PICKER}
             name="arrivalDateTime"
             autoOk={true}
             className={classes.option}

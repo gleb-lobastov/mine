@@ -7,6 +7,7 @@ import ridePropTypes from 'travel/models/rides/propTypes';
 import RideIcon from 'travel/components/models/rides/RideIcon';
 import Actions from 'travel/components/common/Actions';
 import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogs';
+import * as locators from '../../../../../locators';
 
 export const useStyles = makeStyles({
   container: {
@@ -43,6 +44,7 @@ const Ride = ({ className, ride, showDialog }) => {
         </>
       )}
       <Actions
+        data-locator={locators.RIDE_ACTIONS}
         className={cls({
           [classes.visibleOnHover]: isRideExists,
         })}

@@ -1,28 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import omit from 'lodash/omit';
 import TextField from '@material-ui/core/TextField';
 
-export default function Trigger({
-  classes,
-  triggerProps,
-  triggerInputProps,
-  // inputValue,
-  // onChange,
-}) {
-  // const inputValueRef = useRef(inputValue);
-  // useEffect(
-  //   () => {
-  //     const prevInputValue = inputValueRef.current;
-  //     inputValueRef.current = inputValue;
-  //     if (prevInputValue !== inputValue) {
-  //       onChange(inputValue);
-  //     }
-  //   },
-  //   [inputValue, onChange],
-  // );
+export default function Trigger({ classes, triggerProps, triggerInputProps }) {
   return (
     <TextField
       InputProps={{
-        // inputRef: ref,
         classes: {
           root: classes.inputRoot,
           input: classes.inputInput,
@@ -30,7 +13,7 @@ export default function Trigger({
         ...triggerInputProps,
       }}
       fullWidth={true}
-      classes={classes}
+      classes={omit(classes, 'inputRoot', 'inputInput')}
       {...triggerProps}
     />
   );
