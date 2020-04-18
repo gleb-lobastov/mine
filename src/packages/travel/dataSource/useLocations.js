@@ -1,14 +1,5 @@
 import { useSelector } from 'react-redux';
-import {
-  useProvision,
-  useRequest,
-  selectDict,
-} from 'core/connection';
-import {
-  selectIsPending,
-  selectIsError,
-  selectIsReady,
-} from 'core/connection/request/controllerRedux';
+import { useProvision, useRequest, selectDict } from 'core/connection';
 
 export default function useLocations({
   domain,
@@ -22,7 +13,7 @@ export default function useLocations({
     locationId => !locationsDict[locationId],
   );
 
-  const provision = useProvision({
+  return useProvision({
     domain,
     isProvision: true,
     modelName: 'locations',
@@ -33,14 +24,6 @@ export default function useLocations({
       navigation: { isDisabled: true },
     },
   });
-
-  return {
-    locationsDict,
-    isReady: selectIsReady(provision),
-    isLoading: selectIsPending(provision),
-    isError: selectIsError(provision),
-    counters: provision.counters,
-  };
 }
 
 export function useLocationRatingRequest({ domain }) {
