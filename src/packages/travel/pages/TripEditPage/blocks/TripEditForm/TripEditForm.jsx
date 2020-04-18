@@ -17,6 +17,14 @@ const useStyles = makeStyles({
   visibleOnlyOnHover: {
     visibility: 'hidden',
   },
+  actionButton: {
+    marginTop: '24px',
+  },
+  hint: {
+    color: 'gray',
+    fontSize: 12,
+    paddingLeft: '8px'
+  },
 });
 
 const TripEditForm = ({ isCreation, showDialog, provision, formikProps }) => {
@@ -32,19 +40,28 @@ const TripEditForm = ({ isCreation, showDialog, provision, formikProps }) => {
       />
       <Form>
         <TripEditFormSection formikProps={formikProps} provision={provision} />
-        <VisitsAndRidesFormSection
-          classes={classes}
-          showDialog={showDialog}
-          formikProps={formikProps}
-          provision={provision}
-        />
+        {!isCreation && (
+          <VisitsAndRidesFormSection
+            classes={classes}
+            showDialog={showDialog}
+            formikProps={formikProps}
+            provision={provision}
+          />
+        )}
         <Button
           data-locator={locators.SUBMIT_TRIP_BUTTON}
+          className={classes.actionButton}
           type="submit"
           color="primary"
         >
-          Сохранить
+          {isCreation ? 'Создать' : 'Сохранить'}
         </Button>
+        {isCreation && (
+          <div className={classes.hint}>
+            После создания поездки в нее можно будет добавить места посещения и
+            маршрут
+          </div>
+        )}
       </Form>
     </>
   );
