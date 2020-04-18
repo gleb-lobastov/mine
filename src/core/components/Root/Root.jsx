@@ -50,7 +50,7 @@ const Root = ({
             <FilterContextProvider>
               <SidebarContextProvider>
                 <AuthContext.Provider>
-                  <Packages Wrapper={Layout}>
+                  <Packages Layout={Layout}>
                     {auth && <Auth mountPath={auth.mountPath} alias="auth" />}
                     {travel && (
                       <Travel mountPath={travel.mountPath} alias="travel" />

@@ -6,7 +6,7 @@ import PlainLoader from 'modules/components/loaders/PlainLoader';
 import PackagesContext from '../PackagesContext';
 import usePackagesContextValue from './usePackagesContextValue';
 
-export default function Packages({ children, Loader, Wrapper }) {
+export default function Packages({ children, Loader, Layout }) {
   const [layoutProps, setLayoutProps] = useState(null);
   const packagesContextValue = usePackagesContextValue();
   const { packages } = packagesContextValue;
@@ -40,8 +40,8 @@ export default function Packages({ children, Loader, Wrapper }) {
     );
   });
 
-  const actualChildrenNode = Wrapper ? (
-    <Wrapper {...layoutProps}>{transformedChildrenNode}</Wrapper>
+  const actualChildrenNode = Layout ? (
+    <Layout {...layoutProps}>{transformedChildrenNode}</Layout>
   ) : (
     transformedChildrenNode
   );
@@ -55,11 +55,11 @@ export default function Packages({ children, Loader, Wrapper }) {
 
 Packages.propTypes = {
   children: PropTypes.node.isRequired,
-  Wrapper: PropTypes.func,
+  Layout: PropTypes.func,
   Loader: PropTypes.func,
 };
 
 Packages.defaultProps = {
-  Wrapper: null,
+  Layout: null,
   Loader: PlainLoader,
 };
