@@ -1,6 +1,12 @@
+/* globals __IS_DEV_MODE__ */
 import '@babel/polyfill';
 import App from 'core/App';
 import definePackages from 'packages/definePackages';
+import { registerDebugTools } from 'modules/utilities/debug';
+
+if (__IS_DEV_MODE__) {
+  registerDebugTools();
+}
 
 const app = App.create(
   { packages: definePackages() },
