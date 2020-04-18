@@ -32,7 +32,7 @@ export default (packages = {}) => {
         },
         {
           path: travel.routes.visits.path,
-          caption: 'Путешествия',
+          caption: 'Поездки',
           params: { section: 'trips' },
         },
       ],

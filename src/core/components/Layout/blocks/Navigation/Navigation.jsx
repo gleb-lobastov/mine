@@ -12,8 +12,9 @@ import navigationShape from './navigationShape';
 import { findTabIndex } from './utils';
 import MainTabs from './blocks/MainTabs';
 import SubTabs from './blocks/SubTabs';
+import Breadcrumbs from './blocks/Breadcrumbs';
 
-const styles = () => ({
+const styles = theme => ({
   root: {
     flexGrow: 1,
     flexDirection: 'row',
@@ -22,6 +23,10 @@ const styles = () => ({
     flexGrow: 1,
     textAlign: 'right',
     margin: '0 12px',
+  },
+  breadcrumbs: {
+    backgroundColor: theme.palette.background.paper,
+    padding: '12px 0 12px 40px',
   },
 });
 
@@ -36,7 +41,14 @@ class Navigation extends React.PureComponent {
     match: PropTypes.shape({
       params: PropTypes.objectOf(PropTypes.string),
     }).isRequired,
+    actualPath: PropTypes.string.isRequired,
     children: PropTypes.node,
+    breadcrumbs: PropTypes.arrayOf(
+      PropTypes.shape({
+        caption: PropTypes.string,
+        path: PropTypes.string,
+      }),
+    ),
     config: PropTypes.shape(navigationShape).isRequired,
     isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
     userAlias: authContextPropTypes.userAlias.isRequired,
@@ -45,6 +57,7 @@ class Navigation extends React.PureComponent {
 
   static defaultProps = {
     children: PropTypes.node,
+    breadcrumbs: [],
   };
 
   findMainTabIndex = memoizeByLastArgs(findTabIndex);
@@ -52,14 +65,36 @@ class Navigation extends React.PureComponent {
   // different function for different cache
   findSubTabIndex = memoizeByLastArgs(findTabIndex);
 
+  matchPath(patchToCompare, options) {
+    const {
+      location: { pathname },
+    } = this.props;
+    return matchPath(pathname, { ...options, path: patchToCompare.toString() });
+  }
+
+  resolveBreadcrumbs({ selectedMainMenuItem, selectedSubMenuItem }) {
+    const { breadcrumbs = [] } = this.props;
+    const isSubMenuPathExact =
+      selectedSubMenuItem &&
+      this.matchPath(selectedSubMenuItem.path, { exact: true });
+
+    if (!breadcrumbs.length) {
+      return [];
+    }
+
+    return [
+      selectedMainMenuItem,
+      !isSubMenuPathExact && selectedSubMenuItem,
+      ...breadcrumbs,
+    ].filter(Boolean);
+  }
+
   handleChangeUrl = (event, currentPath, nextPath, nextPathParams) => {
     const {
       history,
-      location: { pathname },
       match: { params },
     } = this.props;
-    const match = matchPath(pathname, { path: currentPath.toString() });
-    const { params: pathParams } = match || {};
+    const { params: pathParams } = this.matchPath(currentPath) || {};
     history.push(
       nextPath.toUrl({ ...params, ...pathParams, ...nextPathParams }),
     );
@@ -85,6 +120,7 @@ class Navigation extends React.PureComponent {
 
   render() {
     const {
+      actualPath,
       location: { pathname },
       config: { menu: mainMenu },
       classes,
@@ -119,6 +155,14 @@ class Navigation extends React.PureComponent {
           {this.renderAuthInfo()}
         </AppBar>
         {mainMenuNode && subMenuNode}
+        <Breadcrumbs
+          actualPath={actualPath}
+          onChangeUrl={this.handleChangeUrl}
+          breadcrumbs={this.resolveBreadcrumbs({
+            selectedMainMenuItem: mainMenu?.[mainTabIndex],
+            selectedSubMenuItem: subMenu?.[subTabIndex],
+          })}
+        />
       </div>
     );
   }

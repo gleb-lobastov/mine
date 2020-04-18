@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Layout({ children }) {
+export default function Layout({ children, breadcrumbs, actualPath }) {
   const classes = useStyles();
   const packages = usePackages();
   const navigationConfig = useMemo(() => configureNavigation(packages), [
@@ -81,7 +81,12 @@ export default function Layout({ children }) {
           },
         ]}
       />
-      <Navigation config={navigationConfig} className={classes.navigation}>
+      <Navigation
+        config={navigationConfig}
+        className={classes.navigation}
+        breadcrumbs={breadcrumbs}
+        actualPath={actualPath}
+      >
         <IconButton
           color="inherit"
           aria-label="open sidebar"
@@ -116,6 +121,9 @@ export default function Layout({ children }) {
 
 Layout.propTypes = {
   children: PropTypes.node,
+
+  // eslint-disable-next-line react/forbid-prop-types
+  breadcrumbs: PropTypes.any, // just forwarding to Navigation component
 };
 
 Layout.defaultProps = {

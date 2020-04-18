@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Route } from 'react-router';
 import isString from 'lodash/isString';
@@ -7,6 +7,7 @@ import PackagesContext from '../PackagesContext';
 import usePackagesContextValue from './usePackagesContextValue';
 
 export default function Packages({ children, Loader, Wrapper }) {
+  const [layoutProps, setLayoutProps] = useState(null);
   const packagesContextValue = usePackagesContextValue();
   const { packages } = packagesContextValue;
 
@@ -30,6 +31,7 @@ export default function Packages({ children, Loader, Wrapper }) {
             React.cloneElement(child, {
               ...child.props,
               isActive: isRegistered && routerProps.match !== null,
+              setLayoutProps,
               packageKey,
             })
           }
@@ -39,7 +41,7 @@ export default function Packages({ children, Loader, Wrapper }) {
   });
 
   const actualChildrenNode = Wrapper ? (
-    <Wrapper>{transformedChildrenNode}</Wrapper>
+    <Wrapper {...layoutProps}>{transformedChildrenNode}</Wrapper>
   ) : (
     transformedChildrenNode
   );

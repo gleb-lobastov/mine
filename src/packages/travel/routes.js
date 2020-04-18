@@ -19,6 +19,7 @@ export const visits = {
 export const tripEdit = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/trips/:strTripId(\\d+)/edit`,
   defaultRouteParams: { userAlias: 'my' },
+  layoutProps: { breadcrumbs: [{ caption: 'Редактирование поездки' }] },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/TripEditPage'),
   ),
@@ -27,6 +28,7 @@ export const tripEdit = {
 export const tripCreate = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/trips/:action`,
   defaultRouteParams: { userAlias: 'my', action: 'create' },
+  layoutProps: { breadcrumbs: [{ caption: 'Создание поездки' }] },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/TripEditPage'),
   ),
@@ -35,6 +37,7 @@ export const tripCreate = {
 export const locations = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/locations/edit/:strLocationId?`,
   defaultRouteParams: { userAlias: 'my' },
+  layoutProps: { breadcrumbs: [{ caption: 'Города' }] },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-LocationsPage' */ './pages/LocationsPage'),
   ),
