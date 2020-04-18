@@ -8,10 +8,17 @@ function spy(forwardingValue, description, ...args) {
   return forwardingValue;
 }
 
+function msg(forwardingValue, ...msgs) {
+  console.log(...msgs);
+  return forwardingValue;
+}
+
 export function registerDebugTools() {
   if (typeof window !== 'undefined') {
     window.c = spy;
+    window.co = msg;
   } else {
     global.c = spy;
+    global.co = msg;
   }
 }

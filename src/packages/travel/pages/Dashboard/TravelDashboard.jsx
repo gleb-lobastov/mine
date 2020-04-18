@@ -65,7 +65,6 @@ export default function TravelDashboard() {
 }
 
 function calcCitiesCount(locationsIds, locationsDict = {}) {
-  console.log('ccc', locationsIds, locationsDict);
   return locationsIds.filter(
     locationsId =>
       locationsDict[locationsId]?.locationClass === LOCATION_CLASSES_ID.CITY,
