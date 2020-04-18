@@ -23,6 +23,7 @@ class SubTabs extends React.PureComponent {
     if (!menu.length) {
       return null;
     }
+
     return (
       <div className={classes.root}>
         <Tabs
@@ -31,8 +32,8 @@ class SubTabs extends React.PureComponent {
           variant="scrollable"
           scrollButtons="auto"
         >
-          {menu.map(({ path, caption }) => (
-            <Tab key={path.toString()} label={caption} />
+          {menu.map(({ caption }) => (
+            <Tab key={caption} label={caption} />
           ))}
         </Tabs>
       </div>

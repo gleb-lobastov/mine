@@ -124,8 +124,10 @@ Layout.propTypes = {
 
   // eslint-disable-next-line react/forbid-prop-types
   breadcrumbs: PropTypes.any, // just forwarding to Navigation component
+  actualPath: PropTypes.string.isRequired,
 };
 
 Layout.defaultProps = {
   children: null,
+  breadcrumbs: [],
 };
