@@ -7,6 +7,7 @@ import IconThumbsUpDown from '@material-ui/icons/ThumbsUpDownOutlined';
 import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 import RideInfo from 'travel/components/models/rides/RideInfo';
 import LocationInfo from 'travel/components/models/locations/LocationInfo';
+import LocationPhotos from 'travel/components/models/locations/LocationPhotos';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
 import { LOCATION_RATING } from 'travel/models/users/consts';
 import { GROUP_VISITS_BY, SORT_VISITS_BY } from '../consts';
@@ -28,7 +29,7 @@ const GROUPS_TO_RENDER_YEARS_OF_VISIT = [
 
 export default function renderLocation({
   visit,
-  visit: { visitId, locationId, countryId, departureRideId },
+  visit: { tripId, visitId, locationId, countryId, departureRideId },
   classes,
   changes: {
     isYearChanged,
@@ -47,6 +48,7 @@ export default function renderLocation({
   groupBy,
   sortBy,
   counters,
+  visitEditUrl,
 }) {
   const isGroupedByTripsOnly = groupBy === GROUP_VISITS_BY.TRIPS;
   const shouldRender =
@@ -99,27 +101,73 @@ export default function renderLocation({
     yearsOfVisitDetailNode,
   );
 
+  // const renderLocationsPhotos = () => {
+  //   switch (groupBy) {
+  //     case GROUP_VISITS_BY.TRIPS:
+  //       return (
+  //         <LocationPhotos
+  //           visitId={visitId}
+  //           location={locationsDict[locationId]}
+  //           visitsDict={visitsDict}
+  //         />
+  //       );
+  //     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
+  //       return (
+  //         <LocationPhotos
+  //           tripId={tripId}
+  //           location={locationsDict[locationId]}
+  //           visitsDict={visitsDict}
+  //         />
+  //       );
+  //     case GROUP_VISITS_BY.YEARS:
+  //     case GROUP_VISITS_BY.YEARS_COUNTRIES:
+  //     case GROUP_VISITS_BY.COUNTRIES_YEARS:
+  //       return (
+  //         <LocationPhotos
+  //           location={locationsDict[locationId]}
+  //           visitsDict={visitsDict}
+  //           year={year}
+  //         />
+  //       );
+  //     case GROUP_VISITS_BY.COUNTRIES:
+  //     case GROUP_VISITS_BY.LOCATIONS:
+  //     default:
+  //       return (
+  //         <LocationPhotos
+  //           location={locationsDict[locationId]}
+  //           visitsDict={visitsDict}
+  //         />
+  //       );
+  //   }
+  // };
+
   return (
-    <LocationInfo
-      key={`l${locationId}_v${visitId}`}
-      location={locationsDict[locationId]}
-      country={countriesDict[countryId]}
-      shouldJustifyContent={isGroupedByTripsOnly}
-    >
-      {childrenNodes}
-      {isGroupedByTripsOnly && (
-        <Grid container={true}>
-          <Grid item={true}>
-            <Typography className={classes.detail}>
-              {visitDateTimePeriodToString(visitsDict[visitId])}
-            </Typography>
+    <React.Fragment key={`l${locationId}_v${visitId}`}>
+      <LocationInfo
+        location={locationsDict[locationId]}
+        country={countriesDict[countryId]}
+        shouldJustifyContent={isGroupedByTripsOnly}
+        href={visitEditUrl}
+      >
+        {childrenNodes}
+        {isGroupedByTripsOnly && (
+          <Grid container={true}>
+            <Grid item={true}>
+              <Typography className={classes.detail}>
+                {visitDateTimePeriodToString(visitsDict[visitId])}
+              </Typography>
+            </Grid>
+            <Grid item={true}>
+              <RideInfo
+                ride={ridesDict[departureRideId]}
+                className={classes.halfDown}
+              />
+            </Grid>
           </Grid>
-          <Grid item={true}>
-            <RideInfo ride={ridesDict[departureRideId]} className={classes.halfDown}/>
-          </Grid>
-        </Grid>
-      )}
-    </LocationInfo>
+        )}
+      </LocationInfo>
+      {/*{renderLocationsPhotos()}*/}
+    </React.Fragment>
   );
 }
 

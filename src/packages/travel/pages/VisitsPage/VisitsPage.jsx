@@ -4,6 +4,7 @@ import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
 import LocationsMap from 'travel/components/common/LocationsMap';
+import { GROUP_VISITS_BY } from './consts';
 import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
@@ -31,7 +32,11 @@ export default function VisitsPage({
   const { isPending, isError } = provision;
 
   const { travel: travelPaths } = usePaths();
-  const { locations: locationsPath, tripCreate: tripCreatePath } = travelPaths;
+  const {
+    locations: locationsPath,
+    tripCreate: tripCreatePath,
+    visitEdit: visitEditPath,
+  } = travelPaths;
 
   if (isError) {
     return <div>...Error</div>;
@@ -86,6 +91,10 @@ export default function VisitsPage({
         hasEditRights,
         travelPaths,
         userAlias,
+        visitEditUrl:
+          hasEditRights && groupBy === GROUP_VISITS_BY.TRIPS
+            ? visitEditPath.toUrl({ strVisitId: String(visit.visitId) })
+            : undefined,
       })
         .filter(Boolean)
         .forEach(node => nodesAccumulator.push(node));

@@ -11,6 +11,7 @@ export const toClient = ({
   trip_id: rawTripId,
   visit_type: rawVisitType,
   visit_comment: rawVisitComment,
+  photos: rawPhotos,
 }) => ({
   arrivalRideId: rawArrivalRideId,
   arrivalDateTime: new Date(rawArrivalDateTime),
@@ -24,6 +25,12 @@ export const toClient = ({
   visitId: rawVisitId,
   visitType: rawVisitType,
   visitComment: rawVisitComment,
+  photos: rawPhotos
+    ? rawPhotos.map(({ url: rawUrl, thumbnail_url: rawThumbnailUrl }) => ({
+        fullSizePhotoUrl: rawUrl,
+        thumbnailUrl: rawThumbnailUrl,
+      }))
+    : [],
 });
 
 export const toServer = (requestBody, { isProvision } = {}) => {

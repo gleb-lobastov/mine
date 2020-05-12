@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import ConnectedLink from 'modules/components/muiExtended/ConnectedLink/ConnectedLink.jsx';
 
 const useStyles = makeStyles({
   autoMargin: { marginLeft: 'auto' },
@@ -10,6 +11,7 @@ const useStyles = makeStyles({
 export default function LocationInfo({
   children,
   shouldJustifyContent,
+  href,
   location: { locationName } = {},
 }) {
   const classes = useStyles();
@@ -28,7 +30,12 @@ export default function LocationInfo({
     <Grid container={true} justify="space-between" alignItems="center">
       <Grid item={true}>
         <Typography>
-          {locationName} {restChildren}
+          {href ? (
+            <ConnectedLink to={href}>{locationName}</ConnectedLink>
+          ) : (
+            locationName
+          )}{' '}
+          {restChildren}
         </Typography>
       </Grid>
       <Grid item={true} classes={{ item: classes.autoMargin }}>

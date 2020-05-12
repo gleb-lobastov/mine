@@ -16,6 +16,15 @@ export const visits = {
   ),
 };
 
+export const visitEdit = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/visits/:strVisitId(\\d+)/edit`,
+  defaultRouteParams: { userAlias: 'my' },
+  layoutProps: { breadcrumbs: [{ caption: 'Редактирование посещения' }] },
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/VisitEditPage'),
+  ),
+};
+
 export const tripEdit = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/trips/:strTripId(\\d+)/edit`,
   defaultRouteParams: { userAlias: 'my' },

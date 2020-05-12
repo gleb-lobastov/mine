@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import VisitIcon from '../VisitIcon';
 import visitPropTypes from 'travel/models/visits/propTypes';
+import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 
 const useStyles = makeStyles({
   container: {
@@ -14,10 +15,14 @@ const useStyles = makeStyles({
     display: 'inline-block',
     verticalAlign: 'text-bottom',
   },
-  editIcon: {},
+  period: {
+    display: 'inline',
+    color: 'gray',
+    fontSize: 12,
+  },
 });
 
-const VisitInfo = ({ visit }) => {
+const VisitInfo = ({ visit, isLong }) => {
   const classes = useStyles();
   if (!visit) {
     return 'Не указано';
@@ -26,7 +31,10 @@ const VisitInfo = ({ visit }) => {
   return (
     <div className={classes.container}>
       <VisitIcon visit={visit} className={classes.icon} />
-      {locationName}
+      {`${locationName}${isLong ? ', ' : ''}`}
+      <div className={classes.period}>
+        {isLong && visitDateTimePeriodToString(visit)}
+      </div>
     </div>
   );
 };
