@@ -18,11 +18,19 @@ import {
 import PendingRequestsIndicator from './blocks/PendingRequestsIndicator';
 
 const useStyles = makeStyles(theme => ({
-  app: {
+  root: {
     fontFamily: "'Roboto', sans-serif",
     fontSize: '16px',
   },
-  root: {},
+  pageContainer: {
+    height: '100%',
+    minHeight: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  pageContent: {
+    flexGrow: 1,
+  },
   container: {
     display: 'flex',
   },
@@ -63,7 +71,7 @@ export default function Layout({ children, breadcrumbs, actualPath }) {
   });
 
   return (
-    <div className={cls(classes.app, classes.root)}>
+    <>
       <CssBaseline />
       <Helmet
         meta={[
@@ -81,33 +89,33 @@ export default function Layout({ children, breadcrumbs, actualPath }) {
           },
         ]}
       />
-      <Navigation
-        config={navigationConfig}
-        className={classes.navigation}
-        breadcrumbs={breadcrumbs}
-        actualPath={actualPath}
-      >
-        <IconButton
-          color="inherit"
-          aria-label="open sidebar"
-          edge="start"
-          onClick={handleOpenMobileSidebar}
-          className={classes.menuButton}
+      <div className={cls(classes.root, classes.pageContainer)}>
+        <Navigation
+          config={navigationConfig}
+          className={classes.navigation}
+          breadcrumbs={breadcrumbs}
+          actualPath={actualPath}
         >
-          <MenuIcon />
-        </IconButton>
-      </Navigation>
-      <div>
-        <div className={classes.container}>
+          <IconButton
+            color="inherit"
+            aria-label="open sidebar"
+            edge="start"
+            onClick={handleOpenMobileSidebar}
+            className={classes.menuButton}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Navigation>
+        <div className={cls(classes.container, classes.pageContent)}>
           <div className={classes.content}>{children}</div>
           <DesktopSidebarContainer>
             {sidebarContentNode}
           </DesktopSidebarContainer>
         </div>
         <Footer className={classes.footer} />
-        <div className={classes.statusBar}>
-          <PendingRequestsIndicator />
-        </div>
+      </div>
+      <div className={classes.statusBar}>
+        <PendingRequestsIndicator />
       </div>
       <MobileSidebarContainer
         isSidebarOpen={isMobileSidebarOpen}
@@ -115,7 +123,7 @@ export default function Layout({ children, breadcrumbs, actualPath }) {
       >
         {sidebarContentNode}
       </MobileSidebarContainer>
-    </div>
+    </>
   );
 }
 
