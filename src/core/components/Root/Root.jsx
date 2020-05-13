@@ -32,6 +32,14 @@ const theme = createMuiTheme({
       main: '#ffc400',
       dark: '#c79400',
     },
+    error: {
+      main: '#ff9494',
+      dark: '#ED4337',
+    },
+    disabled: {
+      main: '#999999',
+      dark: '#5e5e5e',
+    }
   },
 });
 

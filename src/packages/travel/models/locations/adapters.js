@@ -6,6 +6,7 @@ export const toClient = ({
   location_class: rawLocationClass,
   lat: rawLatitude,
   lon: rawLongitude,
+  visits_ids: rawVisitsIds,
 }) => ({
   countryId: rawCountryId,
   countryName: rawCountryName,
@@ -14,6 +15,7 @@ export const toClient = ({
   locationClass: rawLocationClass,
   lat: rawLatitude,
   lon: rawLongitude,
+  visitsIds: rawVisitsIds,
 });
 
 export const toServer = () => undefined;

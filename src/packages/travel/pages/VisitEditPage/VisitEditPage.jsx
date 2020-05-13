@@ -1,12 +1,17 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
-import Dropzone from 'react-dropzone';
+import cls from 'classnames';
+import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from 'core/context/AuthContext';
 import { useVisit, useAddVisitPhotoRequest } from 'travel/dataSource';
 import VisitInfo from 'travel/components/models/visits/VisitInfo';
+import resolveDropzoneStyles from './resolveDropzoneStyles';
 
-const useStyles = makeStyles({
+const UPLOAD_IMAGE_MIN_SIZE = 50 * 1024;
+const UPLOAD_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
+
+const useStyles = makeStyles(theme => ({
   container: { fontSize: '16px', lineHeight: '1.5' },
   photosContainer: {
     display: 'flex',
@@ -22,7 +27,8 @@ const useStyles = makeStyles({
     maxWidth: '150px',
     borderRadius: '4px',
   },
-});
+  ...resolveDropzoneStyles(theme),
+}));
 
 const domain = 'travel.VisitEditPage';
 export default function VisitEditPage({
@@ -31,6 +37,9 @@ export default function VisitEditPage({
   },
 }) {
   const classes = useStyles();
+  const [progress, setProgress] = useState(null);
+  const [rejectedFiles, setRejectedFiles] = useState([]);
+  const isUploadInProgress = progress !== null;
 
   const {
     isAuthenticated,
@@ -51,13 +60,28 @@ export default function VisitEditPage({
 
   const handleSubmitPhotos = useCallback((acceptedFiles, rejectedFiles) => {
     if (rejectedFiles) {
-      console.log({ rejectedFiles });
+      setRejectedFiles(rejectedFiles);
     }
+    setProgress(1);
     return submitVisitPhoto({
       id: Number(strVisitId),
       data: acceptedFiles,
-    });
+    }).finally(() => setProgress(null));
   }, submitVisitPhoto);
+
+  const {
+    getRootProps,
+    getInputProps,
+    isDragActive,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    accept: 'image/*',
+    disabled: isUploadInProgress,
+    onDrop: handleSubmitPhotos,
+    maxSize: UPLOAD_IMAGE_MAX_SIZE,
+    minSize: UPLOAD_IMAGE_MIN_SIZE,
+  });
 
   const isEditable = isAuthenticated && authenticatedUserAlias === userAlias;
 
@@ -79,27 +103,40 @@ export default function VisitEditPage({
   const { photos } = visit;
 
   return (
-    <Dropzone onDrop={handleSubmitPhotos}>
-      {({ getRootProps, getInputProps }) => (
-        <section>
-          <VisitInfo visit={visit} isLong={true} />
-          <div {...getRootProps()}>
-            <input {...getInputProps()} />
-            <p>
-              Перенесите сюдай файлы для загрузки или кликните, что-бы выбрать
-              файлы
-            </p>
-          </div>
-          <div className={classes.photosContainer}>
-            {photos.map(({ thumbnailUrl }) => (
-              <div key={thumbnailUrl} className={classes.photoContainer}>
-                <img className={classes.photo} src={thumbnailUrl} />
-              </div>
+    <div
+      {...getRootProps()}
+      className={cls({
+        [classes.dropzoneStandby]: !isDragActive,
+        [classes.dropzoneActive]: isDragActive,
+        [classes.dropzoneAccept]: isDragAccept,
+        [classes.dropzoneReject]: isDragReject,
+      })}
+    >
+      <VisitInfo visit={visit} isLong={true} />
+      <div
+        className={cls(classes.dropzoneContainer, {
+          [classes.dropzoneUpload]: isUploadInProgress,
+        })}
+      >
+        <input {...getInputProps()} />
+        {renderDropzoneCaption({ isDragActive, isUploadInProgress })}
+        {rejectedFiles.length > 0 && (
+          <div>
+            Не удалось загрузить следующие файлы:
+            {rejectedFiles.map(rejectedFile => (
+              <div key={rejectedFile.path}>{renderFile(rejectedFile)}</div>
             ))}
           </div>
-        </section>
-      )}
-    </Dropzone>
+        )}
+      </div>
+      <div className={classes.photosContainer}>
+        {photos.map(({ thumbnailUrl }) => (
+          <div key={thumbnailUrl} className={classes.photoContainer}>
+            <img className={classes.photo} src={thumbnailUrl} />
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -111,3 +148,19 @@ VisitEditPage.propTypes = {
     }).isRequired,
   }).isRequired,
 };
+
+function renderDropzoneCaption({ isDragActive, isUploadInProgress }) {
+  switch (true) {
+    case isUploadInProgress:
+      return 'Идет загрузка, пожалуйста не закрывайте браузер';
+    case isDragActive:
+      return 'Загрузить фотографии';
+    default:
+      return 'Перенесите сюда фотографии для загрузки или кликните, что-бы выбрать файлы';
+  }
+}
+
+function renderFile({ file, errors }) {
+  const errorsMessage = errors.map(({ message }) => message).join(', ');
+  return `${file.path} - ${file.size} bytes, reason: ${errorsMessage}`;
+}
