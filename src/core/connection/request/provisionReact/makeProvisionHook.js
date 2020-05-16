@@ -13,7 +13,7 @@ const memoryState = (() => {
   return {
     get: requirements => {
       const domain = requirements?.domain;
-      return domain ? state[domain] : undefined;
+      return (domain && state[domain]) || {};
     },
     set: nextState => {
       const domain = nextState?.requirements?.domain;
