@@ -2,7 +2,6 @@ import { combineReducers } from 'redux';
 import createDistributor from './distributeReducer';
 import createReactReduxIntegration, { EMPTY_STATE } from './intgReactRedux';
 import createReduxModelIntegration from './intgReduxModelNormalized';
-import { mergeProvisionState } from './utils';
 
 const DEFAULT_DOMAIN = '__unassigned';
 const STATE_PATHS = { ENTITIES: 'entities', PROVISION: 'provision' };
@@ -32,7 +31,7 @@ export default ({
     useProvision,
     useRequest,
   } = createReactReduxIntegration({
-    provisionSelector: selectProvision,
+    provisionSelector: selectDomainProvisionState,
   });
 
   const {
@@ -58,7 +57,9 @@ export default ({
     selectors: {
       ...entitiesSelectors,
       ...provisionSelectors,
-      selectProvisionStatus,
+      selectProvisionState,
+      selectDomainProvisionState,
+      selectDomainProvisionStates,
     },
     denormalize,
     useProvision,
@@ -72,15 +73,12 @@ export default ({
   function selectProvisionState(state) {
     return state[requestKitStateKey][STATE_PATHS.PROVISION];
   }
-  function selectProvision(state, requirements) {
-    const { domain = DEFAULT_DOMAIN } = requirements || {};
+  function selectDomainProvisionState(state, requirements = {}) {
+    const { domain = DEFAULT_DOMAIN } = requirements;
     return selectDomainState(selectProvisionState(state), domain);
   }
-  function selectProvisionStatus(state, domain, { excludeDomains = [] } = {}) {
-    const provisionState = selectProvision(state);
-    return mergeProvisionState(
-      selectDomainStates(provisionState, domain),
-      particularDomain => !excludeDomains.includes(particularDomain),
-    );
+  function selectDomainProvisionStates(state, requirements = {}) {
+    const { domain } = requirements;
+    return selectDomainStates(selectProvisionState(state), domain);
   }
 };

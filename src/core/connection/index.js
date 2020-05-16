@@ -30,16 +30,19 @@ const {
   selectPlaceholder,
   selectReadyState,
   selectResult,
-  selectProvisionStatus,
+  selectProvisionState,
+  selectDomainProvisionState,
+  selectDomainProvisionStates,
 } = selectors;
 
 export {
-  requestMiddleware,
   provide,
-  useProvision,
-  useRequest,
+  requestMiddleware,
   requestReducer,
-  selectProvisionStatus,
+  selectDict,
+  selectItem,
+  selectList,
+  selectMissingIds,
   selectError,
   selectIsError,
   selectIsPending,
@@ -50,8 +53,9 @@ export {
   selectPlaceholder,
   selectReadyState,
   selectResult,
-  selectDict,
-  selectItem,
-  selectList,
-  selectMissingIds,
+  selectProvisionState,
+  selectDomainProvisionState,
+  selectDomainProvisionStates,
+  useProvision,
+  useRequest
 };

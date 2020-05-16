@@ -15,7 +15,7 @@ import {
   DesktopSidebarContainer,
   MobileSidebarContainer,
 } from './blocks/Sidebar/index';
-import PendingRequestsIndicator from './blocks/PendingRequestsIndicator';
+import ProvisionStatusIndicator from './blocks/ProvisionStatusIndicator';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -115,7 +115,7 @@ export default function Layout({ children, breadcrumbs, actualPath }) {
         <Footer className={classes.footer} />
       </div>
       <div className={classes.statusBar}>
-        <PendingRequestsIndicator />
+        <ProvisionStatusIndicator />
       </div>
       <MobileSidebarContainer
         isSidebarOpen={isMobileSidebarOpen}

@@ -1,0 +1,5 @@
+{
+  "name": "provision-status-indicator",
+  "version": "0.0.0",
+  "main": "ProvisionStatusIndicator.jsx"
+}
