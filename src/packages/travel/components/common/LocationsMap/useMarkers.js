@@ -39,11 +39,9 @@ export default markersCoords => {
           bounds.extend(marker.position);
           return marker;
         });
+        map.setOptions({ maxZoom: 11, minZoom: 2 });
         map.fitBounds(bounds);
-        const zoom = map.getZoom();
-        if (zoom > 11) {
-          map.setZoom(11);
-        }
+        map.setOptions({ maxZoom: null, minZoom: null });
       });
       return () => markers.forEach(marker => marker.setMap(null));
     },
