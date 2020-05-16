@@ -1,6 +1,7 @@
 /* globals __GOOGLE_MAP_API_KEY__ */
 import React from 'react';
 import PropTypes from 'prop-types';
+import cls from 'classnames';
 import GoogleMapReact from 'google-map-react';
 import { makeStyles } from '@material-ui/core/styles';
 import locationPropTypes from 'travel/models/locations/propTypes';
@@ -10,13 +11,18 @@ const useStyles = makeStyles({
   googleMapContainer: {
     margin: '12px 0',
     maxWidth: '100%',
-    height: ({ height }) => height,
-    maxHeight: '100%',
+    flexGrow: 1,
+    minHeight: ({ minHeight }) => minHeight,
   },
 });
 
-export default function LocationsMap({ locationsDict, locationsIds, height }) {
-  const classes = useStyles({ height });
+export default function LocationsMap({
+  className,
+  locationsDict,
+  locationsIds,
+  minHeight,
+}) {
+  const classes = useStyles({ minHeight });
 
   const { handleGoogleApiLoaded } = useMarkers(
     locationsIds.map(
@@ -25,7 +31,7 @@ export default function LocationsMap({ locationsDict, locationsIds, height }) {
   );
 
   return (
-    <div className={classes.googleMapContainer}>
+    <div className={cls(className, classes.googleMapContainer)}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: __GOOGLE_MAP_API_KEY__ }}
         center={{ lat: 0, lng: 0 }}
@@ -37,12 +43,14 @@ export default function LocationsMap({ locationsDict, locationsIds, height }) {
 }
 
 LocationsMap.propTypes = {
+  className: PropTypes.string,
   locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
     .isRequired,
   locationsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  height: PropTypes.string,
+  minHeight: PropTypes.number,
 };
 
 LocationsMap.defaultProps = {
-  height: '400px',
+  className: undefined,
+  minHeight: '400px',
 };

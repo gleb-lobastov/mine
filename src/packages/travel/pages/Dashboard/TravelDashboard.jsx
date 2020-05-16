@@ -1,12 +1,26 @@
 import React from 'react';
 import Markdown from 'modules/components/Markdown';
 import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import { usePaths } from 'modules/packages';
 import { plural } from 'modules/utilities/l10n';
 import { useTripsStats } from 'travel/dataSource';
+import LocationsMap from 'travel/components/common/LocationsMap';
 import { LOCATION_CLASSES_ID } from 'travel/models/locations/consts';
 
+const useStyles = makeStyles({
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: ' 100%',
+  },
+  mapContainer: {
+    flexGrow: 1,
+  },
+});
+
 export default function TravelDashboard() {
+  const classes = useStyles();
   const {
     travel: { visits: visitsPaths },
   } = usePaths();
@@ -28,7 +42,7 @@ export default function TravelDashboard() {
   );
 
   return (
-    <div>
+    <div className={classes.content}>
       <Markdown
         source={`
 Статистика по моим путешествиям.
@@ -39,6 +53,12 @@ export default function TravelDashboard() {
 [${locationsCounter}](${visitsPaths.toUrl()}),
 а раз так, то и на инфографику пока забил.
   `}
+      />
+      <LocationsMap
+        className={classes.mapContainer}
+        locationsDict={locationsDict}
+        locationsIds={locationsIds}
+        minHeight={300}
       />
       <div>
         <Button
