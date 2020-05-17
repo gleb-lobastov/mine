@@ -1,6 +1,5 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import useVisitsPageStyles from '../../../../pages/VisitsPage/useVisitsPageStyles';
 
 export default function CountryInfo({
   country: { countryName } = {},
@@ -9,7 +8,6 @@ export default function CountryInfo({
   className,
   children,
 }) {
-  const classes = useVisitsPageStyles();
   if (isDetail) {
     return <span className={className}>{countryName}</span>;
   }
