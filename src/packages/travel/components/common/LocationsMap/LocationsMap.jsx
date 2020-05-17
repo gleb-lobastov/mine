@@ -48,7 +48,12 @@ export default function LocationsMap({
         const step = resolveStep(markerData, options);
         return {
           ...markerData,
-          zIndex: scaleBy === MARKERS_SCALES.BY_RATING ? 10 - step : step,
+          zIndex: [
+            MARKERS_SCALES.BY_RATING,
+            MARKERS_SCALES.BY_FIRST_VISIT,
+          ].includes(scaleBy)
+            ? 10 - step
+            : step,
           iconUrl: resolveMarkerUrl(step, scaleBy),
           title: renderTitle(markerData),
         };
