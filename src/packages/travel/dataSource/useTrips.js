@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import max from 'lodash/max';
 import min from 'lodash/min';
@@ -64,22 +65,40 @@ export function useTripsStats({ userAlias, tripsIds: requiredTripsIds }) {
     locationsDict: selectDict(state, 'locations') || {},
   }));
 
-  const visitsIds = Array.from(
-    new Set(tripsIds.flatMap(tripsId => tripsDict[tripsId]?.visits || [])),
+  const visitsIds = useMemo(
+    () =>
+      Array.from(
+        new Set(tripsIds.flatMap(tripsId => tripsDict[tripsId]?.visits || [])),
+      ),
+    [tripsIds, tripsDict],
   );
 
-  const ridesIds = Array.from(
-    new Set(tripsIds.flatMap(tripsId => tripsDict[tripsId]?.rides || [])),
+  const ridesIds = useMemo(
+    () =>
+      Array.from(
+        new Set(tripsIds.flatMap(tripsId => tripsDict[tripsId]?.rides || [])),
+      ),
+    [tripsIds, tripsDict],
   );
 
-  const countriesIds = Array.from(
-    new Set(visitsIds.flatMap(visitId => visitsDict[visitId]?.countryId || [])),
+  const countriesIds = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          visitsIds.flatMap(visitId => visitsDict[visitId]?.countryId || []),
+        ),
+      ),
+    [visitsIds, visitsDict],
   );
 
-  const locationsIds = Array.from(
-    new Set(
-      visitsIds.flatMap(visitId => visitsDict[visitId]?.locationId || []),
-    ),
+  const locationsIds = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          visitsIds.flatMap(visitId => visitsDict[visitId]?.locationId || []),
+        ),
+      ),
+    [visitsIds, visitsDict],
   );
 
   const countriesProvision = useCountries();
