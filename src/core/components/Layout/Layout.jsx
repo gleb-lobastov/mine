@@ -23,7 +23,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: '16px',
   },
   pageContainer: {
-    height: '100%',
     minHeight: '100%',
     display: 'flex',
     flexDirection: 'column',

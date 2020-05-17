@@ -21,6 +21,14 @@ const useStyles = makeStyles({
     maxWidth: '100%',
     flexGrow: 1,
     minHeight: ({ minHeight }) => minHeight,
+    position: 'relative',
+  },
+  googleMapPosition: {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    right: '0',
+    bottom: '0',
   },
 });
 
@@ -65,12 +73,14 @@ export default function LocationsMap({
 
   return (
     <div className={cls(className, classes.googleMapContainer)}>
-      <GoogleMapReact
-        bootstrapURLKeys={{ key: __GOOGLE_MAP_API_KEY__ }}
-        center={{ lat: 0, lng: 0 }}
-        zoom={11}
-        onGoogleApiLoaded={handleGoogleApiLoaded}
-      />
+      <div className={classes.googleMapPosition}>
+        <GoogleMapReact
+          bootstrapURLKeys={{ key: __GOOGLE_MAP_API_KEY__ }}
+          center={{ lat: 0, lng: 0 }}
+          zoom={11}
+          onGoogleApiLoaded={handleGoogleApiLoaded}
+        />
+      </div>
     </div>
   );
 }
