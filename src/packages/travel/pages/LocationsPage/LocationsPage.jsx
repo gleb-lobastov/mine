@@ -68,10 +68,6 @@ export default function LocationsPage({
   const isEditable = isAuthenticated && authenticatedUserAlias === userAlias;
   return (
     <div className={classes.container}>
-      <LocationsMap
-        locationsDict={locationsDict}
-        locationsIds={actualLocationsIds}
-      />
       {actualLocationsIds.map(locationsIdToRender => {
         const location = locationsDict[locationsIdToRender];
         if (!location) {
