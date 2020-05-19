@@ -22,20 +22,20 @@ export default function renderTitle({
 function renderRating(locationRating) {
   switch (locationRating) {
     case LOCATION_RATING.PLACE_TO_LIVE:
-      return '*****';
+      return 'Жил бы здесь';
     case LOCATION_RATING.FEW_PER_YEAR:
     case LOCATION_RATING.ONCE_PER_YEAR:
-      return '****';
+      return 'Готов ездить сюда постоянно';
     case LOCATION_RATING.ONCE_PER_TWO_YEARS:
     case LOCATION_RATING.ONCE_PER_FIVE_YEARS:
-      return '***';
+      return 'Приезжал бы иногда';
     case LOCATION_RATING.ONCE_PER_DECADE:
     case LOCATION_RATING.TWICE_PER_LIVE:
-      return '**';
+      return 'Заглянул бы еще разок';
     case LOCATION_RATING.ONCE_PER_LIVE:
-      return '*';
+      return 'Одного посещения достаточно';
     case LOCATION_RATING.NEVER:
-      return '-';
+      return 'Тут нечего делать';
     default:
       return '?';
   }
