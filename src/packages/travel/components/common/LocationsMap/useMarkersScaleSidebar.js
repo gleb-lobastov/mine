@@ -1,16 +1,15 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSidebar } from 'core/context/SidebarContext';
+import MarkersScaleSelect from './blocks/MarkersScaleSelect';
+import MarkersRatingLevelSelect from './blocks/MarkersRatingLevelSelect';
 import {
   MARKERS_SCALES,
   KEY_MARKERS_SCALE_BY,
   MARKERS_SCALE_DEFAULT,
+  MARKERS_RATING_LEVELS,
+  KEY_MARKERS_RATING_LEVEL,
+  MARKERS_RATING_LEVEL_DEFAULT,
 } from './consts';
 
 const useStyles = makeStyles({
@@ -21,66 +20,44 @@ const useStyles = makeStyles({
 
 export default function(setQueryFilter, queryFilter) {
   const classes = useStyles();
-  const { [KEY_MARKERS_SCALE_BY]: scaleByQuery } = queryFilter || {};
+  const {
+    [KEY_MARKERS_SCALE_BY]: scaleByQuery,
+    [KEY_MARKERS_RATING_LEVEL]: ratingLevelQuery,
+  } = queryFilter || {};
   const scaleBy = resolveActualScaleBy(scaleByQuery);
-
+  const ratingLevel = resolveActualRatingLevel(ratingLevelQuery);
   useSidebar(
     ({ closeSidebar }) => (
-      <List>
-        <ListItem>
-          <FormControl className={classes.formControl}>
-            <InputLabel shrink={true} id="select-groupBy-filter-label">
-              Раскрасить маркеры
-            </InputLabel>
-            <Select
-              labelId="select-groupBy-filter-label"
-              autoWidth={true}
-              id="select-groupBy-filter"
-              value={scaleBy}
-              onChange={event => {
-                closeSidebar();
-                setQueryFilter({
-                  [KEY_MARKERS_SCALE_BY]: event.target.value,
-                });
-              }}
-            >
-              <MenuItem
-                key={MARKERS_SCALES.BY_FIRST_VISIT}
-                value={MARKERS_SCALES.BY_FIRST_VISIT}
-              >
-                По первому посещению
-              </MenuItem>
-              <MenuItem
-                key={MARKERS_SCALES.BY_LAST_VISIT}
-                value={MARKERS_SCALES.BY_LAST_VISIT}
-              >
-                По последнему посещению
-              </MenuItem>
-              <MenuItem
-                key={MARKERS_SCALES.BY_VISITS_COUNT}
-                value={MARKERS_SCALES.BY_VISITS_COUNT}
-              >
-                По числу посещений
-              </MenuItem>
-              <MenuItem
-                key={MARKERS_SCALES.BY_RATING}
-                value={MARKERS_SCALES.BY_RATING}
-              >
-                По рейтингу
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </ListItem>
-      </List>
+      <>
+        <MarkersScaleSelect
+          classes={classes}
+          onClose={closeSidebar}
+          scaleBy={scaleBy}
+          onChange={setQueryFilter}
+        />
+        {scaleBy === MARKERS_SCALES.BY_RATING && (
+          <MarkersRatingLevelSelect
+            classes={classes}
+            onClose={closeSidebar}
+            ratingLevel={ratingLevel}
+            onChange={setQueryFilter}
+          />
+        )}
+      </>
     ),
-    [scaleBy],
+    [scaleBy, ratingLevel],
   );
 
-  return { scaleBy };
+  return { scaleBy, ratingLevel };
 }
 
 function resolveActualScaleBy(scaleByQuery) {
   return Object.values(MARKERS_SCALES).includes(scaleByQuery)
     ? scaleByQuery
     : MARKERS_SCALE_DEFAULT;
+}
+function resolveActualRatingLevel(ratingLevelQuery) {
+  return Object.values(MARKERS_RATING_LEVELS).includes(ratingLevelQuery)
+    ? ratingLevelQuery
+    : MARKERS_RATING_LEVEL_DEFAULT;
 }

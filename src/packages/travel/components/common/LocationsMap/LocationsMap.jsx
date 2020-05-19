@@ -7,12 +7,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import locationPropTypes from 'travel/models/locations/propTypes';
 import visitsPropTypes from 'travel/models/visits/propTypes';
 import adaptMarkerData from './utils/adaptMarkerData';
+import filterMarkerData from './utils/filterMarkerData';
 import makeScaleUtils from './utils/makeScaleUtils';
 import renderTitle from './utils/renderTitle';
 import resolveMarkerUrl from './utils/resolveMarkerUrl';
-import { MARKERS_SCALES } from './consts';
+import { MARKERS_SCALES, MARKERS_RATING_LEVELS } from './consts';
 import useMarkers from './useMarkers';
 
+export { MARKERS_SCALES, MARKERS_RATING_LEVELS };
 export useMarkersScaleSidebar from './useMarkersScaleSidebar';
 
 const useStyles = makeStyles({
@@ -40,6 +42,7 @@ export default function LocationsMap({
   locationsIds,
   minHeight,
   scaleBy,
+  ratingLevel,
 }) {
   const classes = useStyles({ minHeight });
   const markersData = useMemo(
@@ -50,9 +53,12 @@ export default function LocationsMap({
         locationsRating,
         locationsIds,
       });
+      const actualMarkersData = filterMarkerData(adaptedMarkersData, {
+        ratingLevel,
+      });
       const { resolveStep, resolveOptions } = makeScaleUtils(scaleBy);
-      const options = resolveOptions && resolveOptions(adaptedMarkersData);
-      return adaptedMarkersData.map(markerData => {
+      const options = resolveOptions && resolveOptions(actualMarkersData);
+      return actualMarkersData.map(markerData => {
         const step = resolveStep(markerData, options);
         return {
           ...markerData,
@@ -67,7 +73,14 @@ export default function LocationsMap({
         };
       });
     },
-    [locationsDict, visitsDict, locationsRating, locationsIds, scaleBy],
+    [
+      locationsDict,
+      visitsDict,
+      locationsRating,
+      locationsIds,
+      scaleBy,
+      ratingLevel,
+    ],
   );
   const { handleGoogleApiLoaded } = useMarkers(markersData);
 
@@ -94,6 +107,7 @@ LocationsMap.propTypes = {
   locationsRating: PropTypes.objectOf(PropTypes.number).isRequired,
   minHeight: PropTypes.number,
   scaleBy: PropTypes.oneOf(Object.values(MARKERS_SCALES)).isRequired,
+  ratingLevel: PropTypes.oneOf(Object.values(MARKERS_RATING_LEVELS)).isRequired,
 };
 
 LocationsMap.defaultProps = {

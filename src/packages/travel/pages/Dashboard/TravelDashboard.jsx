@@ -4,6 +4,7 @@ import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useTripsStats } from 'travel/dataSource';
 import LocationsMap, {
   useMarkersScaleSidebar,
+  MARKERS_SCALES,
 } from 'travel/components/common/LocationsMap';
 import Description from './blocks/Description';
 import ExternalLinks from './blocks/ExternalLinks';
@@ -23,7 +24,10 @@ export default function TravelDashboard() {
   const classes = useStyles();
 
   const { queryFilter, setQueryFilter } = useQueryFilter();
-  const { scaleBy } = useMarkersScaleSidebar(setQueryFilter, queryFilter);
+  const { scaleBy, ratingLevel } = useMarkersScaleSidebar(
+    setQueryFilter,
+    queryFilter,
+  );
 
   const {
     countriesIds,
@@ -56,6 +60,9 @@ export default function TravelDashboard() {
         locationsIds={locationsIds}
         minHeight={300}
         scaleBy={scaleBy}
+        ratingLevel={
+          scaleBy === MARKERS_SCALES.BY_RATING ? ratingLevel : undefined
+        }
       />
       <ExternalLinks />
     </div>

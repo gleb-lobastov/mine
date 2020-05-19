@@ -7,7 +7,7 @@ export const MARKERS_SCALES = {
   BY_RATING: 'r',
 };
 
-export const MARKERS_SCALE_DEFAULT = MARKERS_SCALES.BY_FIRST_VISIT;
+export const MARKERS_SCALE_DEFAULT = MARKERS_SCALES.BY_LAST_VISIT;
 
 export const MARKERS_SCALE_IMAGES_BASE_PATH =
   'https://res.cloudinary.com/dc2eke0gj/image/upload/markers/';
@@ -48,3 +48,13 @@ export const MARKERS_SCALE_BY_SOURCES = {
   [MARKERS_SCALES.BY_VISITS_COUNT]: MARKERS_SCALE_BY_VISITS_FILENAMES,
   [MARKERS_SCALES.BY_RATING]: MARKERS_SCALE_BY_RATING_FILENAMES,
 };
+
+export const MARKERS_RATING_LEVELS = {
+  ALL: 'all',
+  GOOD: 'good',
+  BEST: 'best',
+};
+
+export const KEY_MARKERS_RATING_LEVEL = 'rating';
+
+export const MARKERS_RATING_LEVEL_DEFAULT = MARKERS_RATING_LEVELS.ALL;
