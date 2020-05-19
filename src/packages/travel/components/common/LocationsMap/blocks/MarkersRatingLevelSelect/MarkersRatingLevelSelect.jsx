@@ -40,14 +40,14 @@ export default function MarkersRatingLevelSelect({
               Все
             </MenuItem>
             <MenuItem
-              key={MARKERS_RATING_LEVELS.GOOD}
-              value={MARKERS_RATING_LEVELS.GOOD}
+              key={MARKERS_RATING_LEVELS.WANT_COME_BACK}
+              value={MARKERS_RATING_LEVELS.WANT_COME_BACK}
             >
               Куда бы вернулся
             </MenuItem>
             <MenuItem
-              key={MARKERS_RATING_LEVELS.BEST}
-              value={MARKERS_RATING_LEVELS.BEST}
+              key={MARKERS_RATING_LEVELS.LOVE_THIS_PLACE}
+              value={MARKERS_RATING_LEVELS.LOVE_THIS_PLACE}
             >
               В моем сердце
             </MenuItem>

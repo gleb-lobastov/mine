@@ -51,8 +51,8 @@ export const MARKERS_SCALE_BY_SOURCES = {
 
 export const MARKERS_RATING_LEVELS = {
   ALL: 'all',
-  GOOD: 'good',
-  BEST: 'best',
+  WANT_COME_BACK: 'good',
+  LOVE_THIS_PLACE: 'best',
 };
 
 export const KEY_MARKERS_RATING_LEVEL = 'rating';

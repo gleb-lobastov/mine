@@ -8,11 +8,14 @@ export default function filterMarkerData(adaptedMarkersData, { ratingLevel }) {
   ) {
     return adaptedMarkersData;
   }
-  return adaptedMarkersData.filter(({ locationRating }) => {
+  return adaptedMarkersData.filter(({ locationRating, visitsCount }) => {
     switch (ratingLevel) {
-      case MARKERS_RATING_LEVELS.GOOD:
-        return locationRating <= LOCATION_RATING.TWICE_PER_LIVE;
-      case MARKERS_RATING_LEVELS.BEST:
+      case MARKERS_RATING_LEVELS.WANT_COME_BACK:
+        if (visitsCount < 2) {
+          return locationRating <= LOCATION_RATING.TWICE_PER_LIVE;
+        }
+        return locationRating <= LOCATION_RATING.ONCE_PER_DECADE;
+      case MARKERS_RATING_LEVELS.LOVE_THIS_PLACE:
         return locationRating <= LOCATION_RATING.ONCE_PER_YEAR;
       default:
         return true;
