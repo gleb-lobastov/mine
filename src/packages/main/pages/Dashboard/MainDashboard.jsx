@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
+import cls from 'classnames';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
@@ -11,37 +11,57 @@ import { usePaths } from 'modules/packages';
 const useStyles = makeStyles(theme => ({
   container: {
     marginBottom: '16px',
-    display: 'flex',
-    justifyContent: 'space-between',
   },
   title: {
-    margin: '0 0 24px',
+    margin: '0 -12px',
     fontSize: '72px',
     fontFamily: "'Press Start 2P', 'Roboto', sans-serif",
     fontWeight: 900,
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
+  titleItem: {
+    margin: '6px 12px',
+  },
+  avatarContainer: {
+    height: '192px',
+    margin: '0 36px',
   },
   avatar: {
-    height: '216px',
+    height: '100%',
     borderRadius: '100%',
-    marginLeft: '36px',
-    display: 'block',
+    display: 'inline-block',
+  },
+  linksList: {
+    marginTop: '24px',
   },
   [theme.breakpoints.down('sm')]: {
     title: {
       fontSize: '48px',
     },
-    avatar: {
-      height: '180px',
-      marginLeft: '24px',
+    avatarContainer: {
+      margin: '0 24px',
     },
   },
   [theme.breakpoints.down('xs')]: {
     title: {
       fontSize: '36px',
     },
+    avatarContainer: {
+      margin: '18px -25px',
+      overflow: 'hidden',
+      order: 1,
+    },
     avatar: {
-      height: '108px',
-      marginLeft: '16px',
+      borderRadius: '0%',
+      width: '100%',
+      height: 'auto',
+      transform: 'translate(0,-25%)',
+    },
+    linksList: {
+      marginTop: '0',
     },
   },
 }));
@@ -56,16 +76,21 @@ export default function MainDashboard() {
 
   return (
     <div className={classes.container}>
-      <div>
-        <Helmet>
-          <link
-            href="https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap&subset=cyrillic"
-            rel="stylesheet"
+      <Typography variant="h1" className={classes.title}>
+        <span className={classes.titleItem}>Моя</span>
+        <div className={cls(classes.avatarContainer, classes.titleItem)}>
+          <img
+            className={classes.avatar}
+            src="https://res.cloudinary.com/dc2eke0gj/image/upload/_vlywcy.jpg"
+            alt="Мое фото"
           />
-        </Helmet>
-        <Typography variant="h1" className={classes.title}>
-          <span>Моя страница в&nbsp;сети интернет</span>
-        </Typography>
+        </div>
+        <span className={classes.titleItem}>страница</span>
+        <span className={classes.titleItem}>в</span>
+        <span className={classes.titleItem}>сети</span>
+        <span className={classes.titleItem}>интернет</span>
+      </Typography>
+      <div className={classes.linksList}>
         <List>
           <ListItem button={true} component={Link} to={codePath.toUrl()}>
             <ListItemText primary="Кем работаю" />
@@ -81,11 +106,6 @@ export default function MainDashboard() {
           </ListItem>
         </List>
       </div>
-      <img
-        className={classes.avatar}
-        src="/mine/static/me.jpg"
-        alt="Мое фото"
-      />
     </div>
   );
 }

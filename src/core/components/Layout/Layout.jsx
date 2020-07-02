@@ -80,13 +80,6 @@ export default function Layout({ children, breadcrumbs, actualPath }) {
               'minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no',
           },
         ]}
-        link={[
-          {
-            rel: 'stylesheet',
-            href:
-              'https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;subset=cyrillic',
-          },
-        ]}
       />
       <div className={cls(classes.root, classes.pageContainer)}>
         <Navigation
