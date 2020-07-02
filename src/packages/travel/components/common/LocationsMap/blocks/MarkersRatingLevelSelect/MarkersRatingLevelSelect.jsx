@@ -49,7 +49,7 @@ export default function MarkersRatingLevelSelect({
               key={MARKERS_RATING_LEVELS.LOVE_THIS_PLACE}
               value={MARKERS_RATING_LEVELS.LOVE_THIS_PLACE}
             >
-              В моем сердце
+              Лучшие места
             </MenuItem>
           </Select>
         </FormControl>
