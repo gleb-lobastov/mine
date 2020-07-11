@@ -1,7 +1,13 @@
 import { useEffect, useMemo } from 'react';
+import invariant from 'invariant';
 import debounce from 'lodash/debounce';
 import { checkIsRequirementsChanged } from '../utils';
 
+function resolveStateKey(requirements) {
+  const stateKey = requirements?.domain;
+  invariant(stateKey, 'Unable to determine state key');
+  return stateKey; // should never be empty
+}
 // Global storage is used to preserve requirements from previous render even
 // between unmount/mount cycle or component. Moreover even different components
 // could reference same domain and keep provision state in sync.
@@ -12,14 +18,12 @@ const memoryState = (() => {
   const state = {};
   return {
     get: requirements => {
-      const domain = requirements?.domain;
-      return (domain && state[domain]) || {};
+      const stateKey = resolveStateKey(requirements);
+      return state[stateKey] || {};
     },
     set: nextState => {
-      const domain = nextState?.requirements?.domain;
-      if (domain) {
-        state[domain] = nextState;
-      }
+      const stateKey = resolveStateKey(nextState?.requirements);
+      state[stateKey] = nextState;
     },
   };
 })();
