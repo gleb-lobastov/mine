@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import merge from 'lodash/merge';
 import { createControlledPromise } from '../utils';
 
@@ -7,13 +7,18 @@ export default function makeRequestHook({ requestHandler }) {
     const [requirements, setRequirements] = useState();
     const controlledPromiseRef = useRef(null);
 
+    const mergedRequirements = useMemo(
+      () => merge({}, requirements, preRequirements || {}),
+      [requirements],
+    );
+
     useEffect(
       () => {
         if (!requirements) {
           return;
         }
         const promise = requestHandler({
-          requirements: merge({}, requirements, preRequirements || {}),
+          requirements: mergedRequirements,
           ...forwardingRequestParams,
         });
         if (controlledPromiseRef.current) {
@@ -35,6 +40,6 @@ export default function makeRequestHook({ requestHandler }) {
       return controlledPromiseRef.current.promise;
     }, []);
 
-    return [request, requirements];
+    return [request, mergedRequirements];
   };
 }
