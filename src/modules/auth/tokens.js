@@ -36,11 +36,12 @@ export const safeDecode = token => {
 
 export const deriveTokenStatus = (token = getAccessToken()) => {
   const claims = safeDecode(token);
-  const { exp: expirationTime, alias: userAlias } = claims || {};
+  const { exp: expirationTime, alias: userAlias, id: userId } = claims || {};
   return {
     // todo: IMPORTANT, need to request server time, and compare with it
     // otherwise comparison could give false results if user has
     // shifted system time
+    userId,
     userAlias,
     isExpired: !expirationTime || new Date().getTime() > expirationTime * 1000,
     isValid: Boolean(claims),
