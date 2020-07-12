@@ -18,6 +18,7 @@ export default function VisitsPage({
 }) {
   const { userAlias: authenticatedUserAlias } = useAuthContext();
   const hasEditRights = userAlias === authenticatedUserAlias;
+  const isObscure = userAlias !== authenticatedUserAlias;
 
   const classes = useVisitsPageStyles();
   const { queryFilter, setQueryFilter } = useQueryFilter();
@@ -85,6 +86,7 @@ export default function VisitsPage({
           hasEditRights && groupBy === GROUP_VISITS_BY.TRIPS
             ? visitEditPath.toUrl({ strVisitId: String(visit.visitId) })
             : undefined,
+        isObscure,
       })
         .filter(Boolean)
         .forEach(node => nodesAccumulator.push(node));

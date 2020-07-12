@@ -49,6 +49,7 @@ export default function renderLocation({
   sortBy,
   counters,
   visitEditUrl,
+  isObscure,
 }) {
   const isGroupedByTripsOnly = groupBy === GROUP_VISITS_BY.TRIPS;
   const shouldRender =
@@ -154,7 +155,7 @@ export default function renderLocation({
           <Grid container={true}>
             <Grid item={true}>
               <Typography className={classes.detail}>
-                {visitDateTimePeriodToString(visitsDict[visitId])}
+                {visitDateTimePeriodToString(visitsDict[visitId], isObscure)}
               </Typography>
             </Grid>
             <Grid item={true}>

@@ -6,12 +6,15 @@ import ru from 'date-fns/locale/ru';
 
 const DATE_FORMATS = {
   FULL: 'd MMMM yyyy',
+  MONTH_YEAR: 'LLLL yyyy',
+  MONTH_ONLY: 'LLLL',
   DAY_MONTH: 'd MMMM',
   DAY_ONLY: 'd',
 };
 
-function dateTimePeriodToString(periodStart, periodEnd) {
-  const periodEndString = dateFormat(periodEnd, DATE_FORMATS.FULL, {
+function dateTimePeriodToString(periodStart, periodEnd, isObscure) {
+  const fullFormat = isObscure ? DATE_FORMATS.MONTH_YEAR : DATE_FORMATS.FULL;
+  const periodEndString = dateFormat(periodEnd, fullFormat, {
     locale: ru,
   });
 
@@ -21,32 +24,33 @@ function dateTimePeriodToString(periodStart, periodEnd) {
 
   let periodStartString = '';
   if (isSameMonth(periodStart, periodEnd)) {
-    periodStartString = dateFormat(periodStart, DATE_FORMATS.DAY_ONLY, {
-      locale: ru,
-    });
+    if (!isObscure) {
+      periodStartString = dateFormat(periodStart, DATE_FORMATS.DAY_ONLY, {
+        locale: ru,
+      });
+    }
   } else if (isSameYear(periodStart, periodEnd)) {
-    periodStartString = dateFormat(periodStart, DATE_FORMATS.DAY_MONTH, {
-      locale: ru,
-    });
+    const shortFormat = isObscure
+      ? DATE_FORMATS.MONTH_ONLY
+      : DATE_FORMATS.DAY_MONTH;
+    periodStartString = dateFormat(periodStart, shortFormat, { locale: ru });
   } else {
-    periodStartString = dateFormat(periodStart, DATE_FORMATS.FULL, {
-      locale: ru,
-    });
+    periodStartString = dateFormat(periodStart, fullFormat, { locale: ru });
   }
 
   return `${periodStartString}—${periodEndString}`;
 }
 
-export function rideDateTimePeriodToString({
-  departureDateTime,
-  arrivalDateTime,
-}) {
-  return dateTimePeriodToString(departureDateTime, arrivalDateTime);
+export function rideDateTimePeriodToString(
+  { departureDateTime, arrivalDateTime },
+  isObscure,
+) {
+  return dateTimePeriodToString(departureDateTime, arrivalDateTime, isObscure);
 }
 
-export function visitDateTimePeriodToString({
-  departureDateTime,
-  arrivalDateTime,
-}) {
-  return dateTimePeriodToString(arrivalDateTime, departureDateTime);
+export function visitDateTimePeriodToString(
+  { departureDateTime, arrivalDateTime },
+  isObscure,
+) {
+  return dateTimePeriodToString(arrivalDateTime, departureDateTime, isObscure);
 }
