@@ -28,8 +28,8 @@ class Posts extends React.PureComponent {
 
     return (
       <section>
-        {source.sort(sortByDateDesc).map(article => (
-          <Post key={`article${article.id}`} source={article} />
+        {source.sort(sortByDateDesc).map(post => (
+          <Post key={`post${post.id}`} source={post} />
         ))}
       </section>
     );

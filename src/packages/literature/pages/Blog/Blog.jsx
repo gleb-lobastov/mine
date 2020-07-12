@@ -1,17 +1,19 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useProvision, selectDict } from 'core/connection';
+import { selectResult } from 'core/connection/request/controllerRedux';
 import Posts from './blocks/Posts';
 
 export default function Blog() {
-  const { provision = {} } = useProvision({
+  const provision = useProvision({
     domain: 'literature.blogPosts',
     isProvision: true,
-    modelName: 'articles',
+    modelName: 'posts',
     query: { navigation: { isDisabled: true } },
   });
-  const { data: articlesIds = [] } = provision;
-  const articlesDict = useSelector(state => selectDict(state, 'articles'));
-  const articlesList = articlesIds.map(articlesId => articlesId[articlesDict]);
-  return <Posts source={articlesList} />;
+  const { data: postsIds = [] } = selectResult(provision) || {};
+  const postsDict = useSelector(state => selectDict(state, 'posts'));
+  const postsList = postsIds.map(postId => postsDict[postId]).filter(Boolean);
+  // console.log({ postsDict, postsIds, postsList });
+  return <Posts source={postsList} />;
 }
