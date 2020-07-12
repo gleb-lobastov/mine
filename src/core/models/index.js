@@ -2,6 +2,7 @@ import { travelModels } from 'travel';
 import { literatureModels } from 'literature';
 
 export default [
+  literatureModels.posts.model,
   literatureModels.articles.model,
   literatureModels.quotes.model,
   travelModels.users.model,

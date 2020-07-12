@@ -3,11 +3,8 @@ import listSchema from 'modules/derivedSchemas/listSchema';
 import { toClient, toServer } from './adapters';
 
 export default {
-  modelName: 'articles',
+  modelName: 'posts',
   toClientAdapter: toClient,
-  schema: {
-    options: { idAttribute: 'slug' },
-  },
   toServerAdapter: toServer,
   endpointResolver,
   derivedSchemas: [listSchema],

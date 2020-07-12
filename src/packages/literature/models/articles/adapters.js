@@ -1,13 +1,27 @@
 export const toClient = ({
-  content: rawContent,
-  created_at: rawDate,
-  header: rawHeader,
   id: rawArticleId,
+  slug: rawSlug,
+  title: rawTitle,
+  is_draft: rawIsDraft,
+  body: rawBody,
 }) => ({
-  content: rawContent.replace(/\\n/g, '\n'),
-  date: new Date(rawDate),
-  header: rawHeader,
   id: rawArticleId,
+  slug: rawSlug,
+  title: rawTitle,
+  isDraft: rawIsDraft,
+  body: rawBody,
 });
 
-export const toServer = () => undefined;
+export const toServer = ({
+  id: rawArticleId,
+  slug: rawSlug,
+  body: rawBody,
+  isDraft: rawIsDraft,
+  title: rawTitle,
+}) => ({
+  id: rawArticleId,
+  slug: rawSlug,
+  title: rawTitle,
+  is_draft: rawIsDraft,
+  body: rawBody,
+});

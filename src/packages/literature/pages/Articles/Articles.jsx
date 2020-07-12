@@ -1,17 +1,16 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { Link as RouterLink } from 'react-router-dom';
 import compose from 'lodash/fp/compose';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import MUILink from '@material-ui/core/Link';
 import IconHome from '@material-ui/icons/Home';
 import { usePaths } from 'modules/packages';
+import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
+import { useAuthContext } from 'core/context/AuthContext';
+import useArticles from '../../dataSource/articles';
 import Article from './blocks/Article';
-
-const Link = props => <MUILink {...props} component={RouterLink} />;
 
 function Articles({
   classes,
@@ -19,6 +18,14 @@ function Articles({
     params: { slug, tag },
   },
 }) {
+  const {
+    isAuthenticated,
+    userAlias: authenticatedUserAlias,
+    userId: authenticatedUserId,
+  } = useAuthContext();
+
+  const { articlesList } = useArticles({ userAlias: authenticatedUserAlias });
+
   const { literature: literaturePaths, code: codePaths } = usePaths();
   const hasSummaryTag = !tag || tag === 'summary';
   const hasCodeTag = !tag || tag === 'code';
@@ -26,9 +33,12 @@ function Articles({
   return (
     <>
       {!literaturePaths && (
-        <Link to={selfPaths.entry.toUrl()} className={classes.iconHome}>
+        <ConnectedLink
+          to={selfPaths.entry.toUrl()}
+          className={classes.iconHome}
+        >
           <IconHome />
-        </Link>
+        </ConnectedLink>
       )}
       <div className={classes.container}>
         <List
@@ -39,7 +49,7 @@ function Articles({
           {hasSummaryTag && (
             <ListItem
               button={true}
-              component={Link}
+              component={ConnectedLink}
               to={selfPaths.articles.toUrl({ slug: 'chaldini' })}
             >
               <ListItemText primary="&laquo;Психология убеждения&raquo; Чалдини" />
@@ -48,7 +58,7 @@ function Articles({
           {hasSummaryTag && (
             <ListItem
               button={true}
-              component={Link}
+              component={ConnectedLink}
               to={selfPaths.articles.toUrl({ slug: 'blackSwan' })}
             >
               <ListItemText primary="&laquo;Черный лебедь&raquo; Талеба" />
@@ -57,10 +67,40 @@ function Articles({
           {hasCodeTag && (
             <ListItem
               button={true}
-              component={Link}
+              component={ConnectedLink}
               to={selfPaths.articles.toUrl({ slug: 'importThis' })}
             >
               <ListItemText primary="19 принципов достижения дзена при написании компьютерных программ" />
+            </ListItem>
+          )}
+          {articlesList.map(article => {
+            const { userId, isDraft, title, slug: currentSlug } = article;
+            if (
+              isDraft &&
+              (!isAuthenticated || authenticatedUserId !== userId)
+            ) {
+              return null;
+            }
+            const caption = isDraft ? `Черновик: ${title}` : title;
+            return (
+              <ListItem
+                button={true}
+                component={ConnectedLink}
+                to={selfPaths.articles.toUrl({ slug: currentSlug })}
+              >
+                <ListItemText primary={caption} />
+              </ListItem>
+            );
+          })}
+          {isAuthenticated && (
+            <ListItem
+              button={true}
+              component={ConnectedLink}
+              to={selfPaths.createArticle.toUrl({
+                userAlias: authenticatedUserAlias,
+              })}
+            >
+              <ListItemText primary="Добавить статью" />
             </ListItem>
           )}
         </List>

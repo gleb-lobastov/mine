@@ -7,10 +7,24 @@ export const entry = {
   ),
 };
 
+export const createArticle = {
+  path: '/articles/:tag(summary|code)?/create',
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'literature-Articles' */ './pages/ArticleEditor'),
+  ),
+};
+
 export const articles = {
   path: '/articles/:tag(summary|code)?/:slug?',
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'literature-Articles' */ './pages/Articles'),
+  ),
+};
+
+export const editArticle = {
+  path: '/articles/:tag(summary|code)?/:slug/edit',
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'literature-Articles' */ './pages/ArticleEditor'),
   ),
 };
 

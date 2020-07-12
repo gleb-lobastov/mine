@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router';
+import DBArticle from '../../../Article';
 
 const selectArticle = slug => {
   switch (slug) {
@@ -16,7 +17,7 @@ const selectArticle = slug => {
         import(/* webpackChunkName: 'literature-ImportThis' */ './designed/ImportThis'),
       );
     default:
-      return null;
+      return DBArticle;
   }
 };
 
@@ -25,7 +26,7 @@ const Article = ({ slug }) => {
   if (!ArticleComponent) {
     return <div>Статья не найдена</div>;
   }
-  return <ArticleComponent />;
+  return <ArticleComponent slug={slug} />;
 };
 
 export default withRouter(Article);
