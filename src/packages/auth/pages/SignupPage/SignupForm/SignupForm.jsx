@@ -5,11 +5,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 
-export default function SignupForm({ formikProps }) {
+export default function SignupForm({ formikProps, isReset }) {
   const {
     setFieldValue,
     handleSubmit,
-    values: { email, alias, password, passwordConfirm },
+    values: { email, alias, originalPassword, password, passwordConfirm },
   } = formikProps;
 
   return (
@@ -28,19 +28,36 @@ export default function SignupForm({ formikProps }) {
         </FormControl>
       </Grid>
       <Grid item={true} xs={6}>
-        <FormControl fullWidth={true}>
-          <InputLabel htmlFor="signup-page-alias">
-            Алиас (будет в ссылке на страницу)
-          </InputLabel>
-          <Input
-            fullWidth={true}
-            id="signup-page-alias"
-            value={alias}
-            onChange={event =>
-              setFieldValue('alias', event.currentTarget.value)
-            }
-          />
-        </FormControl>
+        {isReset ? (
+          <FormControl fullWidth={true}>
+            <InputLabel htmlFor="signup-page-alias">
+              Предыдущий пароль
+            </InputLabel>
+            <Input
+              type="password"
+              fullWidth={true}
+              id="signup-page-alias"
+              value={originalPassword}
+              onChange={event =>
+                setFieldValue('originalPassword', event.currentTarget.value)
+              }
+            />
+          </FormControl>
+        ) : (
+          <FormControl fullWidth={true}>
+            <InputLabel htmlFor="signup-page-alias">
+              Алиас (будет в ссылке на страницу)
+            </InputLabel>
+            <Input
+              fullWidth={true}
+              id="signup-page-alias"
+              value={alias}
+              onChange={event =>
+                setFieldValue('alias', event.currentTarget.value)
+              }
+            />
+          </FormControl>
+        )}
       </Grid>
       <Grid item={true} xs={6}>
         <FormControl fullWidth={true}>
@@ -74,7 +91,7 @@ export default function SignupForm({ formikProps }) {
       </Grid>
       <Grid item={true} xs={12}>
         <Button type="submit" color="primary" onClick={handleSubmit}>
-          Зарегистрировать пользователя
+          {isReset ? 'Изменить пароль' : 'Зарегистрировать пользователя'}
         </Button>
       </Grid>
     </Grid>

@@ -10,13 +10,17 @@ export const toClient = ({
 export const toServer = ({
   email: rawEmail,
   inviteCode: rawInviteCode,
+  originalPassword: rawOriginalPassword,
   password: rawPassword,
   passwordConfirm: rawPasswordConfirm,
+  reset: rawReset,
   alias: rawUserAlias,
 }) => ({
   invite_code: rawInviteCode,
+  original_password: rawOriginalPassword,
   password: rawPassword,
   password_confirm: rawPasswordConfirm,
   user_alias: rawUserAlias,
+  reset: rawReset,
   username: rawEmail,
 });

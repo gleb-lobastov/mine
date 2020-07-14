@@ -15,23 +15,33 @@ export default function SignupPage() {
     method: 'POST',
   });
 
-  const { invite } = queryFilter || {};
+  const { invite, reset } = queryFilter || {};
 
   return (
     <Formik
       initialValues={{}}
       onSubmit={values =>
-        submit({ query: { body: { ...values, inviteCode: invite } } }).then(
-          x => {
-            console.log({ x, provision });
-            // history.push('/');
+        submit({
+          query: {
+            body: {
+              ...values,
+              inviteCode: invite,
+              reset: Boolean(reset),
+            },
           },
-        )
+        }).then(x => {
+          console.log({ x, provision });
+          // history.push('/');
+        })
       }
       validator={() => ({})}
     >
       {formikProps => (
-        <SignupForm formikProps={formikProps} provision={provision} />
+        <SignupForm
+          formikProps={formikProps}
+          provision={provision}
+          isReset={Boolean(reset)}
+        />
       )}
     </Formik>
   );
