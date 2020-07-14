@@ -9,7 +9,7 @@ export default function YearInfo({ year, isSubgroup }) {
       variant={isSubgroup ? 'h5' : 'h4'}
       className={isSubgroup ? classes.subgroup : classes.group}
     >
-      {year}
+      {year || 'Без указания даты'}
     </Typography>
   );
 }
