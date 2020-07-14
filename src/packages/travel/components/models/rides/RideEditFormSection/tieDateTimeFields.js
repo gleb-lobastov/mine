@@ -1,80 +1,126 @@
 import checkIsSameDay from 'date-fns/isSameDay';
 import checkIsDatesEqual from 'date-fns/isEqual';
 import addDays from 'date-fns/addDays';
-import checkIsAfter from 'date-fns/isAfter';
 
-const checkIsPeriodInverted = (beforeDateTime, afterDateTime) =>
-  checkIsAfter(beforeDateTime, afterDateTime);
+const mixDateTime = ({ dateFrom, timeFrom }) => {
+  const isValidDateFrom = isValidDate(timeFrom);
+  const isValidTimeFrom = isValidDate(dateFrom);
+  if (isValidDateFrom && isValidTimeFrom) {
+    return new Date(
+      dateFrom.getFullYear(),
+      dateFrom.getMonth(),
+      dateFrom.getDate(),
+      timeFrom.getHours(),
+      timeFrom.getMinutes(),
+      timeFrom.getSeconds(),
+    );
+  }
+  return new Date(NaN);
+};
 
-const mixDateTime = ({ dateFrom, timeFrom }) =>
-  new Date(
-    dateFrom.getFullYear(),
-    dateFrom.getMonth(),
-    dateFrom.getDate(),
-    timeFrom.getHours(),
-    timeFrom.getMinutes(),
-    timeFrom.getSeconds(),
+function isValidDate(date) {
+  return date instanceof Date && !Number.isNaN(date.getTime());
+}
+
+function checkCanUpdate(nextDate, prevDate) {
+  return isValidDate(nextDate) && !checkIsDatesEqual(prevDate, nextDate);
+}
+
+export default ({
+  arrivalDateTimeField: {
+    value: arrivalDateTimeValue,
+    onChange: onArrivalDateTimeChange,
+  },
+  departureDateTimeField: {
+    value: departureDateTimeValue,
+    onChange: onDepartureDateTimeChange,
+  },
+}) => {
+  const isSameDay = checkIsSameDay(
+    departureDateTimeValue,
+    arrivalDateTimeValue,
   );
 
-export default ({ values: { rideDeparture, rideArrival }, setFieldValue }) => {
-  const setRideDeparture = nextRideDeparture =>
-    setFieldValue('departureDateTime', nextRideDeparture);
-  const setRideArrival = nextRideArrival =>
-    setFieldValue('arrivalDateTime', nextRideArrival);
-
-  const isSameDay = checkIsSameDay(rideDeparture, rideArrival);
-
-  const setDatesAndTimes = (nextRideDeparture, nextRideArrival) => {
-    const isInverted = checkIsPeriodInverted(
-      nextRideDeparture,
-      nextRideArrival,
-    );
-    const actualNextRideDeparture = isInverted
-      ? nextRideArrival
-      : nextRideDeparture;
-
-    const actualNextRideArrival = isInverted
-      ? nextRideDeparture
-      : nextRideArrival;
-
-    if (!checkIsDatesEqual(rideDeparture, actualNextRideDeparture)) {
-      setRideDeparture(actualNextRideDeparture);
+  const updateFields = (
+    nextDepartureDateTimeValue,
+    nextArrivalDateTimeValue,
+  ) => {
+    if (checkCanUpdate(nextDepartureDateTimeValue, departureDateTimeValue)) {
+      onDepartureDateTimeChange(nextDepartureDateTimeValue);
     }
-    if (!checkIsDatesEqual(rideArrival, actualNextRideArrival)) {
-      setRideArrival(actualNextRideArrival);
+    if (checkCanUpdate(nextArrivalDateTimeValue, arrivalDateTimeValue)) {
+      onArrivalDateTimeChange(nextArrivalDateTimeValue);
     }
   };
 
   const handleIsSameDayFlagChange = nextIsSameDay => {
     if (Boolean(isSameDay) !== Boolean(nextIsSameDay)) {
-      setDatesAndTimes(
-        rideDeparture,
+      updateFields(
+        departureDateTimeValue,
         mixDateTime({
-          dateFrom: nextIsSameDay ? rideDeparture : addDays(rideDeparture, 1),
-          timeFrom: rideArrival,
+          dateFrom: nextIsSameDay
+            ? departureDateTimeValue
+            : addDays(departureDateTimeValue, 1),
+          timeFrom: arrivalDateTimeValue,
         }),
       );
     }
   };
 
-  const handleRideDepartureChange = nextRideDeparture => {
-    const nextRideArrival = isSameDay
+  const handleRideDepartureChange = nextDepartureDateTimeValue => {
+    const nextArrivalDateTimeValue = isSameDay
       ? mixDateTime({
-          timeFrom: rideArrival,
-          dateFrom: nextRideDeparture,
+          timeFrom: arrivalDateTimeValue,
+          dateFrom: nextDepartureDateTimeValue,
         })
-      : rideArrival;
-    setDatesAndTimes(nextRideDeparture, nextRideArrival);
+      : arrivalDateTimeValue;
+    updateFields(nextDepartureDateTimeValue, nextArrivalDateTimeValue);
   };
 
-  const handleRideArrivalChange = nextRideArrival => {
-    const nextRideDeparture = isSameDay
+  const handleRideDepartureDateChange = nextDepartureDateTimeValue => {
+    handleRideDepartureChange(
+      mixDateTime({
+        dateFrom: nextDepartureDateTimeValue,
+        timeFrom: departureDateTimeValue,
+      }),
+    );
+  };
+
+  const handleRideDepartureTimeChange = nextDepartureDateTimeValue => {
+    handleRideDepartureChange(
+      mixDateTime({
+        dateFrom: departureDateTimeValue,
+        timeFrom: nextDepartureDateTimeValue,
+      }),
+    );
+  };
+
+  const handleRideArrivalChange = nextArrivalDateTimeValue => {
+    const nextDepartureDateTimeValue = isSameDay
       ? mixDateTime({
-          timeFrom: rideDeparture,
-          dateFrom: nextRideArrival,
+          timeFrom: departureDateTimeValue,
+          dateFrom: nextArrivalDateTimeValue,
         })
-      : rideDeparture;
-    setDatesAndTimes(nextRideDeparture, nextRideArrival);
+      : departureDateTimeValue;
+    updateFields(nextDepartureDateTimeValue, nextArrivalDateTimeValue);
+  };
+
+  const handleRideArrivalDateChange = nextArrivalDateTimeValue => {
+    handleRideArrivalChange(
+      mixDateTime({
+        dateFrom: nextArrivalDateTimeValue,
+        timeFrom: arrivalDateTimeValue,
+      }),
+    );
+  };
+
+  const handleRideArrivalTimeChange = nextArrivalDateTimeValue => {
+    handleRideArrivalChange(
+      mixDateTime({
+        dateFrom: arrivalDateTimeValue,
+        timeFrom: nextArrivalDateTimeValue,
+      }),
+    );
   };
 
   return {
@@ -82,13 +128,21 @@ export default ({ values: { rideDeparture, rideArrival }, setFieldValue }) => {
       value: isSameDay,
       onChange: handleIsSameDayFlagChange,
     },
-    rideDepartureField: {
-      value: rideDeparture,
-      onChange: handleRideDepartureChange,
+    rideDepartureDateField: {
+      value: departureDateTimeValue,
+      onChange: handleRideDepartureDateChange,
     },
-    rideArrivalField: {
-      value: rideArrival,
-      onChange: handleRideArrivalChange,
+    rideArrivalDateField: {
+      value: arrivalDateTimeValue,
+      onChange: handleRideArrivalDateChange,
+    },
+    rideDepartureTimeField: {
+      value: departureDateTimeValue,
+      onChange: handleRideDepartureTimeChange,
+    },
+    rideArrivalTimeField: {
+      value: arrivalDateTimeValue,
+      onChange: handleRideArrivalTimeChange,
     },
   };
 };

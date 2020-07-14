@@ -1,11 +1,10 @@
-import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
+import React  from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
-import { KeyboardDatePicker, TimePicker } from '@material-ui/pickers';
+import { KeyboardDatePicker, KeyboardTimePicker } from '@material-ui/pickers';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import VisitInfo from 'travel/components/models/visits/VisitInfo';
 import {
@@ -70,15 +69,22 @@ const RideEditFormSection = ({
   const classes = useStyles();
   const isTripHasVisits = tripVisitsIds && tripVisitsIds.length > 0;
   const {
-    rideArrivalField,
-    rideDepartureField,
+    rideArrivalDateField,
+    rideArrivalTimeField,
+    rideDepartureDateField,
+    rideDepartureTimeField,
     isSameDateField,
   } = tieDateTimeFields({
-    values: {
-      rideDeparture: departureDateTime,
-      rideArrival: arrivalDateTime,
+    arrivalDateTimeField: {
+      value: arrivalDateTime,
+      onChange: nextArrivalDateTime =>
+        setFieldValue('arrivalDateTime', nextArrivalDateTime),
     },
-    setFieldValue,
+    departureDateTimeField: {
+      value: departureDateTime,
+      onChange: nextDepartureDateTime =>
+        setFieldValue('departureDateTime', nextDepartureDateTime),
+    },
   });
 
   return (
@@ -168,8 +174,8 @@ const RideEditFormSection = ({
           autoOk={true}
           className={classes.option}
           label="Дата отправления"
-          value={rideDepartureField.value}
-          onChange={rideDepartureField.onChange}
+          value={rideDepartureDateField.value}
+          onChange={rideDepartureDateField.onChange}
           format="dd/MM/yyyy"
         />
       </Grid>
@@ -193,32 +199,32 @@ const RideEditFormSection = ({
             autoOk={true}
             className={classes.option}
             label="Дата прибытия"
-            value={rideArrivalField.value}
-            onChange={rideArrivalField.onChange}
+            value={rideArrivalDateField.value}
+            onChange={rideArrivalDateField.onChange}
             format="dd/MM/yyyy"
           />
         )}
       </Grid>
       <Grid item={true} xs={6}>
-        <TimePicker
+        <KeyboardTimePicker
           name="departureDateTime"
           ampm={false}
           autoOk={true}
           className={classes.option}
           label="Время отправления"
-          value={rideDepartureField.value}
-          onChange={rideDepartureField.onChange}
+          value={rideDepartureTimeField.value}
+          onChange={rideDepartureTimeField.onChange}
         />
       </Grid>
       <Grid item={true} xs={6}>
-        <TimePicker
+        <KeyboardTimePicker
           name="arrivalDateTime"
           ampm={false}
           autoOk={true}
           className={classes.option}
           label="Время прибытия"
-          value={rideArrivalField.value}
-          onChange={rideArrivalField.onChange}
+          value={rideArrivalTimeField.value}
+          onChange={rideArrivalTimeField.onChange}
         />
       </Grid>
       <Grid item={true} xs={12}>
