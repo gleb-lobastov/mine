@@ -84,6 +84,12 @@ export default function(setQueryFilter, queryFilter, section) {
                 <MenuItem value={SORT_VISITS_BY.VISITS_ALPHABET}>
                   По числу посещений
                 </MenuItem>
+                <MenuItem value={SORT_VISITS_BY.FIRST_VISIT_ALPHABET}>
+                  По первому посещению
+                </MenuItem>
+                <MenuItem value={SORT_VISITS_BY.LAST_VISIT_ALPHABET}>
+                  По последнему посещению
+                </MenuItem>
                 <MenuItem value={SORT_VISITS_BY.RATING_ALPHABET}>
                   По рейтингу
                 </MenuItem>

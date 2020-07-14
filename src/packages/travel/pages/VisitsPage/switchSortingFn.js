@@ -2,35 +2,47 @@ import warning from 'warning';
 import memoize from 'lodash/memoize';
 import sum from 'lodash/sum';
 import memoizeOne from 'memoize-one';
+import compareDateTime from 'modules/utilities/dateTime/compareDateTime';
 import { GROUP_VISITS_BY, SORT_VISITS_BY, COMPARATORS } from './consts';
-import { getLocationVisitsCount, getCountryVisitsCount } from './calcCounters';
+import {
+  getLocationVisitsCount,
+  getLocationFirstVisit,
+  getLocationLastVisit,
+  getCountryVisitsCount,
+  getCountryFirstVisit,
+  getCountryLastVisit,
+} from './calcCounters';
 
 const COMPARATOR_FUNCTIONS_MAPPING = {
   [COMPARATORS.VISIT.ARRIVAL_YEAR]: createArrivalYearComparator,
   [COMPARATORS.COUNTRY.NAME_ID]: createCountryNameIdComparator,
   [COMPARATORS.COUNTRY.RATING]: createCountryRatingComparator,
   [COMPARATORS.COUNTRY.VISITS]: createCountryVisitsComparator,
+  [COMPARATORS.COUNTRY.FIRST_VISIT]: createCountryFirstVisitComparator,
+  [COMPARATORS.COUNTRY.LAST_VISIT]: createCountryLastVisitComparator,
   [COMPARATORS.LOCATION.NAME_ID]: createLocationNameIdComparator,
   [COMPARATORS.LOCATION.RATING]: createLocationRatingComparator,
   [COMPARATORS.LOCATION.VISITS]: createLocationVisitsComparator,
+  [COMPARATORS.LOCATION.FIRST_VISIT]: createLocationFirstVisitComparator,
+  [COMPARATORS.LOCATION.LAST_VISIT]: createLocationLastVisitComparator,
   [COMPARATORS.TRIP.PRESERVE_ORDER]: createTripPreserveOrderComparator,
   [COMPARATORS.TRIP.DEPARTURE_TIME]: createTripDepartureTimeComparator,
   [COMPARATORS.TRIP.ID]: createTripIdComparator,
 };
 
-export default function switchSortingFn(queryFilter, provision, counters) {
+export default function switchSortingFn(provision, counters, queryFilter) {
   const { groupBy, sortBy } = queryFilter;
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
       // sorting is not applicable, as locations ordered chronologically
-      return createComparator(provision, counters, [
+      return createComparator(provision, counters, queryFilter, [
         COMPARATORS.TRIP.PRESERVE_ORDER,
         COMPARATORS.TRIP.DEPARTURE_TIME,
         COMPARATORS.TRIP.ID,
         COMPARATORS.LOCATION.NAME,
       ]);
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
-      return createComparator(provision, counters, [
+      return createComparator(provision, counters, queryFilter, [
         COMPARATORS.TRIP.PRESERVE_ORDER,
         COMPARATORS.TRIP.DEPARTURE_TIME,
         COMPARATORS.TRIP.ID,
@@ -40,20 +52,20 @@ export default function switchSortingFn(queryFilter, provision, counters) {
         COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.COUNTRIES:
-      return createComparator(provision, counters, [
+      return createComparator(provision, counters, queryFilter, [
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
         COMPARATORS.COUNTRY.NAME_ID,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
         COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.YEARS:
-      return createComparator(provision, counters, [
+      return createComparator(provision, counters, queryFilter, [
         COMPARATORS.VISIT.ARRIVAL_YEAR,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
         COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.YEARS_COUNTRIES:
-      return createComparator(provision, counters, [
+      return createComparator(provision, counters, queryFilter, [
         COMPARATORS.VISIT.ARRIVAL_YEAR,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
         COMPARATORS.COUNTRY.NAME_ID,
@@ -61,7 +73,7 @@ export default function switchSortingFn(queryFilter, provision, counters) {
         COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.COUNTRIES_YEARS:
-      return createComparator(provision, counters, [
+      return createComparator(provision, counters, queryFilter, [
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
         COMPARATORS.COUNTRY.NAME_ID,
         COMPARATORS.VISIT.ARRIVAL_YEAR,
@@ -70,7 +82,7 @@ export default function switchSortingFn(queryFilter, provision, counters) {
       ]);
     case GROUP_VISITS_BY.LOCATIONS:
     default:
-      return createComparator(provision, counters, [
+      return createComparator(provision, counters, queryFilter, [
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.LOCATION),
         COMPARATORS.LOCATION.NAME_ID,
       ]);
@@ -81,6 +93,10 @@ function resolveComparatorBySortFn(sortFn, ENTITY_COMPARATORS) {
   switch (sortFn) {
     case SORT_VISITS_BY.VISITS_ALPHABET:
       return [ENTITY_COMPARATORS?.VISITS];
+    case SORT_VISITS_BY.FIRST_VISIT_ALPHABET:
+      return [ENTITY_COMPARATORS?.FIRST_VISIT];
+    case SORT_VISITS_BY.LAST_VISIT_ALPHABET:
+      return [ENTITY_COMPARATORS?.LAST_VISIT];
     case SORT_VISITS_BY.RATING_ALPHABET:
       return [ENTITY_COMPARATORS?.RATING, ENTITY_COMPARATORS?.VISITS];
     default:
@@ -88,7 +104,7 @@ function resolveComparatorBySortFn(sortFn, ENTITY_COMPARATORS) {
   }
 }
 
-function createComparator(provision, counters, comparatorsKeys) {
+function createComparator(provision, counters, queryFilter, comparatorsKeys) {
   const comparatorFuncs = comparatorsKeys
     .map(comparatorKey => {
       const comparatorFnCreator = COMPARATOR_FUNCTIONS_MAPPING[comparatorKey];
@@ -96,7 +112,7 @@ function createComparator(provision, counters, comparatorsKeys) {
       if (!comparatorFnCreator) {
         return null;
       }
-      return comparatorFnCreator(provision, counters);
+      return comparatorFnCreator(provision, counters, queryFilter);
     })
     .filter(Boolean);
 
@@ -142,6 +158,29 @@ function createLocationVisitsComparator(_, counters) {
     return (
       getLocationVisitsCount(counters, locationIdB) -
       getLocationVisitsCount(counters, locationIdA)
+    );
+  };
+}
+
+function createLocationFirstVisitComparator({ visitsDict }, counters) {
+  return (visitA, visitB) => {
+    const { locationId: locationIdA } = visitA;
+    const { locationId: locationIdB } = visitB;
+    return compareDateTime(
+      getLocationFirstVisit(counters, locationIdA, visitsDict),
+      getLocationFirstVisit(counters, locationIdB, visitsDict),
+      { reverse: true },
+    );
+  };
+}
+
+function createLocationLastVisitComparator({ visitsDict }, counters) {
+  return (visitA, visitB) => {
+    const { locationId: locationIdA } = visitA;
+    const { locationId: locationIdB } = visitB;
+    return compareDateTime(
+      getLocationLastVisit(counters, locationIdA, visitsDict),
+      getLocationLastVisit(counters, locationIdB, visitsDict),
     );
   };
 }
@@ -198,6 +237,28 @@ function createCountryVisitsComparator(_, counters) {
   };
 }
 
+function createCountryFirstVisitComparator({ visitsDict }, counters) {
+  return (visitA, visitB) => {
+    const { countryId: countryIdA } = visitA;
+    const { countryId: countryIdB } = visitB;
+    return compareDateTime(
+      getCountryFirstVisit(counters, countryIdB, visitsDict),
+      getCountryFirstVisit(counters, countryIdA, visitsDict),
+    );
+  };
+}
+
+function createCountryLastVisitComparator({ visitsDict }, counters) {
+  return (visitA, visitB) => {
+    const { countryId: countryIdA } = visitA;
+    const { countryId: countryIdB } = visitB;
+    return compareDateTime(
+      getCountryLastVisit(counters, countryIdA, visitsDict),
+      getCountryLastVisit(counters, countryIdB, visitsDict),
+    );
+  };
+}
+
 function createTripPreserveOrderComparator({ tripsIds }) {
   return (visitA, visitB) => {
     if (!tripsIds) {
@@ -220,21 +281,17 @@ function createTripPreserveOrderComparator({ tripsIds }) {
   };
 }
 
-function createTripDepartureTimeComparator({ tripsDict }) {
+function createTripDepartureTimeComparator({ tripsDict }, _, { sortBy }) {
   return (visitA, visitB) => {
     const { tripId: tripIdA } = visitA;
     const { tripId: tripIdB } = visitB;
     const { departureDateTime: departureDateTimeA } = tripsDict[tripIdA] || {};
     const { departureDateTime: departureDateTimeB } = tripsDict[tripIdB] || {};
 
-    if (!departureDateTimeA && !departureDateTimeB) {
-      return 0;
-    }
-    if (!departureDateTimeA || !departureDateTimeB) {
-      // here also considered previous check: !arrivalDateTimeA && !arrivalDateTimeB
-      return departureDateTimeA ? -1 : 1;
-    }
-    return departureDateTimeB.getFullYear() - departureDateTimeA.getFullYear();
+    compareDateTime(departureDateTimeA, departureDateTimeB, {
+      matchBy: 'year',
+      reverse: sortBy === SORT_VISITS_BY.FIRST_VISIT_ALPHABET,
+    });
   };
 }
 
@@ -247,18 +304,14 @@ function createTripIdComparator() {
   };
 }
 
-function createArrivalYearComparator() {
+function createArrivalYearComparator(_, __, { sortBy }) {
   return (visitA, visitB) => {
     const { arrivalDateTime: arrivalDateTimeA } = visitA;
     const { arrivalDateTime: arrivalDateTimeB } = visitB;
 
-    if (!arrivalDateTimeA && !arrivalDateTimeB) {
-      return 0;
-    }
-    if (!arrivalDateTimeA || !arrivalDateTimeB) {
-      // here also considered previous check: !arrivalDateTimeA && !arrivalDateTimeB
-      return arrivalDateTimeA ? -1 : 1;
-    }
-    return arrivalDateTimeB.getFullYear() - arrivalDateTimeA.getFullYear();
+    return compareDateTime(arrivalDateTimeA, arrivalDateTimeB, {
+      matchBy: 'year',
+      reverse: sortBy === SORT_VISITS_BY.FIRST_VISIT_ALPHABET,
+    });
   };
 }

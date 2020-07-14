@@ -1,3 +1,5 @@
+import minBy from 'lodash/minBy';
+import maxBy from 'lodash/maxBy';
 import {
   resolveTripCountryId,
   resolveYearCountryId,
@@ -93,9 +95,41 @@ export function getLocationVisitsCount(counters = {}, locationId) {
   return Object.keys(visits).length;
 }
 
+export function getLocationFirstVisit(counters = {}, locationId, visitsDict) {
+  const { locations: { [locationId]: { visits = {} } = {} } = {} } = counters;
+  return minBy(
+    Object.keys(visits).map(visitId => visitsDict[visitId]?.arrivalDateTime),
+    date => date.getTime(),
+  );
+}
+
+export function getLocationLastVisit(counters = {}, locationId, visitsDict) {
+  const { locations: { [locationId]: { visits = {} } = {} } = {} } = counters;
+  return maxBy(
+    Object.keys(visits).map(visitId => visitsDict[visitId]?.departureDateTime),
+    date => date.getTime(),
+  );
+}
+
 export function getCountryVisitsCount(counters = {}, countryId) {
   const { countries: { [countryId]: { visits = {} } = {} } = {} } = counters;
   return Object.keys(visits).length;
+}
+
+export function getCountryFirstVisit(counters = {}, countryId, visitsDict) {
+  const { countries: { [countryId]: { visits = {} } = {} } = {} } = counters;
+  return minBy(
+    Object.keys(visits).map(visitId => visitsDict[visitId]?.arrivalDateTime),
+    date => date.getTime(),
+  );
+}
+
+export function getCountryLastVisit(counters = {}, countryId, visitsDict) {
+  const { countries: { [countryId]: { visits = {} } = {} } = {} } = counters;
+  return maxBy(
+    Object.keys(visits).map(visitId => visitsDict[visitId]?.departureDateTime),
+    date => date.getTime(),
+  );
 }
 
 export function getLocationVisitsByYearCount(counters, locationId, year) {

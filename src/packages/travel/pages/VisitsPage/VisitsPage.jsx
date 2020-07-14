@@ -62,7 +62,7 @@ export default function VisitsPage({
   });
 
   const visitsList = unsortedVisitsList.sort(
-    switchSortingFn({ groupBy, sortBy }, provision, counters),
+    switchSortingFn(provision, counters, { groupBy, sortBy }),
   );
   const nodes = visitsList.reduce(
     (nodesAccumulator, visit, index) => {
