@@ -14,9 +14,9 @@ export const toClient = ({
   photos: rawPhotos,
 }) => ({
   arrivalRideId: rawArrivalRideId,
-  arrivalDateTime: new Date(rawArrivalDateTime),
+  arrivalDateTime: new Date(rawArrivalDateTime || NaN),
   departureRideId: rawDepartureRideId,
-  departureDateTime: new Date(rawDepartureDateTime),
+  departureDateTime: new Date(rawDepartureDateTime || NaN),
   countryId: rawCountryId,
   locationId: rawLocationId,
   locationName: rawLocationName,

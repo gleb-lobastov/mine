@@ -27,19 +27,25 @@ export default function calcCounters(visitsList, cacheKey) {
 
     inc(counters.countries, countryId, 'visits', visitId);
     inc(counters.countries, countryId, 'locations', locationId);
-    inc(counters.countries, countryId, 'years', year);
+    if (year) {
+      inc(counters.countries, countryId, 'years', year);
+    }
     inc(counters.countries, countryId, 'trips', tripId);
 
-    inc(counters.years, year, 'locations', locationId);
-    inc(counters.years, year, 'countries', countryId);
-    inc(counters.years, year, 'trips', tripId);
+    if (year) {
+      inc(counters.years, year, 'locations', locationId);
+      inc(counters.years, year, 'countries', countryId);
+      inc(counters.years, year, 'trips', tripId);
+    }
 
     inc(counters.trips, tripId, 'visits', visitId);
     inc(counters.trips, tripId, 'locations', locationId);
     inc(counters.trips, tripId, 'countries', countryId);
 
     inc(counters.locations, locationId, 'visits', visitId);
-    inc(counters.locations, locationId, 'years', year);
+    if (year) {
+      inc(counters.locations, locationId, 'years', year);
+    }
     inc(counters.locations, locationId, 'trips', tripId);
 
     inc(
@@ -48,12 +54,15 @@ export default function calcCounters(visitsList, cacheKey) {
       'locations',
       locationId,
     );
-    inc(
-      counters.yearsCountries,
-      resolveYearCountryId(year, countryId),
-      'locations',
-      locationId,
-    );
+
+    if (year) {
+      inc(
+        counters.yearsCountries,
+        resolveYearCountryId(year, countryId),
+        'locations',
+        locationId,
+      );
+    }
   }, {});
 
   lastCacheKey = cacheKey;

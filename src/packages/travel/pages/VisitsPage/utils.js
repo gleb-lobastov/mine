@@ -1,3 +1,4 @@
+import isValidDate from 'modules/utilities/dateTime/isValidDate';
 import { GROUP_VISITS_BY } from './consts';
 
 export function resolveTripCountryId(tripId, countryId) {
@@ -8,7 +9,7 @@ export function resolveYearCountryId(year, countryId) {
 }
 
 export function resolveArrivalYear({ arrivalDateTime }) {
-  if (!arrivalDateTime) {
+  if (!isValidDate(arrivalDateTime)) {
     return null;
   }
   return arrivalDateTime.getFullYear(arrivalDateTime);

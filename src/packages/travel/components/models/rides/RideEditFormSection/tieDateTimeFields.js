@@ -1,6 +1,7 @@
 import checkIsSameDay from 'date-fns/isSameDay';
 import checkIsDatesEqual from 'date-fns/isEqual';
 import addDays from 'date-fns/addDays';
+import isValidDate from 'modules/utilities/dateTime/isValidDate';
 
 const mixDateTime = ({ dateFrom, timeFrom }) => {
   const isValidDateFrom = isValidDate(timeFrom);
@@ -17,10 +18,6 @@ const mixDateTime = ({ dateFrom, timeFrom }) => {
   }
   return new Date(NaN);
 };
-
-function isValidDate(date) {
-  return date instanceof Date && !Number.isNaN(date.getTime());
-}
 
 function checkCanUpdate(nextDate, prevDate) {
   return isValidDate(nextDate) && !checkIsDatesEqual(prevDate, nextDate);

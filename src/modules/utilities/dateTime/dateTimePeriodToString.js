@@ -1,8 +1,8 @@
 import isSameDay from 'date-fns/isSameDay';
 import isSameMonth from 'date-fns/isSameMonth';
 import isSameYear from 'date-fns/isSameYear';
-import dateFormat from 'date-fns/format';
 import ru from 'date-fns/locale/ru';
+import dateFormat from 'modules/utilities/dateTime/safeDateFormat';
 
 const DATE_FORMATS = {
   FULL: 'd MMMM yyyy',
