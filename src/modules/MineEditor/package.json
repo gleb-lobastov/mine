@@ -1,0 +1,5 @@
+{
+  "name": "mine-editor",
+  "version": "0.0.0",
+  "main": "./MineEditor.jsx"
+}

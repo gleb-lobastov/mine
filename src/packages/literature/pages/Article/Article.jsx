@@ -4,7 +4,7 @@ import { usePaths } from 'modules/packages';
 import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
 import { useAuthContext } from 'core/context/AuthContext';
 import { useArticle } from '../../dataSource/articles';
-import Paragraph from './blocks/Paragraph';
+import { RenderContent } from 'modules/MineEditor';
 
 const domain = 'ArticleEditor';
 
@@ -21,9 +21,8 @@ export default function Article({ slug }) {
     );
   }
   const { body, title, userId, isDraft } = article;
-  const { blocks } = body || {};
   const isEditable = isAuthenticated && authenticatedUserId === userId;
-  if (!isEditable && isDraft) {
+  if ((!isEditable && isDraft) || !body) {
     return (
       <Typography variant="body">
         Статья еще не опубликована или недоступна для чтения
@@ -38,14 +37,7 @@ export default function Article({ slug }) {
           Редактировать
         </ConnectedLink>
       )}
-      {blocks.map(({ data, type }) => {
-        switch (type) {
-          case 'paragraph':
-            return <Paragraph data={data} />;
-          default:
-            return null;
-        }
-      })}
+      <RenderContent data={body} />
     </>
   );
 }

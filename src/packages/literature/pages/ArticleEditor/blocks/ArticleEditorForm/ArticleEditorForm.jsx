@@ -8,7 +8,10 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
-import EditorJS from 'modules/editorjs/EditorJS';
+import MineEditor, {
+  useEditorState,
+  exportContentFromState,
+} from 'modules/MineEditor';
 import transliteration from './transliteration';
 
 const useStyles = makeStyles({
@@ -35,7 +38,7 @@ export default function ArticleEditorForm({
   const [{ slug, hasSlug }, setSlug] = useState({});
   const [title, setTitle] = useState(initialTitle);
   const [isDraft, setIsDraft] = useState(initialIsDraft);
-  const [content, setContent] = useState(initialContent);
+  const { editorState, setEditorState } = useEditorState(initialContent);
 
   return (
     <Grid container={true} spacing={3} alignItems="center">
@@ -97,7 +100,7 @@ export default function ArticleEditorForm({
               onSubmit({
                 title,
                 isDraft,
-                body: content,
+                body: exportContentFromState(editorState),
                 slug: isCreation ? slug : undefined,
               })
             }
@@ -109,9 +112,9 @@ export default function ArticleEditorForm({
       <Grid item={true} xs={12}>
         <div className={classes.articleBody}>
           <Typography variant="caption">Текст статьи</Typography>
-          <EditorJS
-            value={content}
-            onChange={nextContent => setContent(nextContent)}
+          <MineEditor
+            editorState={editorState}
+            setEditorState={setEditorState}
           />
         </div>
       </Grid>
