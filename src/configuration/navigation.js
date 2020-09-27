@@ -42,7 +42,7 @@ export default (packages = {}) => {
   if (literature) {
     navigationConfig.menu.push({
       path: literature.routes.entry.path,
-      caption: 'Литература',
+      caption: 'Контент',
       icon: IconCreate,
       menu: [
         {
