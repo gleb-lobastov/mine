@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Switch from '@material-ui/core/Switch';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -11,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import MineEditor, {
   useEditorState,
   exportContentFromState,
+  RenderContent,
 } from 'modules/MineEditor';
 import transliteration from './transliteration';
 
@@ -26,6 +28,11 @@ export default function ArticleEditorForm({
   isSubmitting,
 }) {
   const classes = useStyles();
+  const [isInViewMode, setIsInViewMode] = useState(false);
+  const handleToggleViewMode = useCallback(
+    () => setIsInViewMode(prevIsInViewMode => !prevIsInViewMode),
+    [],
+  );
 
   const isCreation = !initialArticle;
 
@@ -110,12 +117,29 @@ export default function ArticleEditorForm({
         )}
       </Grid>
       <Grid item={true} xs={12}>
+        <FormControlLabel
+          className={classes.toggleContainer}
+          control={
+            <Switch
+              name="viewMode"
+              checked={isInViewMode}
+              onChange={handleToggleViewMode}
+            />
+          }
+          label="Режим просмотра"
+        />
+      </Grid>
+      <Grid item={true} xs={12}>
         <div className={classes.articleBody}>
           <Typography variant="caption">Текст статьи</Typography>
-          <MineEditor
-            editorState={editorState}
-            setEditorState={setEditorState}
-          />
+          {isInViewMode ? (
+            <RenderContent data={editorState.getCurrentContent()} />
+          ) : (
+            <MineEditor
+              editorState={editorState}
+              setEditorState={setEditorState}
+            />
+          )}
         </div>
       </Grid>
     </Grid>

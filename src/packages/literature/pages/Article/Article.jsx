@@ -1,4 +1,5 @@
 import React from 'react';
+import { convertFromRaw } from 'draft-js';
 import Typography from '@material-ui/core/Typography';
 import { usePaths } from 'modules/packages';
 import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
@@ -37,7 +38,7 @@ export default function Article({ slug }) {
           Редактировать
         </ConnectedLink>
       )}
-      <RenderContent data={body} />
+      <RenderContent data={convertFromRaw(body)} />
     </>
   );
 }

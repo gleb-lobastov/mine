@@ -5,7 +5,10 @@ import {
   selectItem,
   selectList,
 } from 'core/connection';
-import { selectResult } from 'core/connection/request/controllerRedux';
+import {
+  selectResult,
+  selectIsReady,
+} from 'core/connection/request/controllerRedux';
 
 export default function useArticles() {
   const articlesProvision = useProvision({
@@ -21,7 +24,11 @@ export default function useArticles() {
   const articlesList = useSelector(state =>
     selectList(state, 'articles', articlesIds),
   );
-  return { articlesList };
+  return {
+    ...articlesProvision,
+    articlesList,
+    isReady: selectIsReady(articlesProvision),
+  };
 }
 
 export function useArticle({ slug, domain }) {
