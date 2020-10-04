@@ -1,15 +1,12 @@
+import { Scene } from 'puppeteer-scenario';
 import * as loginPageLocators from 'auth/pages/LoginPage/locators';
 import { toSelector, evaluateInputValue } from '../../../../utils';
 
-export default class LoginScene {
-  constructor(page) {
-    this.page = page;
-  }
-
-  async show() {
-    await this.page.goto('http://localhost:8080/mine/hello', {
-      waitUntil: 'networkidle2',
-    });
+export default class LoginScene extends Scene {
+  async arrange({ unauthorize }) {
+    if (unauthorize) {
+      await this.page.evaluate(() => window.localStorage.removeItem('_at'));
+    }
   }
 
   async login({ login, password }) {

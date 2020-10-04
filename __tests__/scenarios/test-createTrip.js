@@ -20,26 +20,28 @@ describe('user scenarios', () => {
     Object.assign(global, { browser, page });
 
     await new Scenario(page)
-      .showScene(LoginScene)
+      .arrange({
+        scene: LoginScene,
+        url: 'http://localhost:8080/mine/hello',
+        unauthorize: true,
+      })
       .act('login', { login: TEST_LOGIN, password: TEST_PASSWORD })
-      .finally(() =>
+      .assert(() =>
         expect(page.evaluate(() => localStorage.getItem('_at'))).toBeTruthy(),
       )
 
-      .showScene(VisitsScene, { userAlias: TEST_USER_ALIAS })
-      .act('goCreateTrip')
+      .arrange({ scene: VisitsScene, userAlias: TEST_USER_ALIAS })
+      .act('clickCreateTrip')
 
-      .expectScene(CreateTripScene)
+      .arrange({ scene: CreateTripScene, userAlias: TEST_USER_ALIAS })
       .act('createTrip')
 
-      .expectScene(EditTripScene)
-      .act(async editTripScene => {
-        await editTripScene.createVisitDialogActions.createVisit();
-        await editTripScene.createVisitDialogActions.createVisit();
-        await editTripScene.createRideDialogActions.createRide();
-        await editTripScene.createRideDialogActions.createRide();
-        await editTripScene.createRideDialogActions.createRide();
-      })
+      .arrange({ scene: EditTripScene })
+      .act('createVisit')
+      .act('createVisit')
+      .act('createRide')
+      .act('createRide')
+      .act('createRide')
 
       .play();
 

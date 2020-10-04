@@ -1,14 +1,10 @@
+import { Scene } from 'puppeteer-scenario';
 import * as tripEditPageLocators from 'travel/pages/TripEditPage/locators';
 import { toSelector, evaluateClick } from '../../../../utils';
 import getRandomLocationSuggest from '../getRandomLocationSuggest';
 
-export default class CreateTripScene {
-  constructor(page, context) {
-    this.page = page;
-    this.context = context;
-  }
-
-  async show({ userAlias }) {
+export default class CreateTripScene extends Scene {
+  async arrange({ userAlias }) {
     await this.page.goto(
       `http://localhost:8080/mine/travel/${userAlias}/visits/trips/create`,
       { waitUntil: 'networkidle2' },
@@ -89,7 +85,7 @@ export default class CreateTripScene {
         response.request().method() === 'POST',
     );
     this.context.set('createdTrip', await createTripResponse.json());
-    await this.page.waitForNavigation();
+    // await this.page.waitForNavigation();
   }
 }
 

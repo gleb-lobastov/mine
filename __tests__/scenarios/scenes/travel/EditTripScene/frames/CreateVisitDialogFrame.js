@@ -1,28 +1,15 @@
+import { Scene } from 'puppeteer-scenario';
 import * as dialogLocators from 'modules/components/Dialog/locators';
 import * as tripEditPageLocators from 'travel/pages/TripEditPage/locators';
 import * as visitEditFormSectionLocators from 'travel/components/models/visits/VisitEditFormSection/locators';
 import { toSelector, selectRandomOption } from '../../../../../utils';
 import getRandomLocationSuggest from '../../getRandomLocationSuggest';
 
-export default class CreateVisitDialogActions {
-  constructor(page, context) {
-    this.page = page;
-    this.context = context;
-  }
-
+export default class CreateVisitDialogFrame extends Scene {
   async createVisit() {
-    await this.openVisitDialog();
     await this.fulfillLocation();
     await this.fulfillType();
     await this.submit();
-  }
-
-  async openVisitDialog() {
-    const createVisitButtonSelector = toSelector(
-      tripEditPageLocators.ADD_VISIT_BUTTON,
-    );
-    await this.page.waitFor(createVisitButtonSelector);
-    await this.page.click(createVisitButtonSelector);
   }
 
   resolveUniqueLocation() {

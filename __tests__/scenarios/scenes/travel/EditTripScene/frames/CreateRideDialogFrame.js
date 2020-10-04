@@ -1,5 +1,5 @@
+import { Scene } from 'puppeteer-scenario';
 import * as dialogLocators from 'modules/components/Dialog/locators';
-import * as actionsLocators from 'travel/components/common/Actions/locators';
 import * as tripEditPageLocators from 'travel/pages/TripEditPage/locators';
 import * as rideEditFormSectionLocators from 'travel/components/models/rides/RideEditFormSection/locators';
 import {
@@ -8,26 +8,13 @@ import {
   selectRandomOption,
 } from '../../../../../utils';
 
-export default class CreateRideDialogActions {
-  constructor(page) {
-    this.page = page;
-  }
-
+export default class CreateRideDialogFrame extends Scene {
   async createRide() {
-    await this.openRideDialog();
     await this.fulfillRideType();
     await this.fulfillVehicleType();
     await this.fulfillClass();
     await this.fulfillOccupation();
     await this.submit();
-  }
-
-  async openRideDialog() {
-    const rideActionsSelector = toSelector(tripEditPageLocators.RIDE_ACTIONS);
-    const createActionSelector = toSelector(actionsLocators.CREATE_BUTTON);
-    const createRideButtonSelector = `${rideActionsSelector} ${createActionSelector}`;
-    await this.page.waitFor(createRideButtonSelector);
-    await this.page.click(createRideButtonSelector);
   }
 
   async fulfillVehicleType() {

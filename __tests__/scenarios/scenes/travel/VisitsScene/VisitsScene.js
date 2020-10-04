@@ -1,21 +1,16 @@
+import { Scene } from 'puppeteer-scenario';
 import * as visitsPageLocators from 'travel/pages/VisitsPage/locators';
 import { toSelector } from '../../../../utils';
 
-export default class VisitsScene {
-  constructor(page) {
-    this.page = page;
-  }
-
-  async show({ userAlias }) {
+export default class VisitsScene extends Scene {
+  async arrange({ userAlias }) {
     await this.page.goto(
       `http://localhost:8080/mine/travel/${userAlias}/visits/trips`,
-      {
-        waitUntil: 'networkidle2',
-      },
+      { waitUntil: 'networkidle2' },
     );
   }
 
-  async goCreateTrip() {
+  async clickCreateTrip() {
     const addTripButtonSelector = toSelector(
       visitsPageLocators.ADD_TRIP_BUTTON,
     );

@@ -96,6 +96,7 @@
     "node-fetch": "^2.6.1",
     "prettier": "1.14.3",
     "puppeteer": "^2.1.1",
+    "puppeteer-scenario": "^0.7.0",
     "redux-mock-store": "1.5.3",
     "style-loader": "1.0.0",
     "webpack": "^4.42.1",

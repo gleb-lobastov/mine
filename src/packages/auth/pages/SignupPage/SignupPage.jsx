@@ -1,13 +1,10 @@
 import React from 'react';
 import { Formik } from 'formik';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
-import { useHistory } from 'react-router-dom';
 import { useRequest } from 'core/connection';
-import { setAccessToken } from 'modules/auth/tokens';
 import SignupForm from './SignupForm';
 
 export default function SignupPage() {
-  const history = useHistory();
   const { queryFilter } = useQueryFilter();
   const [submit, provision] = useRequest({
     domain: 'signupPage',
@@ -29,9 +26,6 @@ export default function SignupPage() {
               reset: Boolean(reset),
             },
           },
-        }).then(x => {
-          console.log({ x, provision });
-          // history.push('/');
         })
       }
       validator={() => ({})}
