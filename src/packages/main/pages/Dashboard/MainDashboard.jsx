@@ -7,10 +7,14 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import { usePaths } from 'modules/packages';
+import FlockingBoids from './blocks/FlockingBoids';
 
 const useStyles = makeStyles(theme => ({
   container: {
     marginBottom: '16px',
+    position: 'relative',
+    margin: '0 auto',
+    minHeight: '100%',
   },
   title: {
     margin: '0 -12px',
@@ -36,6 +40,13 @@ const useStyles = makeStyles(theme => ({
   },
   linksList: {
     marginTop: '24px',
+  },
+  flockGameBoard: {
+    position: 'absolute',
+    top: '-24px',
+    left: '-24px',
+    height: 'calc(100% + 48px)',
+    width: 'calc(100% + 48px)',
   },
   [theme.breakpoints.down('sm')]: {
     title: {
@@ -90,6 +101,9 @@ export default function MainDashboard() {
         <span className={classes.titleItem}>сети</span>
         <span className={classes.titleItem}>интернет</span>
       </Typography>
+      <div className={classes.flockGameBoard}>
+        <FlockingBoids />
+      </div>
       <div className={classes.linksList}>
         <List>
           <ListItem button={true} component={Link} to={codePath.toUrl()}>

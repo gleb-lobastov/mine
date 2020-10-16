@@ -34,7 +34,10 @@ const Ride = ({ className, ride, showDialog }) => {
   const isRideExists = Boolean(rideId);
 
   return (
-    <div className={cls(className, classes.container)}>
+    <div
+      className={cls(className, classes.container)}
+      data-locator={locators.RIDE_BLOCK}
+    >
       {isRideExists && (
         <>
           <RideIcon ride={ride} className={classes.icon} />
