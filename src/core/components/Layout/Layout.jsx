@@ -34,11 +34,12 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   content: {
-    padding: theme.spacing(3),
+    padding: ({ isResponsive }) => (isResponsive ? 0 : theme.spacing(3)),
     boxSizing: 'border-box',
     flexGrow: 1,
     width: '100%',
     backgroundColor: theme.palette.background.paper,
+    position: 'relative',
   },
   statusBar: {
     position: 'fixed',
@@ -54,8 +55,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Layout({ children, breadcrumbs, actualPath }) {
-  const classes = useStyles();
+export default function Layout({
+  children,
+  isResponsive,
+  breadcrumbs,
+  actualPath,
+}) {
+  const classes = useStyles({ isResponsive });
   const packages = usePackages();
   const navigationConfig = useMemo(() => configureNavigation(packages), [
     packages,

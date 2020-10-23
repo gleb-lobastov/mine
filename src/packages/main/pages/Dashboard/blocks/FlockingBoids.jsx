@@ -12,15 +12,15 @@ const useFlockGame = () => {
     }
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
-    const flockingBoids = animateFlockingBoids({ canvas });
-    const {
-      flockingBoids: { spawnPattern },
-    } = flockingBoids.settings.characteristics;
-    spawnPattern.maxGrowthPerTick = Infinity;
-    spawnPattern.spotPattern = 'RANDOM';
-    flockingBoids.play();
-    flockGameRef.current = flockingBoids;
-    return () => flockingBoids.pause();
+
+    flockGameRef.current =
+      flockGameRef.current || animateFlockingBoids({ canvas });
+
+    const animation = flockGameRef.current;
+    setup(animation);
+    animation.play();
+
+    return () => animation.pause();
   }, []);
 
   return { canvasRef, game: flockGameRef.current };
@@ -44,4 +44,18 @@ export default function FlockingBoids() {
       ref={canvasRef}
     />
   );
+}
+
+function setup({
+  settings: {
+    characteristics: {
+      flockingBoids,
+      flockingBoids: { spawnPattern },
+    },
+  },
+}) {
+  /* eslint-disable no-param-reassign */
+  spawnPattern.maxGrowthPerTick = Infinity;
+  flockingBoids.count = 400;
+  /* eslint-enable no-param-reassign */
 }

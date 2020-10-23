@@ -5,6 +5,7 @@ import MainDashboard from './pages/Dashboard';
 const routes = {
   entry: {
     path: '/',
+    layoutProps: { isResponsive: true },
     Component: MainDashboard,
   },
 };
