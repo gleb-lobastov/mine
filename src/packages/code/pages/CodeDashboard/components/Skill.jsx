@@ -1,8 +1,17 @@
 import React from 'react';
 import Chip from '@material-ui/core/Chip';
+import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import SkillLogo from './SkillLogo';
+
+const useStyles = makeStyles({
+  popper: {
+    // set lower zIndex than AppBar's https://material-ui.com/ru/customization/z-index/
+    // otherwise, on mobile devices tooltip will be showed over AppBar, while chip is hidden under it
+    zIndex: 1000,
+  },
+});
 
 // Immediately show tooltip on touch (on mobile devices)
 // Otherwise, it is difficult to guess that you need to wait a long time and it is inconvenient
@@ -20,6 +29,8 @@ export default function Skill({
   isOutdated,
   className,
 }) {
+  const classes = useStyles();
+
   const chipNode = (
     <Chip
       className={className}
@@ -49,6 +60,7 @@ export default function Skill({
 
   return (
     <Tooltip
+      classes={{ popper: classes.popper }}
       title={actualDescription}
       arrow={true}
       enterTouchDelay={TOOLTIP_ENTER_TOUCH_DELAY}

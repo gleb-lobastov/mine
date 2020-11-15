@@ -20,7 +20,7 @@ const styles = theme => ({
     left: 'auto',
     right: 0,
     position: 'sticky',
-    zIndex: '1',
+    zIndex: '1100', // https://material-ui.com/ru/customization/z-index/
     backgroundColor: '#fafafa',
   },
   root: {
