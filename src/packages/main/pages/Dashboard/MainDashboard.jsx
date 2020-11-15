@@ -90,7 +90,7 @@ const useStyles = makeStyles(theme => ({
       textAlign: 'left',
     },
     title: {
-      fontSize: '36px',
+      fontSize: '32px',
     },
     avatarContainer: {
       margin: '18px -12px 0',
