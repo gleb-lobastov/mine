@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { withRouter, matchPath } from 'react-router';
 import compose from 'lodash/fp/compose';
 import AppBar from '@material-ui/core/AppBar';
+import Slide from '@material-ui/core/Slide';
 import Typography from '@material-ui/core/Typography';
+import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import { withStyles } from '@material-ui/core/styles';
 import { memoizeByLastArgs } from 'modules/utilities/memo';
 import { authContextPropTypes, withAuth } from 'core/context/AuthContext';
@@ -61,6 +63,7 @@ class Navigation extends React.PureComponent {
     isAuthenticated: authContextPropTypes.isAuthenticated.isRequired,
     userAlias: authContextPropTypes.userAlias.isRequired,
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
+    scrollTrigger: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -133,6 +136,7 @@ class Navigation extends React.PureComponent {
       config: { menu: mainMenu },
       classes,
       children,
+      scrollTrigger,
     } = this.props;
 
     const mainTabIndex = this.findMainTabIndex(pathname, mainMenu);
@@ -156,29 +160,39 @@ class Navigation extends React.PureComponent {
     );
 
     return (
-      <div className={classes.container}>
-        <AppBar position="static" classes={{ root: classes.root }}>
-          {children}
-          {mainMenuNode || subMenuNode}
-          {this.renderAuthInfo()}
-        </AppBar>
-        {mainMenuNode && subMenuNode}
-        <Breadcrumbs
-          actualPath={actualPath}
-          onChangeUrl={this.handleChangeUrl}
-          breadcrumbs={this.resolveBreadcrumbs({
-            selectedMainMenuItem: mainMenu?.[mainTabIndex],
-            selectedSubMenuItem: subMenu?.[subTabIndex],
-          })}
-        />
-      </div>
+      <Slide appear={false} direction="down" in={!scrollTrigger}>
+        <div className={classes.container}>
+          <AppBar position="static" classes={{ root: classes.root }}>
+            {children}
+            {mainMenuNode || subMenuNode}
+            {this.renderAuthInfo()}
+          </AppBar>
+          {mainMenuNode && subMenuNode}
+          <Breadcrumbs
+            actualPath={actualPath}
+            onChangeUrl={this.handleChangeUrl}
+            breadcrumbs={this.resolveBreadcrumbs({
+              selectedMainMenuItem: mainMenu?.[mainTabIndex],
+              selectedSubMenuItem: subMenu?.[subTabIndex],
+            })}
+          />
+        </div>
+      </Slide>
     );
   }
 }
 
 export default compose(
+  withScrollTrigger,
   withRouter,
   withAuth,
   withFilterContext,
   withStyles(styles),
 )(Navigation);
+
+function withScrollTrigger(C) {
+  return function WithScrollTrigger(props) {
+    const scrollTrigger = useScrollTrigger();
+    return <C {...props} scrollTrigger={scrollTrigger} />;
+  };
+}
