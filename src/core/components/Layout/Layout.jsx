@@ -48,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     right: 0,
   },
   menuButton: {
-    margin: '12px',
+    margin: '9px',
     [theme.breakpoints.up('sm')]: {
       display: 'none',
     },
@@ -93,17 +93,20 @@ export default function Layout({
           className={classes.navigation}
           breadcrumbs={breadcrumbs}
           actualPath={actualPath}
-        >
-          <IconButton
-            color="inherit"
-            aria-label="open sidebar"
-            edge="start"
-            onClick={handleOpenMobileSidebar}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Navigation>
+          sidebarToggleButton={
+            Boolean(sidebarContentNode) && (
+              <IconButton
+                color="inherit"
+                aria-label="open sidebar"
+                edge="start"
+                onClick={handleOpenMobileSidebar}
+                className={classes.menuButton}
+              >
+                <MenuIcon />
+              </IconButton>
+            )
+          }
+        />
         <div className={cls(classes.container, classes.pageContent)}>
           <div className={classes.content}>{children}</div>
           <DesktopSidebarContainer>

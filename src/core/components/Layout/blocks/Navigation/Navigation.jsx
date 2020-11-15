@@ -135,8 +135,8 @@ class Navigation extends React.PureComponent {
       location: { pathname },
       config: { menu: mainMenu },
       classes,
-      children,
       scrollTrigger,
+      sidebarToggleButton,
     } = this.props;
 
     const mainTabIndex = this.findMainTabIndex(pathname, mainMenu);
@@ -148,6 +148,7 @@ class Navigation extends React.PureComponent {
         menu={mainMenu}
         onChangeUrl={this.handleChangeUrl}
         tabIndex={mainTabIndex}
+        sidebarToggleButton={sidebarToggleButton}
       />
     );
 
@@ -163,7 +164,7 @@ class Navigation extends React.PureComponent {
       <Slide appear={false} direction="down" in={!scrollTrigger}>
         <div className={classes.container}>
           <AppBar position="static" classes={{ root: classes.root }}>
-            {children}
+            {!mainMenuNode && sidebarToggleButton}
             {mainMenuNode || subMenuNode}
             {this.renderAuthInfo()}
           </AppBar>

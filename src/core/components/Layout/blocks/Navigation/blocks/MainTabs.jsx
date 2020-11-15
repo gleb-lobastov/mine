@@ -11,10 +11,17 @@ class MainTabs extends React.PureComponent {
     classes: PropTypes.objectOf(PropTypes.string).isRequired,
   };
 
+  calcTabIndexShift() {
+    const { sidebarToggleButton } = this.props;
+    return sidebarToggleButton ? 1 : 0;
+  }
+
   handleChangeMainTab = (event, nextTabIndex) => {
     const { menu, tabIndex, onChangeUrl } = this.props;
     const { path } = menu[tabIndex];
-    const { path: nextPath, params } = menu[nextTabIndex];
+    const { path: nextPath, params } = menu[
+      nextTabIndex - this.calcTabIndexShift()
+    ];
     onChangeUrl(event, path, nextPath, params);
   };
 
@@ -37,10 +44,15 @@ class MainTabs extends React.PureComponent {
   };
 
   render() {
-    const { tabIndex, menu } = this.props;
+    const { tabIndex, menu, sidebarToggleButton } = this.props;
 
     return (
-      <Tabs value={tabIndex} onChange={this.handleChangeMainTab}>
+      <Tabs
+        value={tabIndex + this.calcTabIndexShift()}
+        onChange={this.handleChangeMainTab}
+        variant="scrollable"
+      >
+        {sidebarToggleButton}
         {menu.map(this.renderTab)}
       </Tabs>
     );
