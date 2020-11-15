@@ -1,6 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TimelineDot from '@material-ui/lab/TimelineDot';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -25,16 +24,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function TimelineDotPic({ src, name }) {
+export default function CompanyLogo({ src, name, component: Component }) {
   const classes = useStyles();
   return (
-    <TimelineDot className={classes.container}>
+    <Component className={classes.container}>
       {src ? (
         <img className={classes.image} src={src} alt={`${name} logo`} />
       ) : (
         <div className={classes.shortName}>{pickShortName(name)}</div>
       )}
-    </TimelineDot>
+    </Component>
   );
 }
 
@@ -46,3 +45,7 @@ function pickShortName(name) {
     .map(part => part.charAt(0).toUpperCase())
     .join('');
 }
+
+CompanyLogo.defaultProps = {
+  component: ({ children, ...props }) => <div {...props}>{children}</div>,
+};

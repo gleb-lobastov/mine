@@ -10,7 +10,7 @@ import parseDate from 'modules/utilities/dateTime/parseDate';
 import Stack from '../../../components/Stack';
 
 const useStyles = makeStyles({
-  alignToEnd: {
+  alignStackToStart: {
     justifyContent: 'flex-start',
   },
 });
@@ -18,7 +18,7 @@ const useStyles = makeStyles({
 export default function ExperiencePeriod({
   job: { from, to, stack },
   skills,
-  alignToEnd,
+  alignStackToStart,
 }) {
   const classes = useStyles();
   return (
@@ -27,7 +27,7 @@ export default function ExperiencePeriod({
         {dateTimePeriodToStr(from, to)}, {workPeriodToStr(from, to)}
       </Typography>
       <Stack
-        className={cls({ [classes.alignToEnd]: alignToEnd })}
+        className={cls({ [classes.alignStackToStart]: alignStackToStart })}
         skills={skills}
         stack={stack}
       />
