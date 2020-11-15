@@ -46,7 +46,7 @@ describe('user scenarios', () => {
       .act('createRide')
       .assert(
         async () => {
-          await page.waitFor(500);
+          await page.waitFor(2000);
           expect(
             await page.$$(toSelector(tripEditPageLocators.VISIT_BLOCK)),
           ).toHaveLength(2);
