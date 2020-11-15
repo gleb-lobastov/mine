@@ -15,6 +15,14 @@ import SubTabs from './blocks/SubTabs';
 import Breadcrumbs from './blocks/Breadcrumbs';
 
 const styles = theme => ({
+  container: {
+    top: 0,
+    left: 'auto',
+    right: 0,
+    position: 'sticky',
+    zIndex: '1',
+    backgroundColor: '#fafafa',
+  },
   root: {
     flexGrow: 1,
     flexDirection: 'row',
@@ -148,7 +156,7 @@ class Navigation extends React.PureComponent {
     );
 
     return (
-      <div>
+      <div className={classes.container}>
         <AppBar position="static" classes={{ root: classes.root }}>
           {children}
           {mainMenuNode || subMenuNode}
