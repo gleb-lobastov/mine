@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "test": "cross-env NODE_ENV=test && jest",
-    "start": "cross-env NODE_ENV=development webpack-dev-server",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --host 0.0.0.0",
     "clean": "rimraf dist",
     "build": "npm run clean && cross-env NODE_ENV=production webpack",
     "publish": "gh-pages -d dist",
