@@ -57,6 +57,7 @@ module.exports = {
       },
     ],
     'react/jsx-boolean-value': ['error', 'always'],
+    'react/prop-types': 0,
   },
   settings: {
     'import/resolver': {
