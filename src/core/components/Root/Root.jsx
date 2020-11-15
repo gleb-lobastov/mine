@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { ThemeProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
 import { Packages } from 'modules/packages';
 import Main from 'packages/main';
@@ -20,28 +20,30 @@ import Layout from '../Layout';
 import ErrorBoundary from '../ErrorBoundary';
 import { configPropTypes } from './propTypes';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#a7c0cd',
-      main: '#78909c',
-      dark: '#4b636e',
+const theme = responsiveFontSizes(
+  createMuiTheme({
+    palette: {
+      primary: {
+        light: '#a7c0cd',
+        main: '#78909c',
+        dark: '#4b636e',
+      },
+      secondary: {
+        light: '#fff64f',
+        main: '#ffc400',
+        dark: '#c79400',
+      },
+      error: {
+        main: '#ff9494',
+        dark: '#ED4337',
+      },
+      disabled: {
+        main: '#999999',
+        dark: '#5e5e5e',
+      },
     },
-    secondary: {
-      light: '#fff64f',
-      main: '#ffc400',
-      dark: '#c79400',
-    },
-    error: {
-      main: '#ff9494',
-      dark: '#ED4337',
-    },
-    disabled: {
-      main: '#999999',
-      dark: '#5e5e5e',
-    }
-  },
-});
+  }),
+);
 
 const Root = ({
   store,
