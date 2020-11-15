@@ -1,11 +1,18 @@
 import React from 'react';
 
 export const entry = {
-  path: '/',
+  path: '/:section?',
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'code-Dashboard' */ './pages/CodeDashboard'),
   ),
 };
+
+// export const section = {
+//   path: '/:section',
+//   Component: React.lazy(() =>
+//     import(/* webpackChunkName: 'code-Dashboard' */ './pages/CodeDashboard'),
+//   ),
+// };
 
 export const articles = {
   defaultRouteParams: { tag: 'code' },

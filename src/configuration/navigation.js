@@ -69,8 +69,46 @@ export default (packages = {}) => {
   if (code) {
     navigationConfig.menu.push({
       path: code.routes.entry.path,
-      caption: 'Код',
+      caption: 'Работа',
       icon: IconCode,
+      menu: [
+        {
+          path: code.routes.entry.path,
+          caption: 'Обо мне',
+          // if section param is just omit, this route has priority over further specified sections
+          params: { section: undefined },
+        },
+        {
+          path: code.routes.entry.path,
+          caption: 'Где работал',
+          params: { section: 'jobs' },
+        },
+        // {
+        //   path: code.routes.entry.path,
+        //   caption: 'Что сделал',
+        //   params: { section: 'works' },
+        // },
+        // {
+        //   path: code.routes.entry.path,
+        //   caption: 'Статьи',
+        //   params: { section: 'articles' },
+        // },
+        // {
+        //   path: code.routes.entry.path,
+        //   caption: 'Выспупления',
+        //   params: { section: 'presentations' },
+        // },
+        {
+          path: code.routes.entry.path,
+          caption: 'Навыки',
+          params: { section: 'skills' },
+        },
+        {
+          path: code.routes.entry.path,
+          caption: 'Контакты',
+          params: { section: 'contacts' },
+        },
+      ],
     });
   }
 

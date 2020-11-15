@@ -1,60 +1,120 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import { useParams, useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { makeStyles } from '@material-ui/core/styles';
 import { usePaths } from 'modules/packages';
+import useSections, {
+  idFromSection,
+} from 'modules/utilities/hooks/useSections';
+import PreviousExperience from './blocks/PreviousExperience';
+import Skills from './blocks/Skills';
+import experience from './experience.json';
+
+const SECTIONS = {
+  ABOUT: 'about',
+  JOBS: 'jobs',
+  WORKS: 'works',
+  ARTICLES: 'articles',
+  PRESENTATIONS: 'presentations',
+  SKILLS: 'skills',
+  CONTACTS: 'contacts',
+};
+
+const useStyles = makeStyles(theme => ({
+  section: {
+    marginBottom: theme.spacing(4),
+    scrollSnapMarginTop: '128px',
+    scrollMarginTop: '128px',
+    '&:last-child': {
+      minHeight: '50vh',
+    },
+  },
+  about: {
+    display: 'flex',
+  },
+  avatar: {
+    float: 'right',
+    shapeOutside: 'circle(50%)',
+    shapeMargin: '12px',
+    height: '256px',
+    width: '256px',
+  },
+}));
 
 export default function CodeDashboard() {
+  const classes = useStyles();
   const {
-    code: { articles: codeArticlesPath },
+    code: { entry: codeEntryPath, articles: codeArticlesPath },
     literature: { articles: articlesPath = codeArticlesPath } = {},
   } = usePaths();
 
+  const { section } = useParams();
+  const history = useHistory();
+
+  useSections({
+    section: section || SECTIONS.ABOUT,
+    onSectionChange: nextSection => {
+      history.replace(
+        codeEntryPath.toUrl(
+          nextSection === SECTIONS.ABOUT ? undefined : { section: nextSection },
+        ),
+      );
+    },
+  });
+
   return (
     <>
-      <Typography variant="h4">
-        Работаю техлидом в{' '}
-        <a
-          href="https://www.onetwotrip.com"
-          target="_blank"
-          rel="nofollow noreferrer noopener"
-        >
-          OneTwoTrip
-        </a>
-      </Typography>
-      <Typography variant="subtitle2" color="textSecondary">
-        JavaScript, ES6+, React, Redux, Restful API, Jest, Git, HTML5, CSS3,
-        Sass, Npm, Webpack, Babel, ESLint, Prettier
-      </Typography>
-      <List>
-        <ListItem
-          button={true}
-          component="a"
-          target="_blank"
-          rel="nofollow noreferrer noopener"
-          href="https://github.com/gleb-lobastov"
-        >
-          <ListItemText primary="Гитхаб" />
-        </ListItem>
-        <ListItem
-          button={true}
-          component="a"
-          target="_blank"
-          rel="nofollow noreferrer noopener"
-          href="https://www.linkedin.com/in/glebin"
-        >
-          <ListItemText primary="Linkedin" />
-        </ListItem>
-        <ListItem
-          button={true}
-          component={Link}
-          to={articlesPath.toUrl({ slug: 'importThis' })}
-        >
-          <ListItemText primary="Статья &laquo;19 принципов достижения дзена при написании компьютерных программ&raquo;" />
-        </ListItem>
-      </List>
+      <div className={classes.section} id={idFromSection(SECTIONS.ABOUT)}>
+        <Avatar
+          className={classes.avatar}
+          alt="My photo on dev conference"
+          src="https://res.cloudinary.com/dc2eke0gj/image/upload/s--JrOLNneh--/c_scale,h_512/v1604960394/avatars/3LG_8070_lwuxw9_c6xxx5.jpg"
+        />
+        <Typography variant="h2">Руководитель команды разработки</Typography>
+        <ReactMarkdown source={experience.about.description.join('\n\n')} />
+      </div>
+      <div className={classes.section} id={idFromSection(SECTIONS.JOBS)}>
+        <Typography variant="h2" gutterBottom={true}>
+          Где работал
+        </Typography>
+        <PreviousExperience jobs={experience.jobs} skills={experience.skills} />
+      </div>
+      <div className={classes.section} id={idFromSection(SECTIONS.SKILLS)}>
+        <Typography variant="h2" gutterBottom={true}>
+          Навыки
+        </Typography>
+        <Skills skills={experience.skills} />
+      </div>
+      <div className={classes.section} id={idFromSection(SECTIONS.CONTACTS)}>
+        <Typography variant="h2" gutterBottom={true}>
+          Контакты
+        </Typography>
+        <List>
+          <ListItem
+            button={true}
+            component="a"
+            target="_blank"
+            rel="nofollow noreferrer noopener"
+            href="https://github.com/gleb-lobastov"
+          >
+            <ListItemText primary="Гитхаб" />
+          </ListItem>
+          <ListItem
+            button={true}
+            component="a"
+            target="_blank"
+            rel="nofollow noreferrer noopener"
+            href="https://www.linkedin.com/in/glebin"
+          >
+            <ListItemText primary="Linkedin" />
+          </ListItem>
+        </List>
+      </div>
     </>
   );
 }

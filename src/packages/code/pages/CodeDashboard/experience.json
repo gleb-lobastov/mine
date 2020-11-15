@@ -1,0 +1,661 @@
+{
+  "about": {
+    "description": [
+      "Профессионально занимаюсь программированием с 2009 года. Разрабатывал фронтенд, бэкенд и было дело — десктоп. По фронтенду имею квалификацию ведущего инженера. Как техлид участвовал более, чем в 10 проектах",
+      "Организовал и руководил несколькими командами, в том числе кроссфункциональными (фронт, бэк, qa, аналитика). Провел > 100 собеседований, есть свой подход к проведению технических собеседований.",
+      "Стараюсь всячески помогать и не мешать своей команде, взамен требую ответственного и взрослого отношения к работе. Считаю, что люди важнее технологий, что в команде должна быть открытая и дружественная атмосфера. Для меня важно, чтобы все участники команды по своей воле и желанию вкладывались в общий результат и ощущали пользу от проделанной работы.",
+      "Люблю работать с людьми, передавать знания, узнавать новое. Выступаю с докладами внутри компании. Выступал на TechLeadConf в июне 2020. К коллегам требователен, но по делу. Стараюсь оценивать работу непредвзято и без придирок к мелочам. Объясняю свою точку зрения.",
+      "Интересуюсь UI/UX, продакт менеджментом, практиками командной работы."
+    ]
+  },
+  "jobs": [
+    {
+      "from": "2020-07-01",
+      "companyName": { "ru": "Синимекс" },
+      "companyDescription": "Системный интегратор",
+      "website": "https://www.cinimex.ru/",
+      "logoSrc": "https://res.cloudinary.com/dc2eke0gj/image/upload/s--R-XRNnzE--/b_rgb:ffffff,bo_12px_solid_rgb:ffffff,c_scale,w_128/v1604776685/minetravel/code/employers/cinimex_logo.png",
+      "position": "Руководитель команды разработки",
+      "description": "Участвую во внешних и внутренних проектах. Road-map, декомпозиция задач, планирование и сроки. Процессы, от флоу задач до code-review, qa и ci/cd.\n\nПровожу митинги, 1:1 встречи, performance review. Поддерживаю командный дух и обмен знаниями, выступаю с докладами.\n\nУчаствую в пресейлах, найме. Провожу собеседования. Провел аудит нескольких проектов компани.",
+      "stack": [
+        {
+          "title": "react",
+          "tooltip": "Главный по реакту в компании"
+        },
+        { "title": "material-ui" },
+        { "title": "react-hook-forms" },
+        { "title": "storybook" },
+        { "title": "jest" },
+        { "title": "puppeteer" },
+        { "title": "gitlab ci" },
+        { "title": "docker" },
+        { "title": "ant-design" },
+        {
+          "title": "trunk based development",
+          "description": "Настроил в текущем проекте близкий к tbd подход, когда основной контроль за качеством лежит на тестах, а изменения сразу попадают в мастер и автоматически деплоятся на тестовый стенд"
+        },
+        { "title": "keycloak" },
+        { "title": "nginx" },
+        { "title": "artefactory" },
+        { "title": "openshift" }
+      ]
+    },
+    {
+      "from": "2017-05-01",
+      "to": "2020-06-01",
+      "companyName": { "ru": "OneTwoTrip" },
+      "companyDescription": "Онлайн-сервис для организации путешествий",
+      "website": "https://www.onetwotrip.com/",
+      "position": "Руководитель команды разработки",
+      "logoSrc": "https://res.cloudinary.com/dc2eke0gj/image/upload/s--wNTElOC2--/c_scale,w_128/v1604776417/minetravel/code/employers/ott_logo.jpg",
+      "description": "Техлид фронтенда в шести проектах (b2b, b2c, инфраструктура). Отвечал за команду, архитектуру и развитие.\n\nЗанимался квартальным планированием, декомпозицией задач. Следил за сроками и качеством исполнения. Проводил ревью, писал код.\n\nПроводил собеседования, онбордил новичков. Поддерживал хорошие отношения в команде. Проводил 1:1 встречи",
+      "stack": [
+        {
+          "title": "react",
+          "description": "Очень много писал на реакте. Крутил—вертел либу по всякому, написал много разных штук"
+        },
+        { "title": "redux" },
+        { "title": "restful API" },
+        { "title": "web-sockets" },
+        { "title": "webpack" },
+        { "title": "babel" },
+        { "title": "lerna" },
+        { "title": "storybook" },
+        { "title": "jest" },
+        { "title": "puppeteer" },
+        { "title": "nexus" },
+        { "title": "jenkins" },
+        { "title": "git" }
+      ]
+    },
+    {
+      "from": "2015-02-01",
+      "to": "2017-04-01",
+      "companyName": { "ru": "Тензор" },
+      "companyDescription": "Электронный документооборот и отчетность",
+      "website": "https://tensor.ru/",
+      "position": "Разработчик программного обеспечения",
+      "logoSrc": "https://res.cloudinary.com/dc2eke0gj/image/upload/s--9YHy8UMT--/c_scale,h_128/v1604776531/minetravel/code/employers/tensor_logo.jpg",
+      "description": "Бэкенд и фронтенд разработка. Написание SQL запросов, скриптов миграции. Тесно взаимодействовал с отделом тестирования, дизайнерами, тех. поддержкой. А так-же с другими отделами и группами разработки",
+      "stack": [
+        { "title": "python" },
+        { "title": "javascript" },
+        { "title": "postgresql" },
+        { "title": "git" },
+        { "title": "svn" },
+        { "title": "require-js" }
+      ]
+    },
+    {
+      "from": "2009-10-01",
+      "to": "2015-01-01",
+      "companyName": { "ru": "Южный Урал" },
+      "companyDescription": "Научно производственная фирма",
+      "position": "Инженер по промышленной безопасности",
+      "description": "Разработка программного обеспечения, поддержка баз данных, для оценки и прогнозирования термоэрозионных процессов. Моделирование овражных процессов. Расчеты устойчивости склонов. Инженерно‑геологические изыскания",
+      "stack": [
+        { "title": "delphi" },
+        { "title": "object pascal" },
+        { "title": "ms access" },
+        { "title": "mysql" }
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "title": "team lead",
+      "isPrimary": true
+    },
+    {
+      "title": "tech lead",
+      "isPrimary": true
+    },
+    {
+      "title": "mentoring"
+    },
+    {
+      "title": "management",
+      "description": "Изучаю литературу, использую лучшие практики в повседневной работе"
+    },
+    {
+      "title": "negotioations",
+      "description": "Мне близка стратегия Джима Кемпа, которую он описал в своих книгах «Нет. Лучшая стратегия ведения переговоров» и «Сначала скажите нет»"
+    },
+    {
+      "title": "pmbok",
+      "description": "Читал в кратком изложении. На роль спеца не претендую, но имею небольшое представление, о чем речь",
+      "icon": {
+        "type": "sprite",
+        "ref": [3, 6]
+      }
+    },
+    {
+      "title": "design review",
+      "description": "Предпочитаю эту практику code review, проговариваю с разработчиками пути решения объемных задач"
+    },
+    {
+      "title": "code review",
+      "description": "Объясняю свою точку зрения. Настаиваю только на критичных вещах, чтобы не снимать с разработчика ответственности за свой код"
+    },
+    {
+      "title": "performance review",
+      "description": "Провожу performance review, обсуждаем перформанс и траекторию развития сотрудника"
+    },
+    {
+      "title": "1:1 meetings",
+      "description": "Стараюсь вовремя дать обратную связь, обсудить планы, настрой, ответить на вопросы"
+    },
+    {
+      "title": "job interview",
+      "isPrimary": true
+    },
+    {
+      "title": "frontend",
+      "isPrimary": "true",
+      "icon": {
+        "type": "sprite",
+        "ref": [4, 2]
+      }
+    },
+    {
+      "title": "javascript",
+      "icon": {
+        "type": "sprite",
+        "ref": [5, 5]
+      },
+      "isPrimary": true
+    },
+    {
+      "title": "typescript",
+      "description": "Были отдельные проекты на typescript. Писал на typescript один из pet-project'ов",
+      "icon": {
+        "type": "sprite",
+        "ref": [7, 7]
+      },
+      "isPrimary": true
+    },
+    {
+      "title": "microfrontends",
+      "description": "Имею представление о концепции. Работал с набором spa приложений в рамках одного домена. Дружил angular и react внутри одного приложения"
+    },
+    {
+      "title": "restful",
+      "description": "Участвовал в проектировании restful-api, писал несколько вариантов фронтовой утилиты для работы с данными в rest стиле. В т.ч. есть open-source вариант"
+    },
+    { "title": "crud" },
+    {
+      "title": "graph-ql",
+      "description": "Есть некоторый опыт работы с приложениями использующими graph-ql",
+      "icon": {
+        "type": "sprite",
+        "ref": [5, 2]
+      }
+    },
+    {
+      "title": "optimistic updates",
+      "description": "Писал свою реализацию optimistic-updates"
+    },
+    {
+      "title": "web-sockets",
+      "icon": {
+        "type": "sprite",
+        "ref": [8, 2]
+      }
+    },
+    {
+      "title": "component based approach",
+      "description": "Стараюсь делить код на связанные внутри и незацепленные между собой компоненты. Простой тест: если при удалении папки какого-то компонента (и удалении его вызовов) в системе остается мертвый код, значит с компонентным подходом не все гладко",
+      "isPrimary": true
+    },
+    {
+      "title": "domain driven design",
+      "description": "Не использовал в полной мере, только отдельные концепты. Однако считаю подход очень перспективным, особенно для больших систем"
+    },
+    {
+      "title": "feature toggles",
+      "description": "Использую в своих проектах. В том числе, для реализации trunk-based-development"
+    },
+    {
+      "title": "html",
+      "icon": {
+        "type": "sprite",
+        "ref": [1, 5]
+      }
+    },
+    {
+      "title": "css",
+      "icon": {
+        "type": "sprite",
+        "ref": [3, 2]
+      }
+    },
+    {
+      "title": "sass",
+      "icon": {
+        "type": "sprite",
+        "ref": [2, 7]
+      }
+    },
+    {
+      "title": "css modules",
+      "icon": {
+        "type": "sprite",
+        "ref": [3, 1]
+      }
+    },
+    { "title": "css-in-js" },
+    {
+      "title": "jss",
+      "description": "Подход, который использую по умолчанию в проектах с material-ui. В целом мне кажется наиболее удобным из всех альтернатив",
+      "icon": {
+        "type": "sprite",
+        "ref": [6, 2]
+      }
+    },
+    {
+      "title": "styled-components",
+      "description": "Использовал в нескольких проектах, но в целом больше предпочитаю jss",
+      "icon": {
+        "type": "sprite",
+        "ref": [5, 7]
+      }
+    },
+    {
+      "title": "react",
+      "icon": {
+        "type": "sprite",
+        "ref": [7, 5]
+      },
+      "isPrimary": true
+    },
+    {
+      "title": "react hooks"
+    },
+    {
+      "title": "redux",
+      "description": "В последнее практически не использую. Контекст + react-query для кеширования запросов на бэк заменяют 98% функциональности, да и с separation of concerns в этой схеме гораздо лучше. А ui-state никогда и не нужно было в нем хранить",
+      "icon": {
+        "type": "sprite",
+        "ref": [7, 6]
+      }
+    },
+    {
+      "title": "flux",
+      "description": "Когда-то разбирался со всеми этими флакс подходами. И даже что-то свое писал. На сегодняшний день еще помню как работает редакс, тому и радуюсь",
+      "icon": {
+        "type": "sprite",
+        "ref": [3, 3]
+      }
+    },
+    {
+      "title": "react-query",
+      "description": "Либа огонь, чтобы быстро завести общение с бэком. Избавляет от проблем, о которых мало кто заранее задумывается ;)",
+      "icon": {
+        "type": "sprite",
+        "ref": [7, 3]
+      }
+    },
+    {
+      "title": "formik",
+      "description": "Использую в части проектов. Так и не определился, кто из них с react-hook-forms лучше. Но есть подозрение, что на сложных формах скорее вытянет формик",
+      "icon": {
+        "type": "sprite",
+        "ref": [4, 1]
+      }
+    },
+    {
+      "title": "react-hook-forms",
+      "description": "Использую в части проектов. Так и не определился, кто из них с формиком лучше. Но есть подозрение, что на сложных формах скорее сдуется react-hook-form",
+      "icon": {
+        "type": "sprite",
+        "ref": [7, 2]
+      }
+    },
+    {
+      "title": "redux-forms",
+      "isOutdated": true,
+      "description": "Использовал во многих проектах, сейчас либа уже скорее мертва. А final-form проигрывает формику и react-hook-form"
+    },
+    {
+      "title": "material-ui",
+      "description": "Использую по умолчанию, для проектов где нет своей дизайн-системы",
+      "icon": {
+        "type": "sprite",
+        "ref": [1, 6]
+      }
+    },
+    {
+      "title": "ant-design",
+      "description": "Работал с проектами, где используется ant-design. Не так хорошо знаю либу, как material-ui",
+      "icon": {
+        "type": "sprite",
+        "ref": [1, 1]
+      }
+    },
+    {
+      "title": "keycloak",
+      "description": "Настраивал keycloak на фронте в нескольких проектах",
+      "icon": {
+        "type": "sprite",
+        "ref": [6, 3]
+      }
+    },
+    {
+      "title": "jwt-tokens",
+      "icon": {
+        "type": "sprite",
+        "ref": [6, 1]
+      }
+    },
+    {
+      "title": "qa",
+      "description": "Очень уважаю qa-специалистов. Со своей стороны писал много юниттестов и настраивал интеграционные тесты в нескольких проектах"
+    },
+    {
+      "title": "jest",
+      "icon": {
+        "type": "sprite",
+        "ref": [3, 5]
+      }
+    },
+    {
+      "title": "puppeteer",
+      "description": "Использую для написания сценариев высокоуровневых интеграционных тестов",
+      "icon": {
+        "type": "sprite",
+        "ref": [6, 6]
+      }
+    },
+    {
+      "title": "react-testing-library",
+      "icon": {
+        "type": "sprite",
+        "ref": [7, 4]
+      }
+    },
+    {
+      "title": "enzyme",
+      "isOutdated": true,
+      "description": "Использовал для юнит тестов, теперь поставил на холд. В новых тестах использую react-testing-library"
+    },
+    {
+      "title": "integration testing",
+      "description": "Писал интеграционные тесты и руками и силами команды разработки и заказывал команде qa"
+    },
+    {
+      "title": "unit-test"
+    },
+    {
+      "title": "test driven development",
+      "description": "По возможности использую этот подход в своих проектах",
+      "isPrimary": true
+    },
+    {
+      "title": "webpack",
+      "icon": {
+        "type": "sprite",
+        "ref": [8, 1]
+      }
+    },
+    {
+      "title": "create-react-app",
+      "icon": {
+        "type": "sprite",
+        "ref": [8, 1]
+      }
+    },
+    {
+      "title": "babel",
+      "icon": {
+        "type": "sprite",
+        "ref": [1, 2]
+      }
+    },
+    {
+      "title": "rollup",
+      "icon": {
+        "type": "sprite",
+        "ref": [1, 7]
+      }
+    },
+    {
+      "title": "gulp",
+      "isOutdated": true
+    },
+    {
+      "title": "jquery",
+      "isOutdated": true
+    },
+    {
+      "title": "backbone",
+      "isOutdated": true
+    },
+    {
+      "title": "bower",
+      "isOutdated": true
+    },
+    {
+      "title": "grunt",
+      "isOutdated": true,
+      "icon": {
+        "type": "sprite",
+        "ref": [5, 3]
+      }
+    },
+    {
+      "title": "code style",
+      "isPrimary": true
+    },
+    {
+      "title": "eslint",
+      "icon": {
+        "type": "sprite",
+        "ref": [2, 3]
+      }
+    },
+    {
+      "title": "prettier",
+      "icon": {
+        "type": "sprite",
+        "ref": [5, 6]
+      }
+    },
+    { "title": "commitlint" },
+    { "title": "conventional commits" },
+    { "title": "git-hooks" },
+    {
+      "title": "semver",
+      "icon": {
+        "type": "sprite",
+        "ref": [3, 7]
+      }
+    },
+    {
+      "title": "swagger",
+      "icon": {
+        "type": "sprite",
+        "ref": [6, 7]
+      }
+    },
+    {
+      "title": "storybook",
+      "icon": {
+        "type": "sprite",
+        "ref": [4, 7]
+      }
+    },
+    { "title": "knowledge management" },
+    {
+      "title": "git",
+      "icon": {
+        "type": "sprite",
+        "ref": [2, 4]
+      }
+    },
+    {
+      "title": "svn",
+      "isOutdated": true
+    },
+    {
+      "title": "require-js",
+      "isOutdated": true
+    },
+    {
+      "title": "gitflow",
+      "icon": {
+        "type": "sprite",
+        "ref": [1, 4]
+      }
+    },
+    {
+      "title": "lerna",
+      "icon": {
+        "type": "sprite",
+        "ref": [6, 4]
+      }
+    },
+    { "title": "monorepo" },
+    { "title": "shared components" },
+    {
+      "title": "s3",
+      "icon": {
+        "type": "sprite",
+        "ref": [2, 1]
+      }
+    },
+    {
+      "title": "cloudinary",
+      "icon": {
+        "type": "sprite",
+        "ref": [2, 2]
+      }
+    },
+    {
+      "title": "google maps api",
+      "icon": {
+        "type": "sprite",
+        "ref": [5, 1]
+      }
+    },
+    {
+      "title": "backend",
+      "isPrimary": "true"
+    },
+    { "title": "fullstack" },
+    { "title": "nodejs" },
+    {
+      "title": "python",
+      "icon": {
+        "type": "sprite",
+        "ref": [7, 1]
+      },
+      "isPrimary": true
+    },
+    { "title": "pep8" },
+    {
+      "title": "golang",
+      "icon": {
+        "type": "sprite",
+        "ref": [4, 4]
+      }
+    },
+    {
+      "title": "gin-gonic",
+      "icon": {
+        "type": "sprite",
+        "ref": [4, 3]
+      }
+    },
+    { "title": "sql" },
+    {
+      "title": "postgresql",
+      "icon": {
+        "type": "sprite",
+        "ref": [4, 6]
+      },
+      "isPrimary": true
+    },
+    {
+      "title": "ms access",
+      "isOutdated": true
+    },
+    {
+      "title": "mysql",
+      "isOutdated": true,
+      "description": "Очень давно не использую MySQL. Когда нужна реляционная СУБД, использую postgreSQL"
+    },
+    {
+      "title": "ci/cd",
+      "isPrimary": true
+    },
+    {
+      "title": "trunk based development"
+    },
+    {
+      "title": "gitlab ci",
+      "icon": {
+        "type": "sprite",
+        "ref": [3, 4]
+      }
+    },
+    {
+      "title": "jenkins",
+      "icon": {
+        "type": "sprite",
+        "ref": [2, 5]
+      }
+    },
+    {
+      "title": "nginx",
+      "icon": {
+        "type": "sprite",
+        "ref": [2, 6]
+      }
+    },
+    {
+      "title": "jira",
+      "icon": {
+        "type": "sprite",
+        "ref": [4, 5]
+      }
+    },
+    {
+      "title": "delphi",
+      "isOutdated": true,
+      "icon": {
+        "type": "sprite",
+        "ref": [1, 3]
+      }
+    },
+    {
+      "title": "object pascal",
+      "isOutdated": true
+    },
+    { "title": "user stories" },
+    { "title": "job stories" },
+    { "title": "jobs to be done" },
+    { "title": "cjm" },
+    { "title": "cusdev" },
+    { "title": "lean" },
+    { "title": "hadi" },
+    { "title": "agile" },
+    {
+      "title": "mobx",
+      "icon": {
+        "type": "sprite",
+        "ref": [6, 5]
+      }
+    },
+    { "title": "scrumban" },
+    { "title": "estimation" },
+    { "title": "ecmascript 6+" },
+    { "title": "npm" },
+    {
+      "title": "heroku",
+      "icon": {
+        "type": "sprite",
+        "ref": [5, 4]
+      }
+    }
+  ]
+}

@@ -12,7 +12,7 @@ const DATE_FORMATS = {
   DAY_ONLY: 'd',
 };
 
-function dateTimePeriodToString(periodStart, periodEnd, isObscure) {
+export function dateTimePeriodToString(periodStart, periodEnd, isObscure) {
   const fullFormat = isObscure ? DATE_FORMATS.MONTH_YEAR : DATE_FORMATS.FULL;
   const periodEndString = dateFormat(periodEnd, fullFormat, {
     locale: ru,
@@ -53,4 +53,18 @@ export function visitDateTimePeriodToString(
   isObscure,
 ) {
   return dateTimePeriodToString(arrivalDateTime, departureDateTime, isObscure);
+}
+
+export function dateTimeOpenPeriodToString({
+  periodStart,
+  periodEnd,
+  isObscure,
+  placeholder,
+}) {
+  if (!periodEnd) {
+    const format = isObscure ? DATE_FORMATS.MONTH_YEAR : DATE_FORMATS.FULL;
+    const startDateStr = dateFormat(periodStart, format, { locale: ru });
+    return `${startDateStr}—${placeholder}`;
+  }
+  return dateTimePeriodToString(periodStart, periodEnd, isObscure);
 }
