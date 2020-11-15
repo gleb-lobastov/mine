@@ -9,7 +9,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     justifyContent: 'center',
     flexWrap: 'wrap',
-    gap: `${theme.spacing(1)}px`,
+  },
+  gap: {
+    margin: `${theme.spacing(0.5)}px`,
   },
 }));
 
@@ -18,7 +20,7 @@ export default React.memo(function Skills({ skills }) {
   return (
     <div className={classes.skillsContainer}>
       {sortBy(skills, property('title')).map(skill => (
-        <Skill {...skill} />
+        <Skill {...skill} className={classes.gap} />
       ))}
     </div>
   );

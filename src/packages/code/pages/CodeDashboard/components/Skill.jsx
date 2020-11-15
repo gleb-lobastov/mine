@@ -10,9 +10,11 @@ export default function Skill({
   description,
   isPrimary,
   isOutdated,
+  className,
 }) {
   const chipNode = (
     <Chip
+      className={className}
       size="small"
       label={title}
       icon={

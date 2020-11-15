@@ -8,8 +8,10 @@ const useStyles = makeStyles(theme => ({
     marginTop: '24px',
     display: 'inline-flex',
     flexWrap: 'wrap',
-    gap: `${theme.spacing(1)}px`,
     justifyContent: 'flex-end',
+  },
+  gap: {
+    margin: `${theme.spacing(0.5)}px`,
   },
 }));
 
@@ -30,6 +32,7 @@ export default function Stack({ className, stack, skills }) {
             key={skillTitle}
             {...skillFromSkills}
             {...skillFromStack}
+            className={classes.gap}
             description={
               /* always override, because description from skills is not relevant */
               description
