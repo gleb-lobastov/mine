@@ -4,6 +4,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import InfoIcon from '@material-ui/icons/Info';
 import SkillLogo from './SkillLogo';
 
+// Immediately show tooltip on touch (on mobile devices)
+// Otherwise, it is difficult to guess that you need to wait a long time and it is inconvenient
+const TOOLTIP_TOUCH_DELAY = 0;
+
 export default function Skill({
   title,
   icon: { type: iconType, ref } = {},
@@ -40,7 +44,11 @@ export default function Skill({
   }
 
   return (
-    <Tooltip title={actualDescription} arrow={true}>
+    <Tooltip
+      title={actualDescription}
+      arrow={true}
+      enterTouchDelay={TOOLTIP_TOUCH_DELAY}
+    >
       {/*  wrap in div to always catch a pointer event, even for disabled chip */}
       <div>{chipNode}</div>
     </Tooltip>
