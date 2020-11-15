@@ -142,7 +142,7 @@ export default function MainDashboard() {
           <FlockingBoids />
         </div>
         <ThemeProvider theme={darkTheme}>
-          <Paper className={classes.linksListContainer}>
+          <Paper className={classes.linksListContainer} square={true}>
             <Grid container={true}>
               <Grid item={true} xs={12} sm={6}>
                 <List className={classes.linksList}>
