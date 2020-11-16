@@ -3,9 +3,6 @@ import ReactMarkdown from 'react-markdown';
 import { useParams, useHistory } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles } from '@material-ui/core/styles';
 import { usePaths } from 'modules/packages';
 import useSections, {
@@ -13,6 +10,7 @@ import useSections, {
 } from 'modules/utilities/hooks/useSections';
 import PreviousExperience from './blocks/PreviousExperience';
 import Skills from './blocks/Skills';
+import Contacts from './blocks/Contacts';
 import experience from './experience.json';
 
 const SECTIONS = {
@@ -94,26 +92,7 @@ export default function CodeDashboard() {
         <Typography variant="h2" gutterBottom={true}>
           Контакты
         </Typography>
-        <List>
-          <ListItem
-            button={true}
-            component="a"
-            target="_blank"
-            rel="nofollow noreferrer noopener"
-            href="https://github.com/gleb-lobastov"
-          >
-            <ListItemText primary="Гитхаб" />
-          </ListItem>
-          <ListItem
-            button={true}
-            component="a"
-            target="_blank"
-            rel="nofollow noreferrer noopener"
-            href="https://www.linkedin.com/in/glebin"
-          >
-            <ListItemText primary="Linkedin" />
-          </ListItem>
-        </List>
+        <Contacts />
       </div>
     </>
   );
