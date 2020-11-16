@@ -61,15 +61,15 @@ module.exports = {
       __GOOGLE_MAP_API_KEY__: `"${GOOGLE_API_KEY}"`,
       __IS_DEV_MODE__: isDevelopmentMode,
     }),
-    new CopyWebpackPlugin(
-      [
+    new CopyWebpackPlugin({
+      patterns: [
         {
           from: 'src/static',
           to: isDevelopmentMode ? 'mine/static' : 'static',
         },
         !isDevelopmentMode && 'src/404.html',
       ].filter(Boolean),
-    ),
+    }),
     isDevelopmentMode && new webpack.HotModuleReplacementPlugin(),
   ].filter(Boolean),
   resolve: {
