@@ -42,6 +42,15 @@ const useStyles = makeStyles(theme => ({
     height: '256px',
     width: '256px',
   },
+  [theme.breakpoints.down('xs')]: {
+    avatar: {
+      float: 'none',
+      margin: '0 auto',
+    },
+    title: {
+      textAlign: 'center',
+    },
+  },
 }));
 
 export default function CodeDashboard() {
@@ -74,7 +83,9 @@ export default function CodeDashboard() {
           alt="My photo on dev conference"
           src="https://res.cloudinary.com/dc2eke0gj/image/upload/s--JrOLNneh--/c_scale,h_512/v1604960394/avatars/3LG_8070_lwuxw9_c6xxx5.jpg"
         />
-        <Typography variant="h2">Руководитель команды разработки</Typography>
+        <Typography className={classes.title} variant="h2">
+          Руководитель команды разработки
+        </Typography>
         <ReactMarkdown source={experience.about.description.join('\n\n')} />
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.JOBS)}>
