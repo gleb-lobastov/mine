@@ -160,6 +160,7 @@ class Navigation extends React.PureComponent {
         menu={subMenu}
         onChangeUrl={this.handleChangeUrl}
         tabIndex={subTabIndex}
+        allowIcons={!mainMenuNode}
       />
     );
 

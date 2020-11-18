@@ -1,7 +1,11 @@
-import IconCreate from '@material-ui/icons/Create';
-import IconCode from '@material-ui/icons/Code';
-import IconHome from '@material-ui/icons/Home';
-import IconPublic from '@material-ui/icons/Public';
+import CreateIcon from '@material-ui/icons/Create';
+import CodeIcon from '@material-ui/icons/Code';
+import HomeIcon from '@material-ui/icons/Home';
+import PublicIcon from '@material-ui/icons/Public';
+import AboutIcon from '@material-ui/icons/Face';
+import ContactsIcon from '@material-ui/icons/Contacts';
+import SkillsIcon from '@material-ui/icons/SportsHandball';
+import WorkIcon from '@material-ui/icons/Work';
 
 export default (packages = {}) => {
   const { main, travel, literature, code } = packages;
@@ -11,7 +15,7 @@ export default (packages = {}) => {
     navigationConfig.menu.push({
       path: main.routes.entry.path,
       caption: 'Главная',
-      icon: IconHome,
+      icon: HomeIcon,
     });
   }
 
@@ -19,7 +23,7 @@ export default (packages = {}) => {
     navigationConfig.menu.push({
       path: travel.routes.entry.path,
       caption: 'Путешествия',
-      icon: IconPublic,
+      icon: PublicIcon,
       menu: [
         {
           path: travel.routes.entry.path,
@@ -43,7 +47,7 @@ export default (packages = {}) => {
     navigationConfig.menu.push({
       path: literature.routes.entry.path,
       caption: 'Контент',
-      icon: IconCreate,
+      icon: CreateIcon,
       menu: [
         {
           path: literature.routes.entry.path,
@@ -70,11 +74,12 @@ export default (packages = {}) => {
     navigationConfig.menu.push({
       path: code.routes.entry.path,
       caption: 'Работа',
-      icon: IconCode,
+      icon: CodeIcon,
       menu: [
         {
           path: code.routes.entry.path,
           caption: 'Обо мне',
+          icon: AboutIcon,
           history: { replace: true },
           // if section param is just omit, this route has priority over further specified sections
           params: { section: undefined },
@@ -82,6 +87,7 @@ export default (packages = {}) => {
         {
           path: code.routes.entry.path,
           caption: 'Где работал',
+          icon: WorkIcon,
           history: { replace: true },
           params: { section: 'jobs' },
         },
@@ -103,12 +109,14 @@ export default (packages = {}) => {
         {
           path: code.routes.entry.path,
           caption: 'Навыки',
+          icon: SkillsIcon,
           history: { replace: true },
           params: { section: 'skills' },
         },
         {
           path: code.routes.entry.path,
           caption: 'Контакты',
+          icon: ContactsIcon,
           history: { replace: true },
           params: { section: 'contacts' },
         },

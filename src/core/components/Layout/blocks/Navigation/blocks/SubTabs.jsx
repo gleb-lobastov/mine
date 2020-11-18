@@ -20,7 +20,7 @@ class SubTabs extends React.PureComponent {
   };
 
   render() {
-    const { tabIndex, classes, menu } = this.props;
+    const { tabIndex, classes, menu, allowIcons } = this.props;
     if (!menu.length) {
       return null;
     }
@@ -33,8 +33,12 @@ class SubTabs extends React.PureComponent {
           variant="scrollable"
           scrollButtons="auto"
         >
-          {menu.map(({ caption }) => (
-            <Tab key={caption} label={caption} />
+          {menu.map(({ caption, icon: IconComponent }) => (
+            <Tab
+              key={caption}
+              label={caption}
+              icon={allowIcons && IconComponent ? <IconComponent /> : null}
+            />
           ))}
         </Tabs>
       </div>
