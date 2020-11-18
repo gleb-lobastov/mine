@@ -13,9 +13,10 @@ class SubTabs extends React.PureComponent {
 
   handleChangeSubTab = (event, nextTabIndex) => {
     const { menu, tabIndex, onChangeUrl } = this.props;
+    const nextMenuItem = menu[nextTabIndex];
     const { path } = menu[tabIndex];
-    const { path: nextPath, params } = menu[nextTabIndex];
-    onChangeUrl(event, path, nextPath, params);
+    const { path: nextPath } = nextMenuItem;
+    onChangeUrl(event, path, nextPath, nextMenuItem);
   };
 
   render() {

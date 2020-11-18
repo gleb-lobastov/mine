@@ -18,11 +18,10 @@ class MainTabs extends React.PureComponent {
 
   handleChangeMainTab = (event, nextTabIndex) => {
     const { menu, tabIndex, onChangeUrl } = this.props;
+    const nextMenuItem = menu[nextTabIndex - this.calcTabIndexShift()];
     const { path } = menu[tabIndex];
-    const { path: nextPath, params } = menu[
-      nextTabIndex - this.calcTabIndexShift()
-    ];
-    onChangeUrl(event, path, nextPath, params);
+    const { path: nextPath } = nextMenuItem;
+    onChangeUrl(event, path, nextPath, nextMenuItem);
   };
 
   renderLabel(label) {

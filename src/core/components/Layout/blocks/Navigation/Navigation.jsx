@@ -100,13 +100,16 @@ class Navigation extends React.PureComponent {
     ].filter(Boolean);
   }
 
-  handleChangeUrl = (event, currentPath, nextPath, nextPathParams) => {
+  handleChangeUrl = (event, currentPath, nextPath, nextMenuItem) => {
     const {
       history,
       match: { params },
     } = this.props;
     const { params: pathParams } = this.matchPath(currentPath) || {};
-    history.push(
+    const { params: nextPathParams, history: { replace } = {} } = nextMenuItem;
+
+    const action = replace ? 'replace' : 'push';
+    history[action](
       nextPath.toUrl({ ...params, ...pathParams, ...nextPathParams }),
     );
   };

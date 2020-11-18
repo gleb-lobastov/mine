@@ -75,12 +75,14 @@ export default (packages = {}) => {
         {
           path: code.routes.entry.path,
           caption: 'Обо мне',
+          history: { replace: true },
           // if section param is just omit, this route has priority over further specified sections
           params: { section: undefined },
         },
         {
           path: code.routes.entry.path,
           caption: 'Где работал',
+          history: { replace: true },
           params: { section: 'jobs' },
         },
         // {
@@ -101,11 +103,13 @@ export default (packages = {}) => {
         {
           path: code.routes.entry.path,
           caption: 'Навыки',
+          history: { replace: true },
           params: { section: 'skills' },
         },
         {
           path: code.routes.entry.path,
           caption: 'Контакты',
+          history: { replace: true },
           params: { section: 'contacts' },
         },
       ],
