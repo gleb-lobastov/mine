@@ -47,10 +47,11 @@ const useStyles = makeStyles(theme => ({
 export default function CodeDashboard() {
   const classes = useStyles();
   const {
-    code: { entry: codeEntryPath, articles: codeArticlesPath },
-    literature: { articles: articlesPath = codeArticlesPath } = {},
+    code: { entry: codeEntryPath },
+    main,
   } = usePaths();
 
+  const isCVMode = !main;
   const { section } = useParams();
   const history = useHistory();
 
@@ -92,7 +93,7 @@ export default function CodeDashboard() {
         <Typography variant="h2" gutterBottom={true}>
           Контакты
         </Typography>
-        <Contacts />
+        <Contacts isCVMode={isCVMode} />
       </div>
     </>
   );

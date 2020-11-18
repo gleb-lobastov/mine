@@ -3,7 +3,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-export default function Contacts() {
+export default function Contacts({ isCVMode }) {
   return (
     <List>
       <ListItem
@@ -24,6 +24,11 @@ export default function Contacts() {
       >
         <ListItemText primary="Linkedin" />
       </ListItem>
+      {isCVMode && (
+        <ListItem button={true} component="a" href="/mine">
+          <ListItemText primary="Home page" />
+        </ListItem>
+      )}
     </List>
   );
 }
