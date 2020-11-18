@@ -22,6 +22,11 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 500,
     fontSize: 24,
   },
+  [theme.breakpoints.down('xs')]: {
+    container: {
+      marginLeft: theme.spacing(1),
+    },
+  },
 }));
 
 export default function CompanyLogo({ src, name, component: Component }) {

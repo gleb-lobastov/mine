@@ -86,7 +86,7 @@ export default (packages = {}) => {
         },
         {
           path: code.routes.entry.path,
-          caption: 'Где работал',
+          caption: 'Опыт',
           icon: WorkIcon,
           history: { replace: true },
           params: { section: 'jobs' },

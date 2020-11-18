@@ -3,6 +3,7 @@ import throttle from 'lodash/throttle';
 import findNearestElement from './findNearestElement';
 
 const SECTION_UPDATE_DELAY = 125;
+const ENSURE_SCROLL_DELAY = 500; // Should be greater than material ui scroll animation time
 
 export default function useSections({ section, onSectionChange }) {
   const currentSectionRef = useRef(null);
@@ -24,6 +25,17 @@ export default function useSections({ section, onSectionChange }) {
           // ignore smooth scroll on page init
           behavior: !isFirstRender ? 'smooth' : 'auto',
         });
+        setTimeout(() => {
+          // There is a bug: when material-ui tabs in toolbar has simultaneous animation,
+          // it completely prevents scrollIntoView from action.
+          // This workaround wait for time > any animation time and check,
+          // if scrollIntoView isn't worked as expected and element still not in view.
+          // If so, then try again, but without smooth behavior, as it more robust way
+          if (awaitSectionRef.current) {
+            awaitSectionRef.current = null;
+            element.scrollIntoView({ block: 'start' });
+          }
+        }, ENSURE_SCROLL_DELAY);
       }
       if (isFirstRender) {
         currentSectionRef.current = section; // first render is over
