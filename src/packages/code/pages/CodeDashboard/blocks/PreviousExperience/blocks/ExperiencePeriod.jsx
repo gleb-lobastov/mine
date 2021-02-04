@@ -1,13 +1,9 @@
 import React from 'react';
 import cls from 'classnames';
-import formatDuration from 'date-fns/formatDuration';
-import ru from 'date-fns/locale/ru';
-import intervalToDuration from 'date-fns/intervalToDuration';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { dateTimeOpenPeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
-import parseDate from 'modules/utilities/dateTime/parseDate';
 import Stack from '../../../components/Stack';
+import { workPeriodToStr, dateTimePeriodToStr } from '../utils';
 
 const useStyles = makeStyles({
   alignStackToStart: {
@@ -32,24 +28,5 @@ export default function ExperiencePeriod({
         stack={stack}
       />
     </>
-  );
-}
-
-function dateTimePeriodToStr(from, to) {
-  return dateTimeOpenPeriodToString({
-    periodStart: from && parseDate(from),
-    periodEnd: to && parseDate(to),
-    isObscure: true,
-    placeholder: 'по настоящее время',
-  });
-}
-
-function workPeriodToStr(from, to) {
-  return formatDuration(
-    intervalToDuration({
-      start: from ? parseDate(from) : new Date(),
-      end: to ? parseDate(to) : new Date(),
-    }),
-    { format: ['years', 'months'], locale: ru },
   );
 }

@@ -8,7 +8,9 @@ import { usePaths } from 'modules/packages';
 import useSections, {
   idFromSection,
 } from 'modules/utilities/hooks/useSections';
-import PreviousExperience from './blocks/PreviousExperience';
+import PreviousExperience, {
+  workPeriodsToStr,
+} from './blocks/PreviousExperience';
 import Skills, { useSkillsQuery } from './blocks/Skills';
 import Contacts from './blocks/Contacts';
 import experience from './experience.json';
@@ -32,10 +34,13 @@ const useStyles = makeStyles(theme => ({
       minHeight: '50vh',
     },
   },
-  titleWithControls: {
+  sectionHeader: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  sectionHeaderDetails: {
+    paddingRight: '32px',
   },
   skillsQueryControls: {
     display: 'flex',
@@ -99,22 +104,29 @@ export default function CodeDashboard() {
         <ReactMarkdown source={experience.about.description.join('\n\n')} />
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.JOBS)}>
-        <Typography variant="h2" gutterBottom={true}>
-          Опыт
-        </Typography>
+        <div className={classes.sectionHeader}>
+          <Typography variant="h2" gutterBottom={true}>
+            Опыт
+          </Typography>
+          <Typography
+            className={classes.sectionHeaderDetails}
+            variant="h6"
+            color="textSecondary"
+          >
+            {workPeriodsToStr(experience.jobs)}
+          </Typography>
+        </div>
         <PreviousExperience jobs={experience.jobs} skills={experience.skills} />
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.SKILLS)}>
-        <Typography
-          variant="h2"
-          gutterBottom={true}
-          className={classes.titleWithControls}
-        >
-          <div>Навыки</div>
+        <div className={classes.sectionHeader}>
+          <Typography variant="h2" gutterBottom={true}>
+            Навыки
+          </Typography>
           <div className={classes.skillsQueryControls}>
             {skillsQueryControlsNode}
           </div>
-        </Typography>
+        </div>
         <Skills skills={experience.skills} query={skillsQuery} />
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.CONTACTS)}>

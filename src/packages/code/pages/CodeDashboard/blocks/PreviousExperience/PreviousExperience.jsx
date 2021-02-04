@@ -12,6 +12,8 @@ import CompanyLogo from '../../components/CompanyLogo';
 import ExperienceDetails from './blocks/ExperienceDetails';
 import ExperiencePeriod from './blocks/ExperiencePeriod';
 
+export { workPeriodsToStr } from './utils';
+
 const useStyles = makeStyles(theme => ({
   timelineContent: {
     paddingBottom: '32px',
@@ -34,7 +36,11 @@ export default function PreviousExperience({ jobs, skills }) {
             job={job}
             logo={<CompanyLogo src={job.logoSrc} name={job.companyName.ru} />}
           >
-            <ExperiencePeriod job={job} skills={skills} alignStackToStart={true} />
+            <ExperiencePeriod
+              job={job}
+              skills={skills}
+              alignStackToStart={true}
+            />
           </ExperienceDetails>
         ))}
       </>
