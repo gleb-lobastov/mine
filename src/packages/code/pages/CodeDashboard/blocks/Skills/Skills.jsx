@@ -3,6 +3,9 @@ import sortBy from 'lodash/sortBy';
 import property from 'lodash/property';
 import { makeStyles } from '@material-ui/core/styles';
 import Skill from '../../components/Skill';
+import { IMPORTANCE_LEVELS } from './consts';
+
+export { default as useSkillsQuery } from './useSkillsQuery';
 
 const useStyles = makeStyles(theme => ({
   skillsContainer: {
@@ -15,13 +18,34 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default React.memo(function Skills({ skills }) {
+export default React.memo(function Skills({
+  skills,
+  query: { filter: skillsFilter } = {},
+}) {
   const classes = useStyles();
+  const actualSkills = filterSkills(skills, skillsFilter);
+
   return (
     <div className={classes.skillsContainer}>
-      {sortBy(skills, property('title')).map(skill => (
-        <Skill {...skill} className={classes.gap} />
+      {sortBy(actualSkills, property('title')).map((skill, index) => (
+        <Skill
+          {...skill}
+          key={skill.title || `skill${index}`}
+          className={classes.gap}
+        />
       ))}
     </div>
   );
 });
+
+function filterSkills(skills, { importanceLevel } = {}) {
+  switch (importanceLevel) {
+    case IMPORTANCE_LEVELS.PRIMARY:
+      return skills.filter(({ isPrimary }) => isPrimary);
+    case IMPORTANCE_LEVELS.ACTUAL:
+      return skills.filter(({ isOutdated }) => !isOutdated);
+    case IMPORTANCE_LEVELS.ALL:
+    default:
+      return skills;
+  }
+}

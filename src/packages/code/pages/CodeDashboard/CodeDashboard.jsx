@@ -9,7 +9,7 @@ import useSections, {
   idFromSection,
 } from 'modules/utilities/hooks/useSections';
 import PreviousExperience from './blocks/PreviousExperience';
-import Skills from './blocks/Skills';
+import Skills, { useSkillsQuery } from './blocks/Skills';
 import Contacts from './blocks/Contacts';
 import experience from './experience.json';
 
@@ -31,6 +31,14 @@ const useStyles = makeStyles(theme => ({
     '&:last-child': {
       minHeight: '50vh',
     },
+  },
+  titleWithControls: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  skillsQueryControls: {
+    display: 'flex',
   },
   about: {
     display: 'flex',
@@ -64,6 +72,8 @@ export default function CodeDashboard() {
   const { section } = useParams();
   const history = useHistory();
 
+  const { skillsQuery, skillsQueryControlsNode } = useSkillsQuery();
+
   useSections({
     section: section || SECTIONS.ABOUT,
     onSectionChange: nextSection => {
@@ -95,10 +105,17 @@ export default function CodeDashboard() {
         <PreviousExperience jobs={experience.jobs} skills={experience.skills} />
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.SKILLS)}>
-        <Typography variant="h2" gutterBottom={true}>
-          Навыки
+        <Typography
+          variant="h2"
+          gutterBottom={true}
+          className={classes.titleWithControls}
+        >
+          <div>Навыки</div>
+          <div className={classes.skillsQueryControls}>
+            {skillsQueryControlsNode}
+          </div>
         </Typography>
-        <Skills skills={experience.skills} />
+        <Skills skills={experience.skills} query={skillsQuery} />
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.CONTACTS)}>
         <Typography variant="h2" gutterBottom={true}>

@@ -121,7 +121,7 @@
       "description": "Я считаю, что личная заинтересованность каждого участника в успехе команды — это ракетное топливо для проекта. Без нее тоже можно протянуть и куда-то добраться, но с ней — долететь и свернуть все горы по дороге. Учесть интересы каждого и получить такую отдачу крайне сложно, тем интереснее задача для менеджера"
     },
     {
-      "title": "negotioations",
+      "title": "negotiations",
       "description": "Мне близка стратегия Джима Кемпа «Сначала скажите нет», которую он описал в своих книгах. Я считаю одинаково важным как понять позицию противоположной стороны в переговорах, так и донести свою. Я разделяю концепцию «Ненасильственного общения» Маршала розенберга."
     },
     {
@@ -159,7 +159,7 @@
     },
     {
       "title": "frontend",
-      "isPrimary": "true",
+      "isPrimary": true,
       "icon": {
         "type": "sprite",
         "ref": [4, 2]
@@ -226,6 +226,7 @@
     },
     {
       "title": "html",
+      "isPrimary": true,
       "icon": {
         "type": "sprite",
         "ref": [1, 5]
@@ -233,6 +234,7 @@
     },
     {
       "title": "css",
+      "isPrimary": true,
       "icon": {
         "type": "sprite",
         "ref": [3, 2]
@@ -393,7 +395,8 @@
       "description": "Писал интеграционные тесты руками, силами команды разработки, а так-же заказывал команде qa"
     },
     {
-      "title": "unit-test"
+      "title": "unit testing",
+      "isPrimary": true
     },
     {
       "title": "test driven development",
@@ -504,7 +507,8 @@
       "icon": {
         "type": "sprite",
         "ref": [2, 4]
-      }
+      },
+      "isPrimary": true
     },
     {
       "title": "svn",
@@ -558,7 +562,7 @@
     },
     {
       "title": "backend",
-      "isPrimary": "true"
+      "isPrimary": true
     },
     { "title": "fullstack" },
     { "title": "nodejs" },
@@ -574,11 +578,12 @@
     { "title": "pep8" },
     {
       "title": "golang",
-      "description": "Пишу на go бэкенд для pet-проекта. Язык привлекает тем, что в нем попрано множестов бест-практис принятых в js. Как адепту «совершенного кода» интересно понять, почему",
+      "description": "Пишу на go бэкенд для pet-проекта",
       "icon": {
         "type": "sprite",
         "ref": [4, 4]
-      }
+      },
+      "isPrimary": true
     },
     {
       "title": "gin-gonic",
@@ -587,7 +592,10 @@
         "ref": [4, 3]
       }
     },
-    { "title": "sql" },
+    {
+      "title": "sql",
+      "isPrimary": true
+    },
     {
       "title": "postgresql",
       "icon": {
@@ -655,8 +663,6 @@
     { "title": "user stories" },
     { "title": "job stories" },
     { "title": "jobs to be done" },
-    { "title": "cjm" },
-    { "title": "cusdev" },
     { "title": "lean" },
     { "title": "agile" },
     {
