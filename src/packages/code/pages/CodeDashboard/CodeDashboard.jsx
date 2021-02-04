@@ -90,7 +90,7 @@ export default function CodeDashboard() {
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.JOBS)}>
         <Typography variant="h2" gutterBottom={true}>
-          Где работал
+          Опыт
         </Typography>
         <PreviousExperience jobs={experience.jobs} skills={experience.skills} />
       </div>
