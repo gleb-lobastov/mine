@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flipped } from 'react-flip-toolkit';
+import { Flipped, spring } from 'react-flip-toolkit';
 import Chip from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -34,7 +34,11 @@ export default function Skill({
   const classes = useStyles();
 
   const chipNode = (
-    <Flipped flipId={flipId}>
+    <Flipped
+      flipId={flipId}
+      onAppear={onElementAppear}
+      onExit={onElementDisappear}
+    >
       <Chip
         className={className}
         size="small"
@@ -78,4 +82,40 @@ export default function Skill({
       <div>{chipNode}</div>
     </Tooltip>
   );
+}
+
+function onElementAppear(el, index) {
+  return spring({
+    values: {
+      translateX: [window.innerWidth * (index % 2 ? 1 : -1), 0],
+      opacity: [0, 1],
+    },
+    onUpdate: createUpdateHandler(el),
+  });
+}
+
+function onElementDisappear(el, index, removeElement) {
+  spring({
+    values: {
+      translateX: [0, window.innerWidth * (index % 2 ? 1 : -1)],
+      opacity: [1, 0],
+    },
+    onUpdate: createUpdateHandler(el),
+    onComplete: removeElement,
+  });
+
+  return () => {
+    // eslint-disable-next-line no-param-reassign
+    el.style.opacity = '';
+    removeElement();
+  };
+}
+
+function createUpdateHandler(el) {
+  return function handleUpdate({ translateX, opacity }) {
+    /* eslint-disable no-param-reassign */
+    el.style.opacity = opacity;
+    el.style.transform = `translateX(${translateX}px)`;
+    /* eslint-enable no-param-reassign */
+  };
 }
