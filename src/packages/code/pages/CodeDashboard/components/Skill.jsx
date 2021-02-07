@@ -39,26 +39,29 @@ export default function Skill({
       onAppear={onElementAppear}
       onExit={onElementDisappear}
     >
-      <Chip
-        className={className}
-        size="small"
-        label={title}
-        icon={
-          iconType === 'sprite' ? (
-            <SkillLogo title={title} spriteRef={ref} />
-          ) : null
-        }
-        disabled={isOutdated}
-        color={isPrimary ? 'primary' : undefined}
-        onDelete={description ? () => {} : undefined}
-        deleteIcon={
-          description ? (
-            <InfoIcon style={{ pointerEvents: 'none' }} />
-          ) : (
-            undefined
-          )
-        }
-      />
+      {/*  wrap in div to preserve original opacity on chip */}
+      <div>
+        <Chip
+          className={className}
+          size="small"
+          label={title}
+          icon={
+            iconType === 'sprite' ? (
+              <SkillLogo title={title} spriteRef={ref} />
+            ) : null
+          }
+          disabled={isOutdated}
+          color={isPrimary ? 'primary' : undefined}
+          onDelete={description ? () => {} : undefined}
+          deleteIcon={
+            description ? (
+              <InfoIcon style={{ pointerEvents: 'none' }} />
+            ) : (
+              undefined
+            )
+          }
+        />
+      </div>
     </Flipped>
   );
 
