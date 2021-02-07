@@ -16,7 +16,7 @@ export default function QueryControls({ value: query, onChange }) {
       ...query,
       filter: {
         ...query.filter,
-        importanceLevel: nextImportanceLevel,
+        importanceLevel: nextImportanceLevel || IMPORTANCE_LEVELS.ACTUAL,
       },
     });
   };
