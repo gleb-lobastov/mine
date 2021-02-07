@@ -222,7 +222,7 @@
     },
     {
       "title": "feature toggles",
-      "description": "Использую в своих проектах. В том числе, для реализации trunk-based-development"
+      "description": "Использую для реализации trunk-based-development. Реализовал утилиту и виджет для удобной работы с флагами на фронте"
     },
     {
       "title": "html",

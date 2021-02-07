@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flipper } from 'react-flip-toolkit';
 import sortBy from 'lodash/sortBy';
 import property from 'lodash/property';
 import { makeStyles } from '@material-ui/core/styles';
@@ -26,15 +27,19 @@ export default React.memo(function Skills({
   const actualSkills = filterSkills(skills, skillsFilter);
 
   return (
-    <div className={classes.skillsContainer}>
+    <Flipper
+      className={classes.skillsContainer}
+      flipKey={skillsFilter.importanceLevel}
+    >
       {sortBy(actualSkills, property('title')).map((skill, index) => (
         <Skill
           {...skill}
           key={skill.title || `skill${index}`}
+          flipId={skill.title || `skill${index}`}
           className={classes.gap}
         />
       ))}
-    </div>
+    </Flipper>
   );
 });
 

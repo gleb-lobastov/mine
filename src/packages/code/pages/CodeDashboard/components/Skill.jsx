@@ -1,4 +1,5 @@
 import React from 'react';
+import { Flipped } from 'react-flip-toolkit';
 import Chip from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -23,6 +24,7 @@ const TOOLTIP_LEAVE_TOUCH_DELAY = 0;
 
 export default function Skill({
   title,
+  flipId,
   icon: { type: iconType, ref } = {},
   description,
   isPrimary,
@@ -32,22 +34,28 @@ export default function Skill({
   const classes = useStyles();
 
   const chipNode = (
-    <Chip
-      className={className}
-      size="small"
-      label={title}
-      icon={
-        iconType === 'sprite' ? (
-          <SkillLogo title={title} spriteRef={ref} />
-        ) : null
-      }
-      disabled={isOutdated}
-      color={isPrimary ? 'primary' : undefined}
-      onDelete={description ? () => {} : undefined}
-      deleteIcon={
-        description ? <InfoIcon style={{ pointerEvents: 'none' }} /> : undefined
-      }
-    />
+    <Flipped flipId={flipId}>
+      <Chip
+        className={className}
+        size="small"
+        label={title}
+        icon={
+          iconType === 'sprite' ? (
+            <SkillLogo title={title} spriteRef={ref} />
+          ) : null
+        }
+        disabled={isOutdated}
+        color={isPrimary ? 'primary' : undefined}
+        onDelete={description ? () => {} : undefined}
+        deleteIcon={
+          description ? (
+            <InfoIcon style={{ pointerEvents: 'none' }} />
+          ) : (
+            undefined
+          )
+        }
+      />
+    </Flipped>
   );
 
   const actualDescription = isOutdated
