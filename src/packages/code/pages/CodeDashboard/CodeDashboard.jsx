@@ -37,6 +37,7 @@ const useStyles = makeStyles(theme => ({
   sectionHeader: {
     display: 'flex',
     justifyContent: 'space-between',
+    flexWrap: 'wrap',
     alignItems: 'center',
   },
   sectionHeaderDetails: {
@@ -63,11 +64,15 @@ const useStyles = makeStyles(theme => ({
     title: {
       textAlign: 'center',
     },
+    sectionHeaderDetails: {
+      paddingRight: '0',
+    },
   },
 }));
 
 export default function CodeDashboard() {
   const classes = useStyles();
+
   const {
     code: { entry: codeEntryPath },
     main,
@@ -119,14 +124,16 @@ export default function CodeDashboard() {
         <PreviousExperience jobs={experience.jobs} skills={experience.skills} />
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.SKILLS)}>
-        <div className={classes.sectionHeader}>
-          <Typography variant="h2" gutterBottom={true}>
-            Навыки
-          </Typography>
+        <Typography
+          variant="h2"
+          gutterBottom={true}
+          className={classes.sectionHeader}
+        >
+          <div>Навыки</div>
           <div className={classes.skillsQueryControls}>
             {skillsQueryControlsNode}
           </div>
-        </div>
+        </Typography>
         <Skills skills={experience.skills} query={skillsQuery} />
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.CONTACTS)}>
