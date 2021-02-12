@@ -1,4 +1,5 @@
 import React from 'react';
+import cls from 'classnames';
 import { Flipped, spring } from 'react-flip-toolkit';
 import Chip from '@material-ui/core/Chip';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +13,7 @@ const useStyles = makeStyles({
     // otherwise, on mobile devices tooltip will be showed over AppBar, while chip is hidden under it
     zIndex: 1000,
   },
+  supreficial: { color: 'gray' },
 });
 
 // Immediately show tooltip on touch (on mobile devices)
@@ -29,6 +31,7 @@ export default function Skill({
   description,
   isPrimary,
   isOutdated,
+  isSupreficial,
   className,
 }) {
   const classes = useStyles();
@@ -42,6 +45,7 @@ export default function Skill({
       {/*  wrap in div to preserve original opacity on chip */}
       <div>
         <Chip
+          classes={{ label: cls({ [classes.supreficial]: isSupreficial }) }}
           className={className}
           size="small"
           label={title}
@@ -65,9 +69,11 @@ export default function Skill({
     </Flipped>
   );
 
-  const actualDescription = isOutdated
-    ? `Неактуальный навык${description ? `. ${description}` : ''}`
-    : description;
+  const actualDescription = resolveDescription(
+    description,
+    isOutdated,
+    isSupreficial,
+  );
 
   if (!actualDescription) {
     return chipNode;
@@ -121,4 +127,15 @@ function createUpdateHandler(el) {
     el.style.transform = `translateX(${translateX}px)`;
     /* eslint-enable no-param-reassign */
   };
+}
+
+function resolveDescription(description, isOutdated, isSuperficial) {
+  switch (true) {
+    case isOutdated:
+      return `Неактуальный навык${description ? `. ${description}` : ''}`;
+    case isSuperficial:
+      return `Поверхностное знание${description ? `. ${description}` : ''}`;
+    default:
+      return description;
+  }
 }

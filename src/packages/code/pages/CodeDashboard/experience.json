@@ -56,7 +56,7 @@
       "website": "https://www.onetwotrip.com/",
       "position": "Руководитель команды разработки",
       "logoSrc": "https://res.cloudinary.com/dc2eke0gj/image/upload/s--wNTElOC2--/c_scale,w_128/v1604776417/minetravel/code/employers/ott_logo.jpg",
-      "description": "Техлид фронтенда в шести проектах (b2b, b2c, инфраструктура). Отвечал за команду, архитектуру и развитие.\n\nЗанимался квартальным планированием, декомпозицией задач. Следил за сроками и качеством исполнения. Проводил ревью, писал код.\n\nПроводил собеседования, онбордил новичков. Поддерживал хорошие отношения в команде. Проводил 1:1 встречи",
+      "description": "Техлид фронтенда в шести продуктах (b2b, b2c, инфраструктура). Отвечал за команду, архитектуру и развитие.\n\nЗанимался квартальным планированием, декомпозицией задач. Следил за сроками и качеством исполнения. Проводил ревью, писал код.\n\nПроводил собеседования, онбордил новичков. Поддерживал хорошие отношения в команде. Проводил 1:1 встречи",
       "stack": [
         {
           "title": "react",
@@ -203,7 +203,8 @@
       "icon": {
         "type": "sprite",
         "ref": [5, 2]
-      }
+      },
+      "isSupreficial": true
     },
     {
       "title": "optimistic updates",
@@ -348,7 +349,8 @@
       "icon": {
         "type": "sprite",
         "ref": [1, 1]
-      }
+      },
+      "isSupreficial": true
     },
     {
       "title": "keycloak",
@@ -356,10 +358,12 @@
       "icon": {
         "type": "sprite",
         "ref": [6, 3]
-      }
+      },
+      "isSupreficial": true
     },
     {
       "title": "jwt-tokens",
+      "description": "Писал два варианта авторизации на jwt токенах. Один раз только на фронте, в другой и на фронте и на бэке",
       "icon": {
         "type": "sprite",
         "ref": [6, 1]
@@ -546,10 +550,8 @@
       "icon": {
         "type": "sprite",
         "ref": [2, 1]
-      }
-    },
-    {
-      "title": "minio"
+      },
+      "isSupreficial": true
     },
     {
       "title": "cloudinary",
@@ -574,7 +576,7 @@
     { "title": "nodejs" },
     {
       "title": "python",
-      "description": "Во время работы в Тензоре очень много писал на питоне и отлично знал язык. Сейчас немного подзабылось, но все равно бывает использую, если нужно быстро набросать небольшой скрипт. Язык классный. Считаю, что idiomatic python привиает хороший вкус в программировании",
+      "description": "Во время работы в Тензоре очень много писал на питоне и отлично знал язык. Сейчас немного подзабылось, но все равно бывает использую, если нужно быстро набросать небольшой скрипт. Язык классный. Считаю, что idiomatic python прививает хороший вкус в программировании",
       "icon": {
         "type": "sprite",
         "ref": [7, 1]
@@ -638,14 +640,16 @@
       "icon": {
         "type": "sprite",
         "ref": [2, 5]
-      }
+      },
+      "isSupreficial": true
     },
     {
       "title": "nginx",
       "icon": {
         "type": "sprite",
         "ref": [2, 6]
-      }
+      },
+      "isSupreficial": true
     },
     {
       "title": "jira",
@@ -666,9 +670,18 @@
       "title": "object pascal",
       "isOutdated": true
     },
-    { "title": "user stories" },
-    { "title": "job stories" },
-    { "title": "jobs to be done" },
+    {
+      "title": "user stories",
+      "isSupreficial": true
+    },
+    {
+      "title": "job stories",
+      "isSupreficial": true
+    },
+    {
+      "title": "jobs to be done",
+      "isSupreficial": true
+    },
     { "title": "lean" },
     { "title": "agile" },
     {
@@ -676,7 +689,8 @@
       "icon": {
         "type": "sprite",
         "ref": [6, 5]
-      }
+      },
+      "isSupreficial": true
     },
     {
       "title": "scrumban",
@@ -694,6 +708,7 @@
         "type": "sprite",
         "ref": [5, 4]
       }
-    }
+    },
+    { "title": "docker" }
   ]
 }

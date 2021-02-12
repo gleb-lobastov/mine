@@ -48,7 +48,7 @@ function filterSkills(skills, { importanceLevel } = {}) {
     case IMPORTANCE_LEVELS.PRIMARY:
       return skills.filter(({ isPrimary }) => isPrimary);
     case IMPORTANCE_LEVELS.ACTUAL:
-      return skills.filter(({ isOutdated }) => !isOutdated);
+      return skills.filter(({ isOutdated, isSupreficial }) => !isOutdated && !isSupreficial);
     case IMPORTANCE_LEVELS.ALL:
     default:
       return skills;
