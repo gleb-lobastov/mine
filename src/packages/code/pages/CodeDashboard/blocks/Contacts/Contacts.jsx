@@ -24,6 +24,15 @@ export default function Contacts({ isCVMode }) {
       >
         <ListItemText primary="Linkedin" />
       </ListItem>
+      <ListItem
+        button={true}
+        component="a"
+        target="_blank"
+        rel="nofollow noreferrer noopener"
+        href="https://t.me/gleb_lobastov"
+      >
+        <ListItemText primary="Telegram" />
+      </ListItem>
       {isCVMode && (
         <ListItem button={true} component="a" href="/mine">
           <ListItemText primary="Home page" />
