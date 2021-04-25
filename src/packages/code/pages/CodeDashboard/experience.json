@@ -682,7 +682,10 @@
       "title": "jobs to be done",
       "isSupreficial": true
     },
-    { "title": "lean" },
+    {
+      "title": "cusdev",
+      "description": "Определяли интерес пользователей к определенным направлениям развития продукта. Поставил гипотезы. Провел несколько интервью"
+    },
     { "title": "agile" },
     {
       "title": "mobx",
@@ -709,6 +712,14 @@
         "ref": [5, 4]
       }
     },
-    { "title": "docker" }
+    { "title": "docker" },
+    {
+      "title": "axios",
+      "link": "https://github.com/axios/axios"
+    },
+    {
+      "title": "superagent",
+      "link": "https://visionmedia.github.io/superagent/"
+    }
   ]
 }
