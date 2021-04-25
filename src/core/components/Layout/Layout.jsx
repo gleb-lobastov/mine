@@ -10,7 +10,7 @@ import { useSidebarContent } from 'core/context/SidebarContext';
 import { configureNavigation } from 'configuration';
 import { usePackages } from 'modules/packages';
 import Navigation from './blocks/Navigation';
-import Footer from './blocks/Footer';
+// import Footer from './blocks/Footer';
 import {
   DesktopSidebarContainer,
   MobileSidebarContainer,
@@ -113,7 +113,7 @@ export default function Layout({
             {sidebarContentNode}
           </DesktopSidebarContainer>
         </div>
-        <Footer className={classes.footer} />
+        {/* <Footer className={classes.footer} /> */}
       </div>
       <div className={classes.statusBar}>
         <ProvisionStatusIndicator />
