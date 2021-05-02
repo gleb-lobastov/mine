@@ -36,15 +36,15 @@ export default function switchSortingFn(provision, counters, queryFilter) {
     case GROUP_VISITS_BY.TRIPS:
       // sorting is not applicable, as locations ordered chronologically
       return createComparator(provision, counters, queryFilter, [
-        COMPARATORS.TRIP.PRESERVE_ORDER,
         COMPARATORS.TRIP.DEPARTURE_TIME,
+        COMPARATORS.TRIP.PRESERVE_ORDER,
         COMPARATORS.TRIP.ID,
-        COMPARATORS.LOCATION.NAME,
+        COMPARATORS.LOCATION.NAME_ID,
       ]);
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
       return createComparator(provision, counters, queryFilter, [
-        COMPARATORS.TRIP.PRESERVE_ORDER,
         COMPARATORS.TRIP.DEPARTURE_TIME,
+        COMPARATORS.TRIP.PRESERVE_ORDER,
         COMPARATORS.TRIP.ID,
         ...resolveComparatorBySortFn(sortBy, COMPARATORS.COUNTRY),
         COMPARATORS.COUNTRY.NAME_ID,
@@ -288,8 +288,8 @@ function createTripDepartureTimeComparator({ tripsDict }, _, { sortBy }) {
     const { departureDateTime: departureDateTimeA } = tripsDict[tripIdA] || {};
     const { departureDateTime: departureDateTimeB } = tripsDict[tripIdB] || {};
 
-    compareDateTime(departureDateTimeA, departureDateTimeB, {
-      matchBy: 'year',
+    return compareDateTime(departureDateTimeA, departureDateTimeB, {
+      matchBy: 'time',
       reverse: sortBy === SORT_VISITS_BY.FIRST_VISIT_ALPHABET,
     });
   };
