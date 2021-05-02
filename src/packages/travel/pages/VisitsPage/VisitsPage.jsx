@@ -7,6 +7,7 @@ import { GROUP_VISITS_BY } from './consts';
 import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
+import switchFilteringFn from './switchFilteringFn';
 import renderNodesInOrder from './blocks/renderNodesInOrder';
 import renderTitle from './blocks/renderTitle';
 import calcCounters from './calcCounters';
@@ -22,7 +23,7 @@ export default function VisitsPage({
 
   const classes = useVisitsPageStyles();
   const { queryFilter, setQueryFilter } = useQueryFilter();
-  const { groupBy, sortBy } = useVisitsGroupingSidebar(
+  const { groupBy, sortBy, filterBy } = useVisitsGroupingSidebar(
     setQueryFilter,
     queryFilter,
     section,
@@ -48,7 +49,7 @@ export default function VisitsPage({
   const { visitsIds, visitsDict } = provision;
   const unsortedVisitsList = visitsIds
     .map(visitId => visitsDict[visitId])
-    .filter(Boolean);
+    .filter(switchFilteringFn(provision, filterBy));
 
   const { updatesCounter } = provision;
   const counters = calcCounters(unsortedVisitsList, updatesCounter);

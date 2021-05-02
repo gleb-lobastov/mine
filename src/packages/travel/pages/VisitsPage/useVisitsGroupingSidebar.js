@@ -16,6 +16,9 @@ import {
   SORT_VISITS_BY,
   KEY_SORT_VISITS_BY,
   SORT_VISITS_BY_DEFAULT,
+  FILTER_VISITS_BY,
+  KEY_FILTER_VISITS_BY,
+  FILTER_VISITS_BY_DEFAULT,
 } from './consts';
 import useVisitsPageStyles from './useVisitsPageStyles';
 
@@ -24,8 +27,11 @@ export default function(setQueryFilter, queryFilter, section) {
   const {
     [KEY_GROUP_VISITS_BY]: groupByQuery,
     [KEY_SORT_VISITS_BY]: sortByQuery,
+    [KEY_FILTER_VISITS_BY]: filterByQuery,
   } = queryFilter || {};
+
   const sortBy = resolveActualSortBy(sortByQuery);
+  const filterBy = resolveActualFilterBy(filterByQuery);
   const [groupBy, visitsSectionGroups] = resolveActualGroupBy(
     groupByQuery,
     section,
@@ -97,12 +103,39 @@ export default function(setQueryFilter, queryFilter, section) {
             </FormControl>
           </ListItem>
         )}
+        <ListItem>
+          <FormControl className={classes.formControl}>
+            <InputLabel shrink={true} id="select-filterBy-filter-label">
+              Фильтровать
+            </InputLabel>
+            <Select
+              labelId="select-filterBy-filter-label"
+              autoWidth={true}
+              id="select-filterBy-filter"
+              value={filterBy}
+              onChange={event => {
+                closeSidebar();
+                setQueryFilter({
+                  [KEY_FILTER_VISITS_BY]: event.target.value,
+                });
+              }}
+            >
+              <MenuItem value={FILTER_VISITS_BY.ANY}>Показать все</MenuItem>
+              <MenuItem value={FILTER_VISITS_BY.FOREIGN}>
+                Только зарубежные
+              </MenuItem>
+              <MenuItem value={FILTER_VISITS_BY.DOMESTIC}>
+                Только местные
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </ListItem>
       </List>
     ),
-    [groupBy, sortBy],
+    [groupBy, sortBy, filterBy],
   );
 
-  return { groupBy, sortBy };
+  return { groupBy, sortBy, filterBy };
 }
 
 function resolveActualSortBy(sortByQuery) {
@@ -110,6 +143,13 @@ function resolveActualSortBy(sortByQuery) {
     ? sortByQuery
     : SORT_VISITS_BY_DEFAULT;
 }
+
+function resolveActualFilterBy(filterByQuery) {
+  return Object.values(FILTER_VISITS_BY).includes(filterByQuery)
+    ? filterByQuery
+    : FILTER_VISITS_BY_DEFAULT;
+}
+
 function resolveActualGroupBy(groupByQuery, section) {
   const actualSection = Object.values(VISITS_SECTIONS).includes(section)
     ? section
