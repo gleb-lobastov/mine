@@ -1,8 +1,11 @@
 import React from 'react';
 import YearInfo from 'travel/components/common/YearInfo';
 import { GROUP_VISITS_BY } from '../consts';
+import PhotosPreviewTooltip from 'modules/components/PhotosPreviewTooltip';
+import { resolvePhotos } from 'travel/pages/VisitsPage/resolvePhotos';
 
 export default function renderYear({
+  provision,
   visit: { visitId },
   changes: { isYearChanged, isCountryChanged },
   groupBy,
@@ -15,10 +18,19 @@ export default function renderYear({
     return null;
   }
   return (
-    <YearInfo
+    <PhotosPreviewTooltip
       key={`y${year}_v${visitId}`}
-      year={year}
-      isSubgroup={isGroupedByCountriesYear}
-    />
+      caption={String(year)}
+      thumbnailsUrls={resolvePhotos({ year }, provision)}
+    >
+      {({ previewTriggerProps, previewTriggerClassName }) => (
+        <YearInfo
+          previewTriggerProps={previewTriggerProps}
+          previewTriggerClassName={previewTriggerClassName}
+          year={year}
+          isSubgroup={isGroupedByCountriesYear}
+        />
+      )}
+    </PhotosPreviewTooltip>
   );
 }

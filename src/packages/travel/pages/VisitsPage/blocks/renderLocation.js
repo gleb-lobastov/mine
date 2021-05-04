@@ -11,7 +11,7 @@ import LocationInfo from 'travel/components/models/locations/LocationInfo';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
 import { LOCATION_RATING } from 'travel/models/users/consts';
 import { GROUP_VISITS_BY, SORT_VISITS_BY } from '../consts';
-import resolvePhotosForLocation from '../resolvePhotosForLocation';
+import { resolvePhotos } from '../resolvePhotos';
 import {
   getYearsOfVisits,
   getLocationVisitsByYearCount,
@@ -30,7 +30,7 @@ const GROUPS_TO_RENDER_YEARS_OF_VISIT = [
 
 export default function renderLocation({
   visit,
-  visit: { tripId, visitId, locationId, countryId, departureRideId },
+  visit: { visitId, locationId, countryId, departureRideId },
   classes,
   changes: {
     isYearChanged,
@@ -39,6 +39,7 @@ export default function renderLocation({
     isLocationChanged,
   },
   year,
+  provision,
   provision: {
     locationsDict,
     locationsRating,
@@ -107,11 +108,10 @@ export default function renderLocation({
   return (
     <PhotosPreviewTooltip
       key={`l${locationId}_v${visitId}`}
-      locationName={location?.locationName}
-      thumbnailsUrls={resolvePhotosForLocation(
-        location,
-        { tripId, visitId, year },
-        { visitsDict },
+      caption={location.locationName}
+      thumbnailsUrls={resolvePhotos(
+        { visitsIds: location.visitsIds },
+        provision,
       )}
     >
       {({ previewTriggerProps, previewTriggerClassName }) => (

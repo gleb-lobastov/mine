@@ -44,12 +44,10 @@ export default function PreviewContextProvider({ children }) {
     <PreviewContext.Provider value={previewContextValue}>
       {children}
       <PreviewPopup
-        anchorEl={activeAnchorEl}
         ref={popupRef}
+        anchorEl={activeAnchorEl}
         hMovePercent={popupHMovePercent}
-        {...activePreviewProps}
-        setPreview={setPreview}
-        resetPreview={resetPreview}
+        previewProps={activePreviewProps}
       />
     </PreviewContext.Provider>
   );

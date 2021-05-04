@@ -48,14 +48,13 @@ const useStyles = makeStyles({
 });
 
 export default function PreviewPopupContent({
-  previewUrls,
   hMovePercent,
-  ...previewProps
+  previewProps: { previewUrls },
 }) {
   const classes = useStyles();
 
   const imageIndex = getIndexFromPercent(hMovePercent, previewUrls.length);
-  const url = previewUrls[imageIndex];
+  const { previewUrl: url, caption } = previewUrls[imageIndex] || {};
   const hasImages = previewUrls.length > 0;
 
   const galleryNode = hasImages ? (
@@ -70,11 +69,11 @@ export default function PreviewPopupContent({
     </>
   );
 
-  const detailsNode = (
+  const detailsNode = caption ? (
     <Typography className={cls(classes.caption, classes.detailsCaption)}>
-      {previewProps?.locationName}
+      {caption}
     </Typography>
-  );
+  ) : null;
 
   const counterNode = hasImages ? (
     <Typography className={cls(classes.caption, classes.counterCaption)}>

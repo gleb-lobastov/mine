@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 export default React.forwardRef(PreviewPopup);
 
 function PreviewPopup(
-  { hMovePercent, anchorEl, setPreview, ...previewProps },
+  { hMovePercent, anchorEl, previewProps },
   ref,
 ) {
   const classes = useStyles();
@@ -24,7 +24,10 @@ function PreviewPopup(
     <Portal container={document.body}>
       <Paper ref={ref} className={classes.container} elevation={2}>
         {Boolean(anchorEl) && (
-          <PreviewPopupContent {...previewProps} hMovePercent={hMovePercent} />
+          <PreviewPopupContent
+            previewProps={previewProps}
+            hMovePercent={hMovePercent}
+          />
         )}
       </Paper>
     </Portal>

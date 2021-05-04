@@ -29,7 +29,6 @@ export default function resolvePhotosForLocation(
 
   const previewsUrls = actualVisits
     .flatMap(({ photos }) => photos.map(({ previewUrl }) => previewUrl))
-    .slice(0, 7);
 
   return previewsUrls;
 }

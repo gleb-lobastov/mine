@@ -2,15 +2,17 @@ import { useContext, useMemo } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 import PreviewContext from './PreviewContext';
 
-export default function usePreviewTrigger({ locationName, thumbnailsUrls }) {
+const MAX_THUMBNAILS = 7;
+
+export default function usePreviewTrigger({ caption, thumbnailsUrls }) {
   const { setPreview, activeKey } = useContext(PreviewContext);
 
   const uniqKey = useMemo(uuidV4, []);
 
   function handleMouseEnter(event) {
     setPreview(event.currentTarget, uniqKey, {
-      previewUrls: thumbnailsUrls,
-      locationName,
+      previewUrls: thumbnailsUrls.slice(0, MAX_THUMBNAILS),
+      caption,
     });
   }
 

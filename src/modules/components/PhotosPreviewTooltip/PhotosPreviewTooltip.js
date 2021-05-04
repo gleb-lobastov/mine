@@ -14,14 +14,14 @@ const useStyles = makeStyles({
 });
 
 export default function PhotosPreviewTooltip({
-  locationName,
+  caption,
   thumbnailsUrls,
   children,
 }) {
   const classes = useStyles();
 
   const { active, triggerProps } = usePreviewTrigger({
-    locationName,
+    caption,
     thumbnailsUrls,
   });
 
