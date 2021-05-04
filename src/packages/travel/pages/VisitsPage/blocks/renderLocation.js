@@ -5,12 +5,13 @@ import IconStar from '@material-ui/icons/StarBorder';
 import IconThumbDown from '@material-ui/icons/ThumbDownOutlined';
 import IconThumbsUpDown from '@material-ui/icons/ThumbsUpDownOutlined';
 import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
+import PhotosPreviewTooltip from 'modules/components/PhotosPreviewTooltip';
 import RideInfo from 'travel/components/models/rides/RideInfo';
 import LocationInfo from 'travel/components/models/locations/LocationInfo';
-import LocationPhotos from 'travel/components/models/locations/LocationPhotos';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
 import { LOCATION_RATING } from 'travel/models/users/consts';
 import { GROUP_VISITS_BY, SORT_VISITS_BY } from '../consts';
+import resolvePhotosForLocation from '../resolvePhotosForLocation';
 import {
   getYearsOfVisits,
   getLocationVisitsByYearCount,
@@ -102,73 +103,45 @@ export default function renderLocation({
     yearsOfVisitDetailNode,
   );
 
-  // const renderLocationsPhotos = () => {
-  //   switch (groupBy) {
-  //     case GROUP_VISITS_BY.TRIPS:
-  //       return (
-  //         <LocationPhotos
-  //           visitId={visitId}
-  //           location={locationsDict[locationId]}
-  //           visitsDict={visitsDict}
-  //         />
-  //       );
-  //     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
-  //       return (
-  //         <LocationPhotos
-  //           tripId={tripId}
-  //           location={locationsDict[locationId]}
-  //           visitsDict={visitsDict}
-  //         />
-  //       );
-  //     case GROUP_VISITS_BY.YEARS:
-  //     case GROUP_VISITS_BY.YEARS_COUNTRIES:
-  //     case GROUP_VISITS_BY.COUNTRIES_YEARS:
-  //       return (
-  //         <LocationPhotos
-  //           location={locationsDict[locationId]}
-  //           visitsDict={visitsDict}
-  //           year={year}
-  //         />
-  //       );
-  //     case GROUP_VISITS_BY.COUNTRIES:
-  //     case GROUP_VISITS_BY.LOCATIONS:
-  //     default:
-  //       return (
-  //         <LocationPhotos
-  //           location={locationsDict[locationId]}
-  //           visitsDict={visitsDict}
-  //         />
-  //       );
-  //   }
-  // };
-
+  const location = locationsDict[locationId];
   return (
-    <React.Fragment key={`l${locationId}_v${visitId}`}>
-      <LocationInfo
-        location={locationsDict[locationId]}
-        country={countriesDict[countryId]}
-        shouldJustifyContent={isGroupedByTripsOnly}
-        href={visitEditUrl}
-      >
-        {childrenNodes}
-        {isGroupedByTripsOnly && (
-          <Grid container={true}>
-            <Grid item={true}>
-              <Typography className={classes.detail}>
-                {visitDateTimePeriodToString(visitsDict[visitId], isObscure)}
-              </Typography>
+    <PhotosPreviewTooltip
+      key={`l${locationId}_v${visitId}`}
+      locationName={location?.locationName}
+      thumbnailsUrls={resolvePhotosForLocation(
+        location,
+        { tripId, visitId, year },
+        { visitsDict },
+      )}
+    >
+      {({ previewTriggerProps, previewTriggerClassName }) => (
+        <LocationInfo
+          previewTriggerProps={previewTriggerProps}
+          previewTriggerClassName={previewTriggerClassName}
+          location={location}
+          country={countriesDict[countryId]}
+          shouldJustifyContent={isGroupedByTripsOnly}
+          href={visitEditUrl}
+        >
+          {childrenNodes}
+          {isGroupedByTripsOnly && (
+            <Grid container={true}>
+              <Grid item={true}>
+                <Typography className={classes.detail}>
+                  {visitDateTimePeriodToString(visitsDict[visitId], isObscure)}
+                </Typography>
+              </Grid>
+              <Grid item={true}>
+                <RideInfo
+                  ride={ridesDict[departureRideId]}
+                  className={classes.halfDown}
+                />
+              </Grid>
             </Grid>
-            <Grid item={true}>
-              <RideInfo
-                ride={ridesDict[departureRideId]}
-                className={classes.halfDown}
-              />
-            </Grid>
-          </Grid>
-        )}
-      </LocationInfo>
-      {/*{renderLocationsPhotos()}*/}
-    </React.Fragment>
+          )}
+        </LocationInfo>
+      )}
+    </PhotosPreviewTooltip>
   );
 }
 

@@ -16,6 +16,7 @@ import Auth from 'packages/auth';
 import AuthContext from '../../context/AuthContext';
 import FilterContextProvider from '../../context/QueryFilterContext';
 import SidebarContextProvider from '../../context/SidebarContext';
+import { PreviewContextProvider } from '../../context/PreviewContext';
 import Layout from '../Layout';
 import ErrorBoundary from '../ErrorBoundary';
 import { configPropTypes } from './propTypes';
@@ -59,22 +60,24 @@ const Root = ({
           <ThemeProvider theme={theme}>
             <FilterContextProvider>
               <SidebarContextProvider>
-                <AuthContext.Provider>
-                  <Packages Layout={Layout}>
-                    {auth && <Auth mountPath={auth.mountPath} alias="auth" />}
-                    {travel && (
-                      <Travel mountPath={travel.mountPath} alias="travel" />
-                    )}
-                    {literature && (
-                      <Literature
-                        mountPath={literature.mountPath}
-                        alias="literature"
-                      />
-                    )}
-                    {code && <Code mountPath={code.mountPath} alias="code" />}
-                    {main && <Main mountPath={main.mountPath} alias="main" />}
-                  </Packages>
-                </AuthContext.Provider>
+                <PreviewContextProvider>
+                  <AuthContext.Provider>
+                    <Packages Layout={Layout}>
+                      {auth && <Auth mountPath={auth.mountPath} alias="auth" />}
+                      {travel && (
+                        <Travel mountPath={travel.mountPath} alias="travel" />
+                      )}
+                      {literature && (
+                        <Literature
+                          mountPath={literature.mountPath}
+                          alias="literature"
+                        />
+                      )}
+                      {code && <Code mountPath={code.mountPath} alias="code" />}
+                      {main && <Main mountPath={main.mountPath} alias="main" />}
+                    </Packages>
+                  </AuthContext.Provider>
+                </PreviewContextProvider>
               </SidebarContextProvider>
             </FilterContextProvider>
           </ThemeProvider>

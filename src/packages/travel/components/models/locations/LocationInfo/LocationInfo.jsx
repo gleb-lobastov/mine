@@ -11,6 +11,8 @@ const useStyles = makeStyles({
 export default function LocationInfo({
   children,
   shouldJustifyContent,
+  previewTriggerProps,
+  previewTriggerClassName,
   href,
   location: { locationName } = {},
 }) {
@@ -18,7 +20,7 @@ export default function LocationInfo({
   const childrenArray = React.Children.toArray(children);
   if (!shouldJustifyContent || childrenArray.length <= 1) {
     return (
-      <Typography>
+      <Typography className={previewTriggerClassName} {...previewTriggerProps}>
         {locationName} {children}
       </Typography>
     );
@@ -29,7 +31,10 @@ export default function LocationInfo({
   return (
     <Grid container={true} justify="space-between" alignItems="center">
       <Grid item={true}>
-        <Typography>
+        <Typography
+          className={previewTriggerClassName}
+          {...previewTriggerProps}
+        >
           {href ? (
             <ConnectedLink to={href}>{locationName}</ConnectedLink>
           ) : (

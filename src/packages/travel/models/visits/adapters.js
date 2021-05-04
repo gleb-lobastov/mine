@@ -26,10 +26,17 @@ export const toClient = ({
   visitType: rawVisitType,
   visitComment: rawVisitComment,
   photos: rawPhotos
-    ? rawPhotos.map(({ url: rawUrl, thumbnail_url: rawThumbnailUrl }) => ({
-        fullSizePhotoUrl: rawUrl,
-        thumbnailUrl: rawThumbnailUrl,
-      }))
+    ? rawPhotos.map(
+        ({
+          url: rawUrl,
+          thumbnail_url: rawThumbnailUrl,
+          preview_url: rawPreviewUrl,
+        }) => ({
+          fullSizePhotoUrl: rawUrl,
+          thumbnailUrl: rawThumbnailUrl,
+          previewUrl: rawPreviewUrl,
+        }),
+      )
     : [],
 });
 
