@@ -22,8 +22,6 @@ const useStyles = makeStyles({
     backgroundColor: 'white',
   },
   imageContainer: {
-    width: '100%',
-    height: '100%',
     backgroundSize: 'cover',
     backgroundPosition: 'center center',
     willChange: 'background-image',
@@ -35,6 +33,18 @@ const useStyles = makeStyles({
     color: 'white',
     borderRadius: '35px',
   },
+  shadow: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'hsla(0, 0%, 15%, 0.6)',
+  },
+  foreground: {
+    color: 'white',
+    zIndex: 1,
+  },
   detailsCaption: {
     position: 'absolute',
     top: '0',
@@ -45,28 +55,44 @@ const useStyles = makeStyles({
     top: '0',
     right: '0',
   },
+  showAllCaption: {
+    position: 'absolute',
+    bottom: '0',
+    left: '0',
+  },
 });
 
 export default function PreviewPopupContent({
   hMovePercent,
-  previewProps: { previewUrls },
+  previewProps: { previewUrls, total },
 }) {
   const classes = useStyles();
 
-  const imageIndex = getIndexFromPercent(hMovePercent, previewUrls.length);
+  const previewUrlsLength = previewUrls.length;
+  const hasImages = previewUrlsLength > 0;
+  const hasMoreImages = total > previewUrlsLength;
+  const imageIndex = getIndexFromPercent(hMovePercent, previewUrlsLength);
   const { previewUrl: url, caption } = previewUrls[imageIndex] || {};
-  const hasImages = previewUrls.length > 0;
+  const showAllBanner = hasMoreImages && imageIndex === previewUrlsLength - 1;
 
   const galleryNode = hasImages ? (
     <animated.div
-      className={classes.imageContainer}
+      className={cls(classes.content, classes.imageContainer)}
       style={{ backgroundImage: `url(${url})` }}
-    />
+    >
+      {showAllBanner && (
+        <>
+          <div className={classes.shadow} />
+          <CameraAltIcon className={classes.foreground} />
+          <div className={classes.foreground}>Дальше...</div>
+        </>
+      )}
+    </animated.div>
   ) : (
-    <>
+    <div className={classes.content}>
       <CameraAltIcon />
       <div>Нет фото</div>
-    </>
+    </div>
   );
 
   const detailsNode = caption ? (
@@ -77,15 +103,13 @@ export default function PreviewPopupContent({
 
   const counterNode = hasImages ? (
     <Typography className={cls(classes.caption, classes.counterCaption)}>
-      {imageIndex + 1}/{previewUrls.length}
+      {imageIndex + 1}/{total}
     </Typography>
   ) : null;
 
   return (
     <div className={classes.container}>
-      <CrossFade uniqKey={hasImages ? url : 'noPhoto'}>
-        <div className={classes.content}>{galleryNode}</div>
-      </CrossFade>
+      <CrossFade uniqKey={hasImages ? url : 'noPhoto'}>{galleryNode}</CrossFade>
       {detailsNode}
       {counterNode}
     </div>

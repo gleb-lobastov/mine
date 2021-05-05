@@ -109,7 +109,7 @@ export default function renderLocation({
     <PhotosPreviewTooltip
       key={`l${locationId}_v${visitId}`}
       caption={location.locationName}
-      thumbnailsUrls={resolvePhotos(
+      previewUrls={resolvePhotos(
         { visitsIds: location.visitsIds },
         provision,
       )}

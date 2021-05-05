@@ -21,7 +21,7 @@ export default function renderYear({
     <PhotosPreviewTooltip
       key={`y${year}_v${visitId}`}
       caption={String(year)}
-      thumbnailsUrls={resolvePhotos({ year }, provision)}
+      previewUrls={resolvePhotos({ year }, provision)}
     >
       {({ previewTriggerProps, previewTriggerClassName }) => (
         <YearInfo
