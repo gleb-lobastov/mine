@@ -1,27 +1,21 @@
-import { useContext, useMemo } from 'react';
+import { useContext, useMemo, useEffect } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 import PreviewContext from './PreviewContext';
 
-const MAX_THUMBNAILS = 10;
+export default function usePreviewTrigger(previewProps) {
+  const { register, activePreviewKey } = useContext(PreviewContext);
 
-export default function usePreviewTrigger({ caption, previewUrls }) {
-  const { setPreview, activeKey } = useContext(PreviewContext);
+  const uniqPreviewKey = useMemo(uuidV4, []);
 
-  const uniqKey = useMemo(uuidV4, []);
-
-  function handleMouseEnter(event) {
-    setPreview(event.currentTarget, uniqKey, {
-      previewUrls: previewUrls.slice(0, MAX_THUMBNAILS),
-      total: previewUrls.length,
-      caption,
-    });
-  }
+  useEffect(() => {
+    const unregister = register(uniqPreviewKey, previewProps);
+    return unregister;
+  }, []);
 
   return {
-    active: uniqKey === activeKey,
+    active: uniqPreviewKey === activePreviewKey,
     triggerProps: {
-      onMouseEnter: handleMouseEnter,
-      'data-preview': uniqKey,
+      'data-preview': uniqPreviewKey,
     },
   };
 }
