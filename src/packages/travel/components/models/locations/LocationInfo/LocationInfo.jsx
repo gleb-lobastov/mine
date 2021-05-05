@@ -20,8 +20,10 @@ export default function LocationInfo({
   const childrenArray = React.Children.toArray(children);
   if (!shouldJustifyContent || childrenArray.length <= 1) {
     return (
-      <Typography className={previewTriggerClassName} {...previewTriggerProps}>
-        {locationName} {children}
+      <Typography {...previewTriggerProps}>
+        <div className={previewTriggerClassName}>
+          {locationName} {children}
+        </div>
       </Typography>
     );
   }
@@ -31,16 +33,15 @@ export default function LocationInfo({
   return (
     <Grid container={true} justify="space-between" alignItems="center">
       <Grid item={true}>
-        <Typography
-          className={previewTriggerClassName}
-          {...previewTriggerProps}
-        >
-          {href ? (
-            <ConnectedLink to={href}>{locationName}</ConnectedLink>
-          ) : (
-            locationName
-          )}{' '}
-          {restChildren}
+        <Typography {...previewTriggerProps}>
+          <div className={previewTriggerClassName}>
+            {href ? (
+              <ConnectedLink to={href}>{locationName}</ConnectedLink>
+            ) : (
+              locationName
+            )}{' '}
+            {restChildren}
+          </div>
         </Typography>
       </Grid>
       <Grid item={true} classes={{ item: classes.autoMargin }}>

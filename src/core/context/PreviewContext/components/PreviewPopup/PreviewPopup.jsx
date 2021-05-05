@@ -6,7 +6,6 @@ import PreviewPopupContent from './components/PreviewPopupContent';
 
 const useStyles = makeStyles({
   container: {
-    pointerEvents: 'none',
     position: 'fixed',
     bottom: 16,
     right: 16,

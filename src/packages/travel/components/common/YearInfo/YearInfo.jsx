@@ -1,5 +1,4 @@
 import React from 'react';
-import cls from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import useVisitsPageStyles from '../../../pages/VisitsPage/useVisitsPageStyles';
 
@@ -13,13 +12,12 @@ export default function YearInfo({
   return (
     <Typography
       variant={isSubgroup ? 'h5' : 'h4'}
-      className={cls(
-        previewTriggerClassName,
-        isSubgroup ? classes.subgroup : classes.group,
-      )}
+      className={isSubgroup ? classes.subgroup : classes.group}
       {...previewTriggerProps}
     >
-      {year || 'Без указания даты'}
+      <div className={previewTriggerClassName}>
+        {year || 'Без указания даты'}
+      </div>
     </Typography>
   );
 }

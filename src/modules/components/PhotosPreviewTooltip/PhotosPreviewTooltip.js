@@ -7,6 +7,7 @@ const useStyles = makeStyles({
   trigger: {
     transition: 'transform 0.5s ease',
     transformOrigin: 'left',
+    display: 'inline-block',
   },
   activeTrigger: {
     transform: 'scale(1.4)',
