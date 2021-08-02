@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import throttle from 'lodash/throttle';
 
 const MOUSE_MOVE_EVENTS_INTERVAL_MS = 40;
@@ -8,10 +8,15 @@ export default function useMouseMove({ total }) {
 
   const sliderRef = useRef();
 
-  const handleMouseMove = useCallback(
-    throttle(handleMouseMoveInternal, MOUSE_MOVE_EVENTS_INTERVAL_MS),
-    [],
-  );
+  const handleMouseMove = useMemo(() => {
+    const handler = throttle(
+      handleMouseMoveInternal,
+      MOUSE_MOVE_EVENTS_INTERVAL_MS,
+    );
+    // Can't track synthetic event, as react discard them and they not
+    // available asynchronously. So track only needed params of event
+    return ({ clientX }) => handler({ clientX });
+  }, []);
 
   return {
     handleMouseMove,
@@ -19,11 +24,11 @@ export default function useMouseMove({ total }) {
     slideIndex: getIndexFromPercent(percent, total),
   };
 
-  function handleMouseMoveInternal(event) {
+  function handleMouseMoveInternal({ clientX }) {
     const sliderEl = sliderRef.current;
     if (sliderEl) {
       const { left, width } = sliderEl.getBoundingClientRect();
-      const x = event.clientX - left;
+      const x = clientX - left;
       if (x > 0 && x < width) {
         setPercent(Math.ceil((x * 100) / width));
       }
