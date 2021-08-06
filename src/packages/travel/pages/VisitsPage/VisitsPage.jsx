@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { usePaths } from 'modules/packages';
+import ScrollBuddy from 'modules/components/ScrollBuddy';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
@@ -8,7 +9,8 @@ import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchSortingFn from './switchSortingFn';
 import switchFilteringFn from './switchFilteringFn';
-import renderNodesInOrder from './blocks/renderNodesInOrder';
+import defineNodesInOrder from './blocks/defineNodesInOrder';
+import renderNode from './blocks/renderNode';
 import renderTitle from './blocks/renderTitle';
 import calcCounters from './calcCounters';
 
@@ -39,6 +41,8 @@ export default function VisitsPage({
     visitEdit: visitEditPath,
   } = travelPaths;
 
+  const nodesRef = useRef();
+
   if (isError) {
     return <div>...Error</div>;
   }
@@ -65,13 +69,13 @@ export default function VisitsPage({
   const visitsList = unsortedVisitsList.sort(
     switchSortingFn(provision, counters, { groupBy, sortBy }),
   );
-  const nodes = visitsList.reduce(
+  const { nodes, definitions } = visitsList.reduce(
     (nodesAccumulator, visit, index) => {
       const prevVisit = index > 0 ? visitsList[index - 1] : {};
       const nextVisit =
         index < visitsList.length - 1 ? visitsList[index + 1] : {};
 
-      renderNodesInOrder({
+      defineNodesInOrder({
         prevVisit,
         visit,
         nextVisit,
@@ -88,20 +92,47 @@ export default function VisitsPage({
             ? visitEditPath.toUrl({ strVisitId: String(visit.visitId) })
             : undefined,
         isObscure,
-      })
-        .filter(Boolean)
-        .forEach(node => nodesAccumulator.push(node));
+      }).forEach(props => {
+        const node = renderNode(props);
+        if (!node) {
+          return;
+        }
+        nodesAccumulator.nodes.push(node);
+        nodesAccumulator.definitions.push(props);
+      });
 
       return nodesAccumulator;
     },
-    [titleNode],
+    { nodes: [titleNode], definitions: [{ type: 'TITLE' }] },
   );
 
   // without key there is strange bug with reconciling:
   // when group_by changed from trips to something other, then trips nodes still
   // rendering in three, but because of nodes keys collisions only
   // originalLocations is remaining on top of the list
-  return <div key={`${groupBy}_${sortBy}`}>{nodes}</div>;
+  return (
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div key={`${groupBy}_${sortBy}`} ref={nodesRef}>
+        {nodes}
+      </div>
+      <ScrollBuddy nodesRef={nodesRef} deps={[provision]}>
+        {definitions.map((definition, index) => {
+          const {
+            type,
+            renderProps: { year, visit: { locationName } = {} } = {},
+          } = definition;
+          return (
+            <div
+              style={{ height: '200px' }}
+              key={`${type}-${year}-${locationName}-${index}`}
+            >
+              {`${type}-${year}-${locationName}-${index}`}
+            </div>
+          );
+        })}
+      </ScrollBuddy>
+    </div>
+  );
 }
 
 /*

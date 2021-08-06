@@ -4,15 +4,9 @@ import {
   checkIsGroupedByTrip,
   checkIsGroupedByYear,
 } from '../utils';
-import { GROUP_VISITS_BY } from '../consts';
-import renderCountry from './renderCountry';
-import renderLocation from './renderLocation';
-import renderDepartureLocation from './renderDepartureLocation';
-import renderArrivalLocation from './renderArrivalLocation';
-import renderTrip from './renderTrip';
-import renderYear from './renderYear';
+import { GROUP_VISITS_BY, NODE_TYPE } from '../consts';
 
-export default function renderNodesInOrder({
+export default function defineNodesInOrder({
   prevVisit,
   visit,
   nextVisit,
@@ -51,36 +45,41 @@ export default function renderNodesInOrder({
   switch (groupBy) {
     case GROUP_VISITS_BY.TRIPS:
       return [
-        renderTrip(renderProps),
-        renderDepartureLocation(renderProps),
-        renderLocation(renderProps),
-        renderArrivalLocation(renderProps),
+        { type: NODE_TYPE.TRIP, renderProps },
+        { type: NODE_TYPE.DEPARTURE_LOCATION, renderProps },
+        { type: NODE_TYPE.LOCATION, renderProps },
+        { type: NODE_TYPE.ARRIVAL_LOCATION, renderProps },
       ];
     case GROUP_VISITS_BY.TRIPS_COUNTRIES:
       return [
-        renderTrip(renderProps),
-        renderCountry(renderProps),
-        renderLocation(renderProps),
+        { type: NODE_TYPE.TRIP, renderProps },
+        { type: NODE_TYPE.COUNTRY, renderProps },
+        { type: NODE_TYPE.LOCATION, renderProps },
       ];
     case GROUP_VISITS_BY.COUNTRIES:
-      return [renderCountry(renderProps), renderLocation(renderProps)];
+      return [
+        { type: NODE_TYPE.COUNTRY, renderProps },
+        { type: NODE_TYPE.LOCATION, renderProps },
+      ];
     case GROUP_VISITS_BY.YEARS:
-      return [renderYear(renderProps), renderLocation(renderProps)];
+      return [
+        { type: NODE_TYPE.YEAR, renderProps },
+        { type: NODE_TYPE.LOCATION, renderProps },
+      ];
     case GROUP_VISITS_BY.YEARS_COUNTRIES:
       return [
-        renderYear(renderProps),
-        renderCountry(renderProps),
-        renderLocation(renderProps),
+        { type: NODE_TYPE.YEAR, renderProps },
+        { type: NODE_TYPE.COUNTRY, renderProps },
+        { type: NODE_TYPE.LOCATION, renderProps },
       ];
     case GROUP_VISITS_BY.COUNTRIES_YEARS:
       return [
-        renderCountry(renderProps),
-        renderYear(renderProps),
-        renderLocation(renderProps),
+        { type: NODE_TYPE.COUNTRY, renderProps },
+        { type: NODE_TYPE.YEAR, renderProps },
+        { type: NODE_TYPE.LOCATION, renderProps },
       ];
     case GROUP_VISITS_BY.LOCATIONS:
     default:
-      // return {push:[locationNode], keep: [countryNode, yearNode]};
-      return [renderLocation(renderProps)];
+      return [{ type: NODE_TYPE.LOCATION, renderProps }];
   }
 }

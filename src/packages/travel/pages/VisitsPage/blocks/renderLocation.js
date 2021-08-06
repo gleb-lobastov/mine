@@ -106,42 +106,29 @@ export default function renderLocation({
 
   const location = locationsDict[locationId];
   return (
-    <PhotosPreviewTooltip
-      key={`l${locationId}_v${visitId}`}
-      caption={location.locationName}
-      previewUrls={resolvePhotos(
-        { visitsIds: location.visitsIds },
-        provision,
-      )}
+    <LocationInfo
+      location={location}
+      country={countriesDict[countryId]}
+      shouldJustifyContent={isGroupedByTripsOnly}
+      href={visitEditUrl}
     >
-      {({ previewTriggerProps, previewTriggerClassName }) => (
-        <LocationInfo
-          previewTriggerProps={previewTriggerProps}
-          previewTriggerClassName={previewTriggerClassName}
-          location={location}
-          country={countriesDict[countryId]}
-          shouldJustifyContent={isGroupedByTripsOnly}
-          href={visitEditUrl}
-        >
-          {childrenNodes}
-          {isGroupedByTripsOnly && (
-            <Grid container={true}>
-              <Grid item={true}>
-                <Typography className={classes.detail}>
-                  {visitDateTimePeriodToString(visitsDict[visitId], isObscure)}
-                </Typography>
-              </Grid>
-              <Grid item={true}>
-                <RideInfo
-                  ride={ridesDict[departureRideId]}
-                  className={classes.halfDown}
-                />
-              </Grid>
-            </Grid>
-          )}
-        </LocationInfo>
+      {childrenNodes}
+      {isGroupedByTripsOnly && (
+        <Grid container={true}>
+          <Grid item={true}>
+            <Typography className={classes.detail}>
+              {visitDateTimePeriodToString(visitsDict[visitId], isObscure)}
+            </Typography>
+          </Grid>
+          <Grid item={true}>
+            <RideInfo
+              ride={ridesDict[departureRideId]}
+              className={classes.halfDown}
+            />
+          </Grid>
+        </Grid>
       )}
-    </PhotosPreviewTooltip>
+    </LocationInfo>
   );
 }
 
