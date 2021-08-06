@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
@@ -29,6 +29,7 @@ export default function ScrollBuddy({ nodesRef, children, deps }) {
   const buddyRef = useRef();
   const heightsRef = useRef();
   const frameHandleRef = useRef(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   useLayoutEffect(() => {
     if (!nodesRef.current) {
@@ -54,6 +55,7 @@ export default function ScrollBuddy({ nodesRef, children, deps }) {
         Math.min(window.scrollY, window.innerHeight / 2) +
         bottom;
       const elIndex = bisect(heightsRef.current, centerPosition);
+      setSelectedIndex(elIndex);
       const percent =
         (centerPosition - heightsRef.current[elIndex]) /
         (heightsRef.current[elIndex + 1] - heightsRef.current[elIndex]);
@@ -75,14 +77,18 @@ export default function ScrollBuddy({ nodesRef, children, deps }) {
     return () => window.removeEventListener('scroll', handleScroll);
   });
 
+  const { right, left } = children(selectedIndex);
   return (
-    <div className={classes.container}>
-      <div className={classes.contentWrapper}>
-        <div className={classes.content} ref={buddyRef}>
-          {children}
+    <>
+      {right}
+      <div className={classes.container}>
+        <div className={classes.contentWrapper}>
+          <div className={classes.content} ref={buddyRef}>
+            {left}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

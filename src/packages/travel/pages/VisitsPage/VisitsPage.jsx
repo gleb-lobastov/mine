@@ -112,23 +112,37 @@ export default function VisitsPage({
   // originalLocations is remaining on top of the list
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <div key={`${groupBy}_${sortBy}`} ref={nodesRef}>
-        {nodes}
-      </div>
       <ScrollBuddy nodesRef={nodesRef} deps={[provision]}>
-        {definitions.map((definition, index) => {
-          const {
-            type,
-            renderProps: { year, visit: { locationName } = {} } = {},
-          } = definition;
-          return (
-            <div
-              style={{ height: '200px' }}
-              key={`${type}-${year}-${locationName}-${index}`}
-            >
-              {`${type}-${year}-${locationName}-${index}`}
+        {currentIndex => ({
+          right: (
+            <div key={`${groupBy}_${sortBy}`} ref={nodesRef}>
+              {nodes.map(
+                (node, index) =>
+                  index === currentIndex ? (
+                    <div style={{ backgroundColor: 'red' }}>{node}</div>
+                  ) : (
+                    node
+                  ),
+              )}
             </div>
-          );
+          ),
+          left: definitions.map((definition, index) => {
+            const {
+              type,
+              renderProps: { year, visit: { locationName } = {} } = {},
+            } = definition;
+            return (
+              <div
+                style={{
+                  height: '200px',
+                  backgroundColor: index === currentIndex ? 'red' : undefined,
+                }}
+                key={`${type}-${year}-${locationName}-${index}`}
+              >
+                {`${type}-${year}-${locationName}-${index}`}
+              </div>
+            );
+          }),
         })}
       </ScrollBuddy>
     </div>
