@@ -111,41 +111,37 @@ export default function VisitsPage({
   // rendering in three, but because of nodes keys collisions only
   // originalLocations is remaining on top of the list
   return (
-    <div style={{ display: 'flex', flexDirection: 'row' }}>
-      <ScrollBuddy nodesRef={nodesRef} deps={[provision]}>
-        {currentIndex => ({
-          right: (
-            <div key={`${groupBy}_${sortBy}`} ref={nodesRef}>
-              {nodes.map(
-                (node, index) =>
-                  index === currentIndex ? (
-                    <div style={{ backgroundColor: 'red' }}>{node}</div>
-                  ) : (
-                    node
-                  ),
-              )}
-            </div>
-          ),
-          left: definitions.map((definition, index) => {
-            const {
-              type,
-              renderProps: { year, visit: { locationName } = {} } = {},
-            } = definition;
-            return (
-              <div
-                style={{
-                  height: '200px',
-                  backgroundColor: index === currentIndex ? 'red' : undefined,
-                }}
-                key={`${type}-${year}-${locationName}-${index}`}
-              >
-                {`${type}-${year}-${locationName}-${index}`}
-              </div>
-            );
-          }),
-        })}
-      </ScrollBuddy>
-    </div>
+    <ScrollBuddy
+      nodesRef={nodesRef}
+      deps={[provision]}
+      renderBuddy={currentIndex => {
+        const {
+          type,
+          renderProps: { year, visit: { locationName } = {} } = {},
+        } = definitions[currentIndex];
+        return (
+          <div
+            style={{ height: '200px' }}
+            key={`${type}-${year}-${locationName}-${currentIndex}`}
+          >
+            {`${type}-${year}-${locationName}-${currentIndex}`}
+          </div>
+        );
+      }}
+    >
+      {currentIndex => (
+        <div key={`${groupBy}_${sortBy}`} ref={nodesRef}>
+          {nodes.map(
+            (node, index) =>
+              index === currentIndex ? (
+                <div style={{ backgroundColor: 'red' }}>{node}</div>
+              ) : (
+                node
+              ),
+          )}
+        </div>
+      )}
+    </ScrollBuddy>
   );
 }
 

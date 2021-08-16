@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import isFunction from 'lodash/isFunction';
 
 const useStyles = makeStyles({
   container: {
@@ -10,26 +11,29 @@ const useStyles = makeStyles({
     overflow: 'hidden',
     marginRight: '-24px',
     marginTop: '-24px',
-  },
-  contentWrapper: {
-    marginRight: '-24px',
-    paddingRight: '24px',
-    paddingTop: '24px',
-    overflow: 'auto',
-    pointerEvents: 'none',
+    width: '300px',
   },
   content: {
-    height: '100vh',
     paddingRight: '24px',
+    paddingTop: '24px',
+  },
+  buddies: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  buddy: {
+    width: '300px',
+    pointerEvents: 'none',
   },
 });
 
-export default function ScrollBuddy({ nodesRef, children, deps }) {
+export default function ScrollBuddy({ nodesRef, children, deps, renderBuddy }) {
   const classes = useStyles();
-  const buddyRef = useRef();
   const heightsRef = useRef();
-  const frameHandleRef = useRef(null);
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [{ elIndex: selectedIndex, percent }, setSelectedIndex] = useState({
+    selectedIndex: null,
+    percent: 0,
+  });
 
   useLayoutEffect(() => {
     if (!nodesRef.current) {
@@ -45,6 +49,9 @@ export default function ScrollBuddy({ nodesRef, children, deps }) {
 
   useEffect(() => {
     const handleScroll = function handleScroll() {
+      if (!heightsRef.current || !nodesRef.current) {
+        return;
+      }
       const bottom = Math.max(
         window.innerHeight * 1.5 -
           nodesRef.current.getBoundingClientRect().bottom,
@@ -55,40 +62,44 @@ export default function ScrollBuddy({ nodesRef, children, deps }) {
         Math.min(window.scrollY, window.innerHeight / 2) +
         bottom;
       const elIndex = bisect(heightsRef.current, centerPosition);
-      setSelectedIndex(elIndex);
-      const percent =
+      const elPercent =
         (centerPosition - heightsRef.current[elIndex]) /
         (heightsRef.current[elIndex + 1] - heightsRef.current[elIndex]);
-      const el = buddyRef.current.children[elIndex];
-      const elHeight = el.getBoundingClientRect().height;
-      const targetTop =
-        el.offsetTop - window.innerHeight / 2 + elHeight * percent;
-      if (!frameHandleRef.current) {
-        cancelAnimationFrame(frameHandleRef.current);
-        frameHandleRef.current = null;
-      }
-      frameHandleRef.current = window.requestAnimationFrame(() => {
-        frameHandleRef.current = null;
-        buddyRef.current.parentElement.scrollTop = targetTop;
-      });
+      setSelectedIndex({ elIndex, percent: elPercent });
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   });
 
-  const { right, left } = children(selectedIndex);
   return (
-    <>
-      {right}
-      <div className={classes.container}>
-        <div className={classes.contentWrapper}>
-          <div className={classes.content} ref={buddyRef}>
-            {left}
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      {isFunction(children) ? children(selectedIndex) : children}
+      {Boolean(nodesRef.current?.children) && (
+        <div className={classes.container}>
+          <div className={classes.content}>
+            <div className={classes.buddies}>
+              {percent < 0.1 &&
+                selectedIndex > 0 && (
+                  <div
+                    className={classes.buddy}
+                    style={{ transform: `translateX(${-percent * 300}px)` }}
+                  >
+                    {renderBuddy(selectedIndex - 1)}
+                  </div>
+                )}
+              <div className={classes.buddy}>{renderBuddy(selectedIndex)}</div>
+              {percent < 0.1 &&
+                selectedIndex >= nodesRef.current?.children.length - 1 && (
+                  <div className={classes.buddy}>
+                    {renderBuddy(selectedIndex + 1)}
+                  </div>
+                )}
+            </div>
           </div>
         </div>
-      </div>
-    </>
+      )}
+    </div>
   );
 }
 
