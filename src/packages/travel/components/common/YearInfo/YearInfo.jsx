@@ -1,8 +1,10 @@
 import React from 'react';
+import cls from 'classnames';
 import Typography from '@material-ui/core/Typography';
 import useVisitsPageStyles from '../../../pages/VisitsPage/useVisitsPageStyles';
 
 export default function YearInfo({
+  className,
   previewTriggerProps,
   previewTriggerClassName,
   year,
@@ -12,7 +14,7 @@ export default function YearInfo({
   return (
     <Typography
       variant={isSubgroup ? 'h5' : 'h4'}
-      className={isSubgroup ? classes.subgroup : classes.group}
+      className={cls(className, isSubgroup ? classes.subgroup : classes.group)}
       {...previewTriggerProps}
     >
       <div className={previewTriggerClassName}>

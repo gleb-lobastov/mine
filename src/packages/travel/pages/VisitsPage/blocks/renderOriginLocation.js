@@ -13,6 +13,7 @@ export default function renderOriginLocation({
   keyBase,
   children,
   classes,
+  className,
   visit: { tripId },
   provision: { tripsDict, locationsDict, countriesDict },
   groupBy,
@@ -40,6 +41,7 @@ export default function renderOriginLocation({
 
   return (
     <LocationInfo
+      className={className}
       key={`${keyBase}_t${tripId}_ol${originLocationId}`}
       location={locationsDict[originLocationId]}
       country={countriesDict[countryId]}

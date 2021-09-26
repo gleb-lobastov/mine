@@ -6,6 +6,7 @@ export default function renderYear({
   changes: { isYearChanged, isCountryChanged },
   groupBy,
   year,
+  className,
 }) {
   const isGroupedByCountriesYear = groupBy === GROUP_VISITS_BY.COUNTRIES_YEARS;
   const shouldRender =
@@ -13,5 +14,11 @@ export default function renderYear({
   if (!shouldRender) {
     return null;
   }
-  return <YearInfo year={year} isSubgroup={isGroupedByCountriesYear} />;
+  return (
+    <YearInfo
+      className={className}
+      year={year}
+      isSubgroup={isGroupedByCountriesYear}
+    />
+  );
 }

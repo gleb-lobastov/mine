@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(theme => ({
+  active: {
+    backgroundColor: 'red',
+  },
   visibilityTrigger: {
     '&:hover $visibleOnlyOnHover': {
       visibility: 'visible',
@@ -10,7 +13,7 @@ export default makeStyles(theme => ({
     visibility: 'hidden',
   },
   group: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     top: 0,
     '&:not(:first-of-type)': {
       marginTop: theme.spacing(5),
@@ -25,7 +28,7 @@ export default makeStyles(theme => ({
     },
   },
   subgroup: {
-    backgroundColor: 'white',
+    // backgroundColor: 'white',
     top: 38,
   },
   detail: {

@@ -6,6 +6,7 @@ import TripInfo from 'travel/components/models/trips/TripInfo';
 
 export default function renderTrip({
   visit: { visitId, tripId },
+  className,
   changes: { isTripChanged },
   provision: { tripsDict, visitsDict, countriesDict, locationsDict },
   travelPaths: { tripEdit: tripEditPath },
@@ -30,7 +31,7 @@ export default function renderTrip({
   return (
     <TripInfo
       key={`t${tripId}_v${visitId}`}
-      className={cls(classes.visibilityTrigger, classes.group)}
+      className={cls(className, classes.visibilityTrigger, classes.group)}
       trip={tripsDict[tripId]}
       visitsDict={visitsDict}
       countriesDict={countriesDict}

@@ -22,13 +22,23 @@ const useStyles = makeStyles({
   },
 });
 
-export default function ScrollBuddy({ nodesRef, children, deps, renderBuddy }) {
+export default function ScrollBuddy({
+  nodesRef,
+  list,
+  renderItem,
+  deps,
+  renderBuddy,
+  children: renderChildrenFn,
+}) {
   const classes = useStyles();
+
   const heightsRef = useRef();
   const [{ elIndex: selectedIndex, percent }, setSelectedIndex] = useState({
     selectedIndex: null,
     percent: 0,
   });
+
+  const children = mapWithActive(list, renderItem, selectedIndex);
 
   useLayoutEffect(() => {
     if (!nodesRef.current) {
@@ -69,7 +79,16 @@ export default function ScrollBuddy({ nodesRef, children, deps, renderBuddy }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
-      {isFunction(children) ? children(selectedIndex) : children}
+      <div>
+        {renderChildrenFn(
+          <div
+            ref={nodesRef}
+            onClick={e => e.target?.scrollIntoView({ block: 'center' })}
+          >
+            {children}
+          </div>,
+        )}
+      </div>
       {Boolean(nodesRef.current?.children) && (
         <div className={classes.container}>
           <div className={classes.content}>
@@ -79,14 +98,17 @@ export default function ScrollBuddy({ nodesRef, children, deps, renderBuddy }) {
                   className={classes.buddy}
                   style={{ transform: `translateX(${-percent * 300}px)` }}
                 >
-                  {renderBuddy(selectedIndex - 1)}
+                  {renderBuddy(list[selectedIndex - 1], selectedIndex - 1)}
                 </div>
               )}
-            <div className={classes.buddy}>{renderBuddy(selectedIndex)}</div>
+            <div className={classes.buddy}>
+              {children[selectedIndex]}
+              {renderBuddy(list[selectedIndex], selectedIndex)}
+            </div>
             {percent < 0.1 &&
               selectedIndex >= nodesRef.current?.children.length - 1 && (
                 <div className={classes.buddy}>
-                  {renderBuddy(selectedIndex + 1)}
+                  {renderBuddy(list[selectedIndex + 1], selectedIndex + 1)}
                 </div>
               )}
           </div>
@@ -140,4 +162,16 @@ function bisect(arrayToSearch, valueToFind) {
     }
   }
   return startLookupIdx;
+}
+
+function mapWithActive(array, callback, activeIndex) {
+  let currentIndex = 0;
+  return array.reduce((accumulator, item) => {
+    const node = callback(item, activeIndex === currentIndex);
+    if (node) {
+      accumulator.push(node);
+      currentIndex += 1;
+    }
+    return accumulator;
+  }, []);
 }

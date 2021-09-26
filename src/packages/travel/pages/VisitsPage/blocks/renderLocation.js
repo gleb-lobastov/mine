@@ -5,7 +5,6 @@ import IconStar from '@material-ui/icons/StarBorder';
 import IconThumbDown from '@material-ui/icons/ThumbDownOutlined';
 import IconThumbsUpDown from '@material-ui/icons/ThumbsUpDownOutlined';
 import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
-import PhotosPreviewTooltip from 'modules/components/PhotosPreviewTooltip';
 import RideInfo from 'travel/components/models/rides/RideInfo';
 import LocationInfo from 'travel/components/models/locations/LocationInfo';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
@@ -31,6 +30,7 @@ const GROUPS_TO_RENDER_YEARS_OF_VISIT = [
 export default function renderLocation({
   visit,
   visit: { visitId, locationId, countryId, departureRideId },
+  className,
   classes,
   changes: {
     isYearChanged,
@@ -39,7 +39,6 @@ export default function renderLocation({
     isLocationChanged,
   },
   year,
-  provision,
   provision: {
     locationsDict,
     locationsRating,
@@ -107,6 +106,7 @@ export default function renderLocation({
   const location = locationsDict[locationId];
   return (
     <LocationInfo
+      className={className}
       location={location}
       country={countriesDict[countryId]}
       shouldJustifyContent={isGroupedByTripsOnly}

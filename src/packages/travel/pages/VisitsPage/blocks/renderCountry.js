@@ -1,4 +1,5 @@
 import React from 'react';
+import cls from 'classnames';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
 import { GROUP_VISITS_BY } from '../consts';
 import { resolveTripCountryId, resolveYearCountryId } from '../utils';
@@ -11,6 +12,7 @@ export default function renderCountry({
   year,
   counters,
   classes,
+  className,
 }) {
   const isGroupedByTrip = groupBy === GROUP_VISITS_BY.TRIPS_COUNTRIES;
   const isGroupedByYearCountries = groupBy === GROUP_VISITS_BY.YEARS_COUNTRIES;
@@ -48,7 +50,7 @@ export default function renderCountry({
       key={`c${countryId}_v${visitId}`}
       country={countriesDict[countryId]}
       isSubgroup={isSubgroup}
-      className={isSubgroup ? classes.subgroup : classes.group}
+      className={cls(className, isSubgroup ? classes.subgroup : classes.group)}
     >
       {locationsCounter > 2 && (
         <span className={classes.detail}>{`${locationsCounter} мест`}</span>

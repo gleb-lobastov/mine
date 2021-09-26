@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import cls from 'classnames';
 import { usePaths } from 'modules/packages';
 import ScrollBuddy from 'modules/components/ScrollBuddy';
 import VisitDetails from 'travel/components/models/visits/VisitDetails';
@@ -70,42 +71,34 @@ export default function VisitsPage({
   const visitsList = unsortedVisitsList.sort(
     switchSortingFn(provision, counters, { groupBy, sortBy }),
   );
-  const { nodes, definitions } = visitsList.reduce(
-    (nodesAccumulator, visit, index) => {
-      const prevVisit = index > 0 ? visitsList[index - 1] : {};
-      const nextVisit =
-        index < visitsList.length - 1 ? visitsList[index + 1] : {};
+  const definitions = visitsList.reduce((accumulator, visit, index) => {
+    const prevVisit = index > 0 ? visitsList[index - 1] : {};
+    const nextVisit =
+      index < visitsList.length - 1 ? visitsList[index + 1] : {};
 
-      defineNodesInOrder({
-        prevVisit,
-        visit,
-        nextVisit,
-        provision,
-        classes,
-        counters,
-        groupBy,
-        sortBy,
-        hasEditRights,
-        travelPaths,
-        userAlias,
-        visitEditUrl:
-          hasEditRights && groupBy === GROUP_VISITS_BY.TRIPS
-            ? visitEditPath.toUrl({ strVisitId: String(visit.visitId) })
-            : undefined,
-        isObscure,
-      }).forEach(props => {
-        const node = renderNode(props);
-        if (!node) {
-          return;
-        }
-        nodesAccumulator.nodes.push(node);
-        nodesAccumulator.definitions.push(props);
-      });
+    defineNodesInOrder({
+      prevVisit,
+      visit,
+      nextVisit,
+      provision,
+      classes,
+      counters,
+      groupBy,
+      sortBy,
+      hasEditRights,
+      travelPaths,
+      userAlias,
+      visitEditUrl:
+        hasEditRights && groupBy === GROUP_VISITS_BY.TRIPS
+          ? visitEditPath.toUrl({ strVisitId: String(visit.visitId) })
+          : undefined,
+      isObscure,
+    }).forEach(props => {
+      accumulator.push(props);
+    });
 
-      return nodesAccumulator;
-    },
-    { nodes: [titleNode], definitions: [{ type: 'TITLE' }] },
-  );
+    return accumulator;
+  }, []);
 
   // without key there is strange bug with reconciling:
   // when group_by changed from trips to something other, then trips nodes still
@@ -113,35 +106,37 @@ export default function VisitsPage({
   // originalLocations is remaining on top of the list
   return (
     <ScrollBuddy
+      key={`${groupBy}_${sortBy}`}
       nodesRef={nodesRef}
       deps={[provision]}
-      renderBuddy={currentIndex => {
-        const {
-          type,
+      list={definitions}
+      renderItem={(definition, isActive) =>
+        renderNode({
+          ...definition,
           renderProps: {
-            year,
-            visit: { visitId, tripId, locationName, locationId } = {},
-          } = {},
-        } = definitions[currentIndex] ?? {};
-        return (
-          <VisitDetails
-            key={`${type}-${year}-${locationName}-${currentIndex}`}
-            visit={provision.visitsDict[visitId]}
-          />
-        );
-      }}
+            ...definition?.renderProps,
+            className: cls({ [classes.active]: isActive }),
+          },
+        })
+      }
+      renderBuddy={(
+        {
+          type,
+          renderProps: { year, visit: { visitId, locationName } = {} } = {},
+        },
+        index,
+      ) => (
+        <VisitDetails
+          key={`${type}-${year}-${locationName}-${index}`}
+          visit={provision.visitsDict[visitId]}
+        />
+      )}
     >
-      {currentIndex => (
-        <div key={`${groupBy}_${sortBy}`} ref={nodesRef}>
-          {nodes.map(
-            (node, index) =>
-              index === currentIndex ? (
-                <div style={{ backgroundColor: 'red' }}>{node}</div>
-              ) : (
-                node
-              ),
-          )}
-        </div>
+      {children => (
+        <>
+          {titleNode}
+          {children}
+        </>
       )}
     </ScrollBuddy>
   );

@@ -5,6 +5,7 @@ import renderOriginLocation from './renderOriginLocation';
 export default function renderDepartureLocation(props) {
   const {
     visit: { arrivalRideId },
+    className,
     classes,
     changes: { isTripChanged },
     provision: { ridesDict },
@@ -16,6 +17,7 @@ export default function renderDepartureLocation(props) {
 
   return renderOriginLocation({
     ...props,
+    className,
     keyBase: `dl`,
     children: (
       <RideInfo ride={ridesDict[arrivalRideId]} className={classes.halfDown} />
