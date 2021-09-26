@@ -40,6 +40,7 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     backgroundColor: theme.palette.background.paper,
     position: 'relative',
+    minWidth: 0,
   },
   statusBar: {
     position: 'fixed',

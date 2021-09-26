@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { usePaths } from 'modules/packages';
 import ScrollBuddy from 'modules/components/ScrollBuddy';
+import VisitDetails from 'travel/components/models/visits/VisitDetails';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
@@ -117,15 +118,16 @@ export default function VisitsPage({
       renderBuddy={currentIndex => {
         const {
           type,
-          renderProps: { year, visit: { locationName } = {} } = {},
-        } = definitions[currentIndex];
+          renderProps: {
+            year,
+            visit: { visitId, tripId, locationName, locationId } = {},
+          } = {},
+        } = definitions[currentIndex] ?? {};
         return (
-          <div
-            style={{ height: '200px' }}
+          <VisitDetails
             key={`${type}-${year}-${locationName}-${currentIndex}`}
-          >
-            {`${type}-${year}-${locationName}-${currentIndex}`}
-          </div>
+            visit={provision.visitsDict[visitId]}
+          />
         );
       }}
     >

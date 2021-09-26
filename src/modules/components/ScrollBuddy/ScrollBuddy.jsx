@@ -6,24 +6,19 @@ const useStyles = makeStyles({
   container: {
     position: 'sticky',
     height: '100vh',
-    top: 0,
+    top: 120,
     right: 0,
     overflow: 'hidden',
     marginRight: '-24px',
     marginTop: '-24px',
-    width: '300px',
+    width: '480px',
   },
   content: {
     paddingRight: '24px',
     paddingTop: '24px',
   },
-  buddies: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
   buddy: {
-    width: '300px',
-    pointerEvents: 'none',
+    backgroundColor: 'yellow',
   },
 });
 
@@ -78,24 +73,22 @@ export default function ScrollBuddy({ nodesRef, children, deps, renderBuddy }) {
       {Boolean(nodesRef.current?.children) && (
         <div className={classes.container}>
           <div className={classes.content}>
-            <div className={classes.buddies}>
-              {percent < 0.1 &&
-                selectedIndex > 0 && (
-                  <div
-                    className={classes.buddy}
-                    style={{ transform: `translateX(${-percent * 300}px)` }}
-                  >
-                    {renderBuddy(selectedIndex - 1)}
-                  </div>
-                )}
-              <div className={classes.buddy}>{renderBuddy(selectedIndex)}</div>
-              {percent < 0.1 &&
-                selectedIndex >= nodesRef.current?.children.length - 1 && (
-                  <div className={classes.buddy}>
-                    {renderBuddy(selectedIndex + 1)}
-                  </div>
-                )}
-            </div>
+            {percent < 0.1 &&
+              selectedIndex > 0 && (
+                <div
+                  className={classes.buddy}
+                  style={{ transform: `translateX(${-percent * 300}px)` }}
+                >
+                  {renderBuddy(selectedIndex - 1)}
+                </div>
+              )}
+            <div className={classes.buddy}>{renderBuddy(selectedIndex)}</div>
+            {percent < 0.1 &&
+              selectedIndex >= nodesRef.current?.children.length - 1 && (
+                <div className={classes.buddy}>
+                  {renderBuddy(selectedIndex + 1)}
+                </div>
+              )}
           </div>
         </div>
       )}
