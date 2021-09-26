@@ -1,5 +1,5 @@
 /* globals __IS_DEV_MODE__ */
-import '@babel/polyfill';
+import 'core-js/features/set';
 import App from 'core/App';
 import definePackages from 'packages/definePackages';
 import { registerDebugTools } from 'modules/utilities/debug';

@@ -1,0 +1,85 @@
+export const KEY_GROUP_VISITS_BY = 'group';
+export const GROUP_VISITS_BY = {
+  LOCATIONS: 'loc',
+  COUNTRIES: 'c',
+  YEARS: 'yr',
+  YEARS_COUNTRIES: 'yr_c',
+  COUNTRIES_YEARS: 'c_yr',
+  TRIPS: 't',
+  TRIPS_COUNTRIES: 't_с',
+};
+
+export const VISITS_SECTIONS = {
+  TRIPS: 'trips',
+  LOCATIONS: 'locations',
+};
+export const VISITS_SECTION_DEFAULT = VISITS_SECTIONS.TRIPS;
+export const VISITS_SECTIONS_GROUPS = {
+  [VISITS_SECTIONS.LOCATIONS]: [
+    { key: GROUP_VISITS_BY.LOCATIONS, l10n: 'По городам' },
+    { key: GROUP_VISITS_BY.COUNTRIES, l10n: 'По странам' },
+    { key: GROUP_VISITS_BY.YEARS, l10n: 'По годам' },
+    { key: GROUP_VISITS_BY.YEARS_COUNTRIES, l10n: 'По годам и странам' },
+    { key: GROUP_VISITS_BY.COUNTRIES_YEARS, l10n: 'По странам и годам' },
+    { key: GROUP_VISITS_BY.TRIPS, l10n: 'По поездкам' },
+    { key: GROUP_VISITS_BY.TRIPS_COUNTRIES, l10n: 'По поездкам и странам' },
+  ],
+  [VISITS_SECTIONS.TRIPS]: [
+    { key: GROUP_VISITS_BY.TRIPS, l10n: 'По поездкам' },
+    { key: GROUP_VISITS_BY.TRIPS_COUNTRIES, l10n: 'По поездкам и странам' },
+  ],
+};
+export const GROUP_VISITS_BY_DEFAULTS = {
+  [VISITS_SECTIONS.LOCATIONS]: GROUP_VISITS_BY.COUNTRIES,
+  [VISITS_SECTIONS.TRIPS]: GROUP_VISITS_BY.TRIPS,
+};
+
+export const KEY_SORT_VISITS_BY = 'sort';
+export const SORT_VISITS_BY = {
+  RATING_ALPHABET: 'r_a',
+  VISITS_ALPHABET: 'v_a',
+  FIRST_VISIT_ALPHABET: 'fv_a',
+  LAST_VISIT_ALPHABET: 'lv_a',
+  ALPHABET: 'a',
+};
+export const SORT_VISITS_BY_DEFAULT = SORT_VISITS_BY.ALPHABET;
+
+export const COMPARATORS = {
+  VISIT: { ARRIVAL_YEAR: 'ARRIVAL_YEAR' },
+  TRIP: {
+    DEPARTURE_TIME: 'TRIP_DEPARTURE_DATE',
+    ID: 'TRIP_ID',
+    PRESERVE_ORDER: 'PRESERVE_ORDER',
+  },
+  COUNTRY: {
+    VISITS: 'COUNTRY_VISITS',
+    RATING: 'COUNTRY_RATING',
+    NAME_ID: 'COUNTRY_NAME_ID',
+    FIRST_VISIT: 'COUNTRY_FIRST_VISIT',
+    LAST_VISIT: 'COUNTRY_LAST_VISIT',
+  },
+  LOCATION: {
+    VISITS: 'LOCATION_VISITS',
+    RATING: 'LOCATION_RATING',
+    NAME_ID: 'LOCATION_NAME_ID',
+    FIRST_VISIT: 'LOCATION_FIRST_VISIT',
+    LAST_VISIT: 'LOCATION_LAST_VISIT',
+  },
+};
+
+export const KEY_FILTER_VISITS_BY = 'filter';
+export const FILTER_VISITS_BY = {
+  ANY: 'a',
+  FOREIGN: 'f',
+  DOMESTIC: 'd',
+};
+export const FILTER_VISITS_BY_DEFAULT = FILTER_VISITS_BY.ANY;
+
+export const NODE_TYPE = {
+  ARRIVAL_LOCATION: 'ARRIVAL_LOCATION',
+  COUNTRY: 'COUNTRY',
+  DEPARTURE_LOCATION: 'DEPARTURE_LOCATION',
+  LOCATION: 'LOCATION',
+  TRIP: 'TRIP',
+  YEAR: 'YEAR',
+};

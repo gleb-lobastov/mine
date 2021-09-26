@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import useVisitsPageStyles from '../../../pages/VisitsPage/useVisitsPageStyles';
 
 export default function YearInfo({
+  children,
   className,
   previewTriggerProps,
   previewTriggerClassName,
@@ -17,9 +18,10 @@ export default function YearInfo({
       className={cls(className, isSubgroup ? classes.subgroup : classes.group)}
       {...previewTriggerProps}
     >
-      <div className={previewTriggerClassName}>
+      <span className={previewTriggerClassName}>
         {year || 'Без указания даты'}
-      </div>
+      </span>
+      {children}
     </Typography>
   );
 }

@@ -2,7 +2,14 @@
 module.exports = function(api) {
   return {
     presets: [
-      ['@babel/env', { modules: api.env('test') ? 'commonjs' : false }],
+      [
+        '@babel/env',
+        {
+          modules: api.env('test') ? 'commonjs' : false,
+          useBuiltIns: 'usage',
+          corejs: '3.18.0',
+        },
+      ],
       '@babel/react',
     ],
     plugins: [

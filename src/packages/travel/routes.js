@@ -16,6 +16,14 @@ export const visits = {
   ),
 };
 
+export const refactoredVisits = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/visits_next/:section?`,
+  defaultRouteParams: { userAlias: 'my', section: 'trips' },
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'travel-VisitsPage' */ './pages/RefactoredVisitsPage'),
+  ),
+};
+
 export const visitEdit = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/:strVisitId(\\d+)/edit`,
   defaultRouteParams: { userAlias: 'my' },
