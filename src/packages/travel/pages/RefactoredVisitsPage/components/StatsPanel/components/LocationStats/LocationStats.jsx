@@ -1,13 +1,12 @@
 import React from 'react';
-import Tooltip from '@material-ui/core/Tooltip';
 import PlaceIcon from '@material-ui/icons/Place';
 import createCalcByYearUtils from '../../utils/createCalcByYearUtils';
 import { renderDetails } from '../CountriesStats';
+import StatsIndicator from '../StatsIndicator';
 
 const { calcTotal, calcByYear } = createCalcByYearUtils('locationId');
 
 export default function LocationStats({
-  className,
   locationsStats,
   visitsDict,
   visitsList,
@@ -19,26 +18,25 @@ export default function LocationStats({
     ? calcByYear(visitsDict, visitsList, year)
     : calcTotal(visitsList);
 
+  const hintNode = renderHint({
+    showByYear,
+    year,
+    newAtYear,
+    totalAtYear,
+    total,
+  });
+
+  const detailsNode = renderDetails({
+    showByYear,
+    newAtYear,
+    totalAtYear,
+    total,
+  });
+
   return (
-    <Tooltip
-      title={renderHint({
-        showByYear,
-        year,
-        newAtYear,
-        totalAtYear,
-        total,
-      })}
-    >
-      <span className={className}>
-        <PlaceIcon />
-        {renderDetails({
-          showByYear,
-          newAtYear,
-          totalAtYear,
-          total,
-        })}
-      </span>
-    </Tooltip>
+    <StatsIndicator hint={hintNode} icon={<PlaceIcon />}>
+      {detailsNode}
+    </StatsIndicator>
   );
 }
 

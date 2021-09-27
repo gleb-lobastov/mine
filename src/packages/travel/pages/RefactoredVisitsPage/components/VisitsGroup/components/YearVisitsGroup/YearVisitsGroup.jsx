@@ -2,7 +2,7 @@ import React from 'react';
 import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import YearInfo from 'travel/components/common/YearInfo';
-import StatsPanel from 'travel/pages/RefactoredVisitsPage/components/StatsPanel';
+import StatsPanel, { CONSIDER_RIDES } from '../../../StatsPanel';
 
 const useStyles = makeStyles({
   container: {
@@ -18,6 +18,7 @@ export default function YearVisitsGroup({
   children,
   className,
   provision,
+  isObscure,
 }) {
   const classes = useStyles();
 
@@ -33,6 +34,8 @@ export default function YearVisitsGroup({
           visitsList={visitsList}
           countriesStats={{ showByYear: year }}
           locationsStats={{ showByYear: year }}
+          daysTravellingStats={{ considerRides: CONSIDER_RIDES.YEAR }}
+          isObscure={isObscure}
         />
       </YearInfo>
       {children}

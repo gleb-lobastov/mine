@@ -3,26 +3,26 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import CountriesStats from './components/CountriesStats';
 import LocationStats from './components/LocationStats';
+import DaysTravellingStats from './components/DaysTravellingStats';
+
+export { CONSIDER_RIDES } from './components/DaysTravellingStats';
 
 const useStyles = makeStyles({
   container: {
     color: 'gray',
-  },
-  statsGroup: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    marginRight: '12px',
+    display: 'inline',
   },
 });
 
 export default function StatsPanel({
   visitsList,
-  provision: { visitsDict },
+  provision: { visitsDict, ridesDict },
   countriesStats,
   locationsStats,
   visitsStats,
-  daysInTravelStats,
+  daysTravellingStats,
   datesStats,
+  isObscure,
   ratesStats,
 }) {
   const classes = useStyles();
@@ -31,7 +31,6 @@ export default function StatsPanel({
     <Typography variant="body1" className={classes.container}>
       {countriesStats && (
         <CountriesStats
-          className={classes.statsGroup}
           countriesStats={countriesStats}
           visitsDict={visitsDict}
           visitsList={visitsList}
@@ -39,12 +38,20 @@ export default function StatsPanel({
       )}
       {locationsStats && (
         <LocationStats
-          className={classes.statsGroup}
           locationsStats={locationsStats}
           visitsDict={visitsDict}
           visitsList={visitsList}
         />
       )}
+      {daysTravellingStats &&
+        !isObscure && (
+          <DaysTravellingStats
+            daysTravellingStats={daysTravellingStats}
+            visitsDict={visitsDict}
+            ridesDict={ridesDict}
+            visitsList={visitsList}
+          />
+        )}
     </Typography>
   );
 }

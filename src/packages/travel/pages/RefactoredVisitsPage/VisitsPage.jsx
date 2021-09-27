@@ -72,6 +72,7 @@ export default function VisitsPage({
           tripCreate: tripCreatePath,
           visitEdit: visitEditPath,
         }}
+        isObscure={isObscure}
       />
     </>
   );

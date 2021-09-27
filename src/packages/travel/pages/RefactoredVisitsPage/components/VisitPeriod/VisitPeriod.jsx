@@ -1,29 +1,27 @@
 import React from 'react';
-import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
-import { PLAIN_GROUPS } from '../../../../consts';
-import StatsPanel, { CONSIDER_RIDES } from '../../../StatsPanel';
+import cls from 'classnames';
+import StatsPanel from 'travel/pages/RefactoredVisitsPage/components/StatsPanel';
 
 const useStyles = makeStyles({});
 
-export default function CountryVisitsGroup({
+export default function VisitPeriod({
   groupKey: countryId,
   children,
   depth,
   groupKeys,
   groupingOrder,
-  className,
-  isObscure,
+  className,isObscure,
   visitsList,
   provision,
   provision: { countriesDict },
 }) {
   const classes = useStyles();
 
+  const locationsCounter = countLocations(visitsList);
   const isSubgroup = depth > 0;
-  const year =
-    parseInt(groupKeys[groupingOrder.indexOf(PLAIN_GROUPS.YEARS)], 10) ?? false;
+  const year = parseInt(groupKeys[groupingOrder.indexOf('YEARS')], 10) ?? false;
   return (
     <>
       <CountryInfo
@@ -39,11 +37,15 @@ export default function CountryVisitsGroup({
           provision={provision}
           visitsList={visitsList}
           locationsStats={{ showByYear: year }}
-          daysTravellingStats={{ considerRides: CONSIDER_RIDES.COUNTRY }}
+          daysTravellingStats={true}
           isObscure={isObscure}
         />
       </CountryInfo>
       {children}
     </>
   );
+}
+
+function countLocations(visitsList) {
+  return new Set(visitsList.map(({ locationId }) => locationId)).size;
 }
