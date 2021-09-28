@@ -35,7 +35,7 @@ export default function DaysTravellingStats({
 
   return (
     <StatsIndicator
-      hint={renderHint(detailedStats, totalStay)}
+      hint={renderHint(detailedStats, totalStay, visitsDict)}
       icon={<TimelapseIcon />}
     >
       {totalStay}
@@ -43,33 +43,48 @@ export default function DaysTravellingStats({
   );
 }
 
-function renderHint(detailedStats, totalStay) {
+function renderHint(detailedStats, totalStay, visitsDict) {
   const totalStr = `Всего ${totalStay} дней в этом месте`;
 
   if (detailedStats.length === 1) {
-    const { departureDateTime, arrivalDateTime } = detailedStats[0];
+    const { visitsIds, departureDateTime, arrivalDateTime } = detailedStats[0];
     const periodStr = visitDateTimePeriodToString({
       departureDateTime,
       arrivalDateTime,
     });
-    return <div>{`${totalStr} ${periodStr}`}</div>;
+    const locationsStr = renderLocations(visitsIds, visitsDict);
+    return <div>{`${totalStr} ${periodStr}. ${locationsStr}`}</div>;
   }
 
   return (
     <div>
       <div>{totalStr}</div>
       {detailedStats.map(
-        ({ stay, departureDateTime, arrivalDateTime }, index) => {
+        ({ stay, visitsIds, departureDateTime, arrivalDateTime }, index) => {
           const periodStr = visitDateTimePeriodToString({
             departureDateTime,
             arrivalDateTime,
           });
+          const locationsStr = renderLocations(visitsIds, visitsDict);
           // No good alternative 4 array index key
-          // eslint-disable-next-line react/no-array-index-key
-          return <div key={`v${index}`}>{`${stay} дней, ${periodStr}`}</div>;
+          /* eslint-disable react/no-array-index-key */
+          return (
+            <div
+              key={`v${index}`}
+            >{`${stay} дней, ${periodStr}. ${locationsStr}`}</div>
+          );
+          /* eslint-enable react/no-array-index-key */
         },
       )}
     </div>
+  );
+}
+
+function renderLocations(visitsIds, visitsDict) {
+  return (
+    visitsIds
+      ?.map(visitId => visitsDict[visitId]?.locationName ?? '')
+      ?.join(', ') ?? ''
   );
 }
 
@@ -81,11 +96,18 @@ function calcDaysTraveling(visitsList, visitsDict, ridesDict, considerRides) {
   const detailedStats = createPeriods([...visitsPeriods])
     .toArray()
     .reduce(
-      (acc, { startDate: arrivalDateTime, endDate: departureDateTime }) => {
+      (
+        acc,
+        {
+          startDate: arrivalDateTime,
+          endDate: departureDateTime,
+          stack: visitsIds,
+        },
+      ) => {
         const stay =
           differenceInCalendarDays(departureDateTime, arrivalDateTime) + 1;
         if (stay > 0) {
-          acc.push({ stay, departureDateTime, arrivalDateTime });
+          acc.push({ stay, visitsIds, departureDateTime, arrivalDateTime });
         }
         return acc;
       },
@@ -106,6 +128,7 @@ function simpleMapper({ arrivalDateTime, departureDateTime }) {
 
 function createMapperWithRides(visitsDict, ridesDict, considerRides) {
   return function mapperWithRides({
+    visitId,
     countryId,
     arrivalRideId,
     arrivalDateTime,
@@ -145,6 +168,6 @@ function createMapperWithRides(visitsDict, ridesDict, considerRides) {
         endDate = rideEndDate;
       }
     }
-    return { startDate, endDate };
+    return { startDate, endDate, stack: new Set([visitId]) };
   };
 }

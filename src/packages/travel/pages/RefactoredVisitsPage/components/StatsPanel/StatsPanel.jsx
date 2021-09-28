@@ -16,7 +16,7 @@ const useStyles = makeStyles({
 
 export default function StatsPanel({
   visitsList,
-  provision: { visitsDict, ridesDict },
+  provision: { visitsDict, ridesDict, locationsDict },
   countriesStats,
   locationsStats,
   visitsStats,
@@ -50,6 +50,7 @@ export default function StatsPanel({
             visitsDict={visitsDict}
             ridesDict={ridesDict}
             visitsList={visitsList}
+            locationsDict={locationsDict}
           />
         )}
     </Typography>

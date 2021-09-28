@@ -11,22 +11,27 @@ const eighties = {
 const ninetieth = {
   startDate: DateUTC(1990, 0, 1),
   endDate: DateUTC(1999, 11, 31),
+  stack: new Set(['ninetieth']),
 };
 const lateNinetiethEarlyNoughties = {
   startDate: DateUTC(1997, 5, 15),
   endDate: DateUTC(2002, 5, 15),
+  stack: new Set(['lateNinetieth', 'earlyNoughties']),
 };
 const noughties = {
   startDate: DateUTC(2000, 0, 1),
   endDate: DateUTC(2009, 11, 31),
+  stack: new Set(['noughties']),
 };
 const lateNoughtiesEarlyTens = {
   startDate: DateUTC(2007, 5, 15),
   endDate: DateUTC(2012, 5, 15),
+  stack: new Set(['lateNoughties', 'earlyTens']),
 };
 const tens = {
   startDate: DateUTC(2010, 0, 1),
   endDate: DateUTC(2019, 11, 31),
+  stack: new Set(['tens']),
 };
 const twenties = {
   startDate: DateUTC(2019, 0, 1),
@@ -454,6 +459,63 @@ describe('weekdaysMask', () => {
         startDate: DateUTC(2018, 0, 9),
         endDate: DateUTC(2018, 0, 13),
       },
+    ]);
+  });
+});
+
+describe('stack', () => {
+  it("should not add stack if it wasn't exist in original period", async () => {
+    const periods = createPeriods([eighties, tens]).toArray();
+    expect(periods[0]).not.toHaveProperty('stack');
+  });
+
+  it('should preserve stack', async () => {
+    expect(createPeriods([ninetieth, tens]).toArray()).toEqual([
+      expect.objectContaining({
+        stack: ninetieth.stack,
+      }),
+      expect.objectContaining({
+        stack: tens.stack,
+      }),
+    ]);
+  });
+
+  it('should union stack when periods merge', async () => {
+    expect(
+      createPeriods([
+        lateNinetiethEarlyNoughties,
+        noughties,
+        lateNoughtiesEarlyTens,
+      ]).toArray(),
+    ).toEqual([
+      expect.objectContaining({
+        stack: new Set([
+          ...Array.from(lateNinetiethEarlyNoughties.stack),
+          ...Array.from(noughties.stack),
+          ...Array.from(lateNoughtiesEarlyTens.stack),
+        ]),
+      }),
+    ]);
+  });
+
+  it('should keep stack at both sides, when exclude period', async () => {
+    expect(
+      createPeriods([ninetieth, noughties])
+        .exclude(lateNinetiethEarlyNoughties)
+        .toArray(),
+    ).toEqual([
+      expect.objectContaining({
+        stack: new Set([
+          ...Array.from(ninetieth.stack),
+          ...Array.from(noughties.stack),
+        ]),
+      }),
+      expect.objectContaining({
+        stack: new Set([
+          ...Array.from(ninetieth.stack),
+          ...Array.from(noughties.stack),
+        ]),
+      }),
     ]);
   });
 });

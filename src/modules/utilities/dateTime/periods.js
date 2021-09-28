@@ -43,9 +43,9 @@ const checkIsContiguous = (
   typeB === START &&
   isSameDayOrAfter(addDays(dateA, 1), dateB);
 
-const periodsToDatePoints = fpFlatMap(({ startDate, endDate }) => [
-  { type: START, date: startDate },
-  { type: END, date: endDate },
+const periodsToDatePoints = fpFlatMap(({ startDate, endDate, stack }) => [
+  { type: START, date: startDate, stack },
+  { type: END, date: endDate, stack },
 ]);
 
 // datePoints that ending period would be placed after ones that starting it (if they has same
@@ -55,24 +55,35 @@ const sortDatePoints = fpSortBy(['date', ({ type }) => type === END]);
 
 const collapseDatePoints = datesPoints => {
   const { memo: result, depth: controlDepth } = datesPoints.reduce(
-    ({ memo, depth }, datePoint) => {
-      const { type } = datePoint;
+    ({ memo, stack, depth }, datePoint) => {
+      const { type, stack: pointStack } = datePoint;
+      let nextStack = pointStack ? stack.union(pointStack) : stack;
+
       const nextDepth = depth + Number(type === START) - Number(type === END);
       const prevDatePoint = memo.length ? memo[memo.length - 1] : null;
       if (prevDatePoint && checkIsContiguous(prevDatePoint, datePoint)) {
-        memo.pop(); // add bag to memo[len-1]
-      } else if (
-        (depth === 0 && type === START) ||
-        (nextDepth === 0 && type === END)
-      ) {
-        memo.push(datePoint);
+        // remove END datePoint when period should be merged
+        memo.pop();
+      } else if (depth === 0 && type === START) {
+        // OUTPUT stack is tracked only by END datePoints
+        memo.push({ ...datePoint, stack: null });
+        // reset stack, when start new period, but keep in mind,
+        // that start period could keep some own INPUT stack
+        nextStack = pointStack ?? new Set();
+      } else if (nextDepth === 0 && type === END) {
+        memo.push({ ...datePoint, stack: nextStack });
       }
       return {
         memo,
+        stack: nextStack,
         depth: nextDepth,
       };
     },
-    { memo: [], depth: 0 },
+    {
+      memo: [],
+      stack: new Set(),
+      depth: 0,
+    },
   );
   invariant(
     controlDepth === 0,
@@ -85,16 +96,17 @@ const datePointsToPeriods = datesPoints =>
   chunk(datesPoints, 2).map(
     ([
       { date: startDate, type: startType },
-      { date: endDate, type: endType },
+      { date: endDate, type: endType, stack },
     ]) => {
       invariant(
         startType === START && endType === END,
         'Wrong datesPoints order',
       );
-      return {
-        startDate,
-        endDate,
-      };
+      const result = { startDate, endDate };
+      if (stack && stack.size) {
+        result.stack = stack;
+      }
+      return result;
     },
   );
 
@@ -151,7 +163,11 @@ class Periods {
     } catch (e) {
       warning(
         false,
-        'error %s, during periods processing. Fallback to ignore operation',
+        `error "${
+          e.message
+        }", during periods processing. Fallback to ignore operation.\n${
+          e.stack
+        }`,
       );
     }
   }

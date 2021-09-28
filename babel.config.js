@@ -7,7 +7,7 @@ module.exports = function(api) {
         {
           modules: api.env('test') ? 'commonjs' : false,
           useBuiltIns: 'usage',
-          corejs: '3.18.0',
+          corejs: { version: '3.18.0', proposals: true },
         },
       ],
       '@babel/react',
