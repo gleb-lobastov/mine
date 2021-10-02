@@ -13,14 +13,15 @@ export default function createCalcByYearUtils(lookupKey) {
 
   function calcTotal(visitsList) {
     return {
-      total: new Set(visitsList.map(({ [lookupKey]: entityId }) => entityId)),
+      total: new Set(visitsList.map(({ [lookupKey]: entityId }) => entityId))
+        .size,
     };
   }
 
   function calcByYear(visitsDict, visitsList, year) {
     const oldies = memoizedCalcOldies(visitsDict)(year);
 
-    const newbies = visitsList.reduce(
+    const freshies = visitsList.reduce(
       (acc, { arrivalYear, [lookupKey]: entityId }) => {
         if (arrivalYear === year) {
           acc.add(entityId);
@@ -30,9 +31,11 @@ export default function createCalcByYearUtils(lookupKey) {
       new Set(),
     );
 
+    const newbies = freshies.difference(oldies);
     return {
-      totalAtYear: newbies.size,
-      newAtYear: newbies.difference(oldies).size,
+      totalAtYear: freshies.size,
+      newAtYear: newbies.size,
+      newbies,
     };
   }
 

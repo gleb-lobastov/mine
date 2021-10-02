@@ -1,22 +1,11 @@
 import React from 'react';
 import FlagIcon from '@material-ui/icons/Flag';
-import createCalcByYearUtils from '../../utils/createCalcByYearUtils';
 import StatsIndicator from '../StatsIndicator';
 
-const { calcTotal, calcByYear } = createCalcByYearUtils('countryId');
-
 export default function CountriesStats({
-  countriesStats,
-  visitsDict,
-  visitsList,
+  countriesStats: { year, newAtYear, totalAtYear, total },
 }) {
-  const { showByYear } = countriesStats === true ? {} : countriesStats;
-
-  const year = parseInt(showByYear, 10);
-  const { newAtYear, totalAtYear, total } = showByYear
-    ? calcByYear(visitsDict, visitsList, year)
-    : calcTotal(visitsList);
-
+  const showByYear = Boolean(year);
   const hintNode = renderHint({
     showByYear,
     year,

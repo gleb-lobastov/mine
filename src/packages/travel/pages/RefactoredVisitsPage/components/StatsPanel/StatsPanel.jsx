@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import FiberNewIcon from '@material-ui/icons/FiberNew';
 import CountriesStats from './components/CountriesStats';
 import LocationStats from './components/LocationStats';
 import DaysTravellingStats from './components/DaysTravellingStats';
@@ -17,32 +18,21 @@ const useStyles = makeStyles({
 export default function StatsPanel({
   visitsList,
   provision: { visitsDict, ridesDict, locationsDict },
-  countriesStats,
-  locationsStats,
+  stats: { countriesStats, locationsStats },
   visitsStats,
   daysTravellingStats,
   datesStats,
   isObscure,
   ratesStats,
+  newbie,
 }) {
   const classes = useStyles();
 
   return (
     <Typography variant="body1" className={classes.container}>
-      {countriesStats && (
-        <CountriesStats
-          countriesStats={countriesStats}
-          visitsDict={visitsDict}
-          visitsList={visitsList}
-        />
-      )}
-      {locationsStats && (
-        <LocationStats
-          locationsStats={locationsStats}
-          visitsDict={visitsDict}
-          visitsList={visitsList}
-        />
-      )}
+      {newbie && <FiberNewIcon />}
+      {countriesStats && <CountriesStats countriesStats={countriesStats} />}
+      {locationsStats && <LocationStats locationsStats={locationsStats} />}
       {daysTravellingStats &&
         !isObscure && (
           <DaysTravellingStats

@@ -14,7 +14,7 @@ const useStyles = makeStyles({
 export default function YearVisitsGroup({
   children,
   visitsList,
-  groupingField: { value: groupingYearStr },
+  groupingField: { value: groupingYearStr, stats },
   headingVariant,
   className,
   isObscure,
@@ -34,8 +34,7 @@ export default function YearVisitsGroup({
         <StatsPanel
           provision={provision}
           visitsList={visitsList}
-          countriesStats={{ showByYear: year }}
-          locationsStats={{ showByYear: year }}
+          stats={stats}
           daysTravellingStats={{ considerRides: CONSIDER_RIDES.YEAR }}
           isObscure={isObscure}
         />

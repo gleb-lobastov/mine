@@ -1,20 +1,25 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import StatsPanel, { CONSIDER_RIDES } from '../../../StatsPanel';
-import { resolveGroupingYear } from '../../utils';
+import { PLAIN_GROUPS } from 'travel/pages/RefactoredVisitsPage/consts';
 
 export default function CountryVisitsGroup({
   children,
   visitsList,
   groupingFields,
-  groupingField: { value: countryIdStr },
+  groupingField: { value: countryIdStr, stats },
   headingVariant,
   className,
   isObscure,
   provision,
   provision: { countriesDict },
 }) {
-  const groupingYear = resolveGroupingYear(groupingFields);
+  const groupingYearField = groupingFields.find(
+    ({ plainGroup }) => plainGroup === PLAIN_GROUPS.YEARS,
+  );
+  const newbie = groupingYearField?.stats?.countriesStats?.newbies?.has(
+    parseInt(countryIdStr, 10),
+  );
   return (
     <>
       <CountryInfo
@@ -24,9 +29,10 @@ export default function CountryVisitsGroup({
         className={className}
       >
         <StatsPanel
+          newbie={newbie}
+          stats={stats}
           provision={provision}
           visitsList={visitsList}
-          locationsStats={{ showByYear: groupingYear }}
           daysTravellingStats={{ considerRides: CONSIDER_RIDES.COUNTRY }}
           isObscure={isObscure}
         />

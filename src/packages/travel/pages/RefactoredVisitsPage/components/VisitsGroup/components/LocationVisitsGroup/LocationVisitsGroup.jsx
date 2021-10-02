@@ -2,12 +2,13 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import StatsPanel from '../../../StatsPanel';
 import { resolveGroupingCountry } from '../../utils';
+import { PLAIN_GROUPS } from 'travel/pages/RefactoredVisitsPage/consts';
 
 export default function LocationVisitsGroup({
   children,
   visitsList,
   groupingFields,
-  groupingField: { value: locationIdStr },
+  groupingField: { value: locationIdStr, stats },
   headingVariant,
   className,
   isObscure,
@@ -16,6 +17,24 @@ export default function LocationVisitsGroup({
 }) {
   const location = locationsDict[locationIdStr];
   const groupingCountryId = resolveGroupingCountry(groupingFields);
+  const groupingYearField = groupingFields.find(
+    ({ plainGroup }) => plainGroup === PLAIN_GROUPS.YEARS,
+  );
+  const groupingCountryField = groupingFields.find(
+    ({ plainGroup }) => plainGroup === PLAIN_GROUPS.COUNTRIES,
+  );
+
+  const countryLocationStats = groupingCountryField?.stats?.locationsStats;
+  const allLocationsIsNew =
+    !countryLocationStats ||
+    !countryLocationStats.newAtYear ||
+    !countryLocationStats.totalAtYear ||
+    countryLocationStats.newAtYear === countryLocationStats.totalAtYear;
+  const showNewbieBadge =
+    !allLocationsIsNew &&
+    groupingYearField?.stats?.locationsStats?.newbies?.has(
+      parseInt(locationIdStr, 10),
+    );
   return (
     <>
       <LocationInfo
@@ -26,8 +45,10 @@ export default function LocationVisitsGroup({
         showCountry={!groupingCountryId}
       >
         <StatsPanel
+          newbie={showNewbieBadge}
           provision={provision}
           visitsList={visitsList}
+          stats={stats}
           daysTravellingStats={{ considerRides: false }}
           isObscure={isObscure}
         />

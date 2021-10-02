@@ -11,17 +11,17 @@ export default function VisitPeriod({
   children,
   depth,
   groupKeys,
+  stats,
   groupingOrder,
-  className,isObscure,
+  className,
+  isObscure,
   visitsList,
   provision,
   provision: { countriesDict },
 }) {
   const classes = useStyles();
 
-  const locationsCounter = countLocations(visitsList);
   const isSubgroup = depth > 0;
-  const year = parseInt(groupKeys[groupingOrder.indexOf('YEARS')], 10) ?? false;
   return (
     <>
       <CountryInfo
@@ -36,7 +36,7 @@ export default function VisitPeriod({
         <StatsPanel
           provision={provision}
           visitsList={visitsList}
-          locationsStats={{ showByYear: year }}
+          stats={stats}
           daysTravellingStats={true}
           isObscure={isObscure}
         />

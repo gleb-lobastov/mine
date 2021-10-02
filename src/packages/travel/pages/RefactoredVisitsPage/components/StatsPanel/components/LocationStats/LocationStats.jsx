@@ -1,23 +1,12 @@
 import React from 'react';
 import PlaceIcon from '@material-ui/icons/Place';
-import createCalcByYearUtils from '../../utils/createCalcByYearUtils';
 import { renderDetails } from '../CountriesStats';
 import StatsIndicator from '../StatsIndicator';
 
-const { calcTotal, calcByYear } = createCalcByYearUtils('locationId');
-
 export default function LocationStats({
-  locationsStats,
-  visitsDict,
-  visitsList,
+  locationsStats: { year, newAtYear, totalAtYear, total },
 }) {
-  const { showByYear } = locationsStats === true ? {} : locationsStats;
-
-  const year = parseInt(showByYear, 10);
-  const { newAtYear, totalAtYear, total } = showByYear
-    ? calcByYear(visitsDict, visitsList, year)
-    : calcTotal(visitsList);
-
+  const showByYear = Boolean(year);
   const hintNode = renderHint({
     showByYear,
     year,
