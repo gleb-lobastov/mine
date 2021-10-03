@@ -1,8 +1,7 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import StatsPanel from '../../../StatsPanel';
-import { resolveGroupingCountry } from '../../utils';
 import { PLAIN_GROUPS } from 'travel/pages/RefactoredVisitsPage/consts';
+import StatsPanel from '../../../StatsPanel';
 
 export default function LocationVisitsGroup({
   children,
@@ -16,7 +15,6 @@ export default function LocationVisitsGroup({
   provision: { countriesDict, locationsDict },
 }) {
   const location = locationsDict[locationIdStr];
-  const groupingCountryId = resolveGroupingCountry(groupingFields);
   const groupingYearField = groupingFields.find(
     ({ plainGroup }) => plainGroup === PLAIN_GROUPS.YEARS,
   );
@@ -42,7 +40,7 @@ export default function LocationVisitsGroup({
         className={className}
         location={location}
         countriesDict={countriesDict}
-        showCountry={!groupingCountryId}
+        showCountry={!groupingCountryField?.groupingCountryId}
       >
         <StatsPanel
           newbie={showNewbieBadge}

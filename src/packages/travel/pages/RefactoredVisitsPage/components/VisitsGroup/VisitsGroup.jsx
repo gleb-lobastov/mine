@@ -7,12 +7,7 @@ import LocationVisitsGroup from './components/LocationVisitsGroup';
 import YearVisitsGroup from './components/YearVisitsGroup';
 import TripVisitsGroup from './components/TripVisitsGroup';
 import VisitsItselfGroup from './components/VisitsItselfGroup';
-import {
-  resolveGroupingCountry,
-  resolveGroupingLocation,
-  resolveGroupingYear,
-} from './utils';
-import createCalcByYearUtils from '../StatsPanel/utils/createCalcByYearUtils';
+import calcStats from '../StatsPanel/utils/calcStats';
 
 const HEADING_VARIANTS = ['h2', 'h4', 'body1'];
 const HEADING_CLASSNAMES = ['level0', 'level1', 'level2'];
@@ -41,9 +36,13 @@ const PLAIN_GROUPS_CONFIG = {
 
 const useStyles = makeStyles({
   level0: {
+    display: 'flex',
+    alignItems: 'self-start',
     marginTop: '64px',
   },
   level1: {
+    display: 'flex',
+    alignItems: 'self-start',
     marginTop: '18px',
     marginBottom: '6px',
     paddingLeft: '32px',
@@ -94,7 +93,7 @@ function renderRecursive({
       value: groupingFieldValue,
     };
     const nestedGroupingFields = [...groupingFields, groupingField];
-    const stats = calcStats(visitsByGroup, nestedGroupingFields, provision);
+    const stats = calcStats(visitsByGroup, provision, nestedGroupingFields);
     groupingField.stats = stats; // ! affect nestedGroupingFields
     return (
       <VisitsGroupComponent
@@ -135,49 +134,4 @@ function resolveGroupingOrder(groupBy) {
     groupingOrder.push(PLAIN_GROUPS.JUST_VISITS);
   }
   return groupingOrder;
-}
-
-function calcStats(visitsList, groupingFields, provision) {
-  const locationId = resolveGroupingLocation(groupingFields);
-  const countryId = resolveGroupingCountry(groupingFields);
-  const year = resolveGroupingYear(groupingFields);
-
-  return {
-    countriesStats: countryId
-      ? null
-      : calcCountriesStats(visitsList, provision, { year }),
-    locationsStats: locationId
-      ? null
-      : calcLocationsStats(visitsList, provision, { year }),
-  };
-}
-
-const {
-  calcTotal: calcCountriesTotal,
-  calcByYear: calcCountriesByYear,
-} = createCalcByYearUtils('countryId');
-
-function calcCountriesStats(visitsList, { visitsDict }, { year }) {
-  const { newAtYear, totalAtYear, total, newbies } = year
-    ? calcCountriesByYear(visitsDict, visitsList, year)
-    : calcCountriesTotal(visitsList);
-  return { year, newAtYear, totalAtYear, total, newbies };
-}
-
-const {
-  calcTotal: calcLocationsTotal,
-  calcByYear: calcLocationsByYear,
-} = createCalcByYearUtils('locationId');
-
-function calcLocationsStats(visitsList, { visitsDict }, { year }) {
-  const { newAtYear, totalAtYear, total, newbies } = year
-    ? calcLocationsByYear(visitsDict, visitsList, year)
-    : calcLocationsTotal(visitsList);
-  return {
-    year,
-    newAtYear,
-    totalAtYear,
-    total,
-    newbies,
-  };
 }

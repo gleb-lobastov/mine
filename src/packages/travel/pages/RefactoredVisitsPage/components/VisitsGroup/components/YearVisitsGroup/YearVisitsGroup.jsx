@@ -5,10 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import StatsPanel, { CONSIDER_RIDES } from '../../../StatsPanel';
 
 const useStyles = makeStyles({
-  container: {
-    display: 'inline-flex',
-    alignItems: 'self-start',
-  },
+  container: {},
 });
 
 export default function YearVisitsGroup({

@@ -11,19 +11,15 @@ export { CONSIDER_RIDES } from './components/DaysTravellingStats';
 const useStyles = makeStyles({
   container: {
     color: 'gray',
-    display: 'inline',
+    display: 'inline-flex',
+    alignItems: 'center',
   },
 });
 
 export default function StatsPanel({
-  visitsList,
-  provision: { visitsDict, ridesDict, locationsDict },
-  stats: { countriesStats, locationsStats },
-  visitsStats,
-  daysTravellingStats,
-  datesStats,
+  provision,
+  stats: { countriesStats, locationsStats, daysTravellingStats },
   isObscure,
-  ratesStats,
   newbie,
 }) {
   const classes = useStyles();
@@ -37,10 +33,7 @@ export default function StatsPanel({
         !isObscure && (
           <DaysTravellingStats
             daysTravellingStats={daysTravellingStats}
-            visitsDict={visitsDict}
-            ridesDict={ridesDict}
-            visitsList={visitsList}
-            locationsDict={locationsDict}
+            provision={provision}
           />
         )}
     </Typography>
