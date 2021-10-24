@@ -1,4 +1,4 @@
-import { PLAIN_GROUPS } from '../../../consts';
+import { PLAIN_GROUPS } from '../../VisitsArranger/arrangement/groupping';
 import {
   resolveGroupingCountry,
   resolveGroupingLocation,

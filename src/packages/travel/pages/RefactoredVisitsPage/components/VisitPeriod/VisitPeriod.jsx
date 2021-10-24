@@ -35,9 +35,7 @@ export default function VisitPeriod({
       >
         <StatsPanel
           provision={provision}
-          visitsList={visitsList}
           stats={stats}
-          daysTravellingStats={true}
           isObscure={isObscure}
         />
       </CountryInfo>

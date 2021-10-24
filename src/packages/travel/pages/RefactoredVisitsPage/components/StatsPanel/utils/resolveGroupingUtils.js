@@ -1,4 +1,5 @@
-import { PLAIN_GROUPS } from '../../../consts';
+import { PLAIN_GROUPS } from '../../VisitsArranger/arrangement/groupping';
+
 
 export function resolveGroupingYear(groupingFields) {
   const yearGroupField = groupingFields.find(

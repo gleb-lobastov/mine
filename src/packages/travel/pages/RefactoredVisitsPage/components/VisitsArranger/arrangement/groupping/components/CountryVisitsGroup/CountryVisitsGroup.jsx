@@ -1,11 +1,11 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import StatsPanel, { CONSIDER_RIDES } from '../../../StatsPanel';
-import { PLAIN_GROUPS } from 'travel/pages/RefactoredVisitsPage/consts';
+import StatsPanel from '../../../../../StatsPanel';
+import { PLAIN_GROUPS } from '../..';
+
 
 export default function CountryVisitsGroup({
   children,
-  visitsList,
   groupingFields,
   groupingField: { value: countryIdStr, stats },
   headingVariant,
@@ -32,8 +32,6 @@ export default function CountryVisitsGroup({
           newbie={newbie}
           stats={stats}
           provision={provision}
-          visitsList={visitsList}
-          daysTravellingStats={{ considerRides: CONSIDER_RIDES.COUNTRY }}
           isObscure={isObscure}
         />
       </CountryInfo>

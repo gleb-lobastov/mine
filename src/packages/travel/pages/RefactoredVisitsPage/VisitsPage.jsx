@@ -1,14 +1,12 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
-import useVisitsPageStyles from './useVisitsPageStyles';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import switchFilteringFn from './switchFilteringFn';
-import renderTitle from './blocks/renderTitle';
-import calcCounters from './calcCounters';
-import VisitsGroup from 'travel/pages/RefactoredVisitsPage/components/VisitsGroup';
+import VisitsArranger from './components/VisitsArranger';
+import VisitsTitle from './components/VisitsTitle';
 
 export default function VisitsPage({
   match: {
@@ -19,7 +17,6 @@ export default function VisitsPage({
   const hasEditRights = userAlias === authenticatedUserAlias;
   const isObscure = userAlias !== authenticatedUserAlias;
 
-  const classes = useVisitsPageStyles();
   const { queryFilter, setQueryFilter } = useQueryFilter();
   const { groupBy, sortBy, filterBy } = useVisitsGroupingSidebar(
     setQueryFilter,
@@ -49,24 +46,18 @@ export default function VisitsPage({
     .map(visitId => visitsDict[visitId])
     .filter(switchFilteringFn(provision, filterBy));
 
-  const { updatesCounter } = provision;
-  const counters = calcCounters(unsortedVisitsList, updatesCounter);
-
-  const titleNode = renderTitle({
-    locationsUrl: locationsPath.toUrl({ userAlias }),
-    createTripUrl: tripCreatePath.toUrl({ userAlias }),
-    locationsCount: Object.keys(counters?.locations || {}).length,
-    countriesCount: Object.keys(counters?.countries || {}).length,
-    groupBy,
-  });
-
   return (
     <>
-      {titleNode}
-      <VisitsGroup
+      <VisitsTitle
+        locationsUrl={locationsPath.toUrl({ userAlias })}
+        locationsCount={320}
+        countriesCount={42}
+      />
+      <VisitsArranger
         visitsList={unsortedVisitsList}
         provision={provision}
         groupBy={groupBy}
+        sortBy={sortBy}
         paths={{
           locations: locationsPath,
           tripCreate: tripCreatePath,

@@ -7,19 +7,25 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useSidebar } from 'core/context/SidebarContext';
 import {
-  GROUP_VISITS_BY,
-  KEY_GROUP_VISITS_BY,
-  GROUP_VISITS_BY_DEFAULTS,
   VISITS_SECTION_DEFAULT,
   VISITS_SECTIONS,
   VISITS_SECTIONS_GROUPS,
-  SORT_VISITS_BY,
-  KEY_SORT_VISITS_BY,
-  SORT_VISITS_BY_DEFAULT,
+  GROUP_VISITS_BY_DEFAULTS,
+} from './consts';
+import {
   FILTER_VISITS_BY,
   KEY_FILTER_VISITS_BY,
   FILTER_VISITS_BY_DEFAULT,
-} from './consts';
+} from './components/VisitsArranger/arrangement/filtering';
+import {
+  SORT_VISITS_BY,
+  KEY_SORT_VISITS_BY,
+  SORT_VISITS_BY_DEFAULT,
+} from './components/VisitsArranger/arrangement/sorting';
+import {
+  GROUP_VISITS_BY,
+  KEY_GROUP_VISITS_BY,
+} from './components/VisitsArranger/arrangement/groupping';
 import useVisitsPageStyles from './useVisitsPageStyles';
 
 export default function(setQueryFilter, queryFilter, section) {

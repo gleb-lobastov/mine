@@ -1,11 +1,10 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { PLAIN_GROUPS } from 'travel/pages/RefactoredVisitsPage/consts';
-import StatsPanel from '../../../StatsPanel';
+import { PLAIN_GROUPS } from '../..';
+import StatsPanel from '../../../../../StatsPanel';
 
 export default function LocationVisitsGroup({
   children,
-  visitsList,
   groupingFields,
   groupingField: { value: locationIdStr, stats },
   headingVariant,
@@ -45,9 +44,7 @@ export default function LocationVisitsGroup({
         <StatsPanel
           newbie={showNewbieBadge}
           provision={provision}
-          visitsList={visitsList}
           stats={stats}
-          daysTravellingStats={{ considerRides: false }}
           isObscure={isObscure}
         />
       </LocationInfo>

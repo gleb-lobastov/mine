@@ -3,11 +3,6 @@ import TimelapseIcon from '@material-ui/icons/Timelapse';
 import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 import StatsIndicator from '../StatsIndicator';
 
-export const CONSIDER_RIDES = {
-  COUNTRY: 'COUNTRY',
-  YEAR: 'YEAR',
-};
-
 export default function DaysTravellingStats({
   daysTravellingStats: { detailedStats, totalStay },
   provision: { visitsDict },

@@ -2,7 +2,7 @@ import React from 'react';
 import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import StatsPanel, { CONSIDER_RIDES } from '../../../StatsPanel';
+import StatsPanel from '../../../../../StatsPanel';
 
 const useStyles = makeStyles({
   container: {},
@@ -10,7 +10,6 @@ const useStyles = makeStyles({
 
 export default function YearVisitsGroup({
   children,
-  visitsList,
   groupingField: { value: groupingYearStr, stats },
   headingVariant,
   className,
@@ -28,13 +27,7 @@ export default function YearVisitsGroup({
         year={year}
         variant={headingVariant}
       >
-        <StatsPanel
-          provision={provision}
-          visitsList={visitsList}
-          stats={stats}
-          daysTravellingStats={{ considerRides: CONSIDER_RIDES.YEAR }}
-          isObscure={isObscure}
-        />
+        <StatsPanel provision={provision} stats={stats} isObscure={isObscure} />
       </YearInfo>
       {children}
     </>

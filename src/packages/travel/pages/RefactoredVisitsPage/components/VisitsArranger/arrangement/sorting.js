@@ -1,0 +1,9 @@
+export const KEY_SORT_VISITS_BY = 'sort';
+export const SORT_VISITS_BY = {
+  RATING_ALPHABET: 'r_a',
+  VISITS_ALPHABET: 'v_a',
+  FIRST_VISIT_ALPHABET: 'fv_a',
+  LAST_VISIT_ALPHABET: 'lv_a',
+  ALPHABET: 'a',
+};
+export const SORT_VISITS_BY_DEFAULT = SORT_VISITS_BY.ALPHABET;

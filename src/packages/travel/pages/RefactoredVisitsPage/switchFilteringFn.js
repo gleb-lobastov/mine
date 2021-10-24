@@ -1,4 +1,4 @@
-import { FILTER_VISITS_BY } from './consts';
+import { FILTER_VISITS_BY } from './components/VisitsArranger/arrangement/filtering';
 
 export default function switchFilteringFn(provision, filterBy) {
   switch (filterBy) {

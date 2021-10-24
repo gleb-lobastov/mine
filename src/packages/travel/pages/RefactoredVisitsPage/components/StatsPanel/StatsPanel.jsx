@@ -6,8 +6,6 @@ import CountriesStats from './components/CountriesStats';
 import LocationStats from './components/LocationStats';
 import DaysTravellingStats from './components/DaysTravellingStats';
 
-export { CONSIDER_RIDES } from './components/DaysTravellingStats';
-
 const useStyles = makeStyles({
   container: {
     color: 'gray',
