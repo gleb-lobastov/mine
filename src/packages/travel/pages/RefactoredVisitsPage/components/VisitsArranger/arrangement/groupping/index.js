@@ -34,28 +34,28 @@ export const PLAIN_GROUPS_MAPPING = {
 
 export const PLAIN_GROUPS_CONFIG = {
   [PLAIN_GROUPS.TRIPS]: {
-    groupingFieldName: 'tripId',
+    groupFieldName: 'tripId',
     component: TripVisitsGroup,
   },
   [PLAIN_GROUPS.YEARS]: {
-    groupingFieldName: ({ arrivalDateTime }) => arrivalDateTime.getFullYear(),
+    groupFieldName: ({ arrivalDateTime }) => arrivalDateTime.getFullYear(),
     component: YearVisitsGroup,
   },
   [PLAIN_GROUPS.COUNTRIES]: {
-    groupingFieldName: 'countryId',
+    groupFieldName: 'countryId',
     component: CountryVisitsGroup,
   },
   [PLAIN_GROUPS.LOCATIONS]: {
-    groupingFieldName: 'locationId',
+    groupFieldName: 'locationId',
     component: LocationVisitsGroup,
   },
   [PLAIN_GROUPS.JUST_VISITS]: {
-    groupingFieldName: 'visitId',
+    groupFieldName: 'visitId',
     component: VisitsItselfGroup,
   },
 };
 
-export function resolveGroupingOrder(groupBy) {
+export function resolveGroupsOrder(groupBy) {
   const groupingOrder = groupBy
     .split('_')
     .map(currentGroupBy => PLAIN_GROUPS_MAPPING[currentGroupBy]);

@@ -3,18 +3,19 @@ import Typography from '@material-ui/core/Typography';
 import StatsPanel from '../../../../../StatsPanel';
 import { PLAIN_GROUPS } from '../..';
 
-
 export default function CountryVisitsGroup({
   children,
-  groupingFields,
-  groupingField: { value: countryIdStr, stats },
-  headingVariant,
-  className,
+  visitGroup: {
+    field: { value: countryIdStr },
+    fieldsStack,
+    stats,
+  },
+  classes,
   isObscure,
   provision,
   provision: { countriesDict },
 }) {
-  const groupingYearField = groupingFields.find(
+  const groupingYearField = fieldsStack.find(
     ({ plainGroup }) => plainGroup === PLAIN_GROUPS.YEARS,
   );
   const newbie = groupingYearField?.stats?.countriesStats?.newbies?.has(
@@ -25,8 +26,8 @@ export default function CountryVisitsGroup({
       <CountryInfo
         key={`c${countryIdStr}`}
         country={countriesDict[countryIdStr]}
-        variant={headingVariant}
-        className={className}
+        className={classes.container}
+        classes={classes}
       >
         <StatsPanel
           newbie={newbie}
@@ -45,10 +46,11 @@ function CountryInfo({
   country: { countryName },
   children,
   className,
+  classes,
 }) {
   return (
     <div className={className}>
-      <Typography display="inline" variant={variant}>
+      <Typography display="inline" variant={variant} className={classes.header}>
         {countryName}
       </Typography>
       {children}

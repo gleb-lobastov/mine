@@ -10,22 +10,24 @@ const useStyles = makeStyles({
 
 export default function YearVisitsGroup({
   children,
-  groupingField: { value: groupingYearStr, stats },
-  headingVariant,
-  className,
+  visitGroup: {
+    field: { value: groupingYearStr },
+    stats,
+  },
+  classes,
   isObscure,
   provision,
 }) {
-  const classes = useStyles();
+  const ownClasses = useStyles();
 
   const year = parseInt(groupingYearStr, 10) ?? null;
 
   return (
     <>
       <YearInfo
-        className={cls(classes.container, className)}
+        className={cls(classes.container, ownClasses.container)}
+        classes={classes}
         year={year}
-        variant={headingVariant}
       >
         <StatsPanel provision={provision} stats={stats} isObscure={isObscure} />
       </YearInfo>
@@ -34,10 +36,10 @@ export default function YearVisitsGroup({
   );
 }
 
-function YearInfo({ children, variant, className, year }) {
+function YearInfo({ children, variant, className, classes, year }) {
   return (
     <div className={className}>
-      <Typography display="inline" variant={variant}>
+      <Typography display="inline" variant={variant} className={classes.header}>
         {year || 'Без указания даты'}
       </Typography>
       {children}

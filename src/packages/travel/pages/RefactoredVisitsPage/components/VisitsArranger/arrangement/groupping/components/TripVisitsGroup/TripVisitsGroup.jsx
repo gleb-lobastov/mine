@@ -7,18 +7,23 @@ const useStyles = makeStyles({});
 
 export default function TripVisitsGroup({
   groupKey: tripId,
-  className,
+  classes,
   children,
   visitsList,
   provision: { tripsDict, visitsDict, countriesDict, locationsDict },
 }) {
-  const classes = useStyles();
+  const ownClasses = useStyles();
 
   return (
     <>
       <TripInfo
         key={`t${tripId}`}
-        className={cls(className, classes.visibilityTrigger, classes.group)}
+        className={cls(
+          classes.container,
+          ownClasses.visibilityTrigger,
+          ownClasses.group,
+        )}
+        classes={classes}
         trip={tripsDict[tripId]}
         visitsDict={visitsDict}
         countriesDict={countriesDict}

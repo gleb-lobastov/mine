@@ -4,112 +4,128 @@ import { makeStyles } from '@material-ui/core/styles';
 import {
   PLAIN_GROUPS,
   PLAIN_GROUPS_CONFIG,
-  resolveGroupingOrder,
+  resolveGroupsOrder,
 } from './arrangement/groupping';
 import calcStats from '../StatsPanel/utils/calcStats';
 
-const HEADING_VARIANTS = ['h2', 'h4', 'body1'];
-const HEADING_CLASSNAMES = ['level0', 'level1', 'level2'];
-
-const useStyles = makeStyles({
-  level0: {
+const useStyles = makeStyles(theme => ({
+  header0: {
+    ...theme.typography.h2,
+  },
+  header1: {
+    ...theme.typography.h4,
+  },
+  header2: {
+    ...theme.typography.body1,
+  },
+  container0: {
     display: 'flex',
     alignItems: 'self-start',
     marginTop: '64px',
   },
-  level1: {
+  container1: {
     display: 'flex',
     alignItems: 'self-start',
     marginTop: '18px',
     marginBottom: '6px',
     paddingLeft: '32px',
   },
-  level2: {
+  container2: {
     paddingLeft: '96px',
   },
-});
+}));
 
 export default function VisitsArranger({
   visitsList,
   groupBy,
   sortBy,
+  provision,
   ...forwardingProps
 }) {
   const classes = useStyles();
   return renderRecursive({
     classes,
+    provision,
     visitsList,
-    groupingOrder: resolveGroupingOrder(groupBy),
+    groupsOrder: resolveGroupsOrder(groupBy),
     forwardingProps,
   });
 }
 
 function renderRecursive({
   classes,
+  provision,
   visitsList,
-  groupingOrder,
-  groupingLevel = 0,
-  groupingFields = [],
+  groupsOrder,
   forwardingProps,
 }) {
-  const { provision } = forwardingProps;
-  const plainGroup = groupingOrder[groupingLevel];
-  if (!plainGroup) {
-    return null;
-  }
-  const {
-    groupingFieldName,
-    component: VisitsGroupComponent,
-  } = PLAIN_GROUPS_CONFIG[plainGroup];
+  return renderRecursiveInternal(visitsList, groupsOrder, []);
 
-  const groupedVisits =
-    plainGroup === PLAIN_GROUPS.JUST_VISITS
-      ? [[null, visitsList]]
-      : Object.entries(groupByFn(visitsList, groupingFieldName));
+  function renderRecursiveInternal(
+    visitsListInternal,
+    groupsOrderInternal,
+    groupsFields,
+  ) {
+    const [plainGroup, ...restGroupsOrder] = groupsOrderInternal;
+    if (!plainGroup) {
+      return null;
+    }
+    const { component: VisitsGroupComponent } = PLAIN_GROUPS_CONFIG[plainGroup];
 
-  const groupedFields = groupedVisits.map(
-    ([groupingFieldValue, visitsByGroup]) => {
-      const groupingField = {
-        visitsByGroup,
-        plainGroup,
-        fieldName: groupingFieldName,
-        value: groupingFieldValue,
-      };
-      const nestedGroupingFields = [...groupingFields, groupingField];
-      const stats = calcStats(visitsByGroup, provision, nestedGroupingFields);
-      groupingField.nestedGroupingFields = nestedGroupingFields;
-      groupingField.stats = stats; // ! affect nestedGroupingFields
-      return groupingField;
-    },
-  );
+    const visitsGroups = groupVisitsBy(visitsListInternal, plainGroup).map(
+      visitGroup => {
+        const fieldsStack = [...groupsFields, visitGroup];
+        return {
+          ...visitGroup,
+          plainGroup,
+          fieldsStack,
+          stats: calcStats(visitGroup.visitsList, provision, fieldsStack),
+        };
+      },
+    );
 
-  // const sortedGroupedFields = sortByFn(groupedFields);
+    // const sortedGroupedFields = sortByFn(groupedFields);
 
-  return groupedFields.map(groupingField => {
-    const {
-      value: groupingFieldValue,
-      nestedGroupingFields,
-      visitsByGroup,
-    } = groupingField;
-    return (
+    return visitsGroups.map(visitGroup => (
       <VisitsGroupComponent
-        key={groupingFieldValue}
-        groupingLevel={groupingLevel}
-        groupingField={groupingField}
-        groupingFields={nestedGroupingFields}
-        headingVariant={HEADING_VARIANTS[groupingLevel]}
-        className={classes[HEADING_CLASSNAMES[groupingLevel]]}
+        key={visitGroup.field.value}
+        visitGroup={visitGroup}
+        classes={resolveVisitsGroupClasses(classes, groupsFields.length)}
+        provision={provision}
         {...forwardingProps}
       >
-        {renderRecursive({
-          classes,
-          visitsList: visitsByGroup,
-          groupingOrder,
-          groupingLevel: groupingLevel + 1,
-          groupingFields: nestedGroupingFields,
-          forwardingProps,
-        })}
+        {renderRecursiveInternal(
+          visitGroup.visitsList,
+          restGroupsOrder,
+          visitGroup.fieldsStack,
+        )}
       </VisitsGroupComponent>
-    );
-  });
+    ));
+  }
+}
+
+function groupVisitsBy(visitsList, plainGroup) {
+  const { groupFieldName } = PLAIN_GROUPS_CONFIG[plainGroup];
+  return plainGroup === PLAIN_GROUPS.JUST_VISITS
+    ? {
+        field: { name: groupFieldName, value: null },
+        visitsList,
+      }
+    : groupVisitsByValue(visitsList, groupFieldName);
+}
+
+function groupVisitsByValue(visitsList, groupFieldName) {
+  return Object.entries(groupByFn(visitsList, groupFieldName)).map(
+    ([groupFieldValue, groupVisitsList]) => ({
+      field: { name: groupFieldName, value: groupFieldValue },
+      visitsList: groupVisitsList,
+    }),
+  );
+}
+
+function resolveVisitsGroupClasses(classes, groupLevel) {
+  return {
+    container: classes[`container${groupLevel}`],
+    header: classes[`header${groupLevel}`],
+  };
 }

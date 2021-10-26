@@ -5,19 +5,21 @@ import StatsPanel from '../../../../../StatsPanel';
 
 export default function LocationVisitsGroup({
   children,
-  groupingFields,
-  groupingField: { value: locationIdStr, stats },
-  headingVariant,
-  className,
+  visitGroup: {
+    field: { value: locationIdStr },
+    fieldsStack,
+    stats,
+  },
+  classes,
   isObscure,
   provision,
   provision: { countriesDict, locationsDict },
 }) {
   const location = locationsDict[locationIdStr];
-  const groupingYearField = groupingFields.find(
+  const groupingYearField = fieldsStack.find(
     ({ plainGroup }) => plainGroup === PLAIN_GROUPS.YEARS,
   );
-  const groupingCountryField = groupingFields.find(
+  const groupingCountryField = fieldsStack.find(
     ({ plainGroup }) => plainGroup === PLAIN_GROUPS.COUNTRIES,
   );
 
@@ -35,8 +37,8 @@ export default function LocationVisitsGroup({
   return (
     <>
       <LocationInfo
-        variant={headingVariant}
-        className={className}
+        className={classes.container}
+        classes={classes}
         location={location}
         countriesDict={countriesDict}
         showCountry={!groupingCountryField?.groupingCountryId}
@@ -57,6 +59,7 @@ function LocationInfo({
   children,
   variant,
   className,
+  classes,
   location: { locationName, countryId } = {},
   countriesDict,
   showCountry,
@@ -66,7 +69,7 @@ function LocationInfo({
 
   return (
     <div className={className}>
-      <Typography display="inline" variant={variant}>
+      <Typography display="inline" variant={variant} className={classes.header}>
         {`${locationName}${countryNode ? ', ' : ''}`}
       </Typography>
       <Typography display="inline" variant="body1">
