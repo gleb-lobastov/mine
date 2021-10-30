@@ -23,8 +23,8 @@ export default function VisitsItselfGroup({
   // currently remains only first visit, and only dates for this visit is shown to user
   // todo: solve the issue, show all periods, or show no dates, whatever
   const actualVisitsList = useMemo(
-    () => (groupTripId ? uniqBy(visitsList, 'locationId') : visitsList),
-    [groupTripId, visitsList],
+    () => (groupCountryId ? uniqBy(visitsList, 'locationId') : visitsList),
+    [groupCountryId, visitsList],
   );
 
   if (!groupTripId) {
