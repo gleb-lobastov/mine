@@ -21,10 +21,12 @@ export default function sortVisitsBy(
   function switchComparator(plainSorting) {
     switch (plainSorting) {
       case PLAIN_SORTING.FIRST_VISIT:
-        return 'stats.visitsStats.firstVisit.arrivalDateTime';
+        return dates('stats.visitsStats.firstVisit.arrivalDateTime');
       case PLAIN_SORTING.LAST_VISIT:
         return {
-          iteratee: 'stats.visitsStats.lastVisit.departureDateTime',
+          iteratee: nullsLast(
+            dates('stats.visitsStats.lastVisit.departureDateTime'),
+          ),
           order: 'desc',
         };
       case PLAIN_SORTING.RATING:
@@ -117,4 +119,9 @@ function createLocationRatingComparator({ locationsRating }) {
 function nullsLast(iteratee) {
   const resolve = iterateeFn(iteratee);
   return value => resolve(value) || '';
+}
+
+function dates(iteratee) {
+  const resolve = iterateeFn(iteratee);
+  return value => (resolve(value) || '').valueOf();
 }
