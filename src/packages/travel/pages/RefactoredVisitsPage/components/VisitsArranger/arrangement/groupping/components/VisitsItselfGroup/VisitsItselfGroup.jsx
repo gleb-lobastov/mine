@@ -28,13 +28,15 @@ export default function VisitsItselfGroup({
 
   return (
     <div className={classes.level}>
-      <LocationWithRideInfo
-        locationId={originLocationId}
-        rideId={departureRideId}
-        provision={provision}
-        groupCountryId={groupCountryId}
-        className={classes.header}
-      />
+      {!groupCountryId && (
+        <LocationWithRideInfo
+          locationId={originLocationId}
+          rideId={departureRideId}
+          provision={provision}
+          groupCountryId={groupCountryId}
+          className={classes.header}
+        />
+      )}
       {visitsList.map(visit => (
         <VisitInfo
           className={classes.header}
@@ -46,12 +48,14 @@ export default function VisitsItselfGroup({
         />
       ))}
       {/* todo: Don't show for relocation trip */}
-      <LocationInfo
-        className={classes.header}
-        countriesDict={countriesDict}
-        location={locationsDict[originLocationId]}
-        showCountry={!groupCountryId}
-      />
+      {!groupCountryId && (
+        <LocationInfo
+          className={classes.header}
+          countriesDict={countriesDict}
+          location={locationsDict[originLocationId]}
+          showCountry={!groupCountryId}
+        />
+      )}
     </div>
   );
 }

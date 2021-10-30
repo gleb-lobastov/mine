@@ -28,12 +28,16 @@ export default function LocationWithRideInfo({
         location={location}
         showCountry={!groupCountryId}
       />
-      <Grid container={true}>
-        <Grid item={true}>{children}</Grid>
-        <Grid item={true}>
-          <RideInfo ride={ridesDict[rideId]} className={classes.halfDown} />
+      {groupCountryId ? (
+        children
+      ) : (
+        <Grid container={true}>
+          <Grid item={true}>{children}</Grid>
+          <Grid item={true}>
+            <RideInfo ride={ridesDict[rideId]} className={classes.halfDown} />
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </AutoMargin>
   );
 }
