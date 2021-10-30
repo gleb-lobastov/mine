@@ -30,9 +30,11 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'self-start',
   },
   level1: {
-    paddingLeft: '32px',
     marginTop: '18px',
     marginBottom: '6px',
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: '32px',
+    },
   },
 
   header2: {
@@ -43,7 +45,9 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
   },
   level2: {
-    paddingLeft: '96px',
+    [theme.breakpoints.up('sm')]: {
+      paddingLeft: '96px',
+    },
   },
 }));
 
