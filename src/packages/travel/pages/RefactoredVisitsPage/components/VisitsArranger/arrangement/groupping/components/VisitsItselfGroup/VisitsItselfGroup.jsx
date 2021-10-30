@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import uniqBy from 'lodash/uniqBy';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
 import VisitInfo from './components/VisitInfo';
@@ -19,6 +20,13 @@ export default function VisitsItselfGroup({
     PLAIN_GROUPS.COUNTRIES,
   );
 
+  // currently remains only first visit, and only dates for this visit is shown to user
+  // todo: solve the issue, show all periods, or show no dates, whatever
+  const actualVisitsList = useMemo(
+    () => (groupTripId ? uniqBy(visitsList, 'locationId') : visitsList),
+    [groupTripId, visitsList],
+  );
+
   if (!groupTripId) {
     // Trip ID always expected
     return null;
@@ -37,7 +45,7 @@ export default function VisitsItselfGroup({
           className={classes.header}
         />
       )}
-      {visitsList.map(visit => (
+      {actualVisitsList.map(visit => (
         <VisitInfo
           className={classes.header}
           key={`v${visit.visitId}`}
