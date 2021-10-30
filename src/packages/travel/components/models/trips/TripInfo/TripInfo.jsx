@@ -9,9 +9,14 @@ export default function TripInfo({
   locationsDict,
   children,
   className,
+  variant,
 }) {
   return (
-    <Typography variant="h4" className={className} paragraph={true}>
+    <Typography
+      variant={variant ?? undefined}
+      className={className}
+      paragraph={true}
+    >
       <span>
         {resolveTripCaption(trip, visitsDict, countriesDict, locationsDict)}
       </span>
@@ -19,3 +24,5 @@ export default function TripInfo({
     </Typography>
   );
 }
+
+TripInfo.defaultProps = { variant: 'h4' };

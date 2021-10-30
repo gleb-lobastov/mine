@@ -12,33 +12,39 @@ export const toClient = ({
   visit_type: rawVisitType,
   visit_comment: rawVisitComment,
   photos: rawPhotos,
-}) => ({
-  arrivalRideId: rawArrivalRideId,
-  arrivalDateTime: new Date(rawArrivalDateTime || NaN),
-  departureRideId: rawDepartureRideId,
-  departureDateTime: new Date(rawDepartureDateTime || NaN),
-  countryId: rawCountryId,
-  locationId: rawLocationId,
-  locationName: rawLocationName,
-  orderInTrip: rawOrderInTrip,
-  tripId: rawTripId,
-  visitId: rawVisitId,
-  visitType: rawVisitType,
-  visitComment: rawVisitComment,
-  photos: rawPhotos
-    ? rawPhotos.map(
-        ({
-          url: rawUrl,
-          thumbnail_url: rawThumbnailUrl,
-          preview_url: rawPreviewUrl,
-        }) => ({
-          fullSizePhotoUrl: rawUrl,
-          thumbnailUrl: rawThumbnailUrl,
-          previewUrl: rawPreviewUrl,
-        }),
-      )
-    : [],
-});
+}) => {
+  const arrivalDateTime = new Date(rawArrivalDateTime || NaN);
+  const departureDateTime = new Date(rawDepartureDateTime || NaN);
+  return {
+    arrivalRideId: rawArrivalRideId,
+    arrivalDateTime,
+    arrivalYear: arrivalDateTime.getFullYear(),
+    departureRideId: rawDepartureRideId,
+    departureDateTime,
+    departureYear: departureDateTime.getFullYear(),
+    countryId: rawCountryId,
+    locationId: rawLocationId,
+    locationName: rawLocationName,
+    orderInTrip: rawOrderInTrip,
+    tripId: rawTripId,
+    visitId: rawVisitId,
+    visitType: rawVisitType,
+    visitComment: rawVisitComment,
+    photos: rawPhotos
+      ? rawPhotos.map(
+          ({
+            url: rawUrl,
+            thumbnail_url: rawThumbnailUrl,
+            preview_url: rawPreviewUrl,
+          }) => ({
+            fullSizePhotoUrl: rawUrl,
+            thumbnailUrl: rawThumbnailUrl,
+            previewUrl: rawPreviewUrl,
+          }),
+        )
+      : [],
+  };
+};
 
 export const toServer = (requestBody, { isProvision } = {}) => {
   if (isProvision) {
