@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import clamp from 'lodash/clamp';
+import VisitsThumbs from './components/VisitsThumbs';
 import calcStats from './statistics/utils/calcStats';
 import StatsPanel from './statistics/components/StatsPanel';
 import resolveGroupsOrder from './arrangement/groupping/utils/resolveGroupsOrder';
@@ -17,10 +18,9 @@ const useStyles = makeStyles(theme => ({
   container0: {
     display: 'flex',
     alignItems: 'self-start',
-  },
-  level0: {
     marginTop: '64px',
   },
+  level0: {},
 
   header1: {
     ...theme.typography.h4,
@@ -28,10 +28,10 @@ const useStyles = makeStyles(theme => ({
   container1: {
     display: 'flex',
     alignItems: 'self-start',
-  },
-  level1: {
     marginTop: '18px',
     marginBottom: '6px',
+  },
+  level1: {
     [theme.breakpoints.up('sm')]: {
       paddingLeft: '32px',
     },
@@ -129,6 +129,9 @@ function renderRecursive({
             isObscure={isObscure}
           />
         </VisitsGroupComponent>
+        {nestingLevel === 0 && (
+          <VisitsThumbs visitsList={visitsGroup.visitsList} />
+        )}
         {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
       </Fragment>
     ));
