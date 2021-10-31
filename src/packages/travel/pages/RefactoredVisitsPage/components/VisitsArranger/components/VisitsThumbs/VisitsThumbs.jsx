@@ -1,4 +1,5 @@
 import React from 'react';
+import cls from 'classnames';
 import LazyLoad from 'react-lazy-load';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -21,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function VisitsThumbs({ visitsList }) {
+export default function VisitsThumbs({ className, visitsList }) {
   const classes = useStyles();
   const thumbnailUrl = visitsList.flatMap(({ photos }) =>
     photos.map(({ previewUrl: url }) => url),
@@ -32,7 +33,7 @@ export default function VisitsThumbs({ visitsList }) {
   }
 
   return (
-    <div key={thumbnailUrl} className={classes.photoContainer}>
+    <div key={thumbnailUrl} className={cls(className, classes.photoContainer)}>
       <LazyLoad height="30vh" offsetVertical={2048}>
         <img alt="фото" className={classes.photo} src={thumbnailUrl} />
       </LazyLoad>

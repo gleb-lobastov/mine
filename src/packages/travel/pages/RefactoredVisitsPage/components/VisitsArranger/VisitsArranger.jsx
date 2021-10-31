@@ -91,7 +91,10 @@ function renderRecursive({
     }
     const { component: VisitsGroupComponent } = PLAIN_GROUPS_CONFIG[plainGroup];
     const { visitsList: visitsListInternal } = parentVisitsGroup;
+
     const nestingLevel = lookupLevel(parentVisitsGroup);
+    const expectedMaxLevel = nestingLevel + groupsOrderInternal.length;
+    const sectionLevel = resolveSectionLevel(nestingLevel, expectedMaxLevel);
 
     const visitsGroups = groupVisitsBy(visitsListInternal, plainGroup).map(
       visitsGroup => {
@@ -117,8 +120,8 @@ function renderRecursive({
         <VisitsGroupComponent
           visitsGroup={visitsGroup}
           classes={resolveVisitsGroupClasses(classes, {
-            level: nestingLevel,
-            levelsTotal: nestingLevel + groupsOrderInternal.length,
+            nestingLevel,
+            sectionLevel,
           })}
           provision={provision}
           {...forwardingProps}
@@ -129,8 +132,11 @@ function renderRecursive({
             isObscure={isObscure}
           />
         </VisitsGroupComponent>
-        {nestingLevel === 0 && (
-          <VisitsThumbs visitsList={visitsGroup.visitsList} />
+        {sectionLevel === 1 && (
+          <VisitsThumbs
+            className={classes[`level${nestingLevel + 1}`]}
+            visitsList={visitsGroup.visitsList}
+          />
         )}
         {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
       </Fragment>
@@ -138,16 +144,14 @@ function renderRecursive({
   }
 }
 
-const MAX_LEVEL = 3;
-function resolveVisitsGroupClasses(classes, { level, levelsTotal }) {
-  const actualLevel = clamp(MAX_LEVEL - levelsTotal + level, 0, MAX_LEVEL - 1);
+function resolveVisitsGroupClasses(classes, { nestingLevel, sectionLevel }) {
   return {
-    level: classes[`level${level}`],
+    level: classes[`level${nestingLevel}`],
     container: cls(
-      classes[`level${level}`],
-      classes[`container${actualLevel}`],
+      classes[`level${nestingLevel}`],
+      classes[`container${sectionLevel}`],
     ),
-    header: classes[`header${actualLevel}`],
+    header: classes[`header${sectionLevel}`],
   };
 }
 
@@ -159,4 +163,9 @@ function lookupLevel(visitsGroup) {
     currentVisitsGroup = currentVisitsGroup.parent;
   }
   return Math.max(0, level - 1);
+}
+
+const MAX_LEVEL = 3;
+function resolveSectionLevel(nestingLevel, expectedMaxLevel) {
+  return clamp(MAX_LEVEL - expectedMaxLevel + nestingLevel, 0, MAX_LEVEL - 1);
 }
