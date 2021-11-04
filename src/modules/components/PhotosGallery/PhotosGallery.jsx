@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import LazyImage from './components/LazyImage';
 import { useLayoutContext } from 'modules/components/LayoutContext';
 
+const FALLBACK_ASPECT_RATIO = 1;
 const PREFETCH_SLIDES = 1;
 const START_INDEX = 0;
 const THUMB_WIDTH_WITHOUT_BORDERS_PX = 92;
@@ -64,13 +65,21 @@ export default function PhotosGallery({ className, photos }) {
 
   const actualPhotos = photos.map(
     (
-      { fullSizePhotoUrl, thumbnailUrl, previewUrl, blurhash, aspectRatio },
+      {
+        fullSizePhotoUrl,
+        thumbnailUrl,
+        previewUrl,
+        blurhash,
+        aspectRatio,
+        description,
+      },
       index,
     ) => ({
       original: previewUrl,
       originalClass: classes.photo,
       thumbnail: thumbnailUrl,
       fullscreen: fullSizePhotoUrl,
+      description,
       blurhash,
       aspectRatio,
       index,
@@ -99,7 +108,11 @@ export default function PhotosGallery({ className, photos }) {
           renderItem={item => (
             <LazyImage
               className="image-gallery-image"
-              aspectRatio={aspectRatios[item.index] || item.aspectRatio || 1}
+              aspectRatio={
+                aspectRatios[item.index] ||
+                item.aspectRatio ||
+                FALLBACK_ASPECT_RATIO
+              }
               description={item.description}
               src={fullscreen ? item.fullscreen : item.original}
               alt={item.originalAlt}
@@ -107,14 +120,24 @@ export default function PhotosGallery({ className, photos }) {
               title={item.originalTitle}
               blurhash={item.blurhash}
               require={Math.abs(currentIndex - item.index) <= PREFETCH_SLIDES}
-            />
+            >
+              {item.description && (
+                <span className="image-gallery-description">
+                  {item.description}
+                </span>
+              )}
+            </LazyImage>
           )}
           renderThumbInner={item => (
             <span className="image-gallery-thumbnail-inner">
               <LazyImage
                 tag={`photos-gallery-thumb-${uniqKey}-${item.index}`}
                 className="image-gallery-thumbnail-image"
-                aspectRatio={aspectRatios[item.index] || item.aspectRatio || 1}
+                aspectRatio={
+                  aspectRatios[item.index] ||
+                  item.aspectRatio ||
+                  FALLBACK_ASPECT_RATIO
+                }
                 src={item.thumbnail}
                 width={THUMB_WIDTH_WITHOUT_BORDERS_PX}
                 alt={item.thumbnailAlt}

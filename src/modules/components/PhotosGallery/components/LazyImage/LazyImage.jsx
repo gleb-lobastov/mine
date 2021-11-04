@@ -29,6 +29,7 @@ export default function LazyImage({
   height,
   width,
   onLoad,
+  children,
   ...forwardingProps
 }) {
   const [loadingState, setLoadingState] = useState(INITIAL_STATE);
@@ -93,6 +94,7 @@ export default function LazyImage({
         loading={LAZY_LOADING_SUPPORT ? 'lazy' : undefined}
         {...forwardingProps}
       />
+      {children}
     </>
   );
 }
