@@ -9,6 +9,7 @@ export default function TripVisitsGroup({
     field: { value: tripId },
   },
   provision: { tripsDict, visitsDict, countriesDict, locationsDict },
+  urls,
 }) {
   return (
     <TripInfo
@@ -20,6 +21,7 @@ export default function TripVisitsGroup({
       countriesDict={countriesDict}
       locationsDict={locationsDict}
       variant={null}
+      urls={urls}
     >
       {children}
     </TripInfo>

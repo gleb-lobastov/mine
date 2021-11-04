@@ -8,6 +8,7 @@ import switchFilteringFn from './switchFilteringFn';
 import VisitsArranger from './components/VisitsArranger';
 import calcStats from './components/VisitsArranger/statistics/utils/calcStats';
 import VisitsTitle from './components/VisitsTitle';
+import { tripEdit } from 'travel/routes';
 
 export default function VisitsPage({
   match: {
@@ -35,6 +36,13 @@ export default function VisitsPage({
       tripCreateUrl: editable
         ? travelPaths.tripCreate.toUrl({ userAlias })
         : null,
+      resolveTripEditUrl: ({ tripId }) =>
+        editable
+          ? travelPaths.tripEdit.toUrl({
+              strTripId: String(tripId),
+              userAlias,
+            })
+          : null,
       resolveVisitEditUrl: ({ visitId }) =>
         editable
           ? travelPaths.visitEdit.toUrl({
