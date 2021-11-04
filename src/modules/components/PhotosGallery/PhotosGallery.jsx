@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PhotosGallery({ className, photos }) {
+export default function PhotosGallery({ className, galleryKey, photos }) {
   const classes = useStyles();
   const { vw, vh } = useLayoutContext();
   const [fullscreen, setFullscreen] = useState(false);
@@ -44,7 +44,9 @@ export default function PhotosGallery({ className, photos }) {
   useEffect(
     () => {
       const thumbnailElement = window.document
-        .querySelector(`[data-photos-gallery-tag="thumbnail-${currentIndex}"]`)
+        .querySelector(
+          `[data-photos-gallery-tag="thumbnail-${galleryKey}-${currentIndex}"]`,
+        )
         ?.closest('.image-gallery-thumbnail');
 
       if (thumbnailElement) {
@@ -138,7 +140,7 @@ const RATIOS = {
   },
   DEFAULT: {
     HEIGHT: { PERCENT: 50, CORRECTION_PX: 0, MAX_PX: 1024 },
-    WIDTH: { PERCENT: 100, CORRECTION_PX: -300, MAX_PX: 1024 },
+    WIDTH: { PERCENT: 100, CORRECTION_PX: -450, MAX_PX: 1024 },
   },
 };
 function resolveImageConstraints(fullscreen, { vh, vw }) {

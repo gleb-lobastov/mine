@@ -1,4 +1,5 @@
 import groupByFn from 'lodash/groupBy';
+import isFunction from 'lodash/isFunction';
 import { PLAIN_GROUPS, PLAIN_GROUPS_CONFIG } from '../consts';
 
 export default function groupVisitsBy(visitsList, plainGroup) {
@@ -12,7 +13,7 @@ function groupVisitsByValue(visitsList, groupFieldName, adapter) {
   return Object.entries(groupByFn(visitsList, groupFieldName)).map(
     ([groupFieldValue, groupVisitsList]) => ({
       field: {
-        name: groupFieldName,
+        name: isFunction(groupFieldName) ? groupFieldName.name : groupFieldName,
         value: adapter ? adapter(groupFieldValue) : groupFieldValue,
       },
       visitsList: groupVisitsList,

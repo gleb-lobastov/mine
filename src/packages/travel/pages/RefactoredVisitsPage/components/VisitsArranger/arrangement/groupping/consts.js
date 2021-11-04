@@ -38,7 +38,9 @@ export const PLAIN_GROUPS_CONFIG = {
     adapter: Number, // Will be applied to value of "groupFieldName" field
   },
   [PLAIN_GROUPS.YEARS]: {
-    groupFieldName: ({ arrivalDateTime }) => arrivalDateTime.getFullYear(),
+    groupFieldName: function getArrivalYear({ arrivalDateTime }) {
+      return arrivalDateTime.getFullYear();
+    },
     component: YearVisitsGroup,
     adapter: Number,
   },
