@@ -97,6 +97,7 @@ export default function PhotosGallery({ className, photos }) {
       style={{ height: constraints.height }}
     >
       <LazyWithPlaceholder
+        offset={1000}
         placeholder={<GallerySkeleton height={constraints.height} />}
       >
         <ImageGallery
