@@ -1,11 +1,12 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { v4 as uuidV4 } from 'uuid';
 import cls from 'classnames';
-import LazyLoad from 'react-lazy-load';
 import ImageGallery from 'react-image-gallery';
 import { makeStyles } from '@material-ui/core/styles';
+import LazyWithPlaceholder from 'modules/components/LazyWithPlaceholder';
 import LazyImage from './components/LazyImage';
 import { useLayoutContext } from 'modules/components/LayoutContext';
+import GallerySkeleton from './components/GallerySkeleton';
 
 const FALLBACK_ASPECT_RATIO = 1;
 const PREFETCH_SLIDES = 1;
@@ -95,7 +96,9 @@ export default function PhotosGallery({ className, photos }) {
       className={cls(className, classes.photoContainer)}
       style={{ height: constraints.height }}
     >
-      <LazyLoad>
+      <LazyWithPlaceholder
+        placeholder={<GallerySkeleton height={constraints.height} />}
+      >
         <ImageGallery
           startIndex={START_INDEX}
           showIndex={true}
@@ -154,7 +157,7 @@ export default function PhotosGallery({ className, photos }) {
             </span>
           )}
         />
-      </LazyLoad>
+      </LazyWithPlaceholder>
     </div>
   );
 }
