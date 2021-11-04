@@ -135,7 +135,7 @@ function renderRecursive({
         {sectionLevel === 1 && (
           <VisitsPhotosGallery
             className={classes[`level${nestingLevel + 1}`]}
-            visitsGroup={visitsGroup}
+            visitsList={visitsGroup.visitsList}
           />
         )}
         {renderRecursiveInternal(visitsGroup, restGroupsOrder)}

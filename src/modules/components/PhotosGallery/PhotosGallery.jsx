@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { v4 as uuidV4 } from 'uuid';
 import cls from 'classnames';
 import LazyLoad from 'react-lazy-load';
 import ImageGallery from 'react-image-gallery';
@@ -29,7 +30,8 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PhotosGallery({ className, galleryKey, photos }) {
+export default function PhotosGallery({ className, photos }) {
+  const uniqKey = useMemo(() => uuidV4(), []);
   const classes = useStyles();
   const { vw, vh } = useLayoutContext();
   const [fullscreen, setFullscreen] = useState(false);
@@ -45,7 +47,7 @@ export default function PhotosGallery({ className, galleryKey, photos }) {
     () => {
       const thumbnailElement = window.document
         .querySelector(
-          `[data-photos-gallery-tag="thumbnail-${galleryKey}-${currentIndex}"]`,
+          `[data-tag="photos-gallery-thumb-${uniqKey}-${currentIndex}"]`,
         )
         ?.closest('.image-gallery-thumbnail');
 
@@ -109,7 +111,7 @@ export default function PhotosGallery({ className, galleryKey, photos }) {
           renderThumbInner={item => (
             <span className="image-gallery-thumbnail-inner">
               <LazyImage
-                tag={`thumbnail-${item.index}`}
+                tag={`photos-gallery-thumb-${uniqKey}-${item.index}`}
                 className="image-gallery-thumbnail-image"
                 aspectRatio={aspectRatios[item.index] || item.aspectRatio || 1}
                 src={item.thumbnail}

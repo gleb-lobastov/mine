@@ -82,7 +82,7 @@ export default function LazyImage({
         />
       )}
       <img
-        data-photos-gallery-tag={tag}
+        data-tag={tag}
         ref={onLoad ? imgRef : undefined}
         className={className}
         alt={alt}
