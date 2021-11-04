@@ -12,8 +12,6 @@ export const VISITS_SECTIONS_GROUPS = {
     { key: GROUP_VISITS_BY.YEARS, l10n: 'По годам' },
     { key: GROUP_VISITS_BY.YEARS_COUNTRIES, l10n: 'По годам и странам' },
     { key: GROUP_VISITS_BY.COUNTRIES_YEARS, l10n: 'По странам и годам' },
-    { key: GROUP_VISITS_BY.TRIPS, l10n: 'По поездкам' },
-    { key: GROUP_VISITS_BY.TRIPS_COUNTRIES, l10n: 'По поездкам и странам' },
   ],
   [VISITS_SECTIONS.TRIPS]: [
     { key: GROUP_VISITS_BY.TRIPS, l10n: 'По поездкам' },
