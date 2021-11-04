@@ -9,6 +9,7 @@ import { useLayoutContext } from 'modules/components/LayoutContext';
 
 const PREFETCH_SLIDES = 1;
 const START_INDEX = 0;
+const THUMB_WIDTH_WITHOUT_BORDERS_PX = 92;
 
 const useStyles = makeStyles({
   photoContainer: {
@@ -115,7 +116,7 @@ export default function PhotosGallery({ className, photos }) {
                 className="image-gallery-thumbnail-image"
                 aspectRatio={aspectRatios[item.index] || item.aspectRatio || 1}
                 src={item.thumbnail}
-                width={100}
+                width={THUMB_WIDTH_WITHOUT_BORDERS_PX}
                 alt={item.thumbnailAlt}
                 title={item.thumbnailTitle}
                 blurhash={item.blurhash}
