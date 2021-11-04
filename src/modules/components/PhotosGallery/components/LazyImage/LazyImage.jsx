@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useRef,
+  useLayoutEffect,
+} from 'react';
 import { Blurhash } from 'react-blurhash';
 import min from 'lodash/min';
 
@@ -70,13 +76,22 @@ export default function LazyImage({
     constraints,
   );
 
+  // consider all margins and paddings, reflect to { maxWidth: '100%' } img behavior
+  const [realImgWidth, setRealImgWidth] = useState(imageWidth);
+  useLayoutEffect(
+    () => {
+      setRealImgWidth(imgRef.current.getBoundingClientRect().width);
+    },
+    [imageWidth],
+  );
+
   return (
     <>
       {!hasResult && (
         <Blurhash
           hash={blurhash}
-          width={imageWidth}
-          height={imageHeight}
+          width={realImgWidth}
+          height={realImgWidth / aspectRatio ?? imageHeight}
           resolutionX={BLURHASH_RESOLUTION}
           resolutionY={BLURHASH_RESOLUTION}
           punch={BLURHASH_PUNCH}
@@ -84,11 +99,15 @@ export default function LazyImage({
       )}
       <img
         data-tag={tag}
-        ref={onLoad ? imgRef : undefined}
+        ref={imgRef}
         className={className}
         alt={alt}
         src={resolveActualSrc(src, loadingState)}
-        style={{ width: imageWidth, height: hasResult ? imageHeight : 0 }}
+        style={{
+          width: imageWidth,
+          height: hasResult ? imageHeight : 0,
+          maxWidth: '100%',
+        }}
         onLoad={handleLoad}
         onError={handleError}
         loading={LAZY_LOADING_SUPPORT ? 'lazy' : undefined}

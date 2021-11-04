@@ -161,12 +161,12 @@ export default function PhotosGallery({ className, photos }) {
 
 const RATIOS = {
   FULLSCREEN: {
-    HEIGHT: { PERCENT: 100, CORRECTION_PX: 0, MAX_PX: Infinity },
-    WIDTH: { PERCENT: 100, CORRECTION_PX: -100, MAX_PX: Infinity },
+    HEIGHT: { PERCENT: 100, MAX_PX: Infinity },
+    WIDTH: { PERCENT: 100, MAX_PX: Infinity },
   },
   DEFAULT: {
-    HEIGHT: { PERCENT: 50, CORRECTION_PX: 0, MAX_PX: 1024 },
-    WIDTH: { PERCENT: 100, CORRECTION_PX: -450, MAX_PX: 1024 },
+    HEIGHT: { PERCENT: 50, MAX_PX: 1024 },
+    WIDTH: { PERCENT: 100, MAX_PX: 1024 },
   },
 };
 function resolveImageConstraints(fullscreen, { vh, vw }) {
@@ -177,9 +177,6 @@ function resolveImageConstraints(fullscreen, { vh, vw }) {
   };
 
   function calc(CONFIG, unit) {
-    return Math.min(
-      CONFIG.PERCENT * unit + CONFIG.CORRECTION_PX,
-      CONFIG.MAX_PX,
-    );
+    return Math.min(CONFIG.PERCENT * unit, CONFIG.MAX_PX);
   }
 }
