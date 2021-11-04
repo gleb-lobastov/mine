@@ -36,11 +36,24 @@ export const toClient = ({
             url: rawUrl,
             thumbnail_url: rawThumbnailUrl,
             preview_url: rawPreviewUrl,
-          }) => ({
-            fullSizePhotoUrl: rawUrl,
-            thumbnailUrl: rawThumbnailUrl,
-            previewUrl: rawPreviewUrl,
-          }),
+            blurhash: rawBlurhash,
+            aspect_ratio: rawAspectRatio = '',
+          }) => {
+            const [w, h] =
+              rawAspectRatio && rawAspectRatio.includes(':')
+                ? rawAspectRatio.split(':').map(Number)
+                : '';
+            return {
+              fullSizePhotoUrl: rawUrl,
+              thumbnailUrl: rawThumbnailUrl,
+              previewUrl: rawPreviewUrl,
+              blurhash: rawBlurhash,
+              aspectRatio:
+                w && h
+                  ? { widthComponent: w, heightComponent: h, ratio: w / h }
+                  : null,
+            };
+          },
         )
       : [],
   };

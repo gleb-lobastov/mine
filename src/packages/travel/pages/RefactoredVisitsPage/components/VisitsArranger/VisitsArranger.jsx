@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import clamp from 'lodash/clamp';
-import VisitsThumbs from './components/VisitsThumbs';
+import VisitsPhotosGallery from './components/VisitsPhotosGallery';
 import calcStats from './statistics/utils/calcStats';
 import StatsPanel from './statistics/components/StatsPanel';
 import resolveGroupsOrder from './arrangement/groupping/utils/resolveGroupsOrder';
@@ -133,7 +133,7 @@ function renderRecursive({
           />
         </VisitsGroupComponent>
         {sectionLevel === 1 && (
-          <VisitsThumbs
+          <VisitsPhotosGallery
             className={classes[`level${nestingLevel + 1}`]}
             visitsList={visitsGroup.visitsList}
           />
