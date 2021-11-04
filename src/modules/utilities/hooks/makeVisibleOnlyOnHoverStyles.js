@@ -6,7 +6,7 @@ export default function makeVisibleOnHoverStyles({
 } = {}) {
   return makeStyles({
     [containerClassName]: {
-      '&:hover $visibleOnlyOnHover': {
+      [`&:hover $${contentClassName}`]: {
         visibility: 'visible',
       },
     },

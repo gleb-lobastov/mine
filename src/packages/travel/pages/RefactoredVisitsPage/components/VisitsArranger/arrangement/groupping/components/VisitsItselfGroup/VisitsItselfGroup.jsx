@@ -12,6 +12,7 @@ export default function VisitsItselfGroup({
   provision,
   provision: { tripsDict, locationsDict, countriesDict },
   classes,
+  urls,
 }) {
   const groupTripId = findClosestGroupValue(visitsGroup, PLAIN_GROUPS.TRIPS);
 
@@ -53,6 +54,7 @@ export default function VisitsItselfGroup({
           provision={provision}
           isObscure={false}
           groupCountryId={groupCountryId}
+          urls={urls}
         />
       ))}
       {/* todo: Don't show for relocation trip */}

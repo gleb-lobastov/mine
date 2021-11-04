@@ -56,6 +56,7 @@ export default function VisitsArranger({
   groupBy,
   sortBy,
   provision,
+  urls,
   ...forwardingProps
 }) {
   const classes = useStyles();
@@ -63,6 +64,7 @@ export default function VisitsArranger({
   return renderRecursive({
     classes,
     provision,
+    urls,
     visitsList,
     groupsOrder: resolveGroupsOrder(groupBy),
     sortingOrder: resolveSortingOrder(sortBy),
@@ -73,6 +75,7 @@ export default function VisitsArranger({
 function renderRecursive({
   classes,
   provision,
+  urls,
   visitsList,
   groupsOrder,
   sortingOrder,
@@ -124,6 +127,7 @@ function renderRecursive({
             sectionLevel,
           })}
           provision={provision}
+          urls={urls}
           {...forwardingProps}
         >
           <StatsPanel

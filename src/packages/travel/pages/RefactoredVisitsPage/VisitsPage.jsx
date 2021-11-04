@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { usePaths } from 'modules/packages';
 import { useTripsStats } from 'travel/dataSource';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
@@ -15,7 +15,7 @@ export default function VisitsPage({
   },
 }) {
   const { userAlias: authenticatedUserAlias } = useAuthContext();
-  const hasEditRights = userAlias === authenticatedUserAlias;
+  const editable = userAlias === authenticatedUserAlias;
   const isObscure = userAlias !== authenticatedUserAlias;
 
   const { queryFilter, setQueryFilter } = useQueryFilter();
@@ -29,11 +29,22 @@ export default function VisitsPage({
   const { isPending, isError } = provision;
 
   const { travel: travelPaths } = usePaths();
-  const {
-    locations: locationsPath,
-    tripCreate: tripCreatePath,
-    visitEdit: visitEditPath,
-  } = travelPaths;
+  const urls = useMemo(
+    () => ({
+      locationsUrl: travelPaths.locations.toUrl({ userAlias }),
+      tripCreateUrl: editable
+        ? travelPaths.tripCreate.toUrl({ userAlias })
+        : null,
+      resolveVisitEditUrl: ({ visitId }) =>
+        editable
+          ? travelPaths.visitEdit.toUrl({
+              strVisitId: String(visitId),
+              userAlias,
+            })
+          : null,
+    }),
+    [editable, travelPaths],
+  );
 
   if (isError) {
     return <div>...Error</div>;
@@ -53,7 +64,8 @@ export default function VisitsPage({
   return (
     <>
       <VisitsTitle
-        locationsUrl={locationsPath.toUrl({ userAlias })}
+        locationsUrl={urls.locationsUrl}
+        tripCreateUrl={urls.tripCreateUrl}
         stats={totalStats}
       />
       <VisitsArranger
@@ -61,12 +73,9 @@ export default function VisitsPage({
         provision={provision}
         groupBy={groupBy}
         sortBy={sortBy}
-        paths={{
-          locations: locationsPath,
-          tripCreate: tripCreatePath,
-          visitEdit: visitEditPath,
-        }}
+        travelPaths={travelPaths}
         isObscure={isObscure}
+        urls={urls}
       />
     </>
   );

@@ -15,6 +15,7 @@ export default function LocationWithRideInfo({
   provision: { countriesDict, ridesDict, locationsDict },
   groupCountryId,
   children,
+  editButton,
   className,
 }) {
   const classes = useStyles();
@@ -27,7 +28,9 @@ export default function LocationWithRideInfo({
         countriesDict={countriesDict}
         location={location}
         showCountry={!groupCountryId}
-      />
+      >
+        {editButton}
+      </LocationInfo>
       {groupCountryId ? (
         children
       ) : (

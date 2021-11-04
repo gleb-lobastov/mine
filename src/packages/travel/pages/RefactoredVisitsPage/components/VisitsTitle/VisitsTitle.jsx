@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import MUILink from '@material-ui/core/Link';
+import IconButton from '@material-ui/core/IconButton';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
 
 export default function renderTitle({
+  tripCreateUrl,
   locationsUrl,
   stats: {
     locationsStats: { total: locationsCount },
@@ -20,6 +23,11 @@ export default function renderTitle({
       <span>из </span>
       <span>{`${countriesCount} стран`}</span>
       {/* <span>{`В путешествии ${totalStay} дней`}</span> */}
+      {tripCreateUrl ? (
+        <IconButton href={tripCreateUrl}>
+          <AddCircleIcon />
+        </IconButton>
+      ) : null}
     </Typography>
   );
 }
