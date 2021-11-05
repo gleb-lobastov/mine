@@ -1,14 +1,13 @@
-import React, { useMemo } from 'react';
-import { usePaths } from 'modules/packages';
+import React from 'react';
 import { useTripsStats } from 'travel/dataSource';
+import BackdropLoader from 'modules/components/loaders/BackdropLoader';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
-import switchFilteringFn from './switchFilteringFn';
 import VisitsArranger from './components/VisitsArranger';
 import calcStats from './components/VisitsArranger/statistics/utils/calcStats';
 import VisitsTitle from './components/VisitsTitle';
-import { tripEdit } from 'travel/routes';
+import useVisitsUrls from './useVisitsUrls';
 
 export default function VisitsPage({
   match: {
@@ -29,42 +28,17 @@ export default function VisitsPage({
   const provision = useTripsStats({ userAlias });
   const { isPending, isError } = provision;
 
-  const { travel: travelPaths } = usePaths();
-  const urls = useMemo(
-    () => ({
-      locationsUrl: travelPaths.locations.toUrl({ userAlias }),
-      tripCreateUrl: editable
-        ? travelPaths.tripCreate.toUrl({ userAlias })
-        : null,
-      resolveTripEditUrl: ({ tripId }) =>
-        editable
-          ? travelPaths.tripEdit.toUrl({
-              strTripId: String(tripId),
-              userAlias,
-            })
-          : null,
-      resolveVisitEditUrl: ({ visitId }) =>
-        editable
-          ? travelPaths.visitEdit.toUrl({
-              strVisitId: String(visitId),
-              userAlias,
-            })
-          : null,
-    }),
-    [editable, travelPaths],
-  );
+  const urls = useVisitsUrls({ editable, userAlias });
 
   if (isError) {
     return <div>...Error</div>;
   }
   if (isPending) {
-    return <div>...Loading</div>;
+    return <BackdropLoader />;
   }
 
   const { visitsIds, visitsDict } = provision;
-  const visitsList = visitsIds
-    .map(visitId => visitsDict[visitId])
-    .filter(switchFilteringFn(provision, filterBy));
+  const visitsList = visitsIds.map(visitId => visitsDict[visitId]);
 
   const commonVisitsGroup = { visitsList, parent: null, field: null };
   const totalStats = calcStats(commonVisitsGroup, provision);
@@ -81,7 +55,7 @@ export default function VisitsPage({
         provision={provision}
         groupBy={groupBy}
         sortBy={sortBy}
-        travelPaths={travelPaths}
+        filterBy={filterBy}
         isObscure={isObscure}
         urls={urls}
       />

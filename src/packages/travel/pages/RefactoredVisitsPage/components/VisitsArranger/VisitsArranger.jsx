@@ -10,6 +10,7 @@ import groupVisitsBy from './arrangement/groupping/utils/groupVisitsBy';
 import resolveSortingOrder from './arrangement/sorting/utils/resolveSortingOrder';
 import sortVisitsBy from './arrangement/sorting/utils/sortVisitsBy';
 import { PLAIN_GROUPS_CONFIG } from './arrangement/groupping/consts';
+import switchFilteringFn from 'travel/pages/RefactoredVisitsPage/components/VisitsArranger/arrangement/filtering/switchFilteringFn';
 
 const useStyles = makeStyles(theme => ({
   header0: {
@@ -55,17 +56,22 @@ export default function VisitsArranger({
   visitsList,
   groupBy,
   sortBy,
+  filterBy,
   provision,
   urls,
   ...forwardingProps
 }) {
   const classes = useStyles();
 
+  const actualVisitsList = visitsList.filter(
+    switchFilteringFn(provision, filterBy),
+  );
+
   return renderRecursive({
     classes,
     provision,
     urls,
-    visitsList,
+    visitsList: actualVisitsList,
     groupsOrder: resolveGroupsOrder(groupBy),
     sortingOrder: resolveSortingOrder(sortBy),
     forwardingProps,

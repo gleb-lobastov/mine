@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
 import { useSidebar } from 'core/context/SidebarContext';
 import {
   VISITS_SECTION_DEFAULT,
@@ -16,7 +17,7 @@ import {
   FILTER_VISITS_BY,
   KEY_FILTER_VISITS_BY,
   FILTER_VISITS_BY_DEFAULT,
-} from './components/VisitsArranger/arrangement/filtering';
+} from './components/VisitsArranger/arrangement/filtering/consts';
 import {
   SORT_VISITS_BY,
   KEY_SORT_VISITS_BY,
@@ -26,10 +27,16 @@ import {
   GROUP_VISITS_BY,
   KEY_GROUP_VISITS_BY,
 } from './components/VisitsArranger/arrangement/groupping/consts';
-import useVisitsPageStyles from './useVisitsPageStyles';
+
+const useStyles = makeStyles({
+  formControl: {
+    width: '100%',
+  },
+});
 
 export default function(setQueryFilter, queryFilter, section) {
-  const classes = useVisitsPageStyles();
+  const classes = useStyles();
+
   const {
     [KEY_GROUP_VISITS_BY]: groupByQuery,
     [KEY_SORT_VISITS_BY]: sortByQuery,
