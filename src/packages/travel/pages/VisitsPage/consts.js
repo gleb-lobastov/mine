@@ -1,13 +1,4 @@
-export const KEY_GROUP_VISITS_BY = 'group';
-export const GROUP_VISITS_BY = {
-  LOCATIONS: 'loc',
-  COUNTRIES: 'c',
-  YEARS: 'yr',
-  YEARS_COUNTRIES: 'yr_c',
-  COUNTRIES_YEARS: 'c_yr',
-  TRIPS: 't',
-  TRIPS_COUNTRIES: 't_с',
-};
+import { GROUP_VISITS_BY } from './components/VisitsArranger/arrangement/groupping/consts';
 
 export const VISITS_SECTIONS = {
   TRIPS: 'trips',
@@ -27,20 +18,11 @@ export const VISITS_SECTIONS_GROUPS = {
     { key: GROUP_VISITS_BY.TRIPS_COUNTRIES, l10n: 'По поездкам и странам' },
   ],
 };
+
 export const GROUP_VISITS_BY_DEFAULTS = {
   [VISITS_SECTIONS.LOCATIONS]: GROUP_VISITS_BY.COUNTRIES,
   [VISITS_SECTIONS.TRIPS]: GROUP_VISITS_BY.TRIPS,
 };
-
-export const KEY_SORT_VISITS_BY = 'sort';
-export const SORT_VISITS_BY = {
-  RATING_ALPHABET: 'r_a',
-  VISITS_ALPHABET: 'v_a',
-  FIRST_VISIT_ALPHABET: 'fv_a',
-  LAST_VISIT_ALPHABET: 'lv_a',
-  ALPHABET: 'a',
-};
-export const SORT_VISITS_BY_DEFAULT = SORT_VISITS_BY.ALPHABET;
 
 export const COMPARATORS = {
   VISIT: { ARRIVAL_YEAR: 'ARRIVAL_YEAR' },
@@ -65,19 +47,11 @@ export const COMPARATORS = {
   },
 };
 
-export const KEY_FILTER_VISITS_BY = 'filter';
-export const FILTER_VISITS_BY = {
-  ANY: 'a',
-  FOREIGN: 'f',
-  DOMESTIC: 'd',
-};
-export const FILTER_VISITS_BY_DEFAULT = FILTER_VISITS_BY.ANY;
-
 export const NODE_TYPE = {
-  ARRIVAL_LOCATION: "ARRIVAL_LOCATION",
-  COUNTRY: "COUNTRY",
-  DEPARTURE_LOCATION: "DEPARTURE_LOCATION",
-  LOCATION: "LOCATION",
-  TRIP: "TRIP",
-  YEAR: "YEAR"
+  ARRIVAL_LOCATION: 'ARRIVAL_LOCATION',
+  COUNTRY: 'COUNTRY',
+  DEPARTURE_LOCATION: 'DEPARTURE_LOCATION',
+  LOCATION: 'LOCATION',
+  TRIP: 'TRIP',
+  YEAR: 'YEAR',
 };

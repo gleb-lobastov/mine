@@ -1,1 +1,0 @@
-export const ADD_TRIP_BUTTON = 'ADD_TRIP_BUTTON';

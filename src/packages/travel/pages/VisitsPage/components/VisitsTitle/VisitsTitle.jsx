@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import MUILink from '@material-ui/core/Link';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import * as locators from '../../locators';
 
 export default function renderTitle({
   tripCreateUrl,
@@ -24,7 +25,10 @@ export default function renderTitle({
       <span>{`${countriesCount} стран`}</span>
       {/* <span>{`В путешествии ${totalStay} дней`}</span> */}
       {tripCreateUrl ? (
-        <IconButton href={tripCreateUrl}>
+        <IconButton
+          href={tripCreateUrl}
+          data-locator={locators.ADD_TRIP_BUTTON}
+        >
           <AddCircleIcon />
         </IconButton>
       ) : null}

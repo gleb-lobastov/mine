@@ -3,8 +3,8 @@ import uniqBy from 'lodash/uniqBy';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
 import VisitInfo from './components/VisitInfo';
-import { LocationInfo } from 'travel/pages/RefactoredVisitsPage/components/VisitsArranger/arrangement/groupping/components/LocationVisitsGroup';
-import LocationWithRideInfo from 'travel/pages/RefactoredVisitsPage/components/VisitsArranger/arrangement/groupping/components/VisitsItselfGroup/components/LocationWithRideInfo';
+import { LocationInfo } from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/groupping/components/LocationVisitsGroup';
+import LocationWithRideInfo from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/groupping/components/VisitsItselfGroup/components/LocationWithRideInfo';
 
 export default function VisitsItselfGroup({
   visitsGroup,

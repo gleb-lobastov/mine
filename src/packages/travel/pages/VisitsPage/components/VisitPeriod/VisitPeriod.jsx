@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CountryInfo from 'travel/components/models/countries/CountryInfo';
 import cls from 'classnames';
-import StatsPanel from 'travel/pages/RefactoredVisitsPage/components/VisitsArranger/statistics/StatsPanel';
+import StatsPanel from 'travel/pages/VisitsPage/components/VisitsArranger/statistics/StatsPanel';
 
 const useStyles = makeStyles({});
 
