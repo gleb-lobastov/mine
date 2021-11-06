@@ -86,15 +86,13 @@ export default function LocationPage({
         <Typography variant="h2" component="span">
           {location.locationName}
         </Typography>
-        {!mapVisible && (
-          <MUILink
-            variant="body2"
-            onClick={() => setMapVisible(true)}
-            className={classes.mapVisibilityToggle}
-          >
-            на карте
-          </MUILink>
-        )}
+        <MUILink
+          variant="body2"
+          onClick={() => setMapVisible(prevMapVisible => !prevMapVisible)}
+          className={classes.mapVisibilityToggle}
+        >
+          {mapVisible ? 'скрыть карту' : 'на карте'}
+        </MUILink>
         <LocationRating
           locationId={locationId}
           locationRating={location.rating}
