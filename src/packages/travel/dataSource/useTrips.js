@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import max from 'lodash/max';
 import min from 'lodash/min';
-import mapValues from 'lodash/mapValues';
 import { useProvision, selectDict } from 'core/connection';
 import { selectResult } from 'core/connection/request/controllerRedux';
 import mergeProvisionsState from 'core/connection/request/utils/mergeProvisionsState';
@@ -14,6 +13,7 @@ export default function useTrips({ userAlias, tripsIds: requiredTripsIds }) {
   const { tripsDict } = useSelector(state => ({
     tripsDict: selectDict(state, 'trips') || {},
   }));
+
   const shouldRequireAllTrips = !requiredTripsIds;
   const missingTripsIds =
     !shouldRequireAllTrips &&
@@ -57,41 +57,10 @@ export function useTripsStats({ userAlias, tripsIds: requiredTripsIds }) {
     locationsDict: selectDict(state, 'locations') || {},
   }));
 
-  const visitsIds = useMemo(
-    () =>
-      Array.from(
-        new Set(tripsIds.flatMap(tripsId => tripsDict[tripsId]?.visits || [])),
-      ),
-    [tripsIds, tripsDict],
-  );
-
-  const ridesIds = useMemo(
-    () =>
-      Array.from(
-        new Set(tripsIds.flatMap(tripsId => tripsDict[tripsId]?.rides || [])),
-      ),
-    [tripsIds, tripsDict],
-  );
-
-  const countriesIds = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          visitsIds.flatMap(visitId => visitsDict[visitId]?.countryId || []),
-        ),
-      ),
-    [visitsIds, visitsDict],
-  );
-
-  const locationsIds = useMemo(
-    () =>
-      Array.from(
-        new Set(
-          visitsIds.flatMap(visitId => visitsDict[visitId]?.locationId || []),
-        ),
-      ),
-    [visitsIds, visitsDict],
-  );
+  const visitsIds = useUniqField(tripsIds, tripsDict, 'visits');
+  const ridesIds = useUniqField(tripsIds, tripsDict, 'rides');
+  const countriesIds = useUniqField(visitsIds, visitsDict, 'countryId');
+  const locationsIds = useUniqField(visitsIds, visitsDict, 'locationId');
 
   const countriesProvision = useCountries();
   const locationsProvision = useLocations({
@@ -144,4 +113,18 @@ function calcRidesStats(ridesIds, ridesDict) {
       max(ridesIds.map(rideId => ridesDict[rideId]?.arrivalDateTime.getTime())),
     ),
   };
+}
+
+function useUniqField(entitiesIds, entitiesDict, fieldName) {
+  return useMemo(
+    () =>
+      Array.from(
+        new Set(
+          entitiesIds.flatMap(
+            entityId => entitiesDict[entityId]?.[fieldName] || [],
+          ),
+        ),
+      ),
+    [entitiesIds, entitiesDict, fieldName],
+  );
 }
