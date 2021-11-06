@@ -1,6 +1,6 @@
 import React from 'react';
 import cls from 'classnames';
-import TripInfo from 'travel/components/models/trips/TripInfo';
+import TripInfo from './TripInfo';
 
 export default function TripVisitsGroup({
   classes,
