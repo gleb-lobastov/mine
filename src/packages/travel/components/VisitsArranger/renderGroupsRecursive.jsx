@@ -9,6 +9,7 @@ import VisitsLocationsMap from './components/VisitsLocationsMap';
 
 export default function renderRecursive({
   classes,
+  children,
   provision,
   urls,
   config,
@@ -56,7 +57,7 @@ export default function renderRecursive({
       provision,
     );
 
-    return sortedVisitsGroups.map(visitsGroup => (
+    return sortedVisitsGroups.map((visitsGroup, index) => (
       <Fragment key={visitsGroup.field.value}>
         <VisitsGroupComponent
           visitsGroup={visitsGroup}
@@ -76,6 +77,7 @@ export default function renderRecursive({
             config={config}
           />
         </VisitsGroupComponent>
+        {children?.({ level: nestingLevel, index, visitsGroup })}
         {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
         {sectionLevel === photosSectionLevel && (
           <VisitsPhotosGallery

@@ -53,6 +53,7 @@ export default function VisitsArranger({
   config,
   mapSectionLevel,
   photosSectionLevel,
+  children,
   ...forwardingProps
 }) {
   const classes = useStyles();
@@ -63,6 +64,7 @@ export default function VisitsArranger({
 
   return renderGroupsRecursive({
     classes,
+    children,
     provision,
     urls,
     config,

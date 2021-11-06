@@ -21,6 +21,7 @@ const RATING_LOCALIZATION = {
 
 const useStyles = makeStyles({
   formControl: {
+    margin: '24px 0',
     width: '100%',
   },
 });
