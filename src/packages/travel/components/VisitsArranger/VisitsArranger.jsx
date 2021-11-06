@@ -4,12 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import clamp from 'lodash/clamp';
 import VisitsPhotosGallery from './components/VisitsPhotosGallery';
 import { calcStats, StatsPanel } from './statistics';
-import {
-  resolveGroupsOrder,
-  groupVisitsBy,
-  PLAIN_GROUPS_CONFIG,
-} from './arrangement/groupping';
-import { resolveSortingOrder, sortVisitsBy } from './arrangement/sorting';
+import { groupVisitsBy, PLAIN_GROUPS_CONFIG } from './arrangement/groupping';
+import { sortVisitsBy } from './arrangement/sorting';
 import { switchFilteringFn } from './arrangement/filtering';
 
 const useStyles = makeStyles(theme => ({
@@ -54,8 +50,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function VisitsArranger({
   visitsList,
-  groupBy,
-  sortBy,
+  groupsOrder,
+  sortingOrder,
   filterBy,
   provision,
   urls,
@@ -72,8 +68,8 @@ export default function VisitsArranger({
     provision,
     urls,
     visitsList: actualVisitsList,
-    groupsOrder: resolveGroupsOrder(groupBy),
-    sortingOrder: resolveSortingOrder(sortBy),
+    groupsOrder,
+    sortingOrder,
     forwardingProps,
   });
 }

@@ -7,6 +7,8 @@ import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import useVisitsUrls from 'travel/utils/useVisitsUrls';
 import VisitsArranger, { calcStats } from 'travel/components/VisitsArranger';
 import VisitsTitle from './components/VisitsTitle';
+import resolveGroupsOrder from './resolveGroupsOrder';
+import resolveSortingOrder from './resolveSortingOrder';
 
 export default function VisitsPage({
   match: {
@@ -52,8 +54,8 @@ export default function VisitsPage({
       <VisitsArranger
         visitsList={visitsList}
         provision={provision}
-        groupBy={groupBy}
-        sortBy={sortBy}
+        groupsOrder={resolveGroupsOrder(groupBy)}
+        sortingOrder={resolveSortingOrder(sortBy)}
         filterBy={filterBy}
         isObscure={isObscure}
         urls={urls}

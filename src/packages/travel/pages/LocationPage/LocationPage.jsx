@@ -7,8 +7,8 @@ import { useAuthContext } from 'core/context/AuthContext';
 import useVisitsUrls from 'travel/utils/useVisitsUrls';
 import LocationsMap, { MARKERS_SCALES } from 'travel/components/LocationsMap';
 import VisitsArranger, {
-  GROUP_VISITS_BY,
-  SORT_VISITS_BY,
+  PLAIN_GROUPS,
+  PLAIN_SORTING,
   FILTER_VISITS_BY,
 } from 'travel/components/VisitsArranger';
 import LocationRating from './blocks/LocationRating';
@@ -115,8 +115,12 @@ export default function LocationPage({
         <VisitsArranger
           visitsList={visitsList}
           provision={tripsProvision}
-          groupBy={GROUP_VISITS_BY.YEARS}
-          sortBy={SORT_VISITS_BY.LAST_VISIT_ALPHABET}
+          groupsOrder={[
+            PLAIN_GROUPS.COUNTRIES,
+            PLAIN_GROUPS.LOCATIONS,
+            PLAIN_GROUPS.YEARS,
+          ]}
+          sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
           filterBy={FILTER_VISITS_BY.ANY}
           isObscure={isObscure}
           urls={urls}

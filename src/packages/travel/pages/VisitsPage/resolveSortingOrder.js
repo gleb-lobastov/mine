@@ -1,4 +1,4 @@
-import { PLAIN_SORTING_MAPPING } from '../consts';
+import { PLAIN_SORTING_MAPPING } from 'travel/components/VisitsArranger';
 
 export default function resolveSortingOrder(sortBy) {
   return sortBy
