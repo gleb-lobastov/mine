@@ -120,6 +120,7 @@ export default function LocationPage({
           filteringOption={PLAIN_FILTERING.ANY}
           isObscure={isObscure}
           urls={urls}
+          config={{ LocationVisitsGroup: { hyperlinks: { location: false } } }}
         />
       )}
     </div>

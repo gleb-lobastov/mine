@@ -79,6 +79,7 @@ export default function CountryPage({
           filteringOption={PLAIN_FILTERING.ANY}
           isObscure={isObscure}
           urls={urls}
+          config={{ CountryVisitsGroup: { hyperlinks: { country: false } } }}
         />
       )}
     </div>

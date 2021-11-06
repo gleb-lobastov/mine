@@ -6,6 +6,7 @@ export default function useVisitsUrls({ editable, userAlias }) {
 
   return useMemo(
     () => ({
+      hyperlinks: () => {},
       locationsUrl: travelPaths.locations.toUrl({ userAlias }),
       tripCreateUrl: editable
         ? travelPaths.tripCreate.toUrl({ userAlias })

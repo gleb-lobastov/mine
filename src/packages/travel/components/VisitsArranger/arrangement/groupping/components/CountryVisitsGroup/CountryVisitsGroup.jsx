@@ -10,13 +10,20 @@ export default function CountryVisitsGroup({
   classes,
   provision: { countriesDict },
   urls,
+  config: {
+    CountryVisitsGroup: {
+      hyperlinks: { country: countryHyperlink = true } = {},
+    } = {},
+  },
 }) {
   return (
     <CountryInfo
       country={countriesDict[countryId]}
       className={classes.container}
       classes={classes}
-      urls={urls}
+      countryUrl={
+        countryHyperlink ? urls?.resolveCountryUrl({ countryId }) : null
+      }
     >
       {children}
     </CountryInfo>
@@ -25,18 +32,20 @@ export default function CountryVisitsGroup({
 
 function CountryInfo({
   variant,
-  country: { countryName, countryId },
+  country: { countryName },
   children,
   className,
   classes,
-  urls,
+  countryUrl,
 }) {
-  const countryUrl = urls?.resolveCountryUrl({ countryId });
-
   return (
     <div className={className}>
       <ConnectedLink to={countryUrl} optional={true}>
-        <Typography display="inline" variant={variant} className={classes.header}>
+        <Typography
+          display="inline"
+          variant={variant}
+          className={classes.header}
+        >
           {countryName}
         </Typography>
       </ConnectedLink>
@@ -44,3 +53,7 @@ function CountryInfo({
     </div>
   );
 }
+
+CountryVisitsGroup.defaultProps = {
+  config: {},
+};

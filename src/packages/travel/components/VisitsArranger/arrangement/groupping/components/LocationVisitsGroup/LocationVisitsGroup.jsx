@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
+import MUILink from '@material-ui/core/Link';
 import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
 import LocationsMap, { MARKERS_SCALES } from 'travel/components/LocationsMap';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
-import MUILink from '@material-ui/core/Link';
 
 export default function LocationVisitsGroup({
   children,
@@ -16,12 +16,28 @@ export default function LocationVisitsGroup({
   provision,
   provision: { locationsDict },
   urls,
+  config: {
+    LocationVisitsGroup: {
+      hyperlinks: {
+        location: locationHyperlink = true,
+        country: countryHyperlink = true,
+      } = {},
+    } = {},
+  },
 }) {
   const location = locationsDict[locationIdStr];
   const groupCountryId = findClosestGroupValue(
     visitsGroup,
     PLAIN_GROUPS.COUNTRIES,
   );
+  const { locationId, countryId } = location ?? {};
+
+  const locationUrl = locationHyperlink
+    ? urls?.resolveLocationUrl({ locationId })
+    : null;
+  const countryUrl = countryHyperlink
+    ? urls?.resolveCountryUrl({ countryId })
+    : null;
 
   return (
     <LocationInfo
@@ -30,12 +46,17 @@ export default function LocationVisitsGroup({
       location={location}
       provision={provision}
       showCountry={!groupCountryId}
-      urls={urls}
+      locationUrl={locationUrl}
+      countryUrl={countryUrl}
     >
       {children}
     </LocationInfo>
   );
 }
+
+LocationVisitsGroup.defaultProps = {
+  config: {},
+};
 
 export function LocationInfo({
   children,
@@ -45,12 +66,10 @@ export function LocationInfo({
   location: { locationName, locationId, countryId } = {},
   provision: { countriesDict, locationsDict, visitsDict, locationsRating },
   showCountry,
-  urls,
+  locationUrl,
+  countryUrl,
 }) {
   const [mapVisible, setMapVisible] = useState(false);
-
-  const locationUrl = urls?.resolveLocationUrl({ locationId });
-  const countryUrl = urls?.resolveCountryUrl({ countryId });
 
   const countryName = countriesDict[countryId]?.countryName;
   const countryNode =
