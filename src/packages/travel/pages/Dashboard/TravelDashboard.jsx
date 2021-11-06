@@ -5,7 +5,7 @@ import { useTripsStats } from 'travel/dataSource';
 import LocationsMap, {
   useMarkersScaleSidebar,
   MARKERS_SCALES,
-} from 'travel/components/common/LocationsMap';
+} from 'travel/components/LocationsMap';
 import Description from './blocks/Description';
 import ExternalLinks from './blocks/ExternalLinks';
 

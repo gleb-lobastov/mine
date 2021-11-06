@@ -4,8 +4,8 @@ import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { rideDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 import ridePropTypes from 'travel/models/rides/propTypes';
-import RideIcon from 'travel/components/models/rides/RideIcon';
-import Actions from 'travel/components/common/Actions';
+import RideIcon from 'travel/components/RideIcon';
+import Actions from 'travel/components/Actions';
 import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogs';
 import * as locators from '../../../../../locators';
 

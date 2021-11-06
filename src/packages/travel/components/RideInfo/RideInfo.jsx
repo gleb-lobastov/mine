@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import HichHikingIcon from '@material-ui/icons/ThumbUp';
 import { rideDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 import { RIDE_TYPES } from 'travel/models/rides/consts';
-import RideIcon from 'travel/components/models/rides/RideIcon';
+import RideIcon from 'travel/components/RideIcon';
 
 const useStyles = makeStyles({
   icon: { color: 'gray', fontSize: 16, height: 16 },

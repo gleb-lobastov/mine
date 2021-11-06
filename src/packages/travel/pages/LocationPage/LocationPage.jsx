@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from 'core/context/AuthContext';
 import LocationsMap, {
   MARKERS_SCALES,
-} from 'travel/components/common/LocationsMap';
+} from 'travel/components/LocationsMap';
 import VisitsArranger from 'travel/pages/VisitsPage/components/VisitsArranger';
 import useVisitsUrls from 'travel/pages/VisitsPage/useVisitsUrls';
 import { GROUP_VISITS_BY } from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/groupping/consts';

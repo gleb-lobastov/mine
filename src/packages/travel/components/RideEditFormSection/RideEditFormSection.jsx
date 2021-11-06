@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import { KeyboardDatePicker, KeyboardTimePicker } from '@material-ui/pickers';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
-import VisitInfo from 'travel/components/models/visits/VisitInfo';
+import VisitInfo from 'travel/components/VisitInfo';
 import {
   RIDE_CLASSES,
   RIDE_OCCUPATION,

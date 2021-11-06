@@ -1,7 +1,7 @@
 import { Scene } from 'puppeteer-scenario';
 import * as dialogLocators from 'modules/components/Dialog/locators';
 import * as tripEditPageLocators from 'travel/pages/TripEditPage/locators';
-import * as visitEditFormSectionLocators from 'travel/components/models/visits/VisitEditFormSection/locators';
+import * as visitEditFormSectionLocators from 'travel/components/VisitEditFormSection/locators';
 import { toSelector, selectRandomOption } from '../../../../../utils';
 import getRandomLocationSuggest from '../../getRandomLocationSuggest';
 

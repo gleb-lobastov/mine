@@ -1,6 +1,6 @@
 import React from 'react';
 import FormDialog from 'modules/components/FormDialog';
-import RideEditFormSection from 'travel/components/models/rides/RideEditFormSection';
+import RideEditFormSection from 'travel/components/RideEditFormSection';
 import * as locators from '../../../../locators';
 
 export default function RideEditDialog({

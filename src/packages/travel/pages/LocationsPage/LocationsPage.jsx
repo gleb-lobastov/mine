@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from 'core/context/AuthContext';
-import LocationsMap from 'travel/components/common/LocationsMap';
+import LocationsMap from 'travel/components/LocationsMap';
 import LocationRating from './blocks/LocationRating';
 import useUserLocations from './useUserLocations';
 

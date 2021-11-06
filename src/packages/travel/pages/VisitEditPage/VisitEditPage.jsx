@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from 'core/context/AuthContext';
 import { useVisit, useAddVisitPhotoRequest } from 'travel/dataSource';
-import VisitInfo from 'travel/components/models/visits/VisitInfo';
+import VisitInfo from 'travel/components/VisitInfo';
 import resolveDropzoneStyles from './resolveDropzoneStyles';
 
 const UPLOAD_IMAGE_MIN_SIZE = 50 * 1024;

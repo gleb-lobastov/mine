@@ -1,11 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import Suggest, { QUERY_FORMATS } from 'modules/components/muiExtended/Suggest';
-import RideInfo from 'travel/components/models/rides/RideInfo';
+import RideInfo from 'travel/components/RideInfo';
 import { VISIT_TYPES } from 'travel/models/visits/consts';
 import * as locators from './locators';
 

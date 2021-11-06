@@ -1,6 +1,6 @@
 import React from 'react';
 import Dialog from 'modules/components/Dialog';
-import VisitInfo from 'travel/components/models/visits/VisitInfo';
+import VisitInfo from 'travel/components/VisitInfo';
 
 export default function VisitDeleteDialog({
   visit,

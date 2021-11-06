@@ -1,6 +1,6 @@
 import React from 'react';
 import FormDialog from 'modules/components/FormDialog';
-import VisitEditFormSection from 'travel/components/models/visits/VisitEditFormSection';
+import VisitEditFormSection from 'travel/components/VisitEditFormSection';
 import * as locators from '../../../../locators';
 
 export default function VisitEditDialog({

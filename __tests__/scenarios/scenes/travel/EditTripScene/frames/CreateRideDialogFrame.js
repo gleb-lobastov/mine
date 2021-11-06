@@ -1,7 +1,7 @@
 import { Scene } from 'puppeteer-scenario';
 import * as dialogLocators from 'modules/components/Dialog/locators';
 import * as tripEditPageLocators from 'travel/pages/TripEditPage/locators';
-import * as rideEditFormSectionLocators from 'travel/components/models/rides/RideEditFormSection/locators';
+import * as rideEditFormSectionLocators from 'travel/components/RideEditFormSection/locators';
 import {
   toSelector,
   evaluateInputValue,

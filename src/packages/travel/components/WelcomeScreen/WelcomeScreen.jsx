@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, Route, Redirect, Switch } from 'react-router-dom';
-import Path from 'modules/utilities/routing/Path';
 import { usePaths } from 'modules/packages';
 import { useAuthContext } from 'core/context/AuthContext';
 
