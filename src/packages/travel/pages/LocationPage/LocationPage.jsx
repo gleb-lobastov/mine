@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from 'core/context/AuthContext';
@@ -12,11 +12,13 @@ import { SORT_VISITS_BY } from 'travel/pages/VisitsPage/components/VisitsArrange
 import { FILTER_VISITS_BY } from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/filtering/consts';
 import LocationRating from './blocks/LocationRating';
 import useLocationWithTripStats from './useLocationWithTripStats';
+import MUILink from '@material-ui/core/Link';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles({
   container: { fontSize: '16px', lineHeight: '1.5' },
   visitContainer: { margin: '20px 0' },
-  location: { fontWeight: 'bold', fontSize: '21px' },
+  mapVisibilityToggle: { marginLeft: '8px', cursor: 'pointer' },
   googleMapContainer: {
     margin: '12px 0',
     width: '800px',
@@ -34,6 +36,7 @@ export default function LocationPage({
 }) {
   const classes = useStyles();
 
+  const [mapVisible, setMapVisible] = useState(false);
   const {
     isAuthenticated,
     userAlias: authenticatedUserAlias,
@@ -79,23 +82,38 @@ export default function LocationPage({
   const isEditable = isAuthenticated && authenticatedUserAlias === userAlias;
   return (
     <div className={classes.container}>
-      <h1 className={classes.location}>{location.locationName}</h1>
-      <LocationRating
-        locationId={locationId}
-        locationRating={location.rating}
-        isEditable={isEditable}
-        onSubmitLocationRating={handleSubmitLocationRating}
-      />
-      <LocationsMap
-        className={classes.mapContainer}
-        locationsDict={tripsProvision.locationsDict}
-        visitsDict={tripsProvision.visitsDict}
-        locationsRating={tripsProvision.locationsRating}
-        locationsIds={[locationId]}
-        minHeight={300}
-        scaleBy={isVisited ? MARKERS_SCALES.BY_RATING : null}
-        ratingLevel={isVisited ? locationRating : null}
-      />
+      <div>
+        <Typography variant="h2" component="span">
+          {location.locationName}
+        </Typography>
+        {!mapVisible && (
+          <MUILink
+            variant="body2"
+            onClick={() => setMapVisible(true)}
+            className={classes.mapVisibilityToggle}
+          >
+            на карте
+          </MUILink>
+        )}
+        <LocationRating
+          locationId={locationId}
+          locationRating={location.rating}
+          isEditable={isEditable}
+          onSubmitLocationRating={handleSubmitLocationRating}
+        />
+      </div>
+      {mapVisible && (
+        <LocationsMap
+          className={classes.mapContainer}
+          locationsDict={tripsProvision.locationsDict}
+          visitsDict={tripsProvision.visitsDict}
+          locationsRating={tripsProvision.locationsRating}
+          locationsIds={[locationId]}
+          minHeight={300}
+          scaleBy={isVisited ? MARKERS_SCALES.BY_RATING : null}
+          ratingLevel={isVisited ? locationRating : null}
+        />
+      )}
       {isVisited && (
         <VisitsArranger
           visitsList={visitsList}
