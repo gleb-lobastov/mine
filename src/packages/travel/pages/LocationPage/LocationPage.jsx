@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import MUILink from '@material-ui/core/Link';
@@ -27,7 +26,7 @@ const useStyles = makeStyles({
   },
 });
 
-const domain = 'travel.LocationsPage';
+const domain = 'travel.LocationPage';
 export default function LocationPage({
   match: {
     params: { userAlias, strLocationId },
@@ -115,12 +114,8 @@ export default function LocationPage({
         <VisitsArranger
           visitsList={visitsList}
           provision={tripsProvision}
-          groupsOrder={[
-            PLAIN_GROUPS.COUNTRIES,
-            PLAIN_GROUPS.LOCATIONS,
-            PLAIN_GROUPS.YEARS,
-          ]}
-          photosSectionLevel={2}
+          groupsOrder={[PLAIN_GROUPS.LOCATIONS, PLAIN_GROUPS.YEARS]}
+          photosSectionLevel={1}
           sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
           filterBy={FILTER_VISITS_BY.ANY}
           isObscure={isObscure}
@@ -130,12 +125,3 @@ export default function LocationPage({
     </div>
   );
 }
-
-LocationPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      userAlias: PropTypes.string.isRequired,
-      strLocationId: PropTypes.string,
-    }).isRequired,
-  }).isRequired,
-};

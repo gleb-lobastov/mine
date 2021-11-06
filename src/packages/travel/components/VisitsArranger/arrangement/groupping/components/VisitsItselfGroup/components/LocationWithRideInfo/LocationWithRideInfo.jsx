@@ -12,7 +12,8 @@ const useStyles = makeStyles({
 export default function LocationWithRideInfo({
   locationId,
   rideId,
-  provision: { countriesDict, ridesDict, locationsDict },
+  provision,
+  provision: { ridesDict, locationsDict },
   groupCountryId,
   children,
   editButton,
@@ -25,7 +26,7 @@ export default function LocationWithRideInfo({
     <AutoMargin>
       <LocationInfo
         className={className}
-        countriesDict={countriesDict}
+        provision={provision}
         location={location}
         showCountry={!groupCountryId}
       >

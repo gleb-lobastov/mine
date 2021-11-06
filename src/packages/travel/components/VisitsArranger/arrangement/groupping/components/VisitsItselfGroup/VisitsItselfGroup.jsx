@@ -61,7 +61,7 @@ export default function VisitsItselfGroup({
       {!groupCountryId && (
         <LocationInfo
           className={classes.header}
-          countriesDict={countriesDict}
+          provision={provision}
           location={locationsDict[originLocationId]}
           showCountry={!groupCountryId}
         />
