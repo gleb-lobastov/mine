@@ -4,9 +4,9 @@ import BackdropLoader from 'modules/components/loaders/BackdropLoader';
 import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
+import useVisitsUrls from 'travel/utils/useVisitsUrls';
 import VisitsArranger, { calcStats } from 'travel/components/VisitsArranger';
 import VisitsTitle from './components/VisitsTitle';
-import useVisitsUrls from './useVisitsUrls';
 
 export default function VisitsPage({
   match: {
