@@ -120,6 +120,7 @@ export default function LocationPage({
             PLAIN_GROUPS.LOCATIONS,
             PLAIN_GROUPS.YEARS,
           ]}
+          photosSectionLevel={2}
           sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
           filterBy={FILTER_VISITS_BY.ANY}
           isObscure={isObscure}
