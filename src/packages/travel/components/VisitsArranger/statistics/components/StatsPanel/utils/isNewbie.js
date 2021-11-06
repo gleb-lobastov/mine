@@ -1,5 +1,5 @@
 import { PLAIN_GROUPS } from '../../../../arrangement/groupping/consts';
-import { findClosestGroupValue } from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/groupping/utils/resolveGroupingUtils';
+import { findClosestGroupValue } from '../../../../arrangement/groupping/utils/resolveGroupingUtils';
 
 export default function isNewbie(visitsGroup) {
   const {

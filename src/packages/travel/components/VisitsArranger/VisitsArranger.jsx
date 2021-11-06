@@ -3,14 +3,14 @@ import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import clamp from 'lodash/clamp';
 import VisitsPhotosGallery from './components/VisitsPhotosGallery';
-import calcStats from './statistics/utils/calcStats';
-import StatsPanel from './statistics/components/StatsPanel';
-import resolveGroupsOrder from './arrangement/groupping/utils/resolveGroupsOrder';
-import groupVisitsBy from './arrangement/groupping/utils/groupVisitsBy';
-import resolveSortingOrder from './arrangement/sorting/utils/resolveSortingOrder';
-import sortVisitsBy from './arrangement/sorting/utils/sortVisitsBy';
-import { PLAIN_GROUPS_CONFIG } from './arrangement/groupping/consts';
-import switchFilteringFn from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/filtering/switchFilteringFn';
+import { calcStats, StatsPanel } from './statistics';
+import {
+  resolveGroupsOrder,
+  groupVisitsBy,
+  PLAIN_GROUPS_CONFIG,
+} from './arrangement/groupping';
+import { resolveSortingOrder, sortVisitsBy } from './arrangement/sorting';
+import { switchFilteringFn } from './arrangement/filtering';
 
 const useStyles = makeStyles(theme => ({
   header0: {

@@ -1,4 +1,4 @@
-import { GROUP_VISITS_BY } from './components/VisitsArranger/arrangement/groupping/consts';
+import { GROUP_VISITS_BY } from 'travel/components/VisitsArranger';
 
 export const VISITS_SECTIONS = {
   TRIPS: 'trips',

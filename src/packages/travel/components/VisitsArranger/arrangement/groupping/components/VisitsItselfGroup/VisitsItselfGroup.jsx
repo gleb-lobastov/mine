@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import uniqBy from 'lodash/uniqBy';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
+import { LocationInfo } from '../LocationVisitsGroup';
 import VisitInfo from './components/VisitInfo';
-import { LocationInfo } from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/groupping/components/LocationVisitsGroup';
-import LocationWithRideInfo from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/groupping/components/VisitsItselfGroup/components/LocationWithRideInfo';
+import LocationWithRideInfo from './components/LocationWithRideInfo';
 
 export default function VisitsItselfGroup({
   visitsGroup,

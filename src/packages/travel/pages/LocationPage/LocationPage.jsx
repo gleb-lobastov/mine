@@ -2,14 +2,13 @@ import React, { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import { useAuthContext } from 'core/context/AuthContext';
-import LocationsMap, {
-  MARKERS_SCALES,
-} from 'travel/components/LocationsMap';
-import VisitsArranger from 'travel/pages/VisitsPage/components/VisitsArranger';
+import LocationsMap, { MARKERS_SCALES } from 'travel/components/LocationsMap';
+import VisitsArranger, {
+  GROUP_VISITS_BY,
+  SORT_VISITS_BY,
+  FILTER_VISITS_BY,
+} from 'travel/components/VisitsArranger';
 import useVisitsUrls from 'travel/pages/VisitsPage/useVisitsUrls';
-import { GROUP_VISITS_BY } from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/groupping/consts';
-import { SORT_VISITS_BY } from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/sorting/consts';
-import { FILTER_VISITS_BY } from 'travel/pages/VisitsPage/components/VisitsArranger/arrangement/filtering/consts';
 import LocationRating from './blocks/LocationRating';
 import useLocationWithTripStats from './useLocationWithTripStats';
 import MUILink from '@material-ui/core/Link';

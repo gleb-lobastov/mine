@@ -17,16 +17,12 @@ import {
   FILTER_VISITS_BY,
   KEY_FILTER_VISITS_BY,
   FILTER_VISITS_BY_DEFAULT,
-} from './components/VisitsArranger/arrangement/filtering/consts';
-import {
   SORT_VISITS_BY,
   KEY_SORT_VISITS_BY,
   SORT_VISITS_BY_DEFAULT,
-} from './components/VisitsArranger/arrangement/sorting/consts';
-import {
   GROUP_VISITS_BY,
   KEY_GROUP_VISITS_BY,
-} from './components/VisitsArranger/arrangement/groupping/consts';
+} from 'travel/components/VisitsArranger';
 
 const useStyles = makeStyles({
   formControl: {
