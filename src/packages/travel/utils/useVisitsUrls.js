@@ -15,6 +15,11 @@ export default function useVisitsUrls({ editable, userAlias }) {
           strLocationId: String(locationId),
           userAlias,
         }),
+      resolveCountryUrl: ({ countryId }) =>
+        travelPaths.country.toUrl({
+          strCountryId: String(countryId),
+          userAlias,
+        }),
       resolveTripEditUrl: ({ tripId }) =>
         editable
           ? travelPaths.tripEdit.toUrl({
