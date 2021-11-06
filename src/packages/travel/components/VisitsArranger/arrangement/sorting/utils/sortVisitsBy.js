@@ -106,11 +106,6 @@ function createLocationNameComparator({ locationsDict }) {
 }
 
 const DEFAULT_RATING = 10;
-function createCountryRatingComparator({ countriesRating }) {
-  return ({ field: { value: countryId } }) =>
-    countriesRating[countryId] ?? DEFAULT_RATING;
-}
-
 function createLocationRatingComparator({ locationsRating }) {
   return ({ field: { value: locationId } }) =>
     locationsRating[locationId] ?? DEFAULT_RATING;
