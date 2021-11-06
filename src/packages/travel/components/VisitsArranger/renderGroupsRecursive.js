@@ -10,6 +10,7 @@ export default function renderRecursive({
   classes,
   provision,
   urls,
+  config,
   visitsList,
   groupsOrder,
   sortingOrder,
@@ -63,12 +64,14 @@ export default function renderRecursive({
           })}
           provision={provision}
           urls={urls}
+          config={config}
           {...forwardingProps}
         >
           <StatsPanel
             visitsGroup={visitsGroup}
             provision={provision}
             isObscure={isObscure}
+            config={config}
           />
         </VisitsGroupComponent>
         {sectionLevel === photosSectionLevel && (

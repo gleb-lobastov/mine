@@ -25,6 +25,15 @@ export default function StatsPanel({
   visitsGroup: {
     stats: { countriesStats, locationsStats, daysTravellingStats },
   },
+  config: {
+    StatsPanel: {
+      appearance: {
+        CountriesStats: countriesStatsAppearance = true,
+        LocationsStats: locationStatsAppearance = true,
+        DaysTravellingStats: daysTravellingStatsAppearance = true,
+      } = {},
+    } = {},
+  },
   isObscure,
 }) {
   const classes = useStyles();
@@ -41,9 +50,11 @@ export default function StatsPanel({
   );
 
   const daysTravellingStatsNode =
-    daysTravellingStats && !isObscure ? (
+    daysTravellingStatsAppearance && daysTravellingStats && !isObscure ? (
       <DaysTravellingStats
-        className={cls({ [classes.visibleOnlyOnHover]: isLocationGroup })}
+        className={cls({
+          [classes.visibleOnlyOnHover]: isLocationGroup,
+        })}
         daysTravellingStats={daysTravellingStats}
         provision={provision}
       />
@@ -52,8 +63,10 @@ export default function StatsPanel({
   return (
     <Typography variant="body1" className={classes.container}>
       {hasYearGroup && isNewbie(visitsGroup) && <FiberNewIcon />}
-      {!hasCountryGroup && <CountriesStats countriesStats={countriesStats} />}
-      {!hasLocationGroup && <LocationStats locationsStats={locationsStats} />}
+      {countriesStatsAppearance &&
+        !hasCountryGroup && <CountriesStats countriesStats={countriesStats} />}
+      {locationStatsAppearance &&
+        !hasLocationGroup && <LocationStats locationsStats={locationsStats} />}
       {daysTravellingStatsNode}
     </Typography>
   );

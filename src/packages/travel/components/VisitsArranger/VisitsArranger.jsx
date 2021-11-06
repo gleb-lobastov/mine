@@ -50,6 +50,7 @@ export default function VisitsArranger({
   filteringOption,
   provision,
   urls,
+  config,
   photosSectionLevel,
   ...forwardingProps
 }) {
@@ -63,6 +64,7 @@ export default function VisitsArranger({
     classes,
     provision,
     urls,
+    config,
     visitsList: actualVisitsList,
     groupsOrder,
     sortingOrder,

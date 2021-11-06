@@ -18,6 +18,7 @@ export default function LocationVisitsGroup({
   urls,
   config: {
     LocationVisitsGroup: {
+      appearance,
       hyperlinks: {
         location: locationHyperlink = true,
         country: countryHyperlink = true,
@@ -48,6 +49,7 @@ export default function LocationVisitsGroup({
       showCountry={!groupCountryId}
       locationUrl={locationUrl}
       countryUrl={countryUrl}
+      appearance={appearance}
     >
       {children}
     </LocationInfo>
@@ -68,12 +70,13 @@ export function LocationInfo({
   showCountry,
   locationUrl,
   countryUrl,
+  appearance: { country: countryAppearance = true },
 }) {
   const [mapVisible, setMapVisible] = useState(false);
 
   const countryName = countriesDict[countryId]?.countryName;
   const countryNode =
-    countryName && showCountry ? (
+    countryAppearance && countryName && showCountry ? (
       <ConnectedLink to={countryUrl} optional={true}>
         <Typography display="inline" variant="body1">
           {countriesDict[countryId]?.countryName}
@@ -122,3 +125,7 @@ export function LocationInfo({
     </>
   );
 }
+
+LocationInfo.defaultProps = {
+  appearance: {},
+};
