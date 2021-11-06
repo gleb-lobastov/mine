@@ -2,13 +2,14 @@ import { MARKERS_RATING_LEVELS } from '../consts';
 import { LOCATION_RATING } from 'travel/models/users/consts';
 
 export default function filterMarkerData(adaptedMarkersData, { ratingLevel }) {
+  const validMarkersData = adaptedMarkersData.filter(Boolean);
   if (
     !Object.values(MARKERS_RATING_LEVELS).includes(ratingLevel) ||
     ratingLevel === MARKERS_RATING_LEVELS.ALL
   ) {
-    return adaptedMarkersData;
+    return validMarkersData;
   }
-  return adaptedMarkersData.filter(({ locationRating, visitsCount }) => {
+  return validMarkersData.filter(({ locationRating, visitsCount }) => {
     switch (ratingLevel) {
       case MARKERS_RATING_LEVELS.WANT_COME_BACK:
         if (visitsCount < 2) {
