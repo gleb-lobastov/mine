@@ -16,8 +16,11 @@ export default function makeScaleUtils(scaleBy) {
     case MARKERS_SCALES.BY_LAST_VISIT:
       return makeScaleByDateTimeUtils('lastVisitDateTime');
     case MARKERS_SCALES.BY_FIRST_VISIT:
-    default:
       return makeScaleByDateTimeUtils('firstVisitDateTime');
+    default:
+      return {
+        resolveStep: () => 1,
+      };
   }
 }
 

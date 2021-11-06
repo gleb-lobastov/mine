@@ -1,6 +1,7 @@
 import isArray from 'lodash/isArray';
 import isUndefined from 'lodash/isUndefined';
 import negate from 'lodash/negate';
+import isPlainObject from 'lodash/isPlainObject';
 import warning from 'modules/errorHandling/warning';
 
 const DEFAULT_PAGE_SIZE = 20;
@@ -42,10 +43,13 @@ const valueToString = value => {
 
 const filterToServerAdapter = (filter = {}) =>
   Object.entries(filter)
-    .map(([fieldName, { comparator, value } = {}]) => {
-      if (!comparator) {
+    .map(([fieldName, filterValue]) => {
+      if (filterValue == null) {
         return undefined;
       }
+      const { comparator = '=', value } = isPlainObject(filterValue)
+        ? filterValue
+        : { value: filterValue };
       const stringifiedValue = valueToString(value);
       if (isUndefined(stringifiedValue)) {
         return undefined;

@@ -51,3 +51,12 @@ export const locations = {
     import(/* webpackChunkName: 'travel-LocationsPage' */ './pages/LocationsPage'),
   ),
 };
+
+export const location = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/visits/locations/:strLocationId`,
+  defaultRouteParams: { userAlias: 'my' },
+  layoutProps: { breadcrumbs: [{ caption: 'Город' }] },
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'travel-LocationsPage' */ './pages/LocationPage'),
+  ),
+};

@@ -1,5 +1,6 @@
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
+import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
 
@@ -11,6 +12,7 @@ export default function LocationVisitsGroup({
   },
   classes,
   provision: { countriesDict, locationsDict },
+  urls,
 }) {
   const location = locationsDict[locationIdStr];
   const groupCountryId = findClosestGroupValue(
@@ -25,6 +27,7 @@ export default function LocationVisitsGroup({
       location={location}
       countriesDict={countriesDict}
       showCountry={!groupCountryId}
+      urls={urls}
     >
       {children}
     </LocationInfo>
@@ -36,21 +39,32 @@ export function LocationInfo({
   variant,
   className,
   classes = {},
-  location: { locationName, countryId } = {},
+  location: { locationName, locationId, countryId } = {},
   countriesDict,
   showCountry,
+  urls,
 }) {
   const countryNode =
     (showCountry && countriesDict[countryId]?.countryName) || null;
 
+  const locationUrl = urls?.resolveLocationUrl({ locationId });
+
   return (
     <div className={className}>
-      <Typography display="inline" variant={variant} className={classes.header}>
-        {`${locationName}${countryNode ? ', ' : ''}`}
-      </Typography>
-      <Typography display="inline" variant="body1">
-        {countryNode}
-      </Typography>
+      <ConnectedLink to={locationUrl}>
+        <Typography
+          display="inline"
+          variant={variant}
+          className={classes.header}
+        >
+          {`${locationName}${countryNode ? ', ' : ''}`}
+        </Typography>
+        {countryNode && (
+          <Typography display="inline" variant="body1">
+            {countryNode}
+          </Typography>
+        )}
+      </ConnectedLink>
       {children}
     </div>
   );

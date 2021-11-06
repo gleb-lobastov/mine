@@ -15,7 +15,7 @@ export default function adaptMarkerData({
     const {
       firstVisitDateTime,
       lastVisitDateTime,
-    } = resolveLocationFirstAndLastVisitDateTime(visitsIds, visitsDict);
+    } = resolveLocationFirstAndLastVisitDateTime(visitsIds ?? [], visitsDict);
 
     return {
       locationName,
@@ -24,7 +24,7 @@ export default function adaptMarkerData({
       firstVisitDateTime,
       lastVisitDateTime,
       locationRating: locationsRating[locationId],
-      visitsCount: location.visitsIds.length,
+      visitsCount: location.visitsIds?.length,
     };
   });
 }
