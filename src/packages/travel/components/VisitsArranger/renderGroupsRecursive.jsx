@@ -5,6 +5,7 @@ import { groupVisitsBy, PLAIN_GROUPS_CONFIG } from './arrangement/groupping';
 import { calcStats, StatsPanel } from './statistics';
 import { sortVisitsBy } from './arrangement/sorting';
 import VisitsPhotosGallery from './components/VisitsPhotosGallery';
+import VisitsLocationsMap from './components/VisitsLocationsMap';
 
 export default function renderRecursive({
   classes,
@@ -15,6 +16,7 @@ export default function renderRecursive({
   groupsOrder,
   sortingOrder,
   isObscure,
+  mapSectionLevel,
   photosSectionLevel,
   forwardingProps,
 }) {
@@ -82,6 +84,13 @@ export default function renderRecursive({
           />
         )}
         {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
+        {sectionLevel === mapSectionLevel && (
+          <VisitsLocationsMap
+            className={classes[`level${nestingLevel + 1}`]}
+            visitsGroup={visitsGroup}
+            provision={provision}
+          />
+        )}
       </Fragment>
     ));
   }

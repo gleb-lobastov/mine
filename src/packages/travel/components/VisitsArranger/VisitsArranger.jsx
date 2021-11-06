@@ -51,6 +51,7 @@ export default function VisitsArranger({
   provision,
   urls,
   config,
+  mapSectionLevel,
   photosSectionLevel,
   ...forwardingProps
 }) {
@@ -68,11 +69,13 @@ export default function VisitsArranger({
     visitsList: actualVisitsList,
     groupsOrder,
     sortingOrder,
+    mapSectionLevel,
     photosSectionLevel,
     forwardingProps,
   });
 }
 
 VisitsArranger.defaultProps = {
+  mapSectionLevel: 1,
   photosSectionLevel: 1,
 };

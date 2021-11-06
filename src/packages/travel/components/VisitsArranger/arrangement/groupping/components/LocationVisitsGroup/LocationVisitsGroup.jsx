@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
-import MUILink from '@material-ui/core/Link';
 import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
-import LocationsMap, { MARKERS_SCALES } from 'travel/components/LocationsMap';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
 
@@ -65,15 +63,13 @@ export function LocationInfo({
   variant,
   className,
   classes = {},
-  location: { locationName, locationId, countryId } = {},
-  provision: { countriesDict, locationsDict, visitsDict, locationsRating },
+  location: { locationName, countryId } = {},
+  provision: { countriesDict },
   showCountry,
   locationUrl,
   countryUrl,
   appearance: { country: countryAppearance = true },
 }) {
-  const [mapVisible, setMapVisible] = useState(false);
-
   const countryName = countriesDict[countryId]?.countryName;
   const countryNode =
     countryAppearance && countryName && showCountry ? (
@@ -94,35 +90,14 @@ export function LocationInfo({
   );
 
   return (
-    <>
-      <div className={className}>
-        <div>
-          {locationNode}
-          {countryNode ? ' ' : null}
-          {countryNode}
-        </div>
-        {children}
-        <MUILink
-          variant="body2"
-          onClick={() => setMapVisible(prevMapVisible => !prevMapVisible)}
-          className={classes.mapVisibilityToggle}
-        >
-          {mapVisible ? 'скрыть карту' : 'на карте'}
-        </MUILink>
+    <div className={className}>
+      <div>
+        {locationNode}
+        {countryNode ? ' ' : null}
+        {countryNode}
       </div>
-      {mapVisible && (
-        <LocationsMap
-          className={classes.mapContainer}
-          locationsDict={locationsDict}
-          visitsDict={visitsDict}
-          locationsRating={locationsRating}
-          locationsIds={[locationId]}
-          minHeight={300}
-          scaleBy={MARKERS_SCALES.BY_RATING}
-          ratingLevel={locationsRating[locationId]}
-        />
-      )}
-    </>
+      {children}
+    </div>
   );
 }
 
