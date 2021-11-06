@@ -49,39 +49,35 @@ export function LocationInfo({
 }) {
   const [mapVisible, setMapVisible] = useState(false);
 
-  const countryName = countriesDict[countryId]?.countryName;
-  const countryNode =
-    countryName && showCountry ? (
-      <Typography display="inline" variant="body1">
-        {countriesDict[countryId]?.countryName}
-      </Typography>
-    ) : null;
-
   const locationUrl = urls?.resolveLocationUrl({ locationId });
   const countryUrl = urls?.resolveCountryUrl({ countryId });
 
+  const countryName = countriesDict[countryId]?.countryName;
+  const countryNode =
+    countryName && showCountry ? (
+      <ConnectedLink to={countryUrl} optional={true}>
+        <Typography display="inline" variant="body1">
+          {countriesDict[countryId]?.countryName}
+        </Typography>
+      </ConnectedLink>
+    ) : null;
+
   const locationNode = (
-    <Typography display="inline" variant={variant} className={classes.header}>
-      {locationName}
-      {countryNode ? ',' : ''}
-    </Typography>
+    <ConnectedLink to={locationUrl} optional={true}>
+      <Typography display="inline" variant={variant} className={classes.header}>
+        {locationName}
+        {countryNode ? ',' : ''}
+      </Typography>
+    </ConnectedLink>
   );
 
   return (
     <>
       <div className={className}>
         <div>
-          {locationUrl ? (
-            <ConnectedLink to={locationUrl}>{locationNode}</ConnectedLink>
-          ) : (
-            locationNode
-          )}
+          {locationNode}
           {countryNode ? ' ' : null}
-          {countryUrl ? (
-            <ConnectedLink to={countryUrl}>{countryNode}</ConnectedLink>
-          ) : (
-            countryNode
-          )}
+          {countryNode}
         </div>
         {children}
         <MUILink

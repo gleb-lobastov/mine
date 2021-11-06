@@ -32,19 +32,14 @@ function CountryInfo({
   urls,
 }) {
   const countryUrl = urls?.resolveCountryUrl({ countryId });
-  const countryNode = (
-    <Typography display="inline" variant={variant} className={classes.header}>
-      {countryName}
-    </Typography>
-  );
 
   return (
     <div className={className}>
-      {countryUrl ? (
-        <ConnectedLink to={countryUrl}>{countryNode}</ConnectedLink>
-      ) : (
-        countryNode
-      )}
+      <ConnectedLink to={countryUrl} optional={true}>
+        <Typography display="inline" variant={variant} className={classes.header}>
+          {countryName}
+        </Typography>
+      </ConnectedLink>
       {children}
     </div>
   );
