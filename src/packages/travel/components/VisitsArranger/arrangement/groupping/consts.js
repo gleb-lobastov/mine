@@ -4,17 +4,6 @@ import YearVisitsGroup from './components/YearVisitsGroup';
 import TripVisitsGroup from './components/TripVisitsGroup';
 import VisitsItselfGroup from './components/VisitsItselfGroup';
 
-export const KEY_GROUP_VISITS_BY = 'group';
-export const GROUP_VISITS_BY = {
-  LOCATIONS: 'loc',
-  COUNTRIES: 'c',
-  YEARS: 'yr',
-  YEARS_COUNTRIES: 'yr_c',
-  COUNTRIES_YEARS: 'c_yr',
-  TRIPS: 't',
-  TRIPS_COUNTRIES: 't_c',
-};
-
 export const PLAIN_GROUPS = {
   // ALL: 'ALL',
   LOCATIONS: 'LOCATIONS',
@@ -22,13 +11,6 @@ export const PLAIN_GROUPS = {
   YEARS: 'YEARS',
   TRIPS: 'TRIPS',
   JUST_VISITS: 'JUST_VISITS',
-};
-
-export const PLAIN_GROUPS_MAPPING = {
-  [GROUP_VISITS_BY.LOCATIONS]: PLAIN_GROUPS.LOCATIONS,
-  [GROUP_VISITS_BY.COUNTRIES]: PLAIN_GROUPS.COUNTRIES,
-  [GROUP_VISITS_BY.YEARS]: PLAIN_GROUPS.YEARS,
-  [GROUP_VISITS_BY.TRIPS]: PLAIN_GROUPS.TRIPS,
 };
 
 export const PLAIN_GROUPS_CONFIG = {

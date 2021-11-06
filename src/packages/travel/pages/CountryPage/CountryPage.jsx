@@ -6,7 +6,7 @@ import useVisitsUrls from 'travel/utils/useVisitsUrls';
 import VisitsArranger, {
   PLAIN_GROUPS,
   PLAIN_SORTING,
-  FILTER_VISITS_BY,
+  PLAIN_FILTERING,
 } from 'travel/components/VisitsArranger';
 import useCountryWithTripStats from './useCountryWithTripStats';
 
@@ -76,7 +76,7 @@ export default function CountryPage({
             PLAIN_GROUPS.LOCATIONS,
           ]}
           sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
-          filterBy={FILTER_VISITS_BY.ANY}
+          filteringOption={PLAIN_FILTERING.ANY}
           isObscure={isObscure}
           urls={urls}
         />

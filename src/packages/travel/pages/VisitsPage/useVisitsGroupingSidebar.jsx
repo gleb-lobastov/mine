@@ -14,15 +14,15 @@ import {
   GROUP_VISITS_BY_DEFAULTS,
 } from './consts';
 import {
-  FILTER_VISITS_BY,
-  KEY_FILTER_VISITS_BY,
-  FILTER_VISITS_BY_DEFAULT,
+  GROUP_VISITS_BY,
+  KEY_GROUP_VISITS_BY,
   SORT_VISITS_BY,
   KEY_SORT_VISITS_BY,
   SORT_VISITS_BY_DEFAULT,
-  GROUP_VISITS_BY,
-  KEY_GROUP_VISITS_BY,
-} from 'travel/components/VisitsArranger';
+  FILTER_VISITS_BY,
+  FILTER_VISITS_BY_DEFAULT,
+  KEY_FILTER_VISITS_BY,
+} from './sidebarConsts';
 
 const useStyles = makeStyles({
   formControl: {

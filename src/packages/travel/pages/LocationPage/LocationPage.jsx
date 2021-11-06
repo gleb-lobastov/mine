@@ -8,7 +8,7 @@ import LocationsMap, { MARKERS_SCALES } from 'travel/components/LocationsMap';
 import VisitsArranger, {
   PLAIN_GROUPS,
   PLAIN_SORTING,
-  FILTER_VISITS_BY,
+  PLAIN_FILTERING,
 } from 'travel/components/VisitsArranger';
 import LocationRating from './blocks/LocationRating';
 import useLocationWithTripStats from './useLocationWithTripStats';
@@ -117,7 +117,7 @@ export default function LocationPage({
           groupsOrder={[PLAIN_GROUPS.LOCATIONS, PLAIN_GROUPS.YEARS]}
           photosSectionLevel={1}
           sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
-          filterBy={FILTER_VISITS_BY.ANY}
+          filteringOption={PLAIN_FILTERING.ANY}
           isObscure={isObscure}
           urls={urls}
         />

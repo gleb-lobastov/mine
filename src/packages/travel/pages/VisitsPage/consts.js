@@ -1,4 +1,4 @@
-import { GROUP_VISITS_BY } from 'travel/components/VisitsArranger';
+import { GROUP_VISITS_BY } from './sidebarConsts';
 
 export const VISITS_SECTIONS = {
   TRIPS: 'trips',

@@ -1,7 +1,5 @@
-import {
-  PLAIN_GROUPS,
-  PLAIN_GROUPS_MAPPING,
-} from 'travel/components/VisitsArranger';
+import { PLAIN_GROUPS } from 'travel/components/VisitsArranger';
+import { PLAIN_GROUPS_MAPPING } from './sidebarConsts';
 
 export default function resolveGroupsOrder(groupBy) {
   const groupingOrder = groupBy

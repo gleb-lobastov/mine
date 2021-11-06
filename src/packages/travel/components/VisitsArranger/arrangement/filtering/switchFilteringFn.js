@@ -1,19 +1,22 @@
-import { FILTER_VISITS_BY } from './consts';
+import { PLAIN_FILTERING } from './consts';
 
-export default function switchFilteringFn(provision, filterBy) {
-  switch (filterBy) {
-    case FILTER_VISITS_BY.FOREIGN:
-    case FILTER_VISITS_BY.DOMESTIC:
-      return createFilterBasedOnOrigin(provision, filterBy);
-    case FILTER_VISITS_BY.ANY:
+export default function switchFilteringFn(provision, filteringOption) {
+  switch (filteringOption) {
+    case PLAIN_FILTERING.FOREIGN:
+    case PLAIN_FILTERING.DOMESTIC:
+      return createFilterBasedOnOrigin(provision, filteringOption);
+    case PLAIN_FILTERING.ANY:
     default:
       return isVisitExist;
   }
 }
 
-function createFilterBasedOnOrigin({ tripsDict, locationsDict }, filterBy) {
-  const isForeign = filterBy === FILTER_VISITS_BY.FOREIGN;
-  if (!isForeign && filterBy !== FILTER_VISITS_BY.DOMESTIC) {
+function createFilterBasedOnOrigin(
+  { tripsDict, locationsDict },
+  filteringOption,
+) {
+  const isForeign = filteringOption === PLAIN_FILTERING.FOREIGN;
+  if (!isForeign && filteringOption !== PLAIN_FILTERING.DOMESTIC) {
     return isVisitExist; // filter nothing
   }
   return function filterOnlyForeign(visit) {

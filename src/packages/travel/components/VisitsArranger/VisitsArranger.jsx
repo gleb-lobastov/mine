@@ -47,7 +47,7 @@ export default function VisitsArranger({
   visitsList,
   groupsOrder,
   sortingOrder,
-  filterBy,
+  filteringOption,
   provision,
   urls,
   photosSectionLevel,
@@ -56,7 +56,7 @@ export default function VisitsArranger({
   const classes = useStyles();
 
   const actualVisitsList = visitsList.filter(
-    switchFilteringFn(provision, filterBy),
+    switchFilteringFn(provision, filteringOption),
   );
 
   return renderGroupsRecursive({
