@@ -76,6 +76,7 @@ export default function renderRecursive({
             config={config}
           />
         </VisitsGroupComponent>
+        {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
         {sectionLevel === photosSectionLevel && (
           <VisitsPhotosGallery
             className={classes[`level${nestingLevel + 1}`]}
@@ -83,7 +84,6 @@ export default function renderRecursive({
             provision={provision}
           />
         )}
-        {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
         {sectionLevel === mapSectionLevel && (
           <VisitsLocationsMap
             className={classes[`level${nestingLevel + 1}`]}
