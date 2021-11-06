@@ -17,7 +17,7 @@ export default function Breadcrumbs({ breadcrumbs, actualPath, onChangeUrl }) {
   const handleBreadcrumbClick = (event, breadcrumbIndex) => {
     event.preventDefault();
     const { path: nextPath, params } = breadcrumbs[breadcrumbIndex];
-    onChangeUrl(event, actualPath, nextPath, params);
+    onChangeUrl(event, actualPath, nextPath, { params });
   };
 
   if (!breadcrumbs.length) {
