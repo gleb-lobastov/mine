@@ -10,7 +10,9 @@ const useStyles = makeStyles(theme => ({
   container0: {
     display: 'flex',
     alignItems: 'self-start',
-    marginTop: '64px',
+    '&:not(:first-child)': {
+      marginTop: '64px',
+    },
   },
   level0: {},
 
