@@ -77,7 +77,7 @@ export function LocationInfo({
             locationNode
           )}
           {countryNode ? ' ' : null}
-          {locationUrl ? (
+          {countryUrl ? (
             <ConnectedLink to={countryUrl}>{countryNode}</ConnectedLink>
           ) : (
             countryNode
