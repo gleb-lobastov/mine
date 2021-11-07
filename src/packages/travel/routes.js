@@ -21,7 +21,7 @@ export const visitEdit = {
   defaultRouteParams: { userAlias: 'my' },
   layoutProps: { breadcrumbs: [{ caption: 'Редактирование посещения' }] },
   Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/VisitEditPage'),
+    import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/VisitPage'),
   ),
 };
 

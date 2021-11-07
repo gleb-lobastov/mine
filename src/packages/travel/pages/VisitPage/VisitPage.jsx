@@ -5,8 +5,8 @@ import VisitInfo from 'travel/components/VisitInfo';
 import PhotosDropzone from './components/PhotosDropzone';
 import PhotosGallery from 'modules/components/PhotosGallery';
 
-const domain = 'travel.VisitEditPage';
-export default function VisitEditPage({
+const domain = 'travel.VisitPage';
+export default function VisitPage({
   match: {
     params: { userAlias, strVisitId },
   },
