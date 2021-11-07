@@ -36,7 +36,7 @@ export default function VisitsItselfGroup({
       <>
         {visitsList.map(visit => (
           <ConnectedLink
-            to={urls.resolveVisitEditUrl({ visitId: visit.visitId })}
+            to={urls.resolveVisitUrl({ visitId: visit.visitId })}
             optional={true}
           >
             <Typography className={classes.level}>

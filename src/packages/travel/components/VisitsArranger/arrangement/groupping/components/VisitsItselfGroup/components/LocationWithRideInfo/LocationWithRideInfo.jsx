@@ -16,7 +16,7 @@ export default function LocationWithRideInfo({
   provision: { ridesDict, locationsDict },
   groupCountryId,
   children,
-  editButton,
+  locationInfoChildren,
   className,
   classes,
   urls,
@@ -34,7 +34,7 @@ export default function LocationWithRideInfo({
         locationUrl={urls?.resolveLocationUrl({ locationId })}
         countryUrl={urls?.resolveCountryUrl({ countryId: location?.countryId })}
       >
-        {editButton}
+        {locationInfoChildren}
       </LocationInfo>
       {groupCountryId ? (
         children

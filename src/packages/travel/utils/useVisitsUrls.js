@@ -28,9 +28,9 @@ export default function useVisitsUrls({ editable, userAlias }) {
               userAlias,
             })
           : null,
-      resolveVisitEditUrl: ({ visitId }) =>
+      resolveVisitUrl: ({ visitId }) =>
         editable
-          ? travelPaths.visitEdit.toUrl({
+          ? travelPaths.visit.toUrl({
               strVisitId: String(visitId),
               userAlias,
             })

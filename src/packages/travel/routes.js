@@ -8,20 +8,20 @@ export const entry = {
   ),
 };
 
+export const visit = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/visits/:strVisitId(\\d+)`,
+  defaultRouteParams: { userAlias: 'my' },
+  layoutProps: { breadcrumbs: [{ caption: 'Посещение' }] },
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/VisitPage'),
+  ),
+};
+
 export const visits = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/:section?`,
   defaultRouteParams: { userAlias: 'my', section: 'trips' },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-VisitsPage' */ './pages/VisitsPage'),
-  ),
-};
-
-export const visitEdit = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/visits/:strVisitId(\\d+)/edit`,
-  defaultRouteParams: { userAlias: 'my' },
-  layoutProps: { breadcrumbs: [{ caption: 'Редактирование посещения' }] },
-  Component: React.lazy(() =>
-    import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/VisitPage'),
   ),
 };
 
@@ -46,7 +46,7 @@ export const tripCreate = {
 export const locations = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/locations/edit/:strLocationId?`,
   defaultRouteParams: { userAlias: 'my' },
-  layoutProps: { breadcrumbs: [{ caption: 'Города' }] },
+  layoutProps: { breadcrumbs: [{ caption: 'Места' }] },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-LocationsPage' */ './pages/LocationsPage'),
   ),
@@ -55,7 +55,7 @@ export const locations = {
 export const location = {
   path: `/:userAlias(${USER_ALIAS_TYPE})/visits/locations/:strLocationId`,
   defaultRouteParams: { userAlias: 'my' },
-  layoutProps: { breadcrumbs: [{ caption: 'Город' }] },
+  layoutProps: { breadcrumbs: [{ caption: 'Место' }] },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-LocationsPage' */ './pages/LocationPage'),
   ),
