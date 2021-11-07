@@ -27,7 +27,7 @@ export default function useVisit({ userAlias, visitId: requiredVisitId }) {
 export function useAddVisitPhotoRequest({ domain }) {
   const [submitVisitPhoto, provision] = useRequest({
     domain,
-    modelName: 'visits',
+    modelName: 'visits', // todo: actually this is assets model, not visits. Moreover this is photos model
     method: 'POST',
     contentType: 'multipart/form-data',
   });
