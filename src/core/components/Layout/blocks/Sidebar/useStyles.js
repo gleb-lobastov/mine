@@ -9,6 +9,10 @@ export default makeStyles(theme => ({
       flexShrink: 0,
     },
   },
+  sidebarContent: {
+    position: 'sticky',
+    top: '108px',
+  },
   drawerPaper: {
     width: drawerWidth,
   },

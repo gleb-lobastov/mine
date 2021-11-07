@@ -12,7 +12,7 @@ export default function DesktopSidebarContainer({ children }) {
 
   return (
     <nav className={classes.sidebar} aria-label="mailbox folders">
-      <Hidden xsDown={true} implementation="css">
+      <Hidden xsDown={true} implementation="css" className={classes.sidebarContent}>
         {children}
       </Hidden>
     </nav>
