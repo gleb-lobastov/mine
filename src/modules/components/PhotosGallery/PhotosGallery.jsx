@@ -114,7 +114,7 @@ export default function PhotosGallery({ className, photos }) {
               className="image-gallery-image"
               aspectRatio={
                 aspectRatios[item.index] ||
-                item.aspectRatio ||
+                item.aspectRatio?.ratio ||
                 FALLBACK_ASPECT_RATIO
               }
               description={item.description}
