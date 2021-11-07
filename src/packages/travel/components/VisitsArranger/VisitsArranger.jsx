@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDeepCompareEffect } from 'react-use';
 import { makeStyles } from '@material-ui/core/styles';
 import { switchFilteringFn } from './arrangement/filtering';
 import renderGroupsRecursive from './renderGroupsRecursive';
@@ -70,6 +71,12 @@ export default function VisitsArranger({
       [fieldSignature]: !prevExpandedGroups[fieldSignature],
     }));
   }, []);
+  useDeepCompareEffect(
+    () => {
+      setExpandedGroups({});
+    },
+    [groupsOrder, sortingOrder, filteringOption],
+  );
 
   const actualVisitsList = visitsList.filter(
     switchFilteringFn(provision, filteringOption),
