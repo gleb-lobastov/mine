@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import cls from 'classnames';
 import MUILink from '@material-ui/core/Link';
+import Typography from '@material-ui/core/Typography';
 import clamp from 'lodash/clamp';
 import {
   groupVisitsBy,
@@ -70,7 +71,8 @@ export default function renderRecursive({
     const collapsible =
       plainGroup === PLAIN_GROUPS.LOCATIONS &&
       sortedVisitsGroups.length >
-        COLLAPSED_GROUP_ITEMS + COLLAPSED_GROUP_THRESHOLD;
+        COLLAPSED_GROUP_ITEMS + COLLAPSED_GROUP_THRESHOLD &&
+      !expandedGroups['*'];
     const expanded = collapsible
       ? expandedGroups[toFieldSignature(parentVisitsGroup.field)]
       : true;
@@ -120,16 +122,23 @@ export default function renderRecursive({
           </Fragment>
         ))}
         {!expanded && (
-          <MUILink
+          <Typography
             className={cls(classes.link, classes[`level${nestingLevel}`])}
             variant="body2"
-            onClick={() =>
-              toggleExpandedGroups(toFieldSignature(parentVisitsGroup.field))
-            }
           >
-            {`показать еще ${sortedVisitsGroups.length -
-              actualVisitsGroups.length}`}
-          </MUILink>
+            <MUILink
+              onClick={() =>
+                toggleExpandedGroups(toFieldSignature(parentVisitsGroup.field))
+              }
+            >
+              {`показать еще ${sortedVisitsGroups.length -
+                actualVisitsGroups.length}`}
+            </MUILink>
+            {', '}
+            <MUILink onClick={() => toggleExpandedGroups('*')}>
+              раскрыть все
+            </MUILink>
+          </Typography>
         )}
       </>
     );
