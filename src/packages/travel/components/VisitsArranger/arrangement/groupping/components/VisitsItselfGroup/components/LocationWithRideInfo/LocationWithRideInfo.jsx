@@ -18,14 +18,15 @@ export default function LocationWithRideInfo({
   children,
   editButton,
   className,
+  classes,
 }) {
-  const classes = useStyles();
+  const ownClasses = useStyles();
   const location = locationsDict[locationId];
 
   return (
-    <AutoMargin>
+    <AutoMargin className={className}>
       <LocationInfo
-        className={className}
+        className={classes.locationContainer}
         provision={provision}
         location={location}
         showCountry={!groupCountryId}
@@ -38,10 +39,17 @@ export default function LocationWithRideInfo({
         <Grid container={true}>
           <Grid item={true}>{children}</Grid>
           <Grid item={true}>
-            <RideInfo ride={ridesDict[rideId]} className={classes.halfDown} />
+            <RideInfo
+              ride={ridesDict[rideId]}
+              className={ownClasses.halfDown}
+            />
           </Grid>
         </Grid>
       )}
     </AutoMargin>
   );
 }
+
+LocationWithRideInfo.defaultProps = {
+  classes: {},
+};

@@ -9,13 +9,17 @@ import EditIcon from '@material-ui/icons/Edit';
 import { useVisibleOnHoverStyles } from 'modules/utilities/hooks/makeVisibleOnlyOnHoverStyles';
 
 const useStyles = makeStyles({
+  locationContainer: {
+    position: 'relative',
+  },
   detail: {
     color: 'gray',
     fontSize: 12,
   },
   editButton: {
     position: 'absolute',
-    marginTop: '-15px',
+    top: '-50%',
+    left: '100%',
   },
 });
 
@@ -35,6 +39,7 @@ export default function VisitInfo({
   return (
     <LocationWithRideInfo
       className={cls(className, hoverTrigger)}
+      classes={{ locationContainer: classes.locationContainer }}
       locationId={locationId}
       rideId={departureRideId}
       provision={provision}
