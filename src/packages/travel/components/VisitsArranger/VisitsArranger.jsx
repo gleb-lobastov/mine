@@ -10,6 +10,7 @@ const useStyles = makeStyles(theme => ({
   },
   header0: {
     ...theme.typography.h2,
+    wordBreak: 'break-word',
   },
   container0: {
     display: 'flex',
@@ -22,6 +23,7 @@ const useStyles = makeStyles(theme => ({
 
   header1: {
     ...theme.typography.h4,
+    wordBreak: 'break-word',
   },
   container1: {
     display: 'flex',
@@ -37,6 +39,7 @@ const useStyles = makeStyles(theme => ({
 
   header2: {
     ...theme.typography.body1,
+    wordBreak: 'break-word',
   },
   container2: {
     display: 'flex',
