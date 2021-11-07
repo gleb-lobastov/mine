@@ -14,6 +14,6 @@ export default compose(
   authPlugin,
   adapterPlugin,
   endpointPlugin,
+  assetsPlugin, // required to be placed before responseAsJsonPlugin, because do request by itself
   responseAsJsonPlugin,
-  assetsPlugin,
 )(requestHandler);
