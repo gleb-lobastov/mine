@@ -1,6 +1,6 @@
 import { Scene } from 'puppeteer-scenario';
 import * as tripEditPageLocators from 'travel/pages/TripEditPage/locators';
-import * as actionsLocators from 'travel/components/common/Actions/locators';
+import * as actionsLocators from 'travel/components/Actions/locators';
 import { toSelector, evaluateClick } from '../../../../utils';
 import CreateVisitDialogFrame from './frames/CreateVisitDialogFrame';
 import CreateRideDialogFrame from './frames/CreateRideDialogFrame';

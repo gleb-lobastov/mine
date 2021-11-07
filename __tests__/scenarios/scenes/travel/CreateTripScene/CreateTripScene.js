@@ -6,7 +6,7 @@ import getRandomLocationSuggest from '../getRandomLocationSuggest';
 export default class CreateTripScene extends Scene {
   async arrange({ userAlias }) {
     await this.page.goto(
-      `http://localhost:8080/mine/travel/${userAlias}/visits/trips/create`,
+      `http://localhost:8080/mine/travel/${userAlias}/trips/create`,
       { waitUntil: 'networkidle2' },
     );
   }

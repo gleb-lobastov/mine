@@ -5,7 +5,7 @@ import { toSelector } from '../../../../utils';
 export default class VisitsScene extends Scene {
   async arrange({ userAlias }) {
     await this.page.goto(
-      `http://localhost:8080/mine/travel/${userAlias}/visits/trips`,
+      `http://localhost:8080/mine/travel/${userAlias}/trips`,
       { waitUntil: 'networkidle2' },
     );
   }
