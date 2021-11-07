@@ -3,6 +3,9 @@ import 'core-js/features/set';
 import App from 'core/App';
 import definePackages from 'packages/definePackages';
 import { registerDebugTools } from 'modules/utilities/debug';
+import { periodsOptions } from 'modules/utilities/dateTime/periods';
+
+periodsOptions.showWarnings = false;
 
 if (__IS_DEV_MODE__) {
   registerDebugTools();

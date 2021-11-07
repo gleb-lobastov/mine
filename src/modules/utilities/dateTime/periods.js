@@ -13,13 +13,15 @@ import negate from 'lodash/negate';
 import times from 'lodash/times';
 import dateTimeReviver from './dateTimeReviver';
 
+export const periodsOptions = { showWarnings: true };
+
 function invariant(condition, errorMessage) {
   if (!condition) {
     throw new Error(errorMessage);
   }
 }
 function warning(condition, errorMessage) {
-  if (!condition) {
+  if (periodsOptions.showWarnings && !condition) {
     console.error(errorMessage);
   }
 }
