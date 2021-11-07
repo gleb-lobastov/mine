@@ -12,7 +12,8 @@ export default next => {
       // to the multipart request, that is required by the server
       // .type('multipart/form-data')
       .set({ ...requestOptions.headers })
-      .field('visitId', requestOptions.id);
+      .field('visitId', requestOptions.id)
+      .field('meta', JSON.stringify(requestOptions.meta));
 
     requestOptions.data.forEach((file, index) =>
       ongoingRequest.attach('data', file, `file${index}`),
