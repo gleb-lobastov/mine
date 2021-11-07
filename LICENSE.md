@@ -1,3 +1,1 @@
-**Licence for code is [MIT](https://opensource.org/licenses/MIT)**
-
-**No licence for content** at this moment. I'm will think about later.
+All source files that placed in folders [/src/modules](./src/modules), [/src/core](./src/core) and all nested folders of them is licensed under [MIT](https://opensource.org/licenses/MIT) license
