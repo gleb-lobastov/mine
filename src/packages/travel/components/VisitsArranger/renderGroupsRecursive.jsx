@@ -1,11 +1,19 @@
 import React, { Fragment } from 'react';
 import cls from 'classnames';
+import MUILink from '@material-ui/core/Link';
 import clamp from 'lodash/clamp';
-import { groupVisitsBy, PLAIN_GROUPS_CONFIG } from './arrangement/groupping';
+import {
+  groupVisitsBy,
+  PLAIN_GROUPS,
+  PLAIN_GROUPS_CONFIG,
+} from './arrangement/groupping';
 import { calcStats, StatsPanel } from './statistics';
 import { sortVisitsBy } from './arrangement/sorting';
 import VisitsPhotosGallery from './components/VisitsPhotosGallery';
 import VisitsLocationsMap from './components/VisitsLocationsMap';
+
+const COLLAPSED_GROUP_ITEMS = 10;
+const COLLAPSED_GROUP_THRESHOLD = 2;
 
 export default function renderRecursive({
   classes,
@@ -20,6 +28,8 @@ export default function renderRecursive({
   mapSectionLevel,
   photosSectionLevel,
   forwardingProps,
+  expandedGroups,
+  toggleExpandedGroups,
 }) {
   return renderRecursiveInternal(
     { visitsList, parent: null, field: null },
@@ -57,44 +67,72 @@ export default function renderRecursive({
       provision,
     );
 
-    return sortedVisitsGroups.map((visitsGroup, index) => (
-      <Fragment key={visitsGroup.field.value}>
-        <VisitsGroupComponent
-          visitsGroup={visitsGroup}
-          classes={resolveVisitsGroupClasses(classes, {
-            nestingLevel,
-            sectionLevel,
-          })}
-          provision={provision}
-          urls={urls}
-          config={config}
-          {...forwardingProps}
-        >
-          <StatsPanel
-            visitsGroup={visitsGroup}
-            provision={provision}
-            isObscure={isObscure}
-            config={config}
-          />
-        </VisitsGroupComponent>
-        {children?.({ level: nestingLevel, index, visitsGroup })}
-        {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
-        {sectionLevel === photosSectionLevel && (
-          <VisitsPhotosGallery
-            className={classes[`level${nestingLevel + 1}`]}
-            visitsGroup={visitsGroup}
-            provision={provision}
-          />
+    const collapsible =
+      plainGroup === PLAIN_GROUPS.LOCATIONS &&
+      sortedVisitsGroups.length >
+        COLLAPSED_GROUP_ITEMS + COLLAPSED_GROUP_THRESHOLD;
+    const expanded = collapsible
+      ? expandedGroups[toFieldSignature(parentVisitsGroup.field)]
+      : true;
+
+    const actualVisitsGroups = expanded
+      ? sortedVisitsGroups
+      : sortedVisitsGroups.slice(0, COLLAPSED_GROUP_ITEMS);
+
+    return (
+      <>
+        {actualVisitsGroups.map((visitsGroup, index) => (
+          <Fragment key={visitsGroup.field.value}>
+            <VisitsGroupComponent
+              visitsGroup={visitsGroup}
+              classes={resolveVisitsGroupClasses(classes, {
+                nestingLevel,
+                sectionLevel,
+              })}
+              provision={provision}
+              urls={urls}
+              config={config}
+              {...forwardingProps}
+            >
+              <StatsPanel
+                visitsGroup={visitsGroup}
+                provision={provision}
+                isObscure={isObscure}
+                config={config}
+              />
+            </VisitsGroupComponent>
+            {children?.({ level: nestingLevel, index, visitsGroup })}
+            {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
+            {sectionLevel === photosSectionLevel && (
+              <VisitsPhotosGallery
+                className={classes[`level${nestingLevel + 1}`]}
+                visitsGroup={visitsGroup}
+                provision={provision}
+              />
+            )}
+            {sectionLevel === mapSectionLevel && (
+              <VisitsLocationsMap
+                className={classes[`level${nestingLevel + 1}`]}
+                visitsGroup={visitsGroup}
+                provision={provision}
+              />
+            )}
+          </Fragment>
+        ))}
+        {!expanded && (
+          <MUILink
+            className={cls(classes.link, classes[`level${nestingLevel}`])}
+            variant="body2"
+            onClick={() =>
+              toggleExpandedGroups(toFieldSignature(parentVisitsGroup.field))
+            }
+          >
+            {`показать еще ${sortedVisitsGroups.length -
+              actualVisitsGroups.length}`}
+          </MUILink>
         )}
-        {sectionLevel === mapSectionLevel && (
-          <VisitsLocationsMap
-            className={classes[`level${nestingLevel + 1}`]}
-            visitsGroup={visitsGroup}
-            provision={provision}
-          />
-        )}
-      </Fragment>
-    ));
+      </>
+    );
   }
 }
 
@@ -122,4 +160,9 @@ function lookupLevel(visitsGroup) {
 const MAX_LEVEL = 3;
 function resolveSectionLevel(nestingLevel, expectedMaxLevel) {
   return clamp(MAX_LEVEL - expectedMaxLevel + nestingLevel, 0, MAX_LEVEL - 1);
+}
+
+function toFieldSignature(field) {
+  const { name, value } = field ?? {};
+  return `${name}:${value}`;
 }

@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { switchFilteringFn } from './arrangement/filtering';
 import renderGroupsRecursive from './renderGroupsRecursive';
 
 const useStyles = makeStyles(theme => ({
+  link: {
+    cursor: 'pointer',
+  },
   header0: {
     ...theme.typography.h2,
   },
@@ -60,6 +63,14 @@ export default function VisitsArranger({
 }) {
   const classes = useStyles();
 
+  const [expandedGroups, setExpandedGroups] = useState({});
+  const toggleExpandedGroups = useCallback(fieldSignature => {
+    setExpandedGroups(prevExpandedGroups => ({
+      ...prevExpandedGroups,
+      [fieldSignature]: !prevExpandedGroups[fieldSignature],
+    }));
+  }, []);
+
   const actualVisitsList = visitsList.filter(
     switchFilteringFn(provision, filteringOption),
   );
@@ -75,6 +86,8 @@ export default function VisitsArranger({
     sortingOrder,
     mapSectionLevel,
     photosSectionLevel,
+    expandedGroups,
+    toggleExpandedGroups,
     forwardingProps,
   });
 }
