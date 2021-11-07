@@ -74,19 +74,19 @@ describe('creation', () => {
         lateNoughtiesEarlyTens,
       ]).toArray(),
     ).toEqual([
-      {
+      expect.objectContaining({
         startDate: lateNinetiethEarlyNoughties.startDate,
         endDate: lateNoughtiesEarlyTens.endDate,
-      },
+      }),
     ]);
   });
 
   it('should combine contiguous periods', async () => {
     expect(createPeriods([ninetieth, noughties, tens]).toArray()).toEqual([
-      {
+      expect.objectContaining({
         startDate: ninetieth.startDate,
         endDate: tens.endDate,
-      },
+      }),
     ]);
   });
 
@@ -114,10 +114,10 @@ describe('inclusion', () => {
         .toArray(),
     ).toEqual([
       eighties,
-      {
+      expect.objectContaining({
         startDate: noughties.startDate,
         endDate: lateNoughtiesEarlyTens.endDate,
-      },
+      }),
     ]);
   });
 
@@ -127,10 +127,10 @@ describe('inclusion', () => {
         .include(noughties)
         .toArray(),
     ).toEqual([
-      {
+      expect.objectContaining({
         startDate: lateNinetiethEarlyNoughties.startDate,
         endDate: lateNoughtiesEarlyTens.endDate,
-      },
+      }),
     ]);
   });
 
@@ -143,10 +143,10 @@ describe('inclusion', () => {
         })
         .toArray(),
     ).toEqual([
-      {
+      expect.objectContaining({
         startDate: ninetieth.startDate,
         endDate: tens.endDate,
-      },
+      }),
     ]);
   });
 });
@@ -167,10 +167,10 @@ describe('exclusion', () => {
         .toArray(),
     ).toEqual([
       eighties,
-      {
+      expect.objectContaining({
         startDate: noughties.startDate,
         endDate: subtractDay(lateNoughtiesEarlyTens.startDate),
-      },
+      }),
     ]);
   });
 
@@ -180,14 +180,14 @@ describe('exclusion', () => {
         .exclude(noughties)
         .toArray(),
     ).toEqual([
-      {
+      expect.objectContaining({
         startDate: lateNinetiethEarlyNoughties.startDate,
         endDate: subtractDay(noughties.startDate),
-      },
-      {
+      }),
+      expect.objectContaining({
         startDate: addDay(noughties.endDate),
         endDate: lateNoughtiesEarlyTens.endDate,
-      },
+      }),
     ]);
   });
 
@@ -212,7 +212,10 @@ describe('exclusion', () => {
       ])
         .exclude(noughties)
         .toArray(),
-    ).toEqual([ninetieth, tens]);
+    ).toEqual([
+      { startDate: ninetieth.startDate, endDate: ninetieth.endDate },
+      { startDate: tens.startDate, endDate: tens.endDate },
+    ]);
   });
 
   it('should exclude one day from middle of sequence of three (edge case)', async () => {
