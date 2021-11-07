@@ -13,7 +13,7 @@ import useLocationWithTripStats from './useLocationWithTripStats';
 const domain = 'travel.LocationPage';
 export default function LocationPage({
   match: {
-    params: { userAlias, strLocationId },
+    params: { userAlias, strLocationId, section },
   },
 }) {
   const {
@@ -24,7 +24,7 @@ export default function LocationPage({
   const editable = userAlias === authenticatedUserAlias;
   const isObscure = userAlias !== authenticatedUserAlias;
 
-  const urls = useVisitsUrls({ editable, userAlias });
+  const urls = useVisitsUrls({ editable, userAlias, section });
 
   const locationId = parseInt(strLocationId, 10);
 

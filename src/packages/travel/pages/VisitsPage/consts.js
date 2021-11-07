@@ -2,11 +2,11 @@ import { GROUP_VISITS_BY } from './sidebarConsts';
 
 export const VISITS_SECTIONS = {
   TRIPS: 'trips',
-  LOCATIONS: 'locations',
+  PLACES: 'places',
 };
 export const VISITS_SECTION_DEFAULT = VISITS_SECTIONS.TRIPS;
 export const VISITS_SECTIONS_GROUPS = {
-  [VISITS_SECTIONS.LOCATIONS]: [
+  [VISITS_SECTIONS.PLACES]: [
     { key: GROUP_VISITS_BY.LOCATIONS, l10n: 'По городам' },
     { key: GROUP_VISITS_BY.COUNTRIES, l10n: 'По странам' },
     { key: GROUP_VISITS_BY.YEARS, l10n: 'По годам' },
@@ -20,7 +20,7 @@ export const VISITS_SECTIONS_GROUPS = {
 };
 
 export const GROUP_VISITS_BY_DEFAULTS = {
-  [VISITS_SECTIONS.LOCATIONS]: GROUP_VISITS_BY.COUNTRIES,
+  [VISITS_SECTIONS.PLACES]: GROUP_VISITS_BY.COUNTRIES,
   [VISITS_SECTIONS.TRIPS]: GROUP_VISITS_BY.TRIPS,
 };
 

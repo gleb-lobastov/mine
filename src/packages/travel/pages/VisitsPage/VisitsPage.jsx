@@ -30,7 +30,7 @@ export default function VisitsPage({
   const provision = useTripsStats({ userAlias });
   const { isPending, isError } = provision;
 
-  const urls = useVisitsUrls({ editable, userAlias });
+  const urls = useVisitsUrls({ editable, userAlias, section });
 
   if (isError) {
     return <div>...Error</div>;

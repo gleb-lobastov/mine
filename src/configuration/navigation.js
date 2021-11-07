@@ -32,7 +32,7 @@ export default (packages = {}) => {
         {
           path: travel.routes.visits.path,
           caption: 'Места',
-          params: { section: 'locations' },
+          params: { section: 'places' },
         },
         {
           path: travel.routes.visits.path,

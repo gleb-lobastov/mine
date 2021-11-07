@@ -11,12 +11,12 @@ import useCountryWithTripStats from './useCountryWithTripStats';
 
 export default function CountryPage({
   match: {
-    params: { userAlias, strCountryId },
+    params: { userAlias, strCountryId, section },
   },
 }) {
   const { userAlias: authenticatedUserAlias } = useAuthContext();
 
-  const urls = useVisitsUrls({ editable: false, userAlias });
+  const urls = useVisitsUrls({ editable: false, userAlias, section });
 
   // const editable = userAlias === authenticatedUserAlias;
   const isObscure = userAlias !== authenticatedUserAlias;

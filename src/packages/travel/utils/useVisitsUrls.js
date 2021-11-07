@@ -1,25 +1,27 @@
 import { useMemo } from 'react';
 import { usePaths } from 'modules/packages';
 
-export default function useVisitsUrls({ editable, userAlias }) {
+export default function useVisitsUrls({ editable, userAlias, section }) {
   const { travel: travelPaths } = usePaths();
 
   return useMemo(
     () => ({
       hyperlinks: () => {},
-      locationsUrl: travelPaths.locations.toUrl({ userAlias }),
+      locationsUrl: travelPaths.locations.toUrl({ userAlias, section }),
       tripCreateUrl: editable
         ? travelPaths.tripCreate.toUrl({ userAlias })
         : null,
       resolveLocationUrl: ({ locationId }) =>
         travelPaths.location.toUrl({
-          strLocationId: String(locationId),
           userAlias,
+          section,
+          strLocationId: String(locationId),
         }),
       resolveCountryUrl: ({ countryId }) =>
         travelPaths.country.toUrl({
-          strCountryId: String(countryId),
           userAlias,
+          section,
+          strCountryId: String(countryId),
         }),
       resolveTripEditUrl: ({ tripId }) =>
         editable
@@ -31,8 +33,9 @@ export default function useVisitsUrls({ editable, userAlias }) {
       resolveVisitUrl: ({ visitId }) =>
         editable
           ? travelPaths.visit.toUrl({
-              strVisitId: String(visitId),
               userAlias,
+              section,
+              strVisitId: String(visitId),
             })
           : null,
     }),
