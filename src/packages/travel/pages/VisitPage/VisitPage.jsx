@@ -4,6 +4,7 @@ import { useAddVisitPhotoRequest, useVisit } from 'travel/dataSource';
 import VisitInfo from 'travel/components/VisitInfo';
 import PhotosDropzone from './components/PhotosDropzone';
 import PhotosGallery from 'modules/components/PhotosGallery';
+import { usePaths } from 'modules/packages';
 
 const domain = 'travel.VisitPage';
 export default function VisitPage({
@@ -15,6 +16,8 @@ export default function VisitPage({
     isAuthenticated,
     userAlias: authenticatedUserAlias,
   } = useAuthContext();
+
+  const { travel: travelPaths } = usePaths();
 
   const visitId = parseInt(strVisitId, 10);
   const { isError, isPending, visit, invalidate } = useVisit({
@@ -42,13 +45,18 @@ export default function VisitPage({
     return <div>...Не найдено посещение</div>;
   }
 
-  const { photos } = visit;
-
-  const contentNode = <VisitInfo visit={visit} isLong={true} />;
+  const { photos, locationId } = visit;
 
   return (
     <>
-      {contentNode}
+      <VisitInfo
+        visit={visit}
+        isLong={true}
+        locationUrl={travelPaths.location.toUrl({
+          strLocationId: String(locationId),
+          userAlias,
+        })}
+      />
       {isEditable && (
         <PhotosDropzone
           visit={visit}

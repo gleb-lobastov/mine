@@ -1,9 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import VisitIcon from '../VisitIcon';
-import visitPropTypes from 'travel/models/visits/propTypes';
 import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
+import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
+import VisitIcon from '../VisitIcon';
 
 const useStyles = makeStyles({
   container: {
@@ -22,7 +21,7 @@ const useStyles = makeStyles({
   },
 });
 
-const VisitInfo = ({ visit, isLong }) => {
+const VisitInfo = ({ visit, isLong, locationUrl }) => {
   const classes = useStyles();
   if (!visit) {
     return 'Не указано';
@@ -31,16 +30,15 @@ const VisitInfo = ({ visit, isLong }) => {
   return (
     <div className={classes.container}>
       <VisitIcon visit={visit} className={classes.icon} />
-      {`${locationName}${isLong ? ', ' : ''}`}
+      <ConnectedLink to={locationUrl} optional={true}>
+        {locationName}
+      </ConnectedLink>
+      {isLong ? ', ' : ''}
       <div className={classes.period}>
         {isLong && visitDateTimePeriodToString(visit)}
       </div>
     </div>
   );
-};
-
-VisitInfo.propTypes = {
-  visit: PropTypes.shape(visitPropTypes),
 };
 
 VisitInfo.defaultProps = {
