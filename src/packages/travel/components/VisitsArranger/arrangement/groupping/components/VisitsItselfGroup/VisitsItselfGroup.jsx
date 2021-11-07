@@ -1,10 +1,13 @@
 import React, { useMemo } from 'react';
 import uniqBy from 'lodash/uniqBy';
+import Typography from '@material-ui/core/Typography';
+import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
 import { LocationInfo } from '../LocationVisitsGroup';
 import VisitInfo from './components/VisitInfo';
 import LocationWithRideInfo from './components/LocationWithRideInfo';
+import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 
 export default function VisitsItselfGroup({
   visitsGroup,
@@ -29,8 +32,20 @@ export default function VisitsItselfGroup({
   );
 
   if (!groupTripId) {
-    // Trip ID always expected
-    return null;
+    return (
+      <>
+        {visitsList.map(visit => (
+          <ConnectedLink
+            to={urls.resolveVisitEditUrl({ visitId: visit.visitId })}
+            optional={true}
+          >
+            <Typography className={classes.level}>
+              {visitDateTimePeriodToString(visit, false)}
+            </Typography>
+          </ConnectedLink>
+        ))}
+      </>
+    );
   }
 
   const { originLocationId, departureRideId } = tripsDict[groupTripId] ?? {};

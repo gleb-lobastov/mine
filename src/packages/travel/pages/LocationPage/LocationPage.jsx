@@ -21,10 +21,10 @@ export default function LocationPage({
     userAlias: authenticatedUserAlias,
   } = useAuthContext();
 
-  const urls = useVisitsUrls({ editable: false, userAlias });
-
-  // const editable = userAlias === authenticatedUserAlias;
+  const editable = userAlias === authenticatedUserAlias;
   const isObscure = userAlias !== authenticatedUserAlias;
+
+  const urls = useVisitsUrls({ editable, userAlias });
 
   const locationId = parseInt(strLocationId, 10);
 
@@ -70,8 +70,13 @@ export default function LocationPage({
     <VisitsArranger
       visitsList={visitsList}
       provision={tripsProvision}
-      groupsOrder={[PLAIN_GROUPS.LOCATIONS, PLAIN_GROUPS.YEARS]}
+      groupsOrder={[
+        PLAIN_GROUPS.LOCATIONS,
+        PLAIN_GROUPS.YEARS,
+        PLAIN_GROUPS.JUST_VISITS,
+      ]}
       photosSectionLevel={1}
+      mapSectionLevel={0}
       sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
       filteringOption={PLAIN_FILTERING.ANY}
       isObscure={isObscure}
