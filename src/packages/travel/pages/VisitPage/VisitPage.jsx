@@ -48,16 +48,13 @@ export default function VisitPage({
 
   return (
     <>
-      {isEditable ? (
+      {contentNode}
+      {isEditable && (
         <PhotosDropzone
           visit={visit}
           userAlias={userAlias}
           onUpload={values => submitVisitPhoto(values).finally(invalidate)}
-        >
-          {contentNode}
-        </PhotosDropzone>
-      ) : (
-        contentNode
+        />
       )}
       <PhotosGallery photos={photos} />
     </>

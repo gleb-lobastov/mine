@@ -1,10 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { encode } from 'blurhash';
 import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
-import { useAddVisitPhotoRequest } from 'travel/dataSource';
 import resolveDropzoneStyles from '../../resolveDropzoneStyles';
 
 const UPLOAD_IMAGE_MIN_SIZE = 50 * 1024;
@@ -13,10 +11,8 @@ const UPLOAD_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 const useStyles = makeStyles(resolveDropzoneStyles);
 
 export default function PhotosDropzone({
-  children,
   onUpload,
   visit,
-  onAfterUpload,
 }) {
   const classes = useStyles();
   const [progress, setProgress] = useState(null);
@@ -65,7 +61,6 @@ export default function PhotosDropzone({
         [classes.dropzoneReject]: isDragReject,
       })}
     >
-      {children}
       <div
         className={cls(classes.dropzoneContainer, {
           [classes.dropzoneUpload]: isUploadInProgress,
