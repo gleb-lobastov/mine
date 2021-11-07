@@ -97,22 +97,37 @@ export default function LazyImage({
           punch={BLURHASH_PUNCH}
         />
       )}
-      <img
-        data-tag={tag}
-        ref={imgRef}
-        className={className}
-        alt={alt}
-        src={resolveActualSrc(src, loadingState)}
-        style={{
-          width: imageWidth,
-          height: hasResult ? imageHeight : 0,
-          maxWidth: '100%',
-        }}
-        onLoad={handleLoad}
-        onError={handleError}
-        loading={LAZY_LOADING_SUPPORT ? 'lazy' : undefined}
-        {...forwardingProps}
-      />
+      {loadingState !== LOADING_STATE.ERROR ? (
+        <img
+          key="ok"
+          data-tag={tag}
+          ref={imgRef}
+          className={className}
+          alt={alt}
+          src={resolveActualSrc(src, loadingState)}
+          style={{
+            width: imageWidth,
+            height: hasResult ? imageHeight : 0,
+            maxWidth: '100%',
+          }}
+          onLoad={handleLoad}
+          onError={handleError}
+          loading={LAZY_LOADING_SUPPORT ? 'lazy' : undefined}
+          {...forwardingProps}
+        />
+      ) : (
+        <img
+          key="error"
+          alt="error"
+          className={className}
+          src={ERROR_IMAGE_URL}
+          style={{
+            width: imageWidth,
+            height: imageHeight,
+            maxWidth: '100%',
+          }}
+        />
+      )}
       {children}
     </>
   );
@@ -122,8 +137,6 @@ function resolveActualSrc(src, loadingState) {
   switch (loadingState) {
     case LOADING_STATE.IDLE:
       return null;
-    case LOADING_STATE.ERROR:
-      return ERROR_IMAGE_URL;
     default:
       return src;
   }
