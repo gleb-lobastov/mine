@@ -66,6 +66,7 @@ export default function VisitEditPage({
     return submitVisitPhoto({
       id: Number(strVisitId),
       data: acceptedFiles,
+      isAsset: true,
     }).finally(() => setProgress(null));
   }, submitVisitPhoto);
 

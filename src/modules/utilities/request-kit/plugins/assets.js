@@ -8,7 +8,9 @@ export default next => {
     }
     const ongoingRequest = request
       .post(`${__API_HOST__}/api/assets`)
-      .type('multipart/form-data')
+      // Browser will set type automatically and add boundary
+      // to the multipart request, that is required by the server
+      // .type('multipart/form-data')
       .set({ ...requestOptions.headers })
       .field('visitId', requestOptions.id);
 
