@@ -19,6 +19,13 @@ export default next => {
       ongoingRequest.attach('data', file, `file${index}`),
     );
 
-    return ongoingRequest.end();
+    return new Promise((resolve, reject) =>
+      ongoingRequest.end((err, res) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(res?.body);
+      }),
+    );
   };
 };
