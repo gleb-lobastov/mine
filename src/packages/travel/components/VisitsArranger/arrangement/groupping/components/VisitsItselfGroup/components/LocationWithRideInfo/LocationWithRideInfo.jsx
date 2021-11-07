@@ -19,6 +19,7 @@ export default function LocationWithRideInfo({
   editButton,
   className,
   classes,
+  urls,
 }) {
   const ownClasses = useStyles();
   const location = locationsDict[locationId];
@@ -30,6 +31,8 @@ export default function LocationWithRideInfo({
         provision={provision}
         location={location}
         showCountry={!groupCountryId}
+        locationUrl={urls?.resolveLocationUrl({ locationId })}
+        countryUrl={urls?.resolveCountryUrl({ countryId: location?.countryId })}
       >
         {editButton}
       </LocationInfo>

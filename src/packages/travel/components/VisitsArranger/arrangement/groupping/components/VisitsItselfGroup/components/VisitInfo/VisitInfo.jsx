@@ -44,6 +44,7 @@ export default function VisitInfo({
       rideId={departureRideId}
       provision={provision}
       groupCountryId={groupCountryId}
+      urls={urls}
       editButton={
         visitEditUrl && (
           <IconButton

@@ -34,6 +34,7 @@ export default function VisitsItselfGroup({
   }
 
   const { originLocationId, departureRideId } = tripsDict[groupTripId] ?? {};
+  const originLocation = locationsDict[originLocationId];
 
   return (
     <div className={classes.level}>
@@ -44,6 +45,7 @@ export default function VisitsItselfGroup({
           provision={provision}
           groupCountryId={groupCountryId}
           className={classes.header}
+          urls={urls}
         />
       )}
       {actualVisitsList.map(visit => (
@@ -62,8 +64,14 @@ export default function VisitsItselfGroup({
         <LocationInfo
           className={classes.header}
           provision={provision}
-          location={locationsDict[originLocationId]}
+          location={originLocation}
           showCountry={!groupCountryId}
+          locationUrl={urls?.resolveLocationUrl({
+            locationId: originLocationId,
+          })}
+          countryUrl={urls?.resolveCountryUrl({
+            countryId: originLocation?.countryId,
+          })}
         />
       )}
     </div>
