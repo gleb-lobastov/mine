@@ -5,7 +5,10 @@ import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import useVisitsUrls from 'travel/utils/useVisitsUrls';
-import VisitsArranger, { calcStats } from 'travel/components/VisitsArranger';
+import VisitsArranger, {
+  calcStats,
+  PLAIN_SORTING,
+} from 'travel/components/VisitsArranger';
 import VisitsTitle from './components/VisitsTitle';
 import resolveGroupsOrder from './resolveGroupsOrder';
 import resolveSortingOrder from './resolveSortingOrder';
@@ -56,7 +59,11 @@ export default function VisitsPage({
         visitsList={visitsList}
         provision={provision}
         groupsOrder={resolveGroupsOrder(groupBy)}
-        sortingOrder={resolveSortingOrder(sortBy)}
+        sortingOrder={
+          section === 'trips'
+            ? [PLAIN_SORTING.LAST_VISIT]
+            : resolveSortingOrder(sortBy)
+        }
         filteringOption={resolveFiltering(filterBy)}
         isObscure={isObscure}
         urls={urls}
