@@ -78,6 +78,7 @@ export function useTripsStats({ userAlias, tripsIds: requiredTripsIds }) {
   const { isError, isValid, isReady, isPending } = commonProvisionState;
 
   return {
+    userProvision,
     tripsProvision,
     countriesProvision,
     locationsProvision,

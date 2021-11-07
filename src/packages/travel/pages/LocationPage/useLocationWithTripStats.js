@@ -7,7 +7,7 @@ export default function useLocationWithTripStats({
   userAlias,
   locationId,
 }) {
-  const tripsProvision = useTripsStats({
+  const tripsStatsProvision = useTripsStats({
     userAlias,
   });
 
@@ -19,7 +19,7 @@ export default function useLocationWithTripStats({
     visitsDict,
     visitsIds,
     locationsRating,
-  } = tripsProvision;
+  } = tripsStatsProvision;
 
   const {
     location,
@@ -48,6 +48,6 @@ export default function useLocationWithTripStats({
       : [],
     locationRating: (isVisited && locationsRating[locationId]) || null,
     submitLocationRating,
-    tripsProvision,
+    tripsStatsProvision,
   };
 }

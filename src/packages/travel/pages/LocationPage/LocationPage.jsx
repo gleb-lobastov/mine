@@ -33,7 +33,9 @@ export default function LocationPage({
     provision: { isError, isPending, isReady },
     isVisited,
     visitsList,
-    tripsProvision,
+    tripsStatsProvision,
+    tripsStatsProvision: { userProvision },
+    locationRating,
     submitLocationRating,
   } = useLocationWithTripStats({ domain, userAlias, locationId });
 
@@ -42,7 +44,7 @@ export default function LocationPage({
       submitLocationRating({
         query: { rating: value, id: String(locationIdToSubmit) },
         condition: Boolean(locationIdToSubmit),
-      });
+      }).finally(userProvision.invalidate); // todo: still need to imporeve invalidation ux
     },
   );
 
@@ -69,7 +71,7 @@ export default function LocationPage({
   return (
     <VisitsArranger
       visitsList={visitsList}
-      provision={tripsProvision}
+      provision={tripsStatsProvision}
       groupsOrder={[
         PLAIN_GROUPS.LOCATIONS,
         PLAIN_GROUPS.YEARS,
@@ -95,7 +97,7 @@ export default function LocationPage({
         index === 0 && (
           <LocationRating
             locationId={locationId}
-            locationRating={location.rating}
+            locationRating={locationRating}
             isEditable={isEditable}
             onSubmitLocationRating={handleSubmitLocationRating}
           />
