@@ -106,7 +106,9 @@ export default function CodeDashboard() {
         <Typography className={classes.title} variant="h2">
           Руководитель команды разработки
         </Typography>
-        <ReactMarkdown source={experience.about.description.join('\n\n')} />
+        <ReactMarkdown>
+          {experience.about.description.join('\n\n')}{' '}
+        </ReactMarkdown>
       </div>
       <div className={classes.section} id={idFromSection(SECTIONS.JOBS)}>
         <div className={classes.sectionHeader}>

@@ -28,8 +28,8 @@ export default function Description({
   );
 
   return (
-    <Markdown
-      source={`
+    <Markdown>
+      {`
 Статистика по моим путешествиям.
 
 Здесь будет красивая инфографика, рассказы и фотки про 250 стран и
@@ -38,7 +38,7 @@ export default function Description({
 [${locationsCounter}](${visitsPaths.toUrl()}),
 а раз так, то и на инфографику пока забил.
   `}
-    />
+    </Markdown>
   );
 }
 

@@ -62,7 +62,7 @@ export default function ExperienceDetails({
       <Typography variant="h5">{position}</Typography>
       {children}
       <Typography variant="body1">
-        <ReactMarkdown source={description} />
+        <ReactMarkdown>{description}</ReactMarkdown>
       </Typography>
     </Paper>
   );

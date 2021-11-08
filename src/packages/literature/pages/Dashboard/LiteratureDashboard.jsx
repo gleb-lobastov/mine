@@ -8,13 +8,13 @@ export default function LiteratureDashboard() {
   } = usePaths();
 
   return (
-    <Markdown
-      source={`
+    <Markdown>
+      {`
 Развлекаюсь написанием [рецензий](${booksPath.toUrl()})
 на прочитанные книги при помощи [твиттера](http://twitter.com/lobastov).
 Что-то побольше могу оформить [статьей](${articlesPath.toUrl()}),
 что-то поменьше отправить в [блог](${blogPath.toUrl()})
   `}
-    />
+    </Markdown>
   );
 }

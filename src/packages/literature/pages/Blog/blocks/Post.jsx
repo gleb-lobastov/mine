@@ -40,7 +40,7 @@ class Post extends React.PureComponent {
             </span>
           )}
         </h3>
-        <ReactMarkdown source={content} />
+        <ReactMarkdown>{content}</ReactMarkdown>
       </article>
     );
   }
