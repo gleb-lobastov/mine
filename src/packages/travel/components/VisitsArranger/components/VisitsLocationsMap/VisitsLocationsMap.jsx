@@ -21,6 +21,7 @@ export default function VisitsLocationsMap({
   className,
   visitsGroup,
   provision: { visitsDict, locationsDict, locationsRating },
+  onToggle,
 }) {
   const classes = useStyles();
   const [mapVisible, setMapVisible] = useState(false);
@@ -34,7 +35,10 @@ export default function VisitsLocationsMap({
       <div>
         <MUILink
           variant="body2"
-          onClick={() => setMapVisible(prevMapVisible => !prevMapVisible)}
+          onClick={() => {
+            setMapVisible(prevMapVisible => !prevMapVisible);
+            onToggle();
+          }}
         >
           {mapVisible ? 'скрыть карту' : 'на карте'}
         </MUILink>

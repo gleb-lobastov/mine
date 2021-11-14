@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useVirtual } from 'react-virtual';
 import cls from 'classnames';
 import MUILink from '@material-ui/core/Link';
@@ -87,10 +87,11 @@ export default function renderRecursive({
     let items;
     let virtualItemsV;
     let size;
+    let measureV;
     if (!virtualized) {
       virtualized = true;
       const windowRef = useRef(window);
-      const { virtualItems, totalSize } = useVirtual({
+      const { virtualItems, totalSize, measure } = useVirtual({
         size: actualVisitsGroups.length,
         parentRef,
         estimateSize,
@@ -106,6 +107,8 @@ export default function renderRecursive({
       items = virtualItems.map(({ index }) => actualVisitsGroups[index]);
       size = totalSize;
       virtualItemsV = virtualItems;
+      measureV = measure;
+      useEffect(() => measureV(), [expandedGroups]);
     } else {
       items = actualVisitsGroups;
     }
@@ -148,7 +151,7 @@ export default function renderRecursive({
                     transform: `translateY(${virtualItemsV[index].start}px)`,
                   }}
                 >
-                  {item}
+                  {React.cloneElement(item, { onHeightChange: measureV })}
                 </div>
               ))}
             </div>
@@ -162,15 +165,19 @@ export default function renderRecursive({
             variant="body2"
           >
             <MUILink
-              onClick={() =>
-                toggleExpandedGroups(toFieldSignature(parentVisitsGroup.field))
-              }
+              onClick={() => {
+                toggleExpandedGroups(toFieldSignature(parentVisitsGroup.field));
+              }}
             >
               {`показать еще ${sortedVisitsGroups.length -
                 actualVisitsGroups.length}`}
             </MUILink>
             {', '}
-            <MUILink onClick={() => toggleExpandedGroups('*')}>
+            <MUILink
+              onClick={() => {
+                toggleExpandedGroups('*');
+              }}
+            >
               раскрыть все
             </MUILink>
           </Typography>

@@ -18,6 +18,7 @@ export default function VisitGroup({
   urls,
   visitsGroup,
   VisitsGroupComponent,
+  onHeightChange
 }) {
   return (
     <Fragment key={visitsGroup.field.value}>
@@ -52,6 +53,7 @@ export default function VisitGroup({
           className={classes[`level${nestingLevel + 1}`]}
           visitsGroup={visitsGroup}
           provision={provision}
+          onToggle={onHeightChange}
         />
       )}
     </Fragment>
