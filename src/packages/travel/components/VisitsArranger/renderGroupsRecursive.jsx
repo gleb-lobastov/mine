@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react';
+import React, { useRef } from 'react';
+import { useVirtual } from 'react-virtual';
 import cls from 'classnames';
 import MUILink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
@@ -8,10 +9,9 @@ import {
   PLAIN_GROUPS,
   PLAIN_GROUPS_CONFIG,
 } from './arrangement/groupping';
-import { calcStats, StatsPanel } from './statistics';
+import { calcStats } from './statistics';
 import { sortVisitsBy } from './arrangement/sorting';
-import VisitsPhotosGallery from './components/VisitsPhotosGallery';
-import VisitsLocationsMap from './components/VisitsLocationsMap';
+import VisitGroup from './components/VisitGroup';
 
 const COLLAPSED_GROUP_ITEMS = 10;
 const COLLAPSED_GROUP_THRESHOLD = 2;
@@ -32,6 +32,9 @@ export default function renderRecursive({
   expandedGroups,
   toggleExpandedGroups,
 }) {
+  const parentRef = useRef();
+  let virtualized = false;
+
   return renderRecursiveInternal(
     { visitsList, parent: null, field: null },
     groupsOrder,
@@ -81,46 +84,78 @@ export default function renderRecursive({
       ? sortedVisitsGroups
       : sortedVisitsGroups.slice(0, COLLAPSED_GROUP_ITEMS);
 
+    let items;
+    let virtualItemsV;
+    let size;
+    if (!virtualized) {
+      virtualized = true;
+      const windowRef = useRef(window);
+      const { virtualItems, totalSize } = useVirtual({
+        size: actualVisitsGroups.length,
+        parentRef,
+        estimateSize,
+        overscan: 1,
+        scrollToFn: defaultScrollToFn,
+        onScrollElement: windowRef,
+        scrollOffsetFn() {
+          const bounds = parentRef.current.getBoundingClientRect();
+          return bounds.top * -1;
+        },
+        useObserver: () => useWindowRect(),
+      });
+      items = virtualItems.map(({ index }) => actualVisitsGroups[index]);
+      size = totalSize;
+      virtualItemsV = virtualItems;
+    } else {
+      items = actualVisitsGroups;
+    }
+
+    const array = items.map((visitsGroup, index) => (
+      <VisitGroup
+        key={toFieldSignature(visitsGroup.field)}
+        classes={classes}
+        config={config}
+        forwardingProps={forwardingProps}
+        isObscure={isObscure}
+        mapSectionLevel={mapSectionLevel}
+        nestingLevel={nestingLevel}
+        photosSectionLevel={photosSectionLevel}
+        provision={provision}
+        sectionLevel={sectionLevel}
+        urls={urls}
+        visitsGroup={visitsGroup}
+        VisitsGroupComponent={VisitsGroupComponent}
+      >
+        {children?.({ level: nestingLevel, index, visitsGroup })}
+        {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
+      </VisitGroup>
+    ));
+
     return (
       <>
-        {actualVisitsGroups.map((visitsGroup, index) => (
-          <Fragment key={visitsGroup.field.value}>
-            <VisitsGroupComponent
-              visitsGroup={visitsGroup}
-              classes={resolveVisitsGroupClasses(classes, {
-                nestingLevel,
-                sectionLevel,
-              })}
-              provision={provision}
-              urls={urls}
-              config={config}
-              {...forwardingProps}
-            >
-              <StatsPanel
-                visitsGroup={visitsGroup}
-                provision={provision}
-                isObscure={isObscure}
-                config={config}
-              />
-            </VisitsGroupComponent>
-            {children?.({ level: nestingLevel, index, visitsGroup })}
-            {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
-            {sectionLevel === photosSectionLevel && (
-              <VisitsPhotosGallery
-                className={classes[`level${nestingLevel + 1}`]}
-                visitsGroup={visitsGroup}
-                provision={provision}
-              />
-            )}
-            {sectionLevel === mapSectionLevel && (
-              <VisitsLocationsMap
-                className={classes[`level${nestingLevel + 1}`]}
-                visitsGroup={visitsGroup}
-                provision={provision}
-              />
-            )}
-          </Fragment>
-        ))}
+        {virtualItemsV ? (
+          <div ref={parentRef}>
+            <div style={{ height: size, position: 'relative' }}>
+              {array.map((item, index) => (
+                <div
+                  key={virtualItemsV[index].index}
+                  ref={virtualItemsV[index].measureRef}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    transform: `translateY(${virtualItemsV[index].start}px)`,
+                  }}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          array
+        )}
         {!expanded && (
           <Typography
             className={cls(classes.link, classes[`level${nestingLevel}`])}
@@ -145,17 +180,6 @@ export default function renderRecursive({
   }
 }
 
-function resolveVisitsGroupClasses(classes, { nestingLevel, sectionLevel }) {
-  return {
-    level: classes[`level${nestingLevel}`],
-    container: cls(
-      classes[`level${nestingLevel}`],
-      classes[`container${sectionLevel}`],
-    ),
-    header: classes[`header${sectionLevel}`],
-  };
-}
-
 function lookupLevel(visitsGroup) {
   let currentVisitsGroup = visitsGroup;
   let level = 0;
@@ -174,4 +198,53 @@ function resolveSectionLevel(nestingLevel, expectedMaxLevel) {
 function toFieldSignature(field) {
   const { name, value } = field ?? {};
   return `${name}:${value}`;
+}
+
+function defaultScrollToFn(offset) {
+  window.scrollY = offset;
+}
+
+function estimateSize() {
+  return 500;
+}
+
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
+
+function useWindowRect() {
+  const [rect, dispatch] = React.useReducer(rectReducer, null);
+  useIsomorphicLayoutEffect(() => {
+    dispatch({
+      rect: {
+        height: window.innerHeight,
+        width: window.innerWidth,
+      },
+    });
+  }, []);
+
+  React.useEffect(() => {
+    const resizeHandler = () => {
+      dispatch({
+        rect: {
+          height: window.innerHeight,
+          width: window.innerWidth,
+        },
+      });
+    };
+    resizeHandler();
+    window.addEventListener('resize', resizeHandler);
+    return () => {
+      window.removeEventListener('resize', resizeHandler);
+    };
+  }, []);
+
+  return rect;
+}
+
+function rectReducer(state, action) {
+  const rect = action.rect;
+  if (!state || state.height !== rect.height || state.width !== rect.width) {
+    return rect;
+  }
+  return state;
 }
