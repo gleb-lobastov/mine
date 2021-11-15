@@ -1,8 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { useVirtual } from 'react-virtual';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import cls from 'classnames';
-import MUILink from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
 import clamp from 'lodash/clamp';
 import {
   groupVisitsBy,
@@ -12,9 +9,8 @@ import {
 import { calcStats } from './statistics';
 import { sortVisitsBy } from './arrangement/sorting';
 import VisitGroup from './components/VisitGroup';
-
-const COLLAPSED_GROUP_ITEMS = 10;
-const COLLAPSED_GROUP_THRESHOLD = 2;
+import Virtualizer from './components/Virtualizer';
+import Expandable from './components/Expandable';
 
 export default function renderRecursive({
   classes,
@@ -29,11 +25,15 @@ export default function renderRecursive({
   mapSectionLevel,
   photosSectionLevel,
   forwardingProps,
-  expandedGroups,
-  toggleExpandedGroups,
+  virtualize,
 }) {
-  const parentRef = useRef();
-  let virtualized = false;
+  const virtualizerRef = useRef();
+  const [collapsible, setCollapsible] = useState(true);
+  const disableCollapsible = useCallback(() => setCollapsible(false), []);
+  useEffect(() => virtualizerRef.current?.measure(), [collapsible]);
+
+  // if virtualize is true, then need to virtualize, so not yet virtualized
+  let virtualized = !virtualize;
 
   return renderRecursiveInternal(
     { visitsList, parent: null, field: null },
@@ -71,117 +71,57 @@ export default function renderRecursive({
       provision,
     );
 
-    const collapsible =
-      plainGroup === PLAIN_GROUPS.LOCATIONS &&
-      sortedVisitsGroups.length >
-        COLLAPSED_GROUP_ITEMS + COLLAPSED_GROUP_THRESHOLD &&
-      !expandedGroups['*'];
-    const expanded = collapsible
-      ? expandedGroups[toFieldSignature(parentVisitsGroup.field)]
-      : true;
-
-    const actualVisitsGroups = expanded
-      ? sortedVisitsGroups
-      : sortedVisitsGroups.slice(0, COLLAPSED_GROUP_ITEMS);
-
-    let items;
-    let virtualItemsV;
-    let size;
-    let measureV;
+    const bypassVirtualization = virtualized;
     if (!virtualized) {
-      virtualized = true;
-      const windowRef = useRef(window);
-      const { virtualItems, totalSize, measure } = useVirtual({
-        size: actualVisitsGroups.length,
-        parentRef,
-        estimateSize,
-        overscan: 1,
-        scrollToFn: defaultScrollToFn,
-        onScrollElement: windowRef,
-        scrollOffsetFn() {
-          const bounds = parentRef.current.getBoundingClientRect();
-          return bounds.top * -1;
-        },
-        useObserver: () => useWindowRect(),
-      });
-      items = virtualItems.map(({ index }) => actualVisitsGroups[index]);
-      size = totalSize;
-      virtualItemsV = virtualItems;
-      measureV = measure;
-      useEffect(() => measureV(), [expandedGroups]);
-    } else {
-      items = actualVisitsGroups;
+      virtualized = true; // only apply for the top level list
     }
-
-    const array = items.map((visitsGroup, index) => (
-      <VisitGroup
-        key={toFieldSignature(visitsGroup.field)}
-        classes={classes}
-        config={config}
-        forwardingProps={forwardingProps}
-        isObscure={isObscure}
-        mapSectionLevel={mapSectionLevel}
-        nestingLevel={nestingLevel}
-        photosSectionLevel={photosSectionLevel}
-        provision={provision}
-        sectionLevel={sectionLevel}
-        urls={urls}
-        visitsGroup={visitsGroup}
-        VisitsGroupComponent={VisitsGroupComponent}
-      >
-        {children?.({ level: nestingLevel, index, visitsGroup })}
-        {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
-      </VisitGroup>
-    ));
-
     return (
       <>
-        {virtualItemsV ? (
-          <div ref={parentRef}>
-            <div style={{ height: size, position: 'relative' }}>
-              {array.map((item, index) => (
-                <div
-                  key={virtualItemsV[index].index}
-                  ref={virtualItemsV[index].measureRef}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    transform: `translateY(${virtualItemsV[index].start}px)`,
-                  }}
+        <Expandable
+          classes={{
+            actions: cls(classes.link, classes[`level${nestingLevel}`]),
+          }}
+          collapsible={collapsible && plainGroup === PLAIN_GROUPS.LOCATIONS}
+          items={sortedVisitsGroups}
+          onExpand={virtualizerRef.current?.measure}
+          onExpandAll={disableCollapsible}
+        >
+          {({ items: actualVisitsGroups }) => (
+            <Virtualizer
+              items={actualVisitsGroups}
+              bypass={bypassVirtualization}
+              ref={bypassVirtualization ? undefined : virtualizerRef}
+            >
+              {({ item: visitsGroup, index }) => (
+                <VisitGroup
+                  key={toFieldSignature(visitsGroup.field)}
+                  classes={resolveVisitsGroupClasses(classes, {
+                    nestingLevel,
+                    sectionLevel,
+                    isFirstChild: index === 0,
+                  })}
+                  visitsGroup={visitsGroup}
+                  VisitsGroupComponent={VisitsGroupComponent}
+                  config={config}
+                  isObscure={isObscure}
+                  provision={provision}
+                  urls={urls}
+                  forwardingProps={forwardingProps}
+                  showMap={sectionLevel === mapSectionLevel}
+                  showPhotos={sectionLevel === photosSectionLevel}
+                  onHeightChange={virtualizerRef.current?.measure}
                 >
-                  {React.cloneElement(item, { onHeightChange: measureV })}
-                </div>
-              ))}
-            </div>
-          </div>
-        ) : (
-          array
-        )}
-        {!expanded && (
-          <Typography
-            className={cls(classes.link, classes[`level${nestingLevel}`])}
-            variant="body2"
-          >
-            <MUILink
-              onClick={() => {
-                toggleExpandedGroups(toFieldSignature(parentVisitsGroup.field));
-              }}
-            >
-              {`показать еще ${sortedVisitsGroups.length -
-                actualVisitsGroups.length}`}
-            </MUILink>
-            {', '}
-            <MUILink
-              onClick={() => {
-                toggleExpandedGroups('*');
-              }}
-            >
-              раскрыть все
-            </MUILink>
-          </Typography>
-        )}
+                  {children?.({
+                    level: nestingLevel,
+                    index,
+                    visitsGroup,
+                  })}
+                  {renderRecursiveInternal(visitsGroup, restGroupsOrder)}
+                </VisitGroup>
+              )}
+            </Virtualizer>
+          )}
+        </Expandable>
       </>
     );
   }
@@ -207,51 +147,18 @@ function toFieldSignature(field) {
   return `${name}:${value}`;
 }
 
-function defaultScrollToFn(offset) {
-  window.scrollY = offset;
-}
-
-function estimateSize() {
-  return 500;
-}
-
-const useIsomorphicLayoutEffect =
-  typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect;
-
-function useWindowRect() {
-  const [rect, dispatch] = React.useReducer(rectReducer, null);
-  useIsomorphicLayoutEffect(() => {
-    dispatch({
-      rect: {
-        height: window.innerHeight,
-        width: window.innerWidth,
-      },
-    });
-  }, []);
-
-  React.useEffect(() => {
-    const resizeHandler = () => {
-      dispatch({
-        rect: {
-          height: window.innerHeight,
-          width: window.innerWidth,
-        },
-      });
-    };
-    resizeHandler();
-    window.addEventListener('resize', resizeHandler);
-    return () => {
-      window.removeEventListener('resize', resizeHandler);
-    };
-  }, []);
-
-  return rect;
-}
-
-function rectReducer(state, action) {
-  const rect = action.rect;
-  if (!state || state.height !== rect.height || state.width !== rect.width) {
-    return rect;
-  }
-  return state;
+function resolveVisitsGroupClasses(
+  classes,
+  { nestingLevel, sectionLevel, isFirstChild },
+) {
+  return {
+    level: classes[`level${nestingLevel}`],
+    nextLevel: classes[`level${nestingLevel + 1}`],
+    container: cls(
+      classes[`level${nestingLevel}`],
+      classes[`container${sectionLevel}`],
+      { [classes.noMarginTop]: isFirstChild && nestingLevel === 0 },
+    ),
+    header: classes[`header${sectionLevel}`],
+  };
 }

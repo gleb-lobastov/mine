@@ -67,6 +67,7 @@ export default function VisitsPage({
         filteringOption={resolveFiltering(filterBy)}
         isObscure={isObscure}
         urls={urls}
+        virtualize={true}
       />
     </>
   );

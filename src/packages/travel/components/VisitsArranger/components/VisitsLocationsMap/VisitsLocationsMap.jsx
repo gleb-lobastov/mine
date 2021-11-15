@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import uniq from 'lodash/uniq';
 import MUILink from '@material-ui/core/Link';
 import { makeStyles } from '@material-ui/core/styles';
@@ -30,6 +30,18 @@ export default function VisitsLocationsMap({
     visitsGroup.visitsList.map(({ locationId }) => locationId),
   );
 
+  const frRef = useRef(false);
+  useEffect(
+    () => {
+      if (!frRef.current) {
+        frRef.current = true;
+      } else if (onToggle) {
+        onToggle(mapVisible);
+      }
+    },
+    [mapVisible],
+  );
+
   return (
     <div className={className}>
       <div>
@@ -37,7 +49,6 @@ export default function VisitsLocationsMap({
           variant="body2"
           onClick={() => {
             setMapVisible(prevMapVisible => !prevMapVisible);
-            onToggle();
           }}
         >
           {mapVisible ? 'скрыть карту' : 'на карте'}

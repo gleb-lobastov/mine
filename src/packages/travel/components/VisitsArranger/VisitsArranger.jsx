@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { useVirtual } from 'react-virtual';
-import { useDeepCompareEffect } from 'react-use';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { switchFilteringFn } from './arrangement/filtering';
 import renderGroupsRecursive from './renderGroupsRecursive';
 
 const useStyles = makeStyles(theme => ({
+  noMarginTop: {},
+
   link: {
     cursor: 'pointer',
   },
@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   container0: {
     display: 'flex',
     alignItems: 'self-start',
-    '&:not(:first-child)': {
+    '&:not($noMarginTop)': {
       marginTop: '64px',
     },
   },
@@ -64,23 +64,10 @@ export default function VisitsArranger({
   mapSectionLevel,
   photosSectionLevel,
   children,
+  virtualize,
   ...forwardingProps
 }) {
   const classes = useStyles();
-
-  const [expandedGroups, setExpandedGroups] = useState({});
-  const toggleExpandedGroups = useCallback(fieldSignature => {
-    setExpandedGroups(prevExpandedGroups => ({
-      ...prevExpandedGroups,
-      [fieldSignature]: !prevExpandedGroups[fieldSignature],
-    }));
-  }, []);
-  useDeepCompareEffect(
-    () => {
-      setExpandedGroups({});
-    },
-    [groupsOrder, sortingOrder, filteringOption],
-  );
 
   const actualVisitsList = visitsList.filter(
     switchFilteringFn(provision, filteringOption),
@@ -97,8 +84,7 @@ export default function VisitsArranger({
     sortingOrder,
     mapSectionLevel,
     photosSectionLevel,
-    expandedGroups,
-    toggleExpandedGroups,
+    virtualize,
     forwardingProps,
   });
 }

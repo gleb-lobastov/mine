@@ -2,32 +2,26 @@ import React, { Fragment } from 'react';
 import StatsPanel from '../../statistics/components/StatsPanel';
 import VisitsPhotosGallery from '../VisitsPhotosGallery';
 import VisitsLocationsMap from '../VisitsLocationsMap';
-import cls from 'classnames';
 
-export default function VisitGroup({
+function VisitGroup({
   children,
   classes,
   config,
   forwardingProps,
   isObscure,
-  mapSectionLevel,
-  nestingLevel,
-  photosSectionLevel,
+  showMap,
+  showPhotos,
   provision,
-  sectionLevel,
   urls,
   visitsGroup,
   VisitsGroupComponent,
-  onHeightChange
+  onHeightChange,
 }) {
   return (
     <Fragment key={visitsGroup.field.value}>
       <VisitsGroupComponent
         visitsGroup={visitsGroup}
-        classes={resolveVisitsGroupClasses(classes, {
-          nestingLevel,
-          sectionLevel,
-        })}
+        classes={classes}
         provision={provision}
         urls={urls}
         config={config}
@@ -41,16 +35,16 @@ export default function VisitGroup({
         />
       </VisitsGroupComponent>
       {children}
-      {sectionLevel === photosSectionLevel && (
+      {showPhotos && (
         <VisitsPhotosGallery
-          className={classes[`level${nestingLevel + 1}`]}
+          className={classes.nextLevel}
           visitsGroup={visitsGroup}
           provision={provision}
         />
       )}
-      {sectionLevel === mapSectionLevel && (
+      {showMap && (
         <VisitsLocationsMap
-          className={classes[`level${nestingLevel + 1}`]}
+          className={classes.nextLevel}
           visitsGroup={visitsGroup}
           provision={provision}
           onToggle={onHeightChange}
@@ -60,13 +54,4 @@ export default function VisitGroup({
   );
 }
 
-function resolveVisitsGroupClasses(classes, { nestingLevel, sectionLevel }) {
-  return {
-    level: classes[`level${nestingLevel}`],
-    container: cls(
-      classes[`level${nestingLevel}`],
-      classes[`container${sectionLevel}`],
-    ),
-    header: classes[`header${sectionLevel}`],
-  };
-}
+export default React.memo(VisitGroup);
