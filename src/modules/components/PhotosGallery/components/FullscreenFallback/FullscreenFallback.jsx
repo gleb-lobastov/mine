@@ -1,5 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
+import ScrollLock from 'react-scrolllock';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  top: {
+    zIndex: `${theme.zIndex.drawer + 1} !important`,
+  },
+}));
 
 export default function FullscreenFallback({
   children,
@@ -7,6 +15,7 @@ export default function FullscreenFallback({
   uniqKey,
   inlineGalleryRef,
 }) {
+  const classes = useStyles();
   const portalGalleryRef = useRef();
 
   useEffect(() => {
@@ -38,7 +47,14 @@ export default function FullscreenFallback({
     return null;
   }
   return ReactDOM.createPortal(
-    React.cloneElement(children, { ref: portalGalleryRef }),
+    <ScrollLock>
+      <div>
+        {React.cloneElement(children, {
+          ref: portalGalleryRef,
+          additionalClass: classes.top,
+        })}
+      </div>
+    </ScrollLock>,
     window.document.getElementById(`imageGalleryPortal-${uniqKey}`),
   );
 }
