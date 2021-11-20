@@ -10,6 +10,7 @@
     "build": "npm run clean && cross-env NODE_ENV=production webpack",
     "publish": "gh-pages -d dist",
     "release": "npm test && npm run build && npm version minor && npm run publish",
+    "hotfix": "npm test && npm run build && npm version patch && npm run publish",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
