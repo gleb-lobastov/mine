@@ -80,7 +80,9 @@ export default function LazyImage({
   const [realImgWidth, setRealImgWidth] = useState(imageWidth);
   useLayoutEffect(
     () => {
-      setRealImgWidth(imgRef.current.getBoundingClientRect().width);
+      if (imgRef.current) {
+        setRealImgWidth(imgRef.current.getBoundingClientRect().width);
+      }
     },
     [imageWidth],
   );
