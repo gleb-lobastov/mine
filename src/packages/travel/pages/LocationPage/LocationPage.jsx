@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
+import MUILink from '@material-ui/core/Link';
 import { useAuthContext } from 'core/context/AuthContext';
 import useVisitsUrls from 'travel/utils/useVisitsUrls';
 import VisitsArranger, {
@@ -9,7 +10,6 @@ import VisitsArranger, {
 } from 'travel/components/VisitsArranger';
 import LocationRating from './blocks/LocationRating';
 import useLocationWithTripStats from './useLocationWithTripStats';
-import MUILink from '@material-ui/core/Link';
 
 const domain = 'travel.LocationPage';
 export default function LocationPage({

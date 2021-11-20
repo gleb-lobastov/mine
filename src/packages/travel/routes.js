@@ -70,3 +70,13 @@ export const country = {
     import(/* webpackChunkName: 'travel-Places' */ './pages/CountryPage'),
   ),
 };
+
+// todo: uncomment when done
+// export const year = {
+//   path: `/:userAlias(${USER_ALIAS_TYPE})/:section(${SECTION_TYPE})/years/:strYear(\\d{4})`,
+//   defaultRouteParams: { userAlias: 'my', section: 'trips' },
+//   layoutProps: { breadcrumbs: [{ caption: 'Год' }] },
+//   Component: React.lazy(() =>
+//     import(/* webpackChunkName: 'travel-Places' */ './pages/YearPage'),
+//   ),
+// };
