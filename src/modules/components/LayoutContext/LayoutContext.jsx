@@ -11,12 +11,12 @@ export default function LayoutContextProvider({ children }) {
   useEffect(() => {
     const handler = throttle(handleResize, LAYOUT_CONTEXT_UPDATE_DELAY);
     window.addEventListener('resize', handler);
-    return () => window.removeEventListener('scroll', handler);
+    return () => window.removeEventListener('resize', handler);
 
     function handleResize() {
       setLayoutContext(measure());
     }
-  });
+  }, []);
 
   return (
     <LayoutContext.Provider value={layoutContext}>
