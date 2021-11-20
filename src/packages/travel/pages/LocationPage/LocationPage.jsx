@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { useAuthContext } from 'core/context/AuthContext';
 import useVisitsUrls from 'travel/utils/useVisitsUrls';
@@ -9,6 +9,7 @@ import VisitsArranger, {
 } from 'travel/components/VisitsArranger';
 import LocationRating from './blocks/LocationRating';
 import useLocationWithTripStats from './useLocationWithTripStats';
+import MUILink from '@material-ui/core/Link';
 
 const domain = 'travel.LocationPage';
 export default function LocationPage({
@@ -16,6 +17,8 @@ export default function LocationPage({
     params: { userAlias, strLocationId, section },
   },
 }) {
+  const [alsoGroupByYears, setAlsoGroupByYears] = useState(false);
+
   const {
     isAuthenticated,
     userAlias: authenticatedUserAlias,
@@ -74,9 +77,9 @@ export default function LocationPage({
       provision={tripsStatsProvision}
       groupsOrder={[
         PLAIN_GROUPS.LOCATIONS,
-        PLAIN_GROUPS.YEARS,
+        alsoGroupByYears && PLAIN_GROUPS.YEARS,
         PLAIN_GROUPS.JUST_VISITS,
-      ]}
+      ].filter(Boolean)}
       photosSectionLevel={1}
       mapSectionLevel={0}
       sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
@@ -95,12 +98,26 @@ export default function LocationPage({
       {({ level, index }) =>
         level === 0 &&
         index === 0 && (
-          <LocationRating
-            locationId={locationId}
-            locationRating={locationRating}
-            isEditable={isEditable}
-            onSubmitLocationRating={handleSubmitLocationRating}
-          />
+          <>
+            <MUILink
+              variant="body2"
+              onClick={() =>
+                setAlsoGroupByYears(
+                  prevAlsoGroupByYears => !prevAlsoGroupByYears,
+                )
+              }
+            >
+              {alsoGroupByYears
+                ? 'Убрать группировку по годам'
+                : 'Сгруппировать по годам'}
+            </MUILink>
+            <LocationRating
+              locationId={locationId}
+              locationRating={locationRating}
+              isEditable={isEditable}
+              onSubmitLocationRating={handleSubmitLocationRating}
+            />
+          </>
         )
       }
     </VisitsArranger>

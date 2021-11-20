@@ -65,6 +65,7 @@ export default function VisitsPage({
             : resolveSortingOrder(sortBy)
         }
         filteringOption={resolveFiltering(filterBy)}
+        adaptHeadersSize={true}
         isObscure={isObscure}
         urls={urls}
         virtualize={true}

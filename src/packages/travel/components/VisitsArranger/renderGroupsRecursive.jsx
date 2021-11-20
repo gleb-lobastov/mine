@@ -22,6 +22,7 @@ export default function renderRecursive({
   groupsOrder,
   sortingOrder,
   isObscure,
+  adaptHeadersSize,
   mapSectionLevel,
   photosSectionLevel,
   forwardingProps,
@@ -50,7 +51,9 @@ export default function renderRecursive({
 
     const nestingLevel = lookupLevel(parentVisitsGroup);
     const expectedMaxLevel = nestingLevel + groupsOrderInternal.length;
-    const sectionLevel = resolveSectionLevel(nestingLevel, expectedMaxLevel);
+    const sectionLevel = adaptHeadersSize
+      ? resolveSectionLevel(nestingLevel, expectedMaxLevel)
+      : nestingLevel;
 
     const visitsGroups = groupVisitsBy(visitsListInternal, plainGroup).map(
       visitsGroup => {

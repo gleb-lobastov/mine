@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@material-ui/core/Typography';
+import MUILink from '@material-ui/core/Link';
 import { useAuthContext } from 'core/context/AuthContext';
 import useVisitsUrls from 'travel/utils/useVisitsUrls';
 import VisitsArranger, {
@@ -14,6 +15,7 @@ export default function CountryPage({
     params: { userAlias, strCountryId, section },
   },
 }) {
+  const [alsoGroupByYears, setAlsoGroupByYears] = useState(false);
   const { userAlias: authenticatedUserAlias } = useAuthContext();
 
   const urls = useVisitsUrls({ editable: false, userAlias, section });
@@ -56,14 +58,30 @@ export default function CountryPage({
       provision={provision}
       groupsOrder={[
         PLAIN_GROUPS.COUNTRIES,
-        PLAIN_GROUPS.YEARS,
+        alsoGroupByYears && PLAIN_GROUPS.YEARS,
         PLAIN_GROUPS.LOCATIONS,
-      ]}
+      ].filter(Boolean)}
       sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
       filteringOption={PLAIN_FILTERING.ANY}
       isObscure={isObscure}
       urls={urls}
       config={{ CountryVisitsGroup: { hyperlinks: { country: false } } }}
-    />
+    >
+      {({ level, index }) =>
+        level === 0 &&
+        index === 0 && (
+          <MUILink
+            variant="body2"
+            onClick={() =>
+              setAlsoGroupByYears(prevAlsoGroupByYears => !prevAlsoGroupByYears)
+            }
+          >
+            {alsoGroupByYears
+              ? 'Убрать группировку по годам'
+              : 'Сгруппировать по годам'}
+          </MUILink>
+        )
+      }
+    </VisitsArranger>
   );
 }
