@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import MUILink from '@material-ui/core/Link';
+import { Typography } from '@material-ui/core';
 
 export default function ConnectedLink({
   optional,
@@ -15,7 +16,7 @@ export default function ConnectedLink({
   );
 
   if (!linkable) {
-    return children;
+    return <Typography {...forwardingProps}>{children}</Typography>;
   }
 
   return (

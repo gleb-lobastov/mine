@@ -62,6 +62,7 @@ export default function YearPage({
       filteringOption={PLAIN_FILTERING.ANY}
       isObscure={isObscure}
       urls={urls}
+      config={{ YearVisitsGroup: { hyperlinks: { year: false } } }}
     >
       {({ level, index }) =>
         level === 0 &&

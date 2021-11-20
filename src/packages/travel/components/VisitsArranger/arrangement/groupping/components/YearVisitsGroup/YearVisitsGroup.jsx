@@ -2,6 +2,7 @@ import React from 'react';
 import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
 
 const useStyles = makeStyles({
   container: {},
@@ -13,6 +14,10 @@ export default function YearVisitsGroup({
     field: { value: year },
   },
   classes,
+  urls,
+  config: {
+    YearVisitsGroup: { hyperlinks: { year: yearHyperlink = true } = {} } = {},
+  },
 }) {
   const ownClasses = useStyles();
 
@@ -21,18 +26,25 @@ export default function YearVisitsGroup({
       className={cls(classes.container, ownClasses.container)}
       classes={classes}
       year={year}
+      yearUrl={yearHyperlink ? urls?.resolveYearUrl({ year }) : null}
     >
       {children}
     </YearInfo>
   );
 }
 
-function YearInfo({ children, variant, className, classes, year }) {
+function YearInfo({ children, variant, className, classes, year, yearUrl }) {
   return (
     <div className={className}>
-      <Typography display="inline" variant={variant} className={classes.header}>
+      <ConnectedLink
+        to={(year && yearUrl) || undefined}
+        optional={true}
+        display="inline"
+        variant={variant}
+        className={classes.header}
+      >
         {year || 'Без указания даты'}
-      </Typography>
+      </ConnectedLink>
       {children}
     </div>
   );
