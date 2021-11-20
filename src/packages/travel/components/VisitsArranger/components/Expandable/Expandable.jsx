@@ -34,7 +34,9 @@ export default function Expandable({
           className={classes.actions}
           diffCount={originalItems.length - actualItems.length}
           onExpand={event => {
-            onExpand(event);
+            if (onExpand) {
+              onExpand(event);
+            }
             setCollapsed(false);
           }}
           onExpandAll={onExpandAll}
