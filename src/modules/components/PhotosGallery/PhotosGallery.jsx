@@ -8,6 +8,7 @@ import LazyWithPlaceholder from 'modules/components/LazyWithPlaceholder';
 import { useLayoutContext } from 'modules/components/LayoutContext';
 import LazyImage from './components/LazyImage';
 import GallerySkeleton from './components/GallerySkeleton';
+import FullscreenFallback from './components/FullscreenFallback';
 
 const FALLBACK_ASPECT_RATIO = 1;
 const PREFETCH_SLIDES = 1;
@@ -96,11 +97,10 @@ export default function PhotosGallery({ className, photos }) {
     return null;
   }
 
-  const inlineGalleryRef = useRef();
-  const portalGalleryRef = useRef();
+  const galleryRef = useRef();
   const imageGalleryNode = (
     <ImageGallery
-      ref={inlineGalleryRef}
+      ref={galleryRef}
       useBrowserFullscreen={FULLSCREEN_ENABLED}
       startIndex={START_INDEX}
       showIndex={true}
@@ -161,34 +161,6 @@ export default function PhotosGallery({ className, photos }) {
     />
   );
 
-  if (!FULLSCREEN_ENABLED) {
-    // ok to use hook inside if, because condition is constant for app lifecycle
-    useEffect(() => {
-      const element = document.createElement('div');
-      element.id = `imageGalleryPortal-${uniqKey}`;
-      document.body.append(element);
-      return () => element.remove();
-    }, []);
-
-    useEffect(
-      () => {
-        if (inlineGalleryRef.current) {
-          inlineGalleryRef.current.setState({
-            isFullscreen: false,
-            modalFullscreen: false,
-          });
-        }
-        if (fullscreen) {
-          portalGalleryRef.current.setState({
-            isFullscreen: true,
-            modalFullscreen: true,
-          });
-        }
-      },
-      [fullscreen],
-    );
-  }
-
   return (
     <div
       className={cls(className, classes.photoContainer)}
@@ -200,12 +172,15 @@ export default function PhotosGallery({ className, photos }) {
       >
         {imageGalleryNode}
       </LazyWithPlaceholder>
-      {!FULLSCREEN_ENABLED && fullscreen
-        ? ReactDOM.createPortal(
-            React.cloneElement(imageGalleryNode, { ref: portalGalleryRef }),
-            window.document.getElementById(`imageGalleryPortal-${uniqKey}`),
-          )
-        : null}
+      {!FULLSCREEN_ENABLED && (
+        <FullscreenFallback
+          fullscreen={fullscreen}
+          uniqKey={uniqKey}
+          inlineGalleryRef={galleryRef}
+        >
+          {imageGalleryNode}
+        </FullscreenFallback>
+      )}
     </div>
   );
 }
