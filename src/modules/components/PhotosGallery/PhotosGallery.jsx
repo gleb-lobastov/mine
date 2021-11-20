@@ -1,17 +1,22 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import ReactDOM from 'react-dom';
 import { v4 as uuidV4 } from 'uuid';
 import cls from 'classnames';
 import ImageGallery from 'react-image-gallery';
 import { makeStyles } from '@material-ui/core/styles';
 import LazyWithPlaceholder from 'modules/components/LazyWithPlaceholder';
-import LazyImage from './components/LazyImage';
 import { useLayoutContext } from 'modules/components/LayoutContext';
+import LazyImage from './components/LazyImage';
 import GallerySkeleton from './components/GallerySkeleton';
 
 const FALLBACK_ASPECT_RATIO = 1;
 const PREFETCH_SLIDES = 1;
 const START_INDEX = 0;
 const THUMB_WIDTH_WITHOUT_BORDERS_PX = 92;
+const FULLSCREEN_ENABLED =
+  document.fullscreenEnabled ||
+  document.mozFullScreenEnabled ||
+  document.documentElement.webkitRequestFullScreen;
 
 const useStyles = makeStyles({
   photoContainer: {
@@ -91,6 +96,99 @@ export default function PhotosGallery({ className, photos }) {
     return null;
   }
 
+  const inlineGalleryRef = useRef();
+  const portalGalleryRef = useRef();
+  const imageGalleryNode = (
+    <ImageGallery
+      ref={inlineGalleryRef}
+      useBrowserFullscreen={FULLSCREEN_ENABLED}
+      startIndex={START_INDEX}
+      showIndex={true}
+      items={actualPhotos}
+      thumbnailPosition="right"
+      onScreenChange={nextFullscreen => setFullscreen(nextFullscreen)}
+      onBeforeSlide={nextIndex => setCurrentIndex(nextIndex)}
+      disableKeyDown={true}
+      disableThumbnailScroll={true}
+      renderItem={item => (
+        <LazyImage
+          className="image-gallery-image"
+          aspectRatio={
+            aspectRatios[item.index] ||
+            item.aspectRatio?.ratio ||
+            FALLBACK_ASPECT_RATIO
+          }
+          description={item.description}
+          src={fullscreen ? item.fullscreen : item.original}
+          alt={item.originalAlt}
+          constraints={constraints}
+          title={item.originalTitle}
+          blurhash={item.blurhash}
+          require={Math.abs(currentIndex - item.index) <= PREFETCH_SLIDES}
+        >
+          {item.description && (
+            <span className="image-gallery-description">
+              {item.description}
+            </span>
+          )}
+        </LazyImage>
+      )}
+      renderThumbInner={item => (
+        <span className="image-gallery-thumbnail-inner">
+          <LazyImage
+            tag={`photos-gallery-thumb-${uniqKey}-${item.index}`}
+            className="image-gallery-thumbnail-image"
+            aspectRatio={
+              aspectRatios[item.index] ||
+              item.aspectRatio ||
+              FALLBACK_ASPECT_RATIO
+            }
+            src={item.thumbnail}
+            width={THUMB_WIDTH_WITHOUT_BORDERS_PX}
+            alt={item.thumbnailAlt}
+            title={item.thumbnailTitle}
+            blurhash={item.blurhash}
+            require={true}
+            onLoad={({ aspectRatio }) =>
+              setAspectRatios(prevRatios => ({
+                ...prevRatios,
+                [item.index]: aspectRatio,
+              }))
+            }
+          />
+        </span>
+      )}
+    />
+  );
+
+  if (!FULLSCREEN_ENABLED) {
+    // ok to use hook inside if, because condition is constant for app lifecycle
+    useEffect(() => {
+      const element = document.createElement('div');
+      element.id = `imageGalleryPortal-${uniqKey}`;
+      document.body.append(element);
+      return () => element.remove();
+    }, []);
+
+    useEffect(
+      () => {
+        if (inlineGalleryRef.current) {
+          inlineGalleryRef.current.setState({
+            isFullscreen: false,
+            modalFullscreen: false,
+          });
+        }
+        if (fullscreen) {
+          portalGalleryRef.current.setState({
+            isFullscreen: true,
+            modalFullscreen: true,
+          });
+        }
+      },
+      [fullscreen],
+    );
+  }
+
   return (
     <div
       className={cls(className, classes.photoContainer)}
@@ -100,65 +198,14 @@ export default function PhotosGallery({ className, photos }) {
         offset={1000}
         placeholder={<GallerySkeleton height={constraints.height} />}
       >
-        <ImageGallery
-          startIndex={START_INDEX}
-          showIndex={true}
-          items={actualPhotos}
-          thumbnailPosition="right"
-          onScreenChange={nextFullscreen => setFullscreen(nextFullscreen)}
-          onBeforeSlide={nextIndex => setCurrentIndex(nextIndex)}
-          disableKeyDown={true}
-          disableThumbnailScroll={true}
-          renderItem={item => (
-            <LazyImage
-              className="image-gallery-image"
-              aspectRatio={
-                aspectRatios[item.index] ||
-                item.aspectRatio?.ratio ||
-                FALLBACK_ASPECT_RATIO
-              }
-              description={item.description}
-              src={fullscreen ? item.fullscreen : item.original}
-              alt={item.originalAlt}
-              constraints={constraints}
-              title={item.originalTitle}
-              blurhash={item.blurhash}
-              require={Math.abs(currentIndex - item.index) <= PREFETCH_SLIDES}
-            >
-              {item.description && (
-                <span className="image-gallery-description">
-                  {item.description}
-                </span>
-              )}
-            </LazyImage>
-          )}
-          renderThumbInner={item => (
-            <span className="image-gallery-thumbnail-inner">
-              <LazyImage
-                tag={`photos-gallery-thumb-${uniqKey}-${item.index}`}
-                className="image-gallery-thumbnail-image"
-                aspectRatio={
-                  aspectRatios[item.index] ||
-                  item.aspectRatio ||
-                  FALLBACK_ASPECT_RATIO
-                }
-                src={item.thumbnail}
-                width={THUMB_WIDTH_WITHOUT_BORDERS_PX}
-                alt={item.thumbnailAlt}
-                title={item.thumbnailTitle}
-                blurhash={item.blurhash}
-                require={true}
-                onLoad={({ aspectRatio }) =>
-                  setAspectRatios(prevRatios => ({
-                    ...prevRatios,
-                    [item.index]: aspectRatio,
-                  }))
-                }
-              />
-            </span>
-          )}
-        />
+        {imageGalleryNode}
       </LazyWithPlaceholder>
+      {!FULLSCREEN_ENABLED && fullscreen
+        ? ReactDOM.createPortal(
+            React.cloneElement(imageGalleryNode, { ref: portalGalleryRef }),
+            window.document.getElementById(`imageGalleryPortal-${uniqKey}`),
+          )
+        : null}
     </div>
   );
 }
