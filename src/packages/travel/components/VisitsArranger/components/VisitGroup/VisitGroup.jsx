@@ -35,19 +35,19 @@ function VisitGroup({
         />
       </VisitsGroupComponent>
       {children}
-      {showPhotos && (
-        <VisitsPhotosGallery
-          className={classes.nextLevel}
-          visitsGroup={visitsGroup}
-          provision={provision}
-        />
-      )}
       {showMap && (
         <VisitsLocationsMap
           className={classes.nextLevel}
           visitsGroup={visitsGroup}
           provision={provision}
           onToggle={onHeightChange}
+        />
+      )}
+      {showPhotos && (
+        <VisitsPhotosGallery
+          className={classes.nextLevel}
+          visitsGroup={visitsGroup}
+          provision={provision}
         />
       )}
     </Fragment>
