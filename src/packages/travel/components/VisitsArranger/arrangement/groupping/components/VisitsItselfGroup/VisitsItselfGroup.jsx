@@ -1,27 +1,46 @@
 import React, { useMemo } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import uniqBy from 'lodash/uniqBy';
-import Typography from '@material-ui/core/Typography';
 import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
+import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
 import { LocationInfo } from '../LocationVisitsGroup';
 import VisitInfo from './components/VisitInfo';
 import LocationWithRideInfo from './components/LocationWithRideInfo';
-import { visitDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
+
+const useStyles = makeStyles({
+  placeDetails: {
+    display: 'inline-block',
+    marginRight: '8px',
+  },
+});
 
 export default function VisitsItselfGroup({
   visitsGroup,
   visitsGroup: { visitsList },
   provision,
-  provision: { tripsDict, locationsDict },
+  provision: { tripsDict, locationsDict, countriesDict },
   classes,
   urls,
+  config: {
+    VisitsItselfGroup: {
+      appearance: {
+        country: countryAppearance = true,
+        location: locationAppearance = true,
+      } = {},
+    } = {},
+  } = {},
 }) {
+  const ownClasses = useStyles();
   const groupTripId = findClosestGroupValue(visitsGroup, PLAIN_GROUPS.TRIPS);
-
   const groupCountryId = findClosestGroupValue(
     visitsGroup,
     PLAIN_GROUPS.COUNTRIES,
+  );
+  const groupLocationId = findClosestGroupValue(
+    visitsGroup,
+    PLAIN_GROUPS.LOCATIONS,
   );
 
   // currently remains only first visit, and only dates for this visit is shown to user
@@ -34,16 +53,38 @@ export default function VisitsItselfGroup({
   if (!groupTripId) {
     return (
       <>
-        {visitsList.map(visit => (
-          <ConnectedLink
-            to={urls.resolveVisitUrl({ visitId: visit.visitId })}
-            optional={true}
-            className={classes.level}
-            display="block"
-          >
-            {visitDateTimePeriodToString(visit, false)}
-          </ConnectedLink>
-        ))}
+        {visitsList.map(visit => {
+          const { locationId, countryId } = visit;
+          const locationUrl =
+            locationAppearance && !groupLocationId
+              ? urls?.resolveLocationUrl({ locationId })
+              : null;
+          const countryUrl =
+            countryAppearance && !groupLocationId
+              ? urls?.resolveCountryUrl({ countryId })
+              : null;
+          return (
+            <div className={classes.level}>
+              {locationUrl && (
+                <LocationInfo
+                  className={ownClasses.placeDetails}
+                  location={locationsDict[locationId]}
+                  provision={provision}
+                  showCountry={Boolean(countryUrl) && !groupCountryId}
+                  locationUrl={locationUrl}
+                  countryUrl={countryUrl}
+                />
+              )}
+              <ConnectedLink
+                to={urls.resolveVisitUrl({ visitId: visit.visitId })}
+                optional={true}
+                display="inline"
+              >
+                {visitDateTimePeriodToString(visit, false)}
+              </ConnectedLink>
+            </div>
+          );
+        })}
       </>
     );
   }

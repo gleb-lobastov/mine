@@ -30,7 +30,7 @@ export default function CountryVisitsGroup({
   );
 }
 
-function CountryInfo({
+export function CountryInfo({
   variant,
   country: { countryName },
   children,

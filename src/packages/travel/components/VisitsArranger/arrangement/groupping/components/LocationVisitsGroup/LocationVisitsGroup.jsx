@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
 import { findClosestGroupValue } from '../../utils/resolveGroupingUtils';
 import { PLAIN_GROUPS } from '../../consts';
@@ -73,10 +72,13 @@ export function LocationInfo({
   const countryName = countriesDict[countryId]?.countryName;
   const countryNode =
     countryAppearance && countryName && showCountry ? (
-      <ConnectedLink to={countryUrl} optional={true}>
-        <Typography display="inline" variant="body1">
-          {countriesDict[countryId]?.countryName}
-        </Typography>
+      <ConnectedLink
+        to={countryUrl}
+        optional={true}
+        display="inline"
+        variant="body1"
+      >
+        {countriesDict[countryId]?.countryName}
       </ConnectedLink>
     ) : null;
 
@@ -107,4 +109,5 @@ export function LocationInfo({
 
 LocationInfo.defaultProps = {
   appearance: {},
+  classes: {},
 };

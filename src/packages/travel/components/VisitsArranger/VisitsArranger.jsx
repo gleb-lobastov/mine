@@ -5,7 +5,6 @@ import renderGroupsRecursive from './renderGroupsRecursive';
 
 const useStyles = makeStyles(theme => ({
   noMarginTop: {},
-
   link: {
     cursor: 'pointer',
   },
