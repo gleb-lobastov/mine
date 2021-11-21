@@ -17,7 +17,7 @@ export default function YearVisitsGroup({
   urls,
   config: {
     YearVisitsGroup: { hyperlinks: { year: yearHyperlink = true } = {} } = {},
-  },
+  } = {}
 }) {
   const ownClasses = useStyles();
 
