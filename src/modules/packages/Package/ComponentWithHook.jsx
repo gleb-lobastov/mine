@@ -10,7 +10,7 @@ function ComponentWithHook({
 }) {
   useEffect(
     () => {
-      setLayoutProps({ ...layoutProps, actualPath });
+      setLayoutProps({ ...layoutProps, routerProps, actualPath });
     },
     [actualPath],
   );

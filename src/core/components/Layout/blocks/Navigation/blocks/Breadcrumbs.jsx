@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import isFunction from 'lodash/isFunction';
 import { makeStyles } from '@material-ui/core/styles';
 import MUIBreadcrumbs from '@material-ui/core/Breadcrumbs';
 import Typography from '@material-ui/core/Typography';
@@ -12,7 +12,12 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Breadcrumbs({ breadcrumbs, actualPath, onChangeUrl }) {
+export default function Breadcrumbs({
+  breadcrumbs,
+  routerParams,
+  actualPath,
+  onChangeUrl,
+}) {
   const classes = useStyles();
   const handleBreadcrumbClick = (event, breadcrumbIndex) => {
     event.preventDefault();
@@ -26,33 +31,24 @@ export default function Breadcrumbs({ breadcrumbs, actualPath, onChangeUrl }) {
 
   return (
     <MUIBreadcrumbs aria-label="breadcrumb" className={classes.breadcrumbs}>
-      {breadcrumbs.map(
-        ({ caption, path }, breadcrumbIndex) =>
-          path ? (
-            <MUILink
-              href={caption}
-              onClick={event => handleBreadcrumbClick(event, breadcrumbIndex)}
-            >
-              {caption}
-            </MUILink>
-          ) : (
-            <Typography color="textPrimary">{caption}</Typography>
-          ),
-      )}
+      {breadcrumbs.map(({ caption, path }, breadcrumbIndex) => {
+        const actualCaption = isFunction(caption)
+          ? caption(routerParams)
+          : caption;
+        return path ? (
+          <MUILink
+            href="#"
+            onClick={event => handleBreadcrumbClick(event, breadcrumbIndex)}
+          >
+            {actualCaption}
+          </MUILink>
+        ) : (
+          <Typography color="textPrimary">{actualCaption}</Typography>
+        );
+      })}
     </MUIBreadcrumbs>
   );
 }
-
-Breadcrumbs.propTypes = {
-  breadcrumbs: PropTypes.arrayOf(
-    PropTypes.shape({
-      caption: PropTypes.string,
-      path: PropTypes.string,
-    }),
-  ),
-  actualPath: PropTypes.string.isRequired,
-  onChangeUrl: PropTypes.func.isRequired,
-};
 
 Breadcrumbs.defaultProps = {
   breadcrumbs: [],

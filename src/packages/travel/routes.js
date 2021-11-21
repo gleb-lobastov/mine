@@ -71,12 +71,13 @@ export const country = {
   ),
 };
 
-// todo: uncomment when done
-// export const year = {
-//   path: `/:userAlias(${USER_ALIAS_TYPE})/:section(${SECTION_TYPE})/years/:strYear(\\d{4})`,
-//   defaultRouteParams: { userAlias: 'my', section: 'trips' },
-//   layoutProps: { breadcrumbs: [{ caption: 'Год' }] },
-//   Component: React.lazy(() =>
-//     import(/* webpackChunkName: 'travel-Places' */ './pages/YearPage'),
-//   ),
-// };
+export const year = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/:section(${SECTION_TYPE})/years/:strYear(\\d{4})`,
+  defaultRouteParams: { userAlias: 'my', section: 'trips' },
+  layoutProps: {
+    breadcrumbs: [{ caption: ({ strYear }) => `${strYear} год` }],
+  },
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'travel-Places' */ './pages/YearPage'),
+  ),
+};

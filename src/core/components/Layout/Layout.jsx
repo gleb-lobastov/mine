@@ -61,6 +61,7 @@ export default function Layout({
   isResponsive,
   breadcrumbs,
   actualPath,
+  routerProps: { match: { params: actualRouterParams } = {} } = {},
 }) {
   const classes = useStyles({ isResponsive });
   const packages = usePackages();
@@ -94,6 +95,7 @@ export default function Layout({
           className={classes.navigation}
           breadcrumbs={breadcrumbs}
           actualPath={actualPath}
+          actualRouterParams={actualRouterParams}
           sidebarToggleButton={
             Boolean(sidebarContentNode) && (
               <IconButton
