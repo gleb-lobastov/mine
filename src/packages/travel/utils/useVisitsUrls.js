@@ -39,13 +39,11 @@ export default function useVisitsUrls({ editable, userAlias, section }) {
             })
           : null,
       resolveVisitUrl: ({ visitId }) =>
-        editable
-          ? travelPaths.visit.toUrl({
-              userAlias,
-              section,
-              strVisitId: String(visitId),
-            })
-          : null,
+        travelPaths.visit.toUrl({
+          userAlias,
+          section,
+          strVisitId: String(visitId),
+        }),
     }),
     [editable, travelPaths],
   );
