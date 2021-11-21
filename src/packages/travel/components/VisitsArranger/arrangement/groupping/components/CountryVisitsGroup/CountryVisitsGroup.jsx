@@ -40,14 +40,14 @@ function CountryInfo({
 }) {
   return (
     <div className={className}>
-      <ConnectedLink to={countryUrl} optional={true}>
-        <Typography
-          display="inline"
-          variant={variant}
-          className={classes.header}
-        >
-          {countryName}
-        </Typography>
+      <ConnectedLink
+        to={countryUrl}
+        optional={true}
+        display="inline"
+        variant={variant}
+        className={classes.header}
+      >
+        {countryName}
       </ConnectedLink>
       {children}
     </div>

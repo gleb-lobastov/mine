@@ -81,11 +81,15 @@ export function LocationInfo({
     ) : null;
 
   const locationNode = (
-    <ConnectedLink to={locationUrl} optional={true}>
-      <Typography display="inline" variant={variant} className={classes.header}>
-        {locationName}
-        {countryNode ? ',' : ''}
-      </Typography>
+    <ConnectedLink
+      to={locationUrl}
+      optional={true}
+      display="inline"
+      variant={variant}
+      className={classes.header}
+    >
+      {locationName}
+      {countryNode ? ',' : ''}
     </ConnectedLink>
   );
 

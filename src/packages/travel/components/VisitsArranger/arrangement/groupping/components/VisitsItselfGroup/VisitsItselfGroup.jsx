@@ -38,10 +38,10 @@ export default function VisitsItselfGroup({
           <ConnectedLink
             to={urls.resolveVisitUrl({ visitId: visit.visitId })}
             optional={true}
+            className={classes.level}
+            display="block"
           >
-            <Typography className={classes.level}>
-              {visitDateTimePeriodToString(visit, false)}
-            </Typography>
+            {visitDateTimePeriodToString(visit, false)}
           </ConnectedLink>
         ))}
       </>
