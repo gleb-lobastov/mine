@@ -1,28 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Box from '@material-ui/core/Box';
+import Rating from '@material-ui/lab/Rating';
 import { LOCATION_RATING } from 'travel/models/users/consts';
 
 const RATING_LOCALIZATION = {
-  [LOCATION_RATING.PLACE_TO_LIVE]: 'Жил бы здесь',
-  [LOCATION_RATING.FEW_PER_YEAR]: 'Несколько раз в год',
-  [LOCATION_RATING.ONCE_PER_YEAR]: 'Раз в год',
-  [LOCATION_RATING.ONCE_PER_TWO_YEARS]: 'Раз в пару лет',
-  [LOCATION_RATING.ONCE_PER_FIVE_YEARS]: 'Раз в пять лет',
-  [LOCATION_RATING.ONCE_PER_DECADE]: 'Раз в десятилетие',
-  [LOCATION_RATING.TWICE_PER_LIVE]: 'Пару раз в жизни',
-  [LOCATION_RATING.ONCE_PER_LIVE]: 'Раз в жизни',
-  [LOCATION_RATING.NEVER]: 'Никогда',
+  [LOCATION_RATING.PLACE_TO_LIVE]: 'Готов тут жить',
+  [LOCATION_RATING.FEW_PER_YEAR]: 'Готов бывать по нескольку раз в год',
+  [LOCATION_RATING.ONCE_PER_YEAR]: 'Приезжал бы каждый год',
+  [LOCATION_RATING.ONCE_PER_TWO_YEARS]: 'Приезжал бы раз в пару лет',
+  [LOCATION_RATING.ONCE_PER_FIVE_YEARS]: 'Приезжал бы раз в пять лет',
+  [LOCATION_RATING.ONCE_PER_DECADE]: 'Можно заглянуть раз в десятилетие',
+  [LOCATION_RATING.TWICE_PER_LIVE]: 'Пары посещений за всю жизнь достаточно',
+  [LOCATION_RATING.ONCE_PER_LIVE]: 'Одного посещения достаточно',
+  [LOCATION_RATING.NEVER]: 'Лучше бы тут и не бывать',
 };
 
 const useStyles = makeStyles({
-  formControl: {
-    margin: '24px 0',
-    width: '100%',
+  container: {
+    display: 'flex',
+    alignItems: 'center',
   },
 });
 
@@ -33,59 +30,57 @@ export default function LocationRating({
   onSubmitLocationRating,
 }) {
   const classes = useStyles();
-  if (!isEditable) {
-    return <div>{RATING_LOCALIZATION[locationRating]}</div>;
-  }
+  const [rating, setRating] = React.useState(locationRating);
+  const [hoverRating, setHoverRating] = React.useState(locationRating);
+
+  const handleChangeRating = useCallback(
+    (event, nextStarsCount) => {
+      const nextRating = starsToRating(nextStarsCount);
+      if (nextRating && nextRating !== locationRating) {
+        setRating(nextRating);
+        onSubmitLocationRating(locationId, rating);
+      }
+    },
+    [locationId, locationRating],
+  );
+
+  const handleHover = useCallback(
+    (event, nextHoverStarsCount) =>
+      setHoverRating(starsToRating(nextHoverStarsCount)),
+    [locationId, locationRating],
+  );
+
+  const starsCount = ratingToStars(rating);
+  const hintRating = hoverRating ?? rating;
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel shrink={true} id="select-location-rating-label">
-        Я бы ездил сюда
-      </InputLabel>
-      <Select
-        labelId="select-location-rating-label"
-        id="select-location-rating"
-        value={locationRating}
-        onChange={event => {
-          onSubmitLocationRating(event, locationId, event.target.value);
-        }}
-      >
-        <MenuItem value={LOCATION_RATING.PLACE_TO_LIVE}>
-          {RATING_LOCALIZATION[LOCATION_RATING.PLACE_TO_LIVE]}
-        </MenuItem>
-        <MenuItem value={LOCATION_RATING.FEW_PER_YEAR}>
-          {RATING_LOCALIZATION[LOCATION_RATING.FEW_PER_YEAR]}
-        </MenuItem>
-        <MenuItem value={LOCATION_RATING.ONCE_PER_YEAR}>
-          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_YEAR]}
-        </MenuItem>
-        <MenuItem value={LOCATION_RATING.ONCE_PER_TWO_YEARS}>
-          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_TWO_YEARS]}
-        </MenuItem>
-        <MenuItem value={LOCATION_RATING.ONCE_PER_FIVE_YEARS}>
-          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_FIVE_YEARS]}
-        </MenuItem>
-        <MenuItem value={LOCATION_RATING.ONCE_PER_DECADE}>
-          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_DECADE]}
-        </MenuItem>
-        <MenuItem value={LOCATION_RATING.TWICE_PER_LIVE}>
-          {RATING_LOCALIZATION[LOCATION_RATING.TWICE_PER_LIVE]}
-        </MenuItem>
-        <MenuItem value={LOCATION_RATING.ONCE_PER_LIVE}>
-          {RATING_LOCALIZATION[LOCATION_RATING.ONCE_PER_LIVE]}
-        </MenuItem>
-        <MenuItem value={LOCATION_RATING.NEVER}>
-          {RATING_LOCALIZATION[LOCATION_RATING.NEVER]}
-        </MenuItem>
-      </Select>
-    </FormControl>
+    <div className={classes.container}>
+      <Rating
+        name="locationRating"
+        readOnly={!isEditable}
+        size="large"
+        value={starsCount}
+        precision={0.5}
+        onChange={handleChangeRating}
+        onChangeActive={handleHover}
+      />
+      {hintRating && <Box ml={2}>{RATING_LOCALIZATION[hintRating]}</Box>}
+    </div>
   );
 }
 
-LocationRating.propTypes = {
-  locationRating: PropTypes.number,
-  locationId: PropTypes.number.isRequired,
-  isEditable: PropTypes.bool.isRequired,
-  onSubmitLocationRating: PropTypes.func.isRequired,
-};
+function starsToRating(starsCount) {
+  if (starsCount === -1) {
+    return null;
+  }
+  if (starsCount <= 2) {
+    return 9 - Math.floor(starsCount);
+  }
+  return (5 - starsCount) * 2 + 1;
+}
 
-LocationRating.defaultProps = { locationRating: null };
+function ratingToStars(rating) {
+  if (rating >= 7) {
+    return 9 - Math.ceil(rating);
+  }
+  return (rating - 1) / 2;
+}

@@ -43,11 +43,11 @@ export default function LocationPage({
   } = useLocationWithTripStats({ domain, userAlias, locationId });
 
   const handleSubmitLocationRating = useCallback(
-    (event, locationIdToSubmit, value) => {
+    (locationIdToSubmit, value) => {
       submitLocationRating({
         query: { rating: value, id: String(locationIdToSubmit) },
         condition: Boolean(locationIdToSubmit),
-      }).finally(userProvision.invalidate); // todo: still need to imporeve invalidation ux
+      }).finally(userProvision.invalidate); // todo: still need to improve invalidation ux
     },
   );
 
