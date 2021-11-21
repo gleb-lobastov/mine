@@ -94,6 +94,7 @@ export default function renderRecursive({
               items={actualVisitsGroups}
               bypass={bypassVirtualization}
               ref={bypassVirtualization ? undefined : virtualizerRef}
+              overscan={3}
             >
               {({ item: visitsGroup, index }) => (
                 <VisitGroup
