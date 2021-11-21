@@ -1,5 +1,9 @@
 import React, { useCallback } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import Box from '@material-ui/core/Box';
 import Rating from '@material-ui/lab/Rating';
 import { LOCATION_RATING } from 'travel/models/users/consts';
@@ -21,6 +25,11 @@ const useStyles = makeStyles({
     display: 'flex',
     alignItems: 'center',
   },
+  formControl: {
+    display: 'block',
+    margin: '24px 12px',
+    width: '100%',
+  },
 });
 
 export default function LocationRating({
@@ -31,56 +40,58 @@ export default function LocationRating({
 }) {
   const classes = useStyles();
   const [rating, setRating] = React.useState(locationRating);
-  const [hoverRating, setHoverRating] = React.useState(locationRating);
 
   const handleChangeRating = useCallback(
-    (event, nextStarsCount) => {
-      const nextRating = starsToRating(nextStarsCount);
+    event => {
+      const nextRating = event.target.value;
       if (nextRating && nextRating !== locationRating) {
         setRating(nextRating);
-        onSubmitLocationRating(locationId, rating);
+        onSubmitLocationRating(locationId, event.target.value);
       }
     },
     [locationId, locationRating],
   );
 
-  const handleHover = useCallback(
-    (event, nextHoverStarsCount) =>
-      setHoverRating(starsToRating(nextHoverStarsCount)),
-    [locationId, locationRating],
-  );
-
-  const starsCount = ratingToStars(rating);
-  const hintRating = hoverRating ?? rating;
   return (
     <div className={classes.container}>
-      <Rating
-        name="locationRating"
-        readOnly={!isEditable}
-        size="large"
-        value={starsCount}
-        precision={0.5}
-        onChange={handleChangeRating}
-        onChangeActive={handleHover}
-      />
-      {hintRating && <Box ml={2}>{RATING_LOCALIZATION[hintRating]}</Box>}
+      {Boolean(rating) && (
+        <Rating
+          name="locationRating"
+          readOnly={true}
+          size="large"
+          value={ratingToStars(rating)}
+          precision={0.5}
+        />
+      )}
+      {Boolean(!isEditable && rating) && (
+        <Box ml={2}>{RATING_LOCALIZATION[rating]}</Box>
+      )}
+      {isEditable && (
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink={true} id="select-location-rating-label">
+            Задать рейтинг
+          </InputLabel>
+          <Select
+            labelId="select-location-rating-label"
+            id="select-location-rating"
+            value={locationRating}
+            onChange={handleChangeRating}
+          >
+            {Object.values(LOCATION_RATING).map(ratingOption => (
+              <MenuItem key={ratingOption} value={ratingOption}>
+                {RATING_LOCALIZATION[ratingOption]}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
     </div>
   );
-}
-
-function starsToRating(starsCount) {
-  if (starsCount === -1) {
-    return null;
-  }
-  if (starsCount <= 2) {
-    return 9 - Math.floor(starsCount);
-  }
-  return (5 - starsCount) * 2 + 1;
 }
 
 function ratingToStars(rating) {
   if (rating >= 7) {
     return 9 - Math.ceil(rating);
   }
-  return (rating - 1) / 2;
+  return 5 - (rating - 1) / 2;
 }
