@@ -24,11 +24,13 @@ export default function useVisitsUrls({ editable, userAlias, section }) {
           strCountryId: String(countryId),
         }),
       resolveYearUrl: ({ year }) =>
-        travelPaths.year.toUrl({
-          userAlias,
-          section,
-          strYear: String(year),
-        }),
+        year
+          ? travelPaths.year.toUrl({
+              userAlias,
+              section,
+              strYear: String(year),
+            })
+          : null,
       resolveTripEditUrl: ({ tripId }) =>
         editable
           ? travelPaths.tripEdit.toUrl({
