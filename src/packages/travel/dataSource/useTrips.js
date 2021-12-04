@@ -19,17 +19,24 @@ export default function useTrips({ userAlias, tripsIds: requiredTripsIds }) {
     !shouldRequireAllTrips &&
     requiredTripsIds.filter(tripId => !tripsDict[tripId]);
 
+  const tripsIdsUniqStr = missingTripsIds ? missingTripsIds.join(',') : '*';
+  const tripsFilter = shouldRequireAllTrips
+    ? {}
+    : { id: { comparator: 'in', value: missingTripsIds } };
+
   return useProvision({
-    domain: `travel.trips-${userAlias}`,
+    domain: `travel.trips-${userAlias}-${tripsIdsUniqStr}`,
     isProvision: true,
     modelName: 'trips',
     observe: userAlias,
+    condition: shouldRequireAllTrips || missingTripsIds.length > 0,
     query: {
       userAlias,
       navigation: { isDisabled: true },
-      filter: shouldRequireAllTrips
-        ? {}
-        : { id: { comparator: 'in', value: missingTripsIds } },
+      filter: {
+        user_alias: { comparator: '=', value: userAlias },
+        ...tripsFilter,
+      },
     },
   });
 }
@@ -41,7 +48,9 @@ export function useTripsStats({ userAlias, tripsIds: requiredTripsIds }) {
     userAlias,
   });
 
-  const { data: tripsIds = [] } = selectResult(tripsProvision) || {};
+  const { data: tripsIds = [] } = requiredTripsIds
+    ? { data: requiredTripsIds }
+    : selectResult(tripsProvision) || {};
 
   const {
     tripsDict,

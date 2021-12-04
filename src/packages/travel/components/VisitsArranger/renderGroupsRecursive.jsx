@@ -51,7 +51,10 @@ export default function renderRecursive({
 
     const nestingLevel = lookupLevel(parentVisitsGroup);
     const expectedMaxLevel = nestingLevel + groupsOrderInternal.length;
-    const sectionLevel = adaptHeadersSize
+    const actualAdaptHeadersSize = Array.isArray(adaptHeadersSize)
+      ? adaptHeadersSize[nestingLevel]
+      : adaptHeadersSize;
+    const sectionLevel = actualAdaptHeadersSize
       ? resolveSectionLevel(nestingLevel, expectedMaxLevel)
       : nestingLevel;
 
@@ -111,12 +114,13 @@ export default function renderRecursive({
                   provision={provision}
                   urls={urls}
                   forwardingProps={forwardingProps}
-                  showMap={sectionLevel === mapSectionLevel}
-                  showPhotos={sectionLevel === photosSectionLevel}
+                  showMap={nestingLevel === mapSectionLevel}
+                  showPhotos={nestingLevel === photosSectionLevel}
                   onHeightChange={virtualizerRef.current?.measure}
                 >
                   {children?.({
                     level: nestingLevel,
+                    className: classes[`level${nestingLevel + 1}`],
                     index,
                     visitsGroup,
                   })}

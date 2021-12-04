@@ -38,6 +38,11 @@ export default function useVisitsUrls({ editable, userAlias, section }) {
               userAlias,
             })
           : null,
+      resolveTripUrl: ({ tripId }) =>
+        travelPaths.trip.toUrl({
+          strTripId: String(tripId),
+          userAlias,
+        }),
       resolveVisitUrl: ({ visitId }) =>
         travelPaths.visit.toUrl({
           userAlias,

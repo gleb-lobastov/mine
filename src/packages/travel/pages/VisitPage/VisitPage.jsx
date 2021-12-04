@@ -1,15 +1,23 @@
 import React from 'react';
+import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
 import { useAuthContext } from 'core/context/AuthContext';
-import { useAddVisitPhotoRequest, useVisit } from 'travel/dataSource';
-import VisitInfo from 'travel/components/VisitInfo';
+import {
+  useAddVisitPhotoRequest,
+  useTripsStats,
+  useVisit,
+} from 'travel/dataSource';
+import VisitsArranger, {
+  PLAIN_FILTERING,
+  PLAIN_GROUPS,
+  PLAIN_SORTING,
+} from 'travel/components/VisitsArranger';
+import useVisitsUrls from 'travel/utils/useVisitsUrls';
 import PhotosDropzone from './components/PhotosDropzone';
-import PhotosGallery from 'modules/components/PhotosGallery';
-import { usePaths } from 'modules/packages';
 
 const domain = 'travel.VisitPage';
 export default function VisitPage({
   match: {
-    params: { userAlias, strVisitId },
+    params: { userAlias, strVisitId, section },
   },
 }) {
   const {
@@ -17,13 +25,16 @@ export default function VisitPage({
     userAlias: authenticatedUserAlias,
   } = useAuthContext();
 
-  const { travel: travelPaths } = usePaths();
-
   const visitId = parseInt(strVisitId, 10);
   const { isError, isPending, visit, invalidate } = useVisit({
     domain,
     userAlias,
     visitId,
+  });
+  const tripsStatsProvision = useTripsStats({
+    domain,
+    userAlias,
+    tripsIds: visit?.tripId ? [visit.tripId] : [],
   });
 
   const { submitVisitPhoto } = useAddVisitPhotoRequest({
@@ -32,7 +43,8 @@ export default function VisitPage({
     visitId,
   });
 
-  const isEditable = isAuthenticated && authenticatedUserAlias === userAlias;
+  const editable = isAuthenticated && authenticatedUserAlias === userAlias;
+  const urls = useVisitsUrls({ editable, userAlias, section });
 
   if (isError) {
     return <div>...Error</div>;
@@ -45,26 +57,41 @@ export default function VisitPage({
     return <div>...Не найдено посещение</div>;
   }
 
-  const { photos, locationId } = visit;
-
   return (
     <>
-      <VisitInfo
-        visit={visit}
-        isLong={true}
-        locationUrl={travelPaths.location.toUrl({
-          strLocationId: String(locationId),
-          userAlias,
-        })}
-      />
-      {isEditable && (
+      <VisitsArranger
+        visitsList={[visit]}
+        provision={tripsStatsProvision}
+        groupsOrder={[PLAIN_GROUPS.JUST_VISITS]}
+        adaptHeadersSize={true}
+        photosSectionLevel={0}
+        mapSectionLevel={0}
+        sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
+        filteringOption={PLAIN_FILTERING.ANY}
+        isObscure={!editable}
+        urls={urls}
+        config={{ YearVisitsGroup: { hyperlinks: { year: false } } }}
+      >
+        {({ level, index, className }) =>
+          level === 0 &&
+          index === 0 && (
+            <ConnectedLink
+              className={className}
+              variant="body2"
+              to={urls.resolveTripUrl({ tripId: visit.tripId })}
+            >
+              вся поездка
+            </ConnectedLink>
+          )
+        }
+      </VisitsArranger>
+      {editable && (
         <PhotosDropzone
           visit={visit}
           userAlias={userAlias}
           onUpload={values => submitVisitPhoto(values).finally(invalidate)}
         />
       )}
-      <PhotosGallery photos={photos} />
     </>
   );
 }

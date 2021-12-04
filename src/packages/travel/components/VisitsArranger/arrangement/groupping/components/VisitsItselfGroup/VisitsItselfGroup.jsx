@@ -20,7 +20,7 @@ export default function VisitsItselfGroup({
   visitsGroup,
   visitsGroup: { visitsList },
   provision,
-  provision: { tripsDict, locationsDict, countriesDict },
+  provision: { tripsDict, locationsDict },
   classes,
   urls,
   config: {

@@ -36,11 +36,22 @@ export const tripEdit = {
 };
 
 export const tripCreate = {
-  path: `/:userAlias(${USER_ALIAS_TYPE})/trips/:action`,
+  path: `/:userAlias(${USER_ALIAS_TYPE})/trips/:action(create)`,
   defaultRouteParams: { userAlias: 'my', action: 'create' },
   layoutProps: { breadcrumbs: [{ caption: 'Создание поездки' }] },
   Component: React.lazy(() =>
     import(/* webpackChunkName: 'travel-TripEditPage' */ './pages/TripEditPage'),
+  ),
+};
+
+export const trip = {
+  path: `/:userAlias(${USER_ALIAS_TYPE})/trips/:strTripId(\\d+)`,
+  defaultRouteParams: { userAlias: 'my' },
+  layoutProps: {
+    breadcrumbs: [{ caption: 'Поездка' }],
+  },
+  Component: React.lazy(() =>
+    import(/* webpackChunkName: 'travel-Places' */ './pages/TripPage'),
   ),
 };
 
