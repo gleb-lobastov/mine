@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { Blurhash } from 'react-blurhash';
 import min from 'lodash/min';
+import ZoomableImage from '../ZoomableImage';
 
 const BLURHASH_RESOLUTION = 32;
 const BLURHASH_PUNCH = 1;
@@ -36,6 +37,7 @@ export default function LazyImage({
   width,
   onLoad,
   children,
+  zoomable,
   ...forwardingProps
 }) {
   const [loadingState, setLoadingState] = useState(INITIAL_STATE);
@@ -78,6 +80,7 @@ export default function LazyImage({
 
   // consider all margins and paddings, reflect to { maxWidth: '100%' } img behavior
   const [realImgWidth, setRealImgWidth] = useState(imageWidth);
+
   useLayoutEffect(
     () => {
       if (imgRef.current) {
@@ -86,6 +89,8 @@ export default function LazyImage({
     },
     [imageWidth],
   );
+
+  const ImageComponent = zoomable ? ZoomableImage : 'img';
 
   return (
     <>
@@ -100,7 +105,7 @@ export default function LazyImage({
         />
       )}
       {loadingState !== LOADING_STATE.ERROR ? (
-        <img
+        <ImageComponent
           key="ok"
           data-tag={tag}
           ref={imgRef}
