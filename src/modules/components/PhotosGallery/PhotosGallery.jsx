@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import ReactDOM from 'react-dom';
 import { v4 as uuidV4 } from 'uuid';
 import cls from 'classnames';
 import ImageGallery from 'react-image-gallery';
 import { makeStyles } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 import LazyWithPlaceholder from 'modules/components/LazyWithPlaceholder';
 import { useLayoutContext } from 'modules/components/LayoutContext';
 import LazyImage from './components/LazyImage';
@@ -40,6 +40,7 @@ const useStyles = makeStyles({
 });
 
 export default function PhotosGallery({ className, photos }) {
+  const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
   const uniqKey = useMemo(() => uuidV4(), []);
   const classes = useStyles();
   const { vw, vh } = useLayoutContext();
@@ -97,6 +98,8 @@ export default function PhotosGallery({ className, photos }) {
     return null;
   }
 
+  const showThumbnails = !isMobile || fullscreen;
+
   const galleryRef = useRef();
   const imageGalleryNode = (
     <ImageGallery
@@ -104,8 +107,9 @@ export default function PhotosGallery({ className, photos }) {
       useBrowserFullscreen={FULLSCREEN_ENABLED}
       startIndex={START_INDEX}
       showIndex={true}
+      showThumbnails={showThumbnails}
       items={actualPhotos}
-      thumbnailPosition="right"
+      thumbnailPosition={showThumbnails ? 'right' : undefined}
       onScreenChange={nextFullscreen => setFullscreen(nextFullscreen)}
       onBeforeSlide={nextIndex => setCurrentIndex(nextIndex)}
       disableKeyDown={true}
