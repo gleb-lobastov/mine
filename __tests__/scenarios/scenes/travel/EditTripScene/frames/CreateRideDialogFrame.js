@@ -64,8 +64,8 @@ export default class CreateRideDialogFrame extends Scene {
     const rideDialogSelector = toSelector(tripEditPageLocators.RIDE_DIALOG);
     const submitButtonSelector = toSelector(dialogLocators.SUBMIT_BUTTON);
     await this.page.click(`${rideDialogSelector} ${submitButtonSelector}`);
-    await this.page.waitForResponse(
-      'http://localhost:8082/api/trips?user=test1812381&limit=null',
+    await this.page.waitForResponse(resp =>
+      resp.url().startsWith('http://localhost:8082/api/trips'),
     );
   }
 }
