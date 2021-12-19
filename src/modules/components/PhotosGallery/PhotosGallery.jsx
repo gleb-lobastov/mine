@@ -41,10 +41,13 @@ const useStyles = makeStyles({
 });
 
 export default function PhotosGallery({ className, photos }) {
-  const mobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
-  const touchscreen = window.matchMedia('(any-pointer: coarse)').matches;
   const uniqKey = useMemo(() => uuidV4(), []);
   const classes = useStyles();
+
+  const mobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const touchscreen = window.matchMedia('(any-pointer: coarse)').matches;
+  const [swipeLock, setSwipeLock] = useState(false);
+
   const { vw, vh } = useLayoutContext();
   const [fullscreen, setFullscreen] = useState(false);
   const [aspectRatios, setAspectRatios] = useState({});
@@ -101,6 +104,7 @@ export default function PhotosGallery({ className, photos }) {
   }
 
   const showThumbnails = !mobile || fullscreen;
+  const zoomable = !touchscreen || fullscreen;
 
   const galleryRef = useRef();
   const imageGalleryNode = (
@@ -108,6 +112,7 @@ export default function PhotosGallery({ className, photos }) {
       ref={galleryRef}
       useBrowserFullscreen={FULLSCREEN_ENABLED}
       startIndex={START_INDEX}
+      disableSwipe={swipeLock}
       showIndex={true}
       showThumbnails={showThumbnails}
       items={actualPhotos}
@@ -124,7 +129,9 @@ export default function PhotosGallery({ className, photos }) {
             item.aspectRatio?.ratio ||
             FALLBACK_ASPECT_RATIO
           }
-          component={currentIndex === item.index ? ZoomableImage : 'img'}
+          component={
+            zoomable && currentIndex === item.index ? ZoomableImage : 'img'
+          }
           description={item.description}
           src={fullscreen ? item.fullscreen : item.original}
           alt={item.originalAlt}
@@ -132,6 +139,7 @@ export default function PhotosGallery({ className, photos }) {
           title={item.originalTitle}
           blurhash={item.blurhash}
           require={Math.abs(currentIndex - item.index) <= PREFETCH_SLIDES}
+          onSwipeLock={setSwipeLock}
         >
           {item.description && (
             <span className="image-gallery-description">
