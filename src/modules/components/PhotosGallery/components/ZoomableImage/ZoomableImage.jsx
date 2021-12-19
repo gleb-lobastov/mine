@@ -79,9 +79,9 @@ export default ensuredForwardRef(function ZoomableImage(
     } = ref.current.getBoundingClientRect();
 
     const offsetX =
-      (nativeEvent.clientX ?? nativeEvent.touches[0]?.clientX) - containerTop;
+      (nativeEvent.clientX ?? nativeEvent.touches[0]?.clientX) - containerLeft;
     const offsetY =
-      (nativeEvent.clientY ?? nativeEvent.touches[0]?.clientY) - containerLeft;
+      (nativeEvent.clientY ?? nativeEvent.touches[0]?.clientY) - containerTop;
 
     if (!offsetX || !offsetY) {
       return;
@@ -100,6 +100,14 @@ export default ensuredForwardRef(function ZoomableImage(
     const y = extendableByY
       ? asPercent((offsetY / originalHeight) * 100)
       : CENTER;
+
+    console.log({
+      x,
+      y,
+      oX: offsetX,
+      oW: originalWidth,
+      nW: ref.current.naturalWidth,
+    });
 
     setBackgroundPosition(`${x}% ${y}%`);
   }, []);
