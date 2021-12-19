@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import cls from 'classnames';
 import { ensuredForwardRef } from 'react-use';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
@@ -62,6 +62,8 @@ export default ensuredForwardRef(function ZoomableImage(
     `${CENTER}% ${CENTER}%`,
   );
 
+  const containerRef = useRef();
+
   useEffect(
     () => {
       onSwipeLock(touchscreenZoom);
@@ -87,27 +89,23 @@ export default ensuredForwardRef(function ZoomableImage(
       return;
     }
 
-    const extendableByX = originalWidth < ref.current.naturalWidth;
-    const extendableByY = originalHeight < ref.current.naturalHeight;
+    const extendable =
+      originalWidth < ref.current.naturalWidth ||
+      originalHeight < ref.current.naturalHeight;
 
-    if (!extendableByX && !extendableByY) {
+    const notEnoughWidth =
+      containerRef.current.getBoundingClientRect().width <
+      ref.current.naturalWidth;
+
+    if (!extendable) {
       return;
     }
 
-    const x = extendableByX
-      ? asPercent((offsetX / originalWidth) * 100)
-      : CENTER;
-    const y = extendableByY
-      ? asPercent((offsetY / originalHeight) * 100)
-      : CENTER;
-
-    console.log({
-      x,
-      y,
-      oX: offsetX,
-      oW: originalWidth,
-      nW: ref.current.naturalWidth,
-    });
+    const x =
+      extendable && notEnoughWidth
+        ? asPercent((offsetX / originalWidth) * 100)
+        : CENTER;
+    const y = extendable ? asPercent((offsetY / originalHeight) * 100) : CENTER;
 
     setBackgroundPosition(`${x}% ${y}%`);
   }, []);
@@ -124,7 +122,7 @@ export default ensuredForwardRef(function ZoomableImage(
   const ZoomIcon = touchscreenZoom ? ZoomOutIcon : ZoomInIcon;
 
   return (
-    <div className={classes.container}>
+    <div className={classes.container} ref={containerRef}>
       <img ref={ref} alt={alt} src={src} {...forwardingProps} />
       <figure
         className={cls(classes.zoom, {
