@@ -27,6 +27,7 @@ const INITIAL_STATE = LAZY_LOADING_SUPPORT
 export default function LazyImage({
   aspectRatio,
   className,
+  component: ImageComponent,
   require,
   tag,
   src,
@@ -90,8 +91,6 @@ export default function LazyImage({
     [imageWidth],
   );
 
-  const ImageComponent = zoomable ? ZoomableImage : 'img';
-
   return (
     <>
       {!hasResult && (
@@ -139,6 +138,10 @@ export default function LazyImage({
     </>
   );
 }
+
+LazyImage.defaultProps = {
+  component: 'img',
+};
 
 function resolveActualSrc(src, loadingState) {
   switch (loadingState) {

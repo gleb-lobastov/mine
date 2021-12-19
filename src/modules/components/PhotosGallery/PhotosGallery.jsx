@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import LazyWithPlaceholder from 'modules/components/LazyWithPlaceholder';
 import { useLayoutContext } from 'modules/components/LayoutContext';
+import ZoomableImage from './components/ZoomableImage';
 import LazyImage from './components/LazyImage';
 import GallerySkeleton from './components/GallerySkeleton';
 import FullscreenFallback from './components/FullscreenFallback';
@@ -40,7 +41,8 @@ const useStyles = makeStyles({
 });
 
 export default function PhotosGallery({ className, photos }) {
-  const isMobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const mobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const touchscreen = window.matchMedia('(any-pointer: coarse)').matches;
   const uniqKey = useMemo(() => uuidV4(), []);
   const classes = useStyles();
   const { vw, vh } = useLayoutContext();
@@ -98,7 +100,7 @@ export default function PhotosGallery({ className, photos }) {
     return null;
   }
 
-  const showThumbnails = !isMobile || fullscreen;
+  const showThumbnails = !mobile || fullscreen;
 
   const galleryRef = useRef();
   const imageGalleryNode = (
@@ -122,6 +124,7 @@ export default function PhotosGallery({ className, photos }) {
             item.aspectRatio?.ratio ||
             FALLBACK_ASPECT_RATIO
           }
+          component={currentIndex === item.index ? ZoomableImage : 'img'}
           description={item.description}
           src={fullscreen ? item.fullscreen : item.original}
           alt={item.originalAlt}
