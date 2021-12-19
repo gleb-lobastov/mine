@@ -91,6 +91,6 @@ export default function VisitsArranger({
 }
 
 VisitsArranger.defaultProps = {
-  mapSectionLevel: 1,
-  photosSectionLevel: 1,
+  mapSectionLevel: 0,
+  photosSectionLevel: 0,
 };
