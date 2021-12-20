@@ -12,15 +12,6 @@ const useStyles = makeStyles({
   container: {
     position: 'relative',
   },
-  '@global': {
-    // need this workaround to keep zoom even when mouseover gallery controllers
-    '.image-gallery-slide-wrapper:hover .MINE-image-gallery-zoom-not-touchscreen': {
-      opacity: 1,
-    },
-  },
-  touchscreenZoom: {
-    opacity: 1,
-  },
   zoom: {
     backgroundPosition: `${CENTER}% ${CENTER}%`,
     backgroundRepeat: 'no-repeat',
@@ -49,6 +40,16 @@ const useStyles = makeStyles({
     cursor: 'pointer',
     outline: 'none',
     filter: 'drop-shadow(0 2px 2px #1a1a1a)',
+  },
+  '@global': {
+    // need this workaround to keep zoom even when mouseover gallery controllers
+    '.image-gallery-slide-wrapper:hover .MINE-image-gallery-zoom-not-touchscreen': {
+      opacity: 1,
+    },
+  },
+  touchscreenZoom: {
+    // should be more specific than $zoom class, so placed later
+    opacity: 1,
   },
 });
 
@@ -128,7 +129,7 @@ export default ensuredForwardRef(function ZoomableImage(
       <img ref={ref} alt={alt} src={src} {...forwardingProps} />
       <figure
         className={cls(classes.zoom, {
-          ['MINE-image-gallery-zoom-not-touchscreen']: !touchscreen,
+          'MINE-image-gallery-zoom-not-touchscreen': !touchscreen,
           [classes.touchscreenZoom]: touchscreenZoom,
         })}
         style={{ backgroundPosition, backgroundImage: `url(${src})` }}
