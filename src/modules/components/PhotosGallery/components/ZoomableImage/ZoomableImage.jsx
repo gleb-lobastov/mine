@@ -24,6 +24,8 @@ const useStyles = makeStyles({
     padding: 0,
     opacity: 0,
     transition: 'opacity 0.5s',
+    // https://stackoverflow.com/questions/2975217/how-to-fix-flicker-when-using-webkit-transforms-transitions
+    transform: 'translateZ(0)',
   },
   zoomButton: {
     position: 'absolute',
