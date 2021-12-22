@@ -103,7 +103,7 @@ export default function PhotosGallery({ className, photos }) {
     return null;
   }
 
-  const showThumbnails = !mobile || fullscreen;
+  const showThumbnails = !swipeLock && (!mobile || fullscreen);
   const zoomable = !touchscreen || fullscreen;
 
   const galleryRef = useRef();
