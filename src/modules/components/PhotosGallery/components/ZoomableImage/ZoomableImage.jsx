@@ -4,7 +4,6 @@ import { ensuredForwardRef } from 'react-use';
 import ZoomInIcon from '@material-ui/icons/ZoomIn';
 import ZoomOutIcon from '@material-ui/icons/ZoomOut';
 import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
 
 const CENTER = 50;
 
@@ -29,27 +28,16 @@ const useStyles = makeStyles({
   },
   zoomButton: {
     position: 'absolute',
-    bottom: '10px',
-    left: 'calc(50% - 20px)',
+    bottom: '0',
+    right: 'initial',
+    left: '50%',
+    transform: 'translate(-50%)',
     zIndex: 4,
   },
   zoomIcon: {
-    height: '28px',
-    width: '28px',
-    color: 'white',
-    transition: 'all 0.3s ease-out',
-    border: 0,
-    cursor: 'pointer',
-    outline: 'none',
-    filter: 'drop-shadow(0 2px 2px #1a1a1a)',
+    transform: 'scale(1.2)',
   },
-  '@global': {
-    // need this workaround to keep zoom even when mouseover gallery controllers
-    '.image-gallery-slide-wrapper:hover .MINE-image-gallery-zoom-not-touchscreen': {
-      opacity: 1,
-    },
-  },
-  touchscreenZoom: {
+  zoomed: {
     // should be more specific than $zoom class, so placed later
     opacity: 1,
   },
@@ -60,7 +48,8 @@ export default ensuredForwardRef(function ZoomableImage(
   ref,
 ) {
   const touchscreen = window.matchMedia('(any-pointer: coarse)').matches;
-  const [touchscreenZoom, setTouchscreenZoom] = useState(false);
+  const [zoomable, setZoomable] = useState(true);
+  const [zoomed, setZoomed] = useState(false);
 
   const classes = useStyles();
   const [backgroundPosition, setBackgroundPosition] = useState(
@@ -71,9 +60,13 @@ export default ensuredForwardRef(function ZoomableImage(
 
   useEffect(
     () => {
-      onSwipeLock(touchscreenZoom);
+      if (!touchscreen) {
+        return undefined;
+      }
+      onSwipeLock(zoomed);
+      return () => onSwipeLock(false);
     },
-    [touchscreenZoom],
+    [touchscreen, zoomed],
   );
 
   const handleAnyZoom = useCallback(event => {
@@ -103,6 +96,7 @@ export default ensuredForwardRef(function ZoomableImage(
       ref.current.naturalWidth;
 
     if (!extendable) {
+      setZoomable(false);
       return;
     }
 
@@ -115,39 +109,35 @@ export default ensuredForwardRef(function ZoomableImage(
     setBackgroundPosition(`${x}% ${y}%`);
   }, []);
 
-  const handleTouchscreenZoom = useCallback(
-    event => {
-      if (touchscreenZoom) {
-        handleAnyZoom(event);
-      }
-    },
-    [touchscreenZoom],
-  );
+  const ZoomIcon = zoomed ? ZoomOutIcon : ZoomInIcon;
 
-  const ZoomIcon = touchscreenZoom ? ZoomOutIcon : ZoomInIcon;
+  const imgNode = <img ref={ref} alt={alt} src={src} {...forwardingProps} />;
+  if (!zoomable) {
+    return imgNode;
+  }
 
   return (
     <div className={classes.container} ref={containerRef}>
-      <img ref={ref} alt={alt} src={src} {...forwardingProps} />
+      {imgNode}
       <figure
         className={cls(classes.zoom, {
-          'MINE-image-gallery-zoom-not-touchscreen': !touchscreen,
-          [classes.touchscreenZoom]: touchscreenZoom,
+          [classes.zoomed]: zoomed,
         })}
         style={{ backgroundPosition, backgroundImage: `url(${src})` }}
-        onMouseMove={touchscreen ? undefined : handleAnyZoom}
-        onTouchMove={touchscreenZoom ? handleTouchscreenZoom : undefined}
+        onMouseMove={zoomed && !touchscreen ? handleAnyZoom : undefined}
+        onTouchMove={zoomed && touchscreen ? handleAnyZoom : undefined}
       />
-      {touchscreen && (
-        <IconButton
-          className={classes.zoomButton}
-          onClick={() =>
-            setTouchscreenZoom(prevTouchscreenZoom => !prevTouchscreenZoom)
-          }
-        >
-          <ZoomIcon className={classes.zoomIcon} />
-        </IconButton>
-      )}
+      <button
+        type="button"
+        className={cls(
+          'image-gallery-icon',
+          'image-gallery-fullscreen-button',
+          classes.zoomButton,
+        )}
+        onClick={() => setZoomed(prevZoomed => !prevZoomed)}
+      >
+        <ZoomIcon className={cls('image-gallery-svg', classes.zoomIcon)} />
+      </button>
     </div>
   );
 });
