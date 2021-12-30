@@ -26,7 +26,8 @@ export default function renderTitle({
       {/* <span>{`В путешествии ${totalStay} дней`}</span> */}
       {tripCreateUrl ? (
         <IconButton
-          href={tripCreateUrl}
+          component={Link}
+          to={tripCreateUrl}
           data-locator={locators.ADD_TRIP_BUTTON}
         >
           <AddCircleIcon />
