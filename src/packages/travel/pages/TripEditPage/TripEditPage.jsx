@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import { Formik } from 'formik';
 import { usePaths } from 'modules/packages';
@@ -99,13 +98,5 @@ function TripEditPage({
     </>
   );
 }
-
-TripEditPage.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      userAlias: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default TripEditPage;

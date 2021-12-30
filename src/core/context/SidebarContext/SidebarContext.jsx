@@ -1,5 +1,4 @@
 import React, { useContext, useMemo, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 const SidebarContext = React.createContext({
   sidebarContentNode: null,
@@ -20,10 +19,6 @@ export default function SidebarContextProvider({ children }) {
     </SidebarContext.Provider>
   );
 }
-
-SidebarContextProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
 
 export function useSidebarContent({ closeSidebar }) {
   const { sidebarContentNode } = useContext(SidebarContext);

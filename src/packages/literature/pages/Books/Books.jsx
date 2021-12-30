@@ -8,8 +8,6 @@ const StyledSection = styled.article`
 `;
 
 class Books extends React.PureComponent {
-  static propTypes = {};
-
   static defaultProps = {};
 
   constructor(...args) {

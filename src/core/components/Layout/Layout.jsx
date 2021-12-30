@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import cls from 'classnames';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -130,14 +129,6 @@ export default function Layout({
     </>
   );
 }
-
-Layout.propTypes = {
-  children: PropTypes.node,
-
-  // eslint-disable-next-line react/forbid-prop-types
-  breadcrumbs: PropTypes.any, // just forwarding to Navigation component
-  actualPath: PropTypes.string.isRequired,
-};
 
 Layout.defaultProps = {
   children: null,

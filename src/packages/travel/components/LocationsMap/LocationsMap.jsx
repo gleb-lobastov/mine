@@ -1,11 +1,8 @@
 /* globals __GOOGLE_MAP_API_KEY__ */
 import React, { useMemo } from 'react';
-import PropTypes from 'prop-types';
 import cls from 'classnames';
 import GoogleMapReact from 'google-map-react';
 import { makeStyles } from '@material-ui/core/styles';
-import locationPropTypes from 'travel/models/locations/propTypes';
-import visitsPropTypes from 'travel/models/visits/propTypes';
 import adaptMarkerData from './utils/adaptMarkerData';
 import filterMarkerData from './utils/filterMarkerData';
 import makeScaleUtils from './utils/makeScaleUtils';
@@ -97,18 +94,6 @@ export default function LocationsMap({
     </div>
   );
 }
-
-LocationsMap.propTypes = {
-  className: PropTypes.string,
-  visitsDict: PropTypes.objectOf(PropTypes.shape(visitsPropTypes)).isRequired,
-  locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
-    .isRequired,
-  locationsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  locationsRating: PropTypes.objectOf(PropTypes.number).isRequired,
-  minHeight: PropTypes.number,
-  scaleBy: PropTypes.oneOf(Object.values(MARKERS_SCALES)).isRequired,
-  ratingLevel: PropTypes.oneOf(Object.values(MARKERS_RATING_LEVELS)).isRequired,
-};
 
 LocationsMap.defaultProps = {
   className: undefined,

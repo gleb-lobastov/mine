@@ -2,7 +2,6 @@
 // import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import 'react-image-gallery/styles/css/image-gallery.css';
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -12,6 +11,7 @@ import {
   responsiveFontSizes,
 } from '@material-ui/core/styles';
 import DateFnsUtils from '@date-io/date-fns';
+import LayoutContextProvider from 'modules/components/LayoutContext';
 import { Packages } from 'modules/packages';
 import Main from 'packages/main';
 import Code from 'packages/code';
@@ -24,8 +24,6 @@ import SidebarContextProvider from '../../context/SidebarContext';
 import { PreviewContextProvider } from '../../context/PreviewContext';
 import Layout from '../Layout';
 import ErrorBoundary from '../ErrorBoundary';
-import { configPropTypes } from './propTypes';
-import LayoutContextProvider from 'modules/components/LayoutContext';
 
 const theme = responsiveFontSizes(
   createMuiTheme({
@@ -104,13 +102,6 @@ const Root = ({
       </Provider>
     </ErrorBoundary>
   );
-};
-
-Root.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  store: PropTypes.object.isRequired,
-  config: PropTypes.shape(configPropTypes).isRequired,
-  appId: PropTypes.number.isRequired,
 };
 
 export default Root;

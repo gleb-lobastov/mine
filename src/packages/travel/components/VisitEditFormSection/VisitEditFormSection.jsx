@@ -126,7 +126,6 @@ export default function VisitEditFormSection({
   );
 }
 
-VisitEditFormSection.propTypes = {};
 VisitEditFormSection.defaultProps = {};
 
 function transformSuggestionToOption(suggestion) {

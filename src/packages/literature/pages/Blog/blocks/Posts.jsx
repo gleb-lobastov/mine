@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Post from './Post';
 
 const sortByDateDesc = ({ date: dateA }, { date: dateB }) => {
@@ -13,16 +12,6 @@ const sortByDateDesc = ({ date: dateA }, { date: dateB }) => {
 };
 
 class Posts extends React.PureComponent {
-  static propTypes = {
-    source: PropTypes.arrayOf(
-      PropTypes.shape({
-        date: PropTypes.string.isRequired,
-        content: PropTypes.string.isRequired,
-        id: PropTypes.number.isRequired,
-      }),
-    ).isRequired,
-  };
-
   render() {
     const { source } = this.props;
 

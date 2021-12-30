@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import * as locators from '../locators';
@@ -19,7 +18,5 @@ export default function CreateButton({ onClick, ...forwardingProps }) {
     </IconButton>
   );
 }
-
-CreateButton.propTypes = {};
 
 CreateButton.defaultProps = {};

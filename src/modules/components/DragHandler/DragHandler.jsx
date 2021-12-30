@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import IconDragHandle from '@material-ui/icons/DragHandle';
@@ -19,9 +18,5 @@ export default function DragHandler({ className }) {
     />
   );
 }
-
-DragHandler.propTypes = {
-  className: PropTypes.string,
-};
 
 DragHandler.defaultProps = { className: undefined };

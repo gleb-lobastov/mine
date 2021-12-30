@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
 
@@ -74,47 +73,29 @@ const StyledBlockBody = styled.blockquote`
   padding: 16px 8px 8px 28px;
 `;
 
-const nodeOrStringPropType = PropTypes.oneOfType([
-  PropTypes.node,
-  PropTypes.string,
-]);
-
 const Block = ({ children, title }) => (
   <Paragraph>
     <StyledBlockTitle>{title}</StyledBlockTitle>
     <StyledBlockBody>{children}</StyledBlockBody>
   </Paragraph>
 );
-Block.propTypes = {
-  children: nodeOrStringPropType.isRequired,
-  title: nodeOrStringPropType.isRequired,
-};
 
 export const Quote = ({ children }) => (
   <Block title="Цитата">
     <em>{children}</em>
   </Block>
 );
-Quote.propTypes = {
-  children: nodeOrStringPropType.isRequired,
-};
 
 export const Guidance = ({ children }) => (
   <Block title="Действие">{children}</Block>
 );
-Guidance.propTypes = {
-  children: nodeOrStringPropType.isRequired,
-};
 
 export const Example = ({ children, description }) => (
   <Block title={description ? `Пример: ${description}` : 'Пример'}>
     {children}
   </Block>
 );
-Example.propTypes = {
-  description: PropTypes.string,
-  children: nodeOrStringPropType.isRequired,
-};
+
 Example.defaultProps = {
   description: '',
 };
@@ -122,9 +103,6 @@ Example.defaultProps = {
 export const Footnote = ({ children }) => (
   <Block title="Примечание">{children}</Block>
 );
-Footnote.propTypes = {
-  children: nodeOrStringPropType.isRequired,
-};
 
 export const ChaptersList = styled.ol`
   margin: 36px 0 0;

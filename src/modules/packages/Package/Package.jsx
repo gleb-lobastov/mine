@@ -1,8 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router';
 import isString from 'lodash/isString';
-import { routeShape } from '../propTypes';
 import ComponentWithHook from './ComponentWithHook';
 import usePackageLifecycleEffect from './usePackageLifecycleEffect';
 
@@ -46,14 +44,6 @@ function Package({ isActive, mountPath, packageKey, routes, setLayoutProps }) {
     </Switch>
   );
 }
-
-Package.propTypes = {
-  isActive: PropTypes.bool,
-  mountPath: PropTypes.string.isRequired,
-  packageKey: PropTypes.string.isRequired,
-  setLayoutProps: PropTypes.func.isRequired,
-  routes: PropTypes.objectOf(PropTypes.shape(routeShape)),
-};
 
 Package.defaultProps = {
   isActive: false,

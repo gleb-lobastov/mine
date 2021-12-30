@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Hidden from '@material-ui/core/Hidden';
 import useStyles from './useStyles';
 
@@ -18,10 +17,6 @@ export default function DesktopSidebarContainer({ children }) {
     </nav>
   );
 }
-
-DesktopSidebarContainer.propTypes = {
-  children: PropTypes.node,
-};
 
 DesktopSidebarContainer.defaultProps = {
   children: null,

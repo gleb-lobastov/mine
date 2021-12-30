@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
@@ -34,12 +33,6 @@ export default function MobileSidebarContainer({
     </nav>
   );
 }
-
-MobileSidebarContainer.propTypes = {
-  children: PropTypes.node,
-  isSidebarOpen: PropTypes.bool.isRequired,
-  onCloseSidebar: PropTypes.func.isRequired,
-};
 
 MobileSidebarContainer.defaultProps = {
   children: null,

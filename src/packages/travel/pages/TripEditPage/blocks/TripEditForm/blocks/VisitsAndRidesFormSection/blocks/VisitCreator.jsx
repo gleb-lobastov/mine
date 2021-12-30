@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import DragHandler from 'modules/components/DragHandler';
@@ -45,9 +44,5 @@ export default function VisitCreator({ showDialog }) {
     </div>
   );
 }
-
-VisitCreator.propTypes = {
-  showDialog: PropTypes.func.isRequired,
-};
 
 VisitCreator.defaultProps = {};

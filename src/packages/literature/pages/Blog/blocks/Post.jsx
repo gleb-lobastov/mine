@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ReactMarkdown from 'react-markdown';
 import format from 'date-fns/format';
 import ru from 'date-fns/locale/ru';
@@ -15,15 +14,6 @@ const styles = {
 };
 
 class Post extends React.PureComponent {
-  static propTypes = {
-    classes: PropTypes.objectOf(PropTypes.string).isRequired,
-    source: PropTypes.shape({
-      date: PropTypes.string.isRequired,
-      content: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-    }).isRequired,
-  };
-
   render() {
     const {
       classes,

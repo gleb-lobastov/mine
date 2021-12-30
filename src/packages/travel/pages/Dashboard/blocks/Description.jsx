@@ -1,10 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Markdown from 'modules/components/Markdown';
 import { usePaths } from 'modules/packages';
 import { plural } from 'modules/utilities/l10n';
 import { LOCATION_CLASSES_ID } from 'travel/models/locations/consts';
-import locationPropTypes from 'travel/models/locations/propTypes';
 
 export default function Description({
   countriesIds,
@@ -41,13 +39,6 @@ export default function Description({
     </Markdown>
   );
 }
-
-Description.propTypes = {
-  countriesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  locationsDict: PropTypes.objectOf(PropTypes.shape(locationPropTypes))
-    .isRequired,
-  locationsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-};
 
 function calcCitiesCount(locationsIds, locationsDict = {}) {
   return locationsIds.filter(

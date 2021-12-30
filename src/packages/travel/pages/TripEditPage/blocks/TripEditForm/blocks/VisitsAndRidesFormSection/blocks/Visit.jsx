@@ -1,9 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Actions from 'travel/components/Actions';
 import VisitIcon from 'travel/components/VisitIcon';
-import visitPropTypes from 'travel/models/visits/propTypes';
 import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogs';
 import * as locators from '../../../../../locators';
 
@@ -45,10 +43,6 @@ const Visit = ({ visit, showDialog }) => {
       />
     </div>
   );
-};
-
-Visit.propTypes = {
-  visit: PropTypes.shape(visitPropTypes),
 };
 
 Visit.defaultProps = {

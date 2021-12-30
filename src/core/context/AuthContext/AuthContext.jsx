@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
 import {
   subscribe,
   unsubscribe,
@@ -43,8 +42,6 @@ class AuthContextProvider extends React.Component {
   }
 }
 
-AuthContextProvider.propTypes = { children: PropTypes.node.isRequired };
-
 export default {
   Provider: AuthContextProvider,
   Consumer: AuthContext.Consumer,
@@ -57,8 +54,3 @@ export const withAuth = Component => props => (
 );
 
 export const useAuthContext = () => useContext(AuthContext);
-
-export const authContextPropTypes = {
-  isAuthenticated: PropTypes.bool,
-  userAlias: PropTypes.string,
-};

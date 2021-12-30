@@ -110,6 +110,4 @@ export default function VisitAndRidesFormSection({
   );
 }
 
-VisitAndRidesFormSection.propTypes = {};
-
 VisitAndRidesFormSection.defaultProps = {};

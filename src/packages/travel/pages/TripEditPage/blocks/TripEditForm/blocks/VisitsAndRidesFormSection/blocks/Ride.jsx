@@ -1,9 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { makeStyles } from '@material-ui/core/styles';
 import { rideDateTimePeriodToString } from 'modules/utilities/dateTime/dateTimePeriodToString';
-import ridePropTypes from 'travel/models/rides/propTypes';
 import RideIcon from 'travel/components/RideIcon';
 import Actions from 'travel/components/Actions';
 import { DIALOG_NAMES } from '../../../../../useTripEditPageDialogs';
@@ -57,11 +55,6 @@ const Ride = ({ className, ride, showDialog }) => {
       />
     </div>
   );
-};
-
-Ride.propTypes = {
-  className: PropTypes.string,
-  ride: PropTypes.shape(ridePropTypes),
 };
 
 Ride.defaultProps = {

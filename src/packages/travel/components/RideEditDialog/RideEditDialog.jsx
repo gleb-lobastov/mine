@@ -1,9 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import DialogWithForm from 'modules/components/muiExtended/DialogWithForm';
-import locationsPropTypes from 'travel/models/locations/propTypes';
-import ridePropTypes from 'travel/models/rides/propTypes';
-import visitPropTypes from 'travel/models/visits/propTypes';
 import RideEditFormSection from '../RideEditFormSection';
 
 const RideEditDialog = ({ children, className }) => {
@@ -33,14 +29,6 @@ const RideEditDialog = ({ children, className }) => {
   );
 };
 
-RideEditDialog.propTypes = {
-  availableVisits: PropTypes.arrayOf(PropTypes.shape(visitPropTypes)),
-  initialState: PropTypes.shape(ridePropTypes).isRequired,
-  children: PropTypes.node.isRequired,
-  className: PropTypes.string,
-  onSubmit: PropTypes.func.isRequired,
-  originLocation: PropTypes.shape(locationsPropTypes).isRequired,
-};
 RideEditDialog.defaultProps = {
   className: undefined,
   availableVisits: [],

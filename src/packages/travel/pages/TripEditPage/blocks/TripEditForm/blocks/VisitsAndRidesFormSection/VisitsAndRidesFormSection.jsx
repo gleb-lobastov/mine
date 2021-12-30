@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import cls from 'classnames';
 import { FieldArray } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
@@ -153,8 +152,6 @@ export default function VisitsAndRidesFormSection({
     />
   );
 }
-
-VisitsAndRidesFormSection.propTypes = {};
 
 VisitsAndRidesFormSection.defaultProps = {};
 

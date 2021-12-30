@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { withRouter, Route, Redirect, Switch } from 'react-router-dom';
 import { usePaths } from 'modules/packages';
 import { useAuthContext } from 'core/context/AuthContext';
@@ -41,13 +40,6 @@ const WelcomeScreen = ({
       <Redirect to={tripsPath.toUrl({ userAlias: authenticatedUserAlias })} />
     </Switch>
   );
-};
-
-WelcomeScreen.propTypes = {
-  children: PropTypes.node,
-  match: PropTypes.shape({
-    params: PropTypes.shape({ userAlias: PropTypes.string }),
-  }).isRequired,
 };
 
 WelcomeScreen.defaultProps = {

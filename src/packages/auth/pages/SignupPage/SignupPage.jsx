@@ -40,6 +40,5 @@ export default function SignupPage() {
     </Formik>
   );
 }
-SignupPage.propTypes = {};
 
 SignupPage.defaultProps = {};

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -70,11 +69,3 @@ export default function MarkersScaleSelect({
     </List>
   );
 }
-
-MarkersScaleSelect.propTypes = {
-  classes: PropTypes.shape({ formControl: PropTypes.string.isRequired })
-    .isRequired,
-  scaleBy: PropTypes.oneOf(Object.values(MARKERS_SCALES)).isRequired,
-  onClose: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-};

@@ -243,7 +243,6 @@ const RideEditFormSection = ({
   );
 };
 
-RideEditFormSection.propTypes = {};
 RideEditFormSection.defaultProps = {};
 
 export default RideEditFormSection;

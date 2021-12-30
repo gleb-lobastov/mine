@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Form } from 'formik';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
@@ -65,10 +64,6 @@ const TripEditForm = ({ isCreation, showDialog, provision, formikProps }) => {
       </Form>
     </>
   );
-};
-
-TripEditForm.propTypes = {
-  isCreation: PropTypes.bool.isRequired,
 };
 
 TripEditForm.defaultProps = {};

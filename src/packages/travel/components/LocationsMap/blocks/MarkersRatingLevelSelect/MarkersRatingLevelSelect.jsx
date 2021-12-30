@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -57,11 +56,3 @@ export default function MarkersRatingLevelSelect({
     </List>
   );
 }
-
-MarkersRatingLevelSelect.propTypes = {
-  classes: PropTypes.shape({ formControl: PropTypes.string.isRequired })
-    .isRequired,
-  ratingLevel: PropTypes.oneOf(Object.values(MARKERS_RATING_LEVELS)).isRequired,
-  onClose: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-};

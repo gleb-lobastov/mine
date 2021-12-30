@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -79,12 +78,5 @@ export default function LocationRating({
     </FormControl>
   );
 }
-
-LocationRating.propTypes = {
-  locationRating: PropTypes.number,
-  locationId: PropTypes.number.isRequired,
-  isEditable: PropTypes.bool.isRequired,
-  onSubmitLocationRating: PropTypes.func.isRequired,
-};
 
 LocationRating.defaultProps = { locationRating: null };

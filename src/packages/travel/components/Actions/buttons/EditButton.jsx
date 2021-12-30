@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import * as locators from '../locators';
@@ -19,7 +18,5 @@ export default function EditButton({ onClick, ...forwardingProps }) {
     </IconButton>
   );
 }
-
-EditButton.propTypes = {};
 
 EditButton.defaultProps = {};

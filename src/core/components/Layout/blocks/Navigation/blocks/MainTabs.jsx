@@ -1,16 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 
 class MainTabs extends React.PureComponent {
-  static propTypes = {
-    onChangeUrl: PropTypes.func.isRequired,
-    tabIndex: PropTypes.number.isRequired,
-    classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  };
-
   calcTabIndexShift() {
     const { sidebarToggleButton } = this.props;
     return sidebarToggleButton ? 1 : 0;

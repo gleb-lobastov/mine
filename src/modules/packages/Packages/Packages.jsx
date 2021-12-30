@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Route } from 'react-router';
 import isString from 'lodash/isString';
 import PlainLoader from 'modules/components/loaders/PlainLoader';
@@ -52,12 +51,6 @@ export default function Packages({ children, Loader, Layout }) {
     </PackagesContext.Provider>
   );
 }
-
-Packages.propTypes = {
-  children: PropTypes.node.isRequired,
-  Layout: PropTypes.func,
-  Loader: PropTypes.func,
-};
 
 Packages.defaultProps = {
   Layout: null,

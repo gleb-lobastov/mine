@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 // https://www.toptal.com/developers/css/sprite-generator/
 const SPRITE_URL =
@@ -36,11 +35,6 @@ export default function SkillLogo({ spriteRef: [col, row] = [], size }) {
     </div>
   );
 }
-
-SkillLogo.propTypes = {
-  spriteRef: PropTypes.arrayOf(PropTypes.number).isRequired,
-  size: PropTypes.number,
-};
 
 SkillLogo.defaultProps = {
   size: DEFAULT_LOGO_SIZE,

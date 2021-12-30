@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
@@ -53,22 +52,6 @@ const OptionsSelect = ({
     </Select>
   </div>
 );
-
-const valuePropTypes = PropTypes.oneOfType([
-  PropTypes.number,
-  PropTypes.string,
-]);
-OptionsSelect.propTypes = {
-  name: PropTypes.string,
-  caption: PropTypes.string.isRequired,
-  classes: PropTypes.objectOf(PropTypes.string).isRequired,
-  hasNullOption: PropTypes.bool,
-  inputId: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-  optionRender: PropTypes.func,
-  options: PropTypes.arrayOf(valuePropTypes),
-  value: valuePropTypes,
-};
 
 OptionsSelect.defaultProps = {
   name: undefined,
