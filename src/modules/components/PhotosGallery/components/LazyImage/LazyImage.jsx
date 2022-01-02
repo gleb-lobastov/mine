@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import { Blurhash } from 'react-blurhash';
 import min from 'lodash/min';
-import ZoomableImage from '../ZoomableImage';
+import BlurhashErrorBoundary from './BlurhashErrorBoundary';
 
 const BLURHASH_RESOLUTION = 32;
 const BLURHASH_PUNCH = 1;
@@ -94,14 +94,16 @@ export default function LazyImage({
   return (
     <>
       {!hasResult && (
-        <Blurhash
-          hash={blurhash}
-          width={realImgWidth}
-          height={realImgWidth / aspectRatio ?? imageHeight}
-          resolutionX={BLURHASH_RESOLUTION}
-          resolutionY={BLURHASH_RESOLUTION}
-          punch={BLURHASH_PUNCH}
-        />
+        <BlurhashErrorBoundary>
+          <Blurhash
+            hash={blurhash}
+            width={realImgWidth}
+            height={realImgWidth / aspectRatio ?? imageHeight}
+            resolutionX={BLURHASH_RESOLUTION}
+            resolutionY={BLURHASH_RESOLUTION}
+            punch={BLURHASH_PUNCH}
+          />
+        </BlurhashErrorBoundary>
       )}
       {loadingState !== LOADING_STATE.ERROR ? (
         <ImageComponent
