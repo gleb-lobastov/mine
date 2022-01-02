@@ -44,7 +44,7 @@ export default function PhotosGallery({ className, photos }) {
   const uniqKey = useMemo(() => uuidV4(), []);
   const classes = useStyles();
 
-  const mobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const mobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
   const touchscreen = window.matchMedia('(any-pointer: coarse)').matches;
   const [swipeLock, setSwipeLock] = useState(false);
 
@@ -58,23 +58,20 @@ export default function PhotosGallery({ className, photos }) {
     [fullscreen, vh, vw],
   );
 
-  useEffect(
-    () => {
-      const thumbnailElement = window.document
-        .querySelector(
-          `[data-tag="photos-gallery-thumb-${uniqKey}-${currentIndex}"]`,
-        )
-        ?.closest('.image-gallery-thumbnail');
+  useEffect(() => {
+    const thumbnailElement = window.document
+      .querySelector(
+        `[data-tag="photos-gallery-thumb-${uniqKey}-${currentIndex}"]`,
+      )
+      ?.closest('.image-gallery-thumbnail');
 
-      if (thumbnailElement) {
-        thumbnailElement.scrollIntoView({
-          block: 'nearest',
-          behavior: 'smooth',
-        });
-      }
-    },
-    [currentIndex],
-  );
+    if (thumbnailElement) {
+      thumbnailElement.scrollIntoView({
+        block: 'nearest',
+        behavior: 'smooth',
+      });
+    }
+  }, [currentIndex]);
 
   const actualPhotos = photos.map(
     (
@@ -117,38 +114,39 @@ export default function PhotosGallery({ className, photos }) {
       showThumbnails={showThumbnails}
       items={actualPhotos}
       thumbnailPosition={showThumbnails ? 'right' : undefined}
-      onScreenChange={nextFullscreen => setFullscreen(nextFullscreen)}
-      onBeforeSlide={nextIndex => setCurrentIndex(nextIndex)}
+      onScreenChange={(nextFullscreen) => setFullscreen(nextFullscreen)}
+      onBeforeSlide={(nextIndex) => setCurrentIndex(nextIndex)}
       disableKeyDown={true}
       disableThumbnailScroll={true}
-      renderItem={item => (
-        <LazyImage
-          className="image-gallery-image"
-          aspectRatio={
-            aspectRatios[item.index] ||
-            item.aspectRatio?.ratio ||
-            FALLBACK_ASPECT_RATIO
-          }
-          component={
-            zoomable && currentIndex === item.index ? ZoomableImage : 'img'
-          }
-          description={item.description}
-          src={fullscreen ? item.fullscreen : item.original}
-          alt={item.originalAlt}
-          constraints={constraints}
-          title={item.originalTitle}
-          blurhash={item.blurhash}
-          require={Math.abs(currentIndex - item.index) <= PREFETCH_SLIDES}
-          onSwipeLock={setSwipeLock}
-        >
-          {item.description && (
-            <span className="image-gallery-description">
-              {item.description}
-            </span>
-          )}
-        </LazyImage>
-      )}
-      renderThumbInner={item => (
+      renderItem={(item) => {
+        const zoomableItem = zoomable && currentIndex === item.index;
+        return (
+          <LazyImage
+            className="image-gallery-image"
+            aspectRatio={
+              aspectRatios[item.index] ||
+              item.aspectRatio?.ratio ||
+              FALLBACK_ASPECT_RATIO
+            }
+            component={zoomableItem ? ZoomableImage : 'img'}
+            description={item.description}
+            src={fullscreen ? item.fullscreen : item.original}
+            alt={item.originalAlt}
+            constraints={constraints}
+            title={item.originalTitle}
+            blurhash={item.blurhash}
+            require={Math.abs(currentIndex - item.index) <= PREFETCH_SLIDES}
+            onSwipeLock={zoomableItem ? setSwipeLock : undefined}
+          >
+            {item.description && (
+              <span className="image-gallery-description">
+                {item.description}
+              </span>
+            )}
+          </LazyImage>
+        );
+      }}
+      renderThumbInner={(item) => (
         <span className="image-gallery-thumbnail-inner">
           <LazyImage
             tag={`photos-gallery-thumb-${uniqKey}-${item.index}`}
@@ -165,7 +163,7 @@ export default function PhotosGallery({ className, photos }) {
             blurhash={item.blurhash}
             require={true}
             onLoad={({ aspectRatio }) =>
-              setAspectRatios(prevRatios => ({
+              setAspectRatios((prevRatios) => ({
                 ...prevRatios,
                 [item.index]: aspectRatio,
               }))
