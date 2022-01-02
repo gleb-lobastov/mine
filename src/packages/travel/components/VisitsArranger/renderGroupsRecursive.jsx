@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef } from 'react';
 import cls from 'classnames';
 import clamp from 'lodash/clamp';
 import {
@@ -8,6 +8,7 @@ import {
 } from './arrangement/groupping';
 import { calcStats } from './statistics';
 import { sortVisitsBy } from './arrangement/sorting';
+import { useCollapsible } from './arrangement/collapsing';
 import VisitGroup from './components/VisitGroup';
 import Virtualizer from './components/Virtualizer';
 import Expandable from './components/Expandable';
@@ -17,7 +18,7 @@ export default function renderRecursive({
   children,
   provision,
   urls,
-  config,
+  config: { collapsible: allowCollapsible = true, ...config },
   visitsList,
   groupsOrder,
   sortingOrder,
@@ -29,9 +30,10 @@ export default function renderRecursive({
   virtualize,
 }) {
   const virtualizerRef = useRef();
-  const [collapsible, setCollapsible] = useState(true);
-  const disableCollapsible = useCallback(() => setCollapsible(false), []);
-  useEffect(() => virtualizerRef.current?.measure(), [collapsible]);
+  const { collapsible, disableCollapsible } = useCollapsible({
+    allowCollapsible,
+    onToggleCollapsible: () => virtualizerRef.current?.measure(),
+  });
 
   // if virtualize is true, then need to virtualize, so not yet virtualized
   let virtualized = !virtualize;
