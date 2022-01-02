@@ -66,11 +66,12 @@ export default function VisitsPage({
             : resolveSortingOrder(sortBy)
         }
         filteringOption={resolveFiltering(filterBy)}
-        adaptHeadersSize={true}
+        adaptTopHeaderSize={true}
         isObscure={isObscure}
         urls={urls}
         virtualize={true}
         mapSectionLevel={groupBy === GROUP_VISITS_BY.LOCATIONS ? -1 : 1}
+        photosSectionLevel={0}
         config={{
           collapsible: groupBy !== GROUP_VISITS_BY.LOCATIONS,
         }}

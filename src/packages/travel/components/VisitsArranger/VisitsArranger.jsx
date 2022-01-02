@@ -72,8 +72,8 @@ export default function VisitsArranger({
   provision,
   urls,
   isObscure,
-  config: { collapsible: allowCollapsible = true, ...config },
-  adaptHeadersSize,
+  config: { collapsible: allowCollapsible = false, ...config },
+  adaptTopHeaderSize,
   mapSectionLevel,
   photosSectionLevel,
   children,
@@ -87,13 +87,13 @@ export default function VisitsArranger({
   );
 
   const virtualizerRef = useRef();
+  // if virtualize is true, then need to virtualize, so not yet virtualized
+  let virtualized = !virtualize;
+
   const { collapsible, disableCollapsible } = useCollapsible({
     allowCollapsible,
     onToggleCollapsible: () => virtualizerRef.current?.measure(),
   });
-
-  // if virtualize is true, then need to virtualize, so not yet virtualized
-  let virtualized = !virtualize;
 
   return renderRecursive(
     { visitsList: actualVisitsList, parent: null, field: null },
@@ -108,14 +108,15 @@ export default function VisitsArranger({
     const { component: VisitsGroupComponent } = PLAIN_GROUPS_CONFIG[plainGroup];
     const { visitsList: visitsListInternal } = parentVisitsGroup;
 
-    const nestingLevel = lookupLevel(parentVisitsGroup);
+    const nestingLevel = lookupNestingLevel(parentVisitsGroup);
     const expectedMaxLevel = nestingLevel + groupsOrderInternal.length;
-    const actualAdaptHeadersSize = Array.isArray(adaptHeadersSize)
-      ? adaptHeadersSize[nestingLevel]
-      : adaptHeadersSize;
-    const sectionLevel = actualAdaptHeadersSize
-      ? resolveSectionLevel(nestingLevel, expectedMaxLevel)
-      : nestingLevel;
+    const sectionLevel = lookupSectionLevel(
+      nestingLevel,
+      adaptTopHeaderSize,
+      expectedMaxLevel,
+    );
+    const actualPhotosSectionLevel = photosSectionLevel ?? expectedMaxLevel - 1;
+    const actualMapSectionLevel = mapSectionLevel ?? expectedMaxLevel - 2;
 
     const visitsGroups = groupVisitsBy(visitsListInternal, plainGroup).map(
       visitsGroup => {
@@ -173,16 +174,16 @@ export default function VisitsArranger({
                   provision={provision}
                   urls={urls}
                   forwardingProps={forwardingProps}
-                  showMap={nestingLevel === mapSectionLevel}
-                  showPhotos={nestingLevel === photosSectionLevel}
+                  showMap={nestingLevel === actualMapSectionLevel}
+                  showPhotos={nestingLevel === actualPhotosSectionLevel}
                   onHeightChange={virtualizerRef.current?.measure}
-                >
-                  {children?.({
+                  customNode={children?.({
                     level: nestingLevel,
                     className: classes[`level${nestingLevel + 1}`],
                     index,
                     visitsGroup,
                   })}
+                >
                   {renderRecursive(visitsGroup, restGroupsOrder)}
                 </VisitGroup>
               )}
@@ -195,11 +196,11 @@ export default function VisitsArranger({
 }
 
 VisitsArranger.defaultProps = {
-  mapSectionLevel: 0,
-  photosSectionLevel: 0,
+  mapSectionLevel: undefined,
+  photosSectionLevel: undefined,
 };
 
-function lookupLevel(visitsGroup) {
+function lookupNestingLevel(visitsGroup) {
   let currentVisitsGroup = visitsGroup;
   let level = 0;
   while (currentVisitsGroup) {
@@ -210,8 +211,14 @@ function lookupLevel(visitsGroup) {
 }
 
 const MAX_LEVEL = 3;
-function resolveSectionLevel(nestingLevel, expectedMaxLevel) {
-  return clamp(MAX_LEVEL - expectedMaxLevel + nestingLevel, 0, MAX_LEVEL - 1);
+function lookupSectionLevel(
+  nestingLevel,
+  adaptTopHeaderSize,
+  expectedMaxLevel,
+) {
+  return nestingLevel > 0 || adaptTopHeaderSize
+    ? clamp(MAX_LEVEL - expectedMaxLevel + nestingLevel, 0, MAX_LEVEL - 1)
+    : nestingLevel;
 }
 
 function toFieldSignature(field) {

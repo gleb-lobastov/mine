@@ -16,6 +16,7 @@ function VisitGroup({
   visitsGroup,
   VisitsGroupComponent,
   onHeightChange,
+  customNode,
 }) {
   return (
     <Fragment key={visitsGroup.field.value}>
@@ -34,7 +35,7 @@ function VisitGroup({
           config={config}
         />
       </VisitsGroupComponent>
-      {children}
+      {customNode}
       {showMap && (
         <VisitsLocationsMap
           className={classes.nextLevel}
@@ -43,6 +44,7 @@ function VisitGroup({
           onToggle={onHeightChange}
         />
       )}
+      {children}
       {showPhotos && (
         <VisitsPhotosGallery
           className={classes.nextLevel}

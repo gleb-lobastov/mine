@@ -63,7 +63,6 @@ export default function VisitPage({
         visitsList={[visit]}
         provision={tripsStatsProvision}
         groupsOrder={[PLAIN_GROUPS.JUST_VISITS]}
-        adaptHeadersSize={true}
         photosSectionLevel={0}
         mapSectionLevel={0}
         sortingOrder={[PLAIN_SORTING.LAST_VISIT]}

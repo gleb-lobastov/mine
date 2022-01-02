@@ -57,7 +57,6 @@ export default function TripPage({
         alsoGroupByCountries && PLAIN_GROUPS.COUNTRIES,
         PLAIN_GROUPS.JUST_VISITS,
       ].filter(Boolean)}
-      adaptHeadersSize={[false, true, true]}
       photosSectionLevel={-1}
       mapSectionLevel={0}
       sortingOrder={[PLAIN_SORTING.LAST_VISIT]}
