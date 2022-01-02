@@ -119,6 +119,8 @@ export default ensuredForwardRef(function ZoomableImage(
   return (
     <div className={classes.container} ref={containerRef}>
       {imgNode}
+      {/* click handler in only for convenience */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
       <figure
         className={cls(classes.zoom, {
           [classes.zoomed]: zoomed,
@@ -126,6 +128,7 @@ export default ensuredForwardRef(function ZoomableImage(
         style={{ backgroundPosition, backgroundImage: `url(${src})` }}
         onMouseMove={zoomed && !touchscreen ? handleAnyZoom : undefined}
         onTouchMove={zoomed && touchscreen ? handleAnyZoom : undefined}
+        onClick={() => setZoomed(false)}
       />
       <button
         type="button"
