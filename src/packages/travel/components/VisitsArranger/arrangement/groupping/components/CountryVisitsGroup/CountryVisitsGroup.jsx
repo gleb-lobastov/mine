@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import ConnectedLink from 'modules/components/muiExtended/ConnectedLink';
 
 export default function CountryVisitsGroup({

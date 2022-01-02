@@ -5,6 +5,7 @@ import { useQueryFilter } from 'core/context/QueryFilterContext';
 import { useAuthContext } from 'core/context/AuthContext';
 import useVisitsGroupingSidebar from './useVisitsGroupingSidebar';
 import useVisitsUrls from 'travel/utils/useVisitsUrls';
+import { GROUP_VISITS_BY } from 'travel/pages/VisitsPage/sidebarConsts';
 import VisitsArranger, {
   calcStats,
   PLAIN_SORTING,
@@ -69,6 +70,10 @@ export default function VisitsPage({
         isObscure={isObscure}
         urls={urls}
         virtualize={true}
+        mapSectionLevel={groupBy === GROUP_VISITS_BY.LOCATIONS ? -1 : 1}
+        config={{
+          collapsible: groupBy !== GROUP_VISITS_BY.LOCATIONS,
+        }}
       />
     </>
   );
