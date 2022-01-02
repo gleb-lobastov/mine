@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import cls from 'classnames';
 import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
+import chunk from 'lodash/chunk';
 import resolveDropzoneStyles from '../../resolveDropzoneStyles';
 import calcBlurhashInWorker from './calcBlurhashInWorker';
 
@@ -10,7 +11,11 @@ const UPLOAD_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
 const useStyles = makeStyles(resolveDropzoneStyles);
 
-export default function PhotosDropzone({ onUpload, visit }) {
+export default function PhotosDropzone({
+  onChunkUpload,
+  onUploadComplete,
+  visit,
+}) {
   const classes = useStyles();
   const [progress, setProgress] = useState(null);
   const [rejectedFiles, setRejectedFiles] = useState([]);
@@ -24,14 +29,23 @@ export default function PhotosDropzone({ onUpload, visit }) {
         setRejectedFiles(currentRejectedFiles);
       }
       setProgress(1);
-      return onUpload({
-        id: visitId,
-        data: acceptedFiles,
-        meta: await Promise.all(acceptedFiles.map(measureImage)),
-        isAsset: true,
-      }).finally(() => setProgress(null));
+      const chunks = chunk(acceptedFiles, 2);
+
+      Promise.all(
+        chunks.map(async chunkAcceptedFiles => {
+          return onChunkUpload({
+            id: visitId,
+            data: chunkAcceptedFiles,
+            meta: await Promise.all(chunkAcceptedFiles.map(measureImage)),
+            isAsset: true,
+          });
+        }),
+      ).finally(() => {
+        setProgress(null);
+        onUploadComplete();
+      });
     },
-    [onUpload],
+    [onChunkUpload],
   );
 
   const {

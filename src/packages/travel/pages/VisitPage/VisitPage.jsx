@@ -88,7 +88,8 @@ export default function VisitPage({
         <PhotosDropzone
           visit={visit}
           userAlias={userAlias}
-          onUpload={values => submitVisitPhoto(values).finally(invalidate)}
+          onChunkUpload={values => submitVisitPhoto(values)}
+          onUploadComplete={invalidate}
         />
       )}
     </>
