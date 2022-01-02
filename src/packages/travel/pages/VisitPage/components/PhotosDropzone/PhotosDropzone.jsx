@@ -1,19 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import cls from 'classnames';
-import { encode } from 'blurhash';
 import { useDropzone } from 'react-dropzone';
 import { makeStyles } from '@material-ui/core/styles';
 import resolveDropzoneStyles from '../../resolveDropzoneStyles';
+import calcBlurhashInWorker from './calcBlurhashInWorker';
 
 const UPLOAD_IMAGE_MIN_SIZE = 50 * 1024;
 const UPLOAD_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
 const useStyles = makeStyles(resolveDropzoneStyles);
 
-export default function PhotosDropzone({
-  onUpload,
-  visit,
-}) {
+export default function PhotosDropzone({ onUpload, visit }) {
   const classes = useStyles();
   const [progress, setProgress] = useState(null);
   const [rejectedFiles, setRejectedFiles] = useState([]);
@@ -143,15 +140,17 @@ async function measureImage(fileImage) {
         : [image.width, image.height];
       try {
         const imageData = getImageData(image);
-        resolve({
-          aspect_ratio: `${w}:${h}`,
-          blurhash: encode(
-            imageData.data,
-            imageData.width,
-            imageData.height,
-            4,
-            4,
-          ),
+        calcBlurhashInWorker({
+          pixels: imageData.data,
+          width: imageData.width,
+          height: imageData.height,
+          componentX: 4,
+          componentY: 4,
+        }).then(blurhash => {
+          resolve({
+            aspect_ratio: `${w}:${h}`,
+            blurhash,
+          });
         });
       } catch (e) {
         resolve({
