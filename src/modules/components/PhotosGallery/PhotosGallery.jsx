@@ -44,7 +44,7 @@ export default function PhotosGallery({ className, photos }) {
   const uniqKey = useMemo(() => uuidV4(), []);
   const classes = useStyles();
 
-  const mobile = useMediaQuery((theme) => theme.breakpoints.down('sm'));
+  const mobile = useMediaQuery(theme => theme.breakpoints.down('sm'));
   const touchscreen = window.matchMedia('(any-pointer: coarse)').matches;
   const [swipeLock, setSwipeLock] = useState(false);
 
@@ -58,20 +58,23 @@ export default function PhotosGallery({ className, photos }) {
     [fullscreen, vh, vw],
   );
 
-  useEffect(() => {
-    const thumbnailElement = window.document
-      .querySelector(
-        `[data-tag="photos-gallery-thumb-${uniqKey}-${currentIndex}"]`,
-      )
-      ?.closest('.image-gallery-thumbnail');
+  useEffect(
+    () => {
+      const thumbnailElement = window.document
+        .querySelector(
+          `[data-tag="photos-gallery-thumb-${uniqKey}-${currentIndex}"]`,
+        )
+        ?.closest('.image-gallery-thumbnail');
 
-    if (thumbnailElement) {
-      thumbnailElement.scrollIntoView({
-        block: 'nearest',
-        behavior: 'smooth',
-      });
-    }
-  }, [currentIndex]);
+      if (thumbnailElement) {
+        thumbnailElement.scrollIntoView({
+          block: 'nearest',
+          behavior: 'smooth',
+        });
+      }
+    },
+    [currentIndex],
+  );
 
   const actualPhotos = photos.map(
     (
@@ -96,14 +99,15 @@ export default function PhotosGallery({ className, photos }) {
     }),
   );
 
-  if (!actualPhotos.length) {
-    return null;
-  }
-
   const showThumbnails = !swipeLock && (!mobile || fullscreen);
   const zoomable = !touchscreen || fullscreen;
 
   const galleryRef = useRef();
+
+  if (!actualPhotos.length) {
+    return null;
+  }
+
   const imageGalleryNode = (
     <ImageGallery
       ref={galleryRef}
@@ -114,11 +118,11 @@ export default function PhotosGallery({ className, photos }) {
       showThumbnails={showThumbnails}
       items={actualPhotos}
       thumbnailPosition={showThumbnails ? 'right' : undefined}
-      onScreenChange={(nextFullscreen) => setFullscreen(nextFullscreen)}
-      onBeforeSlide={(nextIndex) => setCurrentIndex(nextIndex)}
+      onScreenChange={nextFullscreen => setFullscreen(nextFullscreen)}
+      onBeforeSlide={nextIndex => setCurrentIndex(nextIndex)}
       disableKeyDown={true}
       disableThumbnailScroll={true}
-      renderItem={(item) => {
+      renderItem={item => {
         const zoomableItem = zoomable && currentIndex === item.index;
         return (
           <LazyImage
@@ -146,7 +150,7 @@ export default function PhotosGallery({ className, photos }) {
           </LazyImage>
         );
       }}
-      renderThumbInner={(item) => (
+      renderThumbInner={item => (
         <span className="image-gallery-thumbnail-inner">
           <LazyImage
             tag={`photos-gallery-thumb-${uniqKey}-${item.index}`}
@@ -163,7 +167,7 @@ export default function PhotosGallery({ className, photos }) {
             blurhash={item.blurhash}
             require={true}
             onLoad={({ aspectRatio }) =>
-              setAspectRatios((prevRatios) => ({
+              setAspectRatios(prevRatios => ({
                 ...prevRatios,
                 [item.index]: aspectRatio,
               }))
