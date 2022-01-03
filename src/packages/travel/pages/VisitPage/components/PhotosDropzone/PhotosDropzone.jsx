@@ -6,6 +6,8 @@ import chunk from 'lodash/chunk';
 import resolveDropzoneStyles from '../../resolveDropzoneStyles';
 import calcBlurhashInWorker from './calcBlurhashInWorker';
 
+const UPLOAD_MAX_IMAGES = 10;
+const UPLOAD_IMAGES_CHUNK_SIZE = 2;
 const UPLOAD_IMAGE_MIN_SIZE = 50 * 1024;
 const UPLOAD_IMAGE_MAX_SIZE = 5 * 1024 * 1024;
 
@@ -28,18 +30,33 @@ export default function PhotosDropzone({
       if (currentRejectedFiles) {
         setRejectedFiles(currentRejectedFiles);
       }
-      setProgress(1);
-      const chunks = chunk(acceptedFiles, 2);
+      setProgress({ uploaded: 0, measured: 0, total: acceptedFiles.length });
+      const chunks = chunk(acceptedFiles, UPLOAD_IMAGES_CHUNK_SIZE);
 
       Promise.all(
-        chunks.map(async chunkAcceptedFiles => {
-          return onChunkUpload({
+        chunks.map(async chunkAcceptedFiles =>
+          onChunkUpload({
             id: visitId,
             data: chunkAcceptedFiles,
-            meta: await Promise.all(chunkAcceptedFiles.map(measureImage)),
+            meta: await Promise.all(
+              chunkAcceptedFiles.map(file =>
+                measureImage(file).finally(() =>
+                  setProgress(prevProgress => ({
+                    ...prevProgress,
+                    measured: (prevProgress?.measured ?? 0) + 1,
+                  })),
+                ),
+              ),
+            ),
             isAsset: true,
-          });
-        }),
+          }).finally(() =>
+            setProgress(prevProgress => ({
+              ...prevProgress,
+              uploaded:
+                (prevProgress?.uploaded ?? 0) + UPLOAD_IMAGES_CHUNK_SIZE,
+            })),
+          ),
+        ),
       ).finally(() => {
         setProgress(null);
         onUploadComplete();
@@ -60,6 +77,7 @@ export default function PhotosDropzone({
     onDrop: handleSubmitPhotos,
     maxSize: UPLOAD_IMAGE_MAX_SIZE,
     minSize: UPLOAD_IMAGE_MIN_SIZE,
+    maxFiles: UPLOAD_MAX_IMAGES,
   });
 
   return (
@@ -78,7 +96,7 @@ export default function PhotosDropzone({
         })}
       >
         <input {...getInputProps()} />
-        {renderDropzoneCaption({ isDragActive, isUploadInProgress })}
+        {renderDropzoneCaption({ isDragActive, progress })}
         {rejectedFiles.length > 0 && (
           <div>
             Не удалось загрузить следующие файлы:
@@ -92,10 +110,12 @@ export default function PhotosDropzone({
   );
 }
 
-function renderDropzoneCaption({ isDragActive, isUploadInProgress }) {
+function renderDropzoneCaption({ isDragActive, progress }) {
   switch (true) {
-    case isUploadInProgress:
-      return 'Идет загрузка, пожалуйста не закрывайте браузер';
+    case progress !== null: {
+      const { total, measured, uploaded } = progress;
+      return `Идет загрузка, пожалуйста не закрывайте браузер. Загружено/Подготовлено/Всего: ${uploaded}/${measured}/${total}`;
+    }
     case isDragActive:
       return 'Загрузить фотографии';
     default:
