@@ -49,13 +49,15 @@ export default function PhotosDropzone({
               ),
             ),
             isAsset: true,
-          }).finally(() =>
-            setProgress(prevProgress => ({
-              ...prevProgress,
-              uploaded:
-                (prevProgress?.uploaded ?? 0) + UPLOAD_IMAGES_CHUNK_SIZE,
-            })),
-          ),
+          })
+            .finally(() =>
+              setProgress(prevProgress => ({
+                ...prevProgress,
+                uploaded:
+                  (prevProgress?.uploaded ?? 0) + UPLOAD_IMAGES_CHUNK_SIZE,
+              })),
+            )
+            .catch(() => {}),
         ),
       ).finally(() => {
         setProgress(null);

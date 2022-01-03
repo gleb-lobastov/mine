@@ -82,18 +82,22 @@ export default function VisitPage({
               >
                 вся поездка
               </ConnectedLink>
-              {editable && (
-                <PhotosDropzone
-                  visit={visit}
-                  userAlias={userAlias}
-                  onChunkUpload={values => submitVisitPhoto(values)}
-                  onUploadComplete={invalidate}
-                />
-              )}
             </>
           )
         }
       </VisitsArranger>
+      {editable && (
+        <PhotosDropzone
+          visit={visit}
+          userAlias={userAlias}
+          onChunkUpload={values =>
+            submitVisitPhoto(values, {
+              refetchPolicy: submitVisitPhoto.REFETCH_POLICY.SEQUENTIAL,
+            })
+          }
+          onUploadComplete={invalidate}
+        />
+      )}
     </>
   );
 }
