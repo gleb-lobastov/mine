@@ -74,24 +74,26 @@ export default function VisitPage({
         {({ level, index, className }) =>
           level === 0 &&
           index === 0 && (
-            <ConnectedLink
-              className={className}
-              variant="body2"
-              to={urls.resolveTripUrl({ tripId: visit.tripId })}
-            >
-              вся поездка
-            </ConnectedLink>
+            <>
+              <ConnectedLink
+                className={className}
+                variant="body2"
+                to={urls.resolveTripUrl({ tripId: visit.tripId })}
+              >
+                вся поездка
+              </ConnectedLink>
+              {editable && (
+                <PhotosDropzone
+                  visit={visit}
+                  userAlias={userAlias}
+                  onChunkUpload={values => submitVisitPhoto(values)}
+                  onUploadComplete={invalidate}
+                />
+              )}
+            </>
           )
         }
       </VisitsArranger>
-      {editable && (
-        <PhotosDropzone
-          visit={visit}
-          userAlias={userAlias}
-          onChunkUpload={values => submitVisitPhoto(values)}
-          onUploadComplete={invalidate}
-        />
-      )}
     </>
   );
 }
