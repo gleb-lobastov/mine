@@ -127,20 +127,20 @@ export default function PhotosGallery({ className, photos }) {
         return (
           <LazyImage
             className="image-gallery-image"
+            src={fullscreen ? item.fullscreen : item.original}
+            component={zoomableItem ? ZoomableImage : 'img'}
+            onSwipeLock={zoomableItem ? setSwipeLock : undefined}
+            description={item.description}
+            alt={item.originalAlt}
+            title={item.originalTitle}
+            blurhash={item.blurhash}
+            require={Math.abs(currentIndex - item.index) <= PREFETCH_SLIDES}
+            constraints={constraints}
             aspectRatio={
               aspectRatios[item.index] ||
               item.aspectRatio?.ratio ||
               FALLBACK_ASPECT_RATIO
             }
-            component={zoomableItem ? ZoomableImage : 'img'}
-            description={item.description}
-            src={fullscreen ? item.fullscreen : item.original}
-            alt={item.originalAlt}
-            constraints={constraints}
-            title={item.originalTitle}
-            blurhash={item.blurhash}
-            require={Math.abs(currentIndex - item.index) <= PREFETCH_SLIDES}
-            onSwipeLock={zoomableItem ? setSwipeLock : undefined}
           >
             {item.description && (
               <span className="image-gallery-description">

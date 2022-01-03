@@ -12,9 +12,12 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'space-between',
   },
-  isCompact: {
-    marginTop: '-52px',
+  compact: {
+    '&:not($ghost)': {
+      marginTop: '-52px',
+    },
   },
+  ghost: {},
   resetFlow: {
     transform: 'translate(0, 0)',
   },
@@ -53,7 +56,7 @@ export default function VisitsAndRidesFormSection({
   const [creatorsNodeIndex, setCreatorsNodeIndex] = useState(
     formVisitsIds.length,
   );
-  const [isSorting, setIsSorting] = useState(false);
+  const [sortingIndex, setSortingIndex] = useState(null);
 
   const showCreationDialog = (dialogName, dialogParams) => {
     const [prevVisit, visit] = neighbors(formVisitsIds, creatorsNodeIndex).map(
@@ -68,15 +71,19 @@ export default function VisitsAndRidesFormSection({
   if (!formVisitsIds.length) {
     return <VisitCreator key="visitCreator" showDialog={showCreationDialog} />;
   }
+
   return (
     <FieldArray
       name="trip.visits"
       render={arrayHelpers => (
         <Sortable
+          useWindowAsScrollContainer={true}
           className={classes.resetFlow}
-          updateBeforeSortStart={() => setIsSorting(true)}
+          onSortStart={({ index }) => {
+            setSortingIndex(index);
+          }}
           onSortEnd={data => {
-            setIsSorting(false);
+            setSortingIndex(null);
             const { oldIndex, newIndex } = data;
             const isVisitCreatorNodeMoved = oldIndex === creatorsNodeIndex;
             if (isVisitCreatorNodeMoved) {
@@ -99,7 +106,6 @@ export default function VisitsAndRidesFormSection({
 
             const shouldCollapseRides =
               indexOfVisit >= 1 &&
-              !isSorting &&
               isArrivalRideMatch &&
               creatorsNodeIndex !== indexOfVisit;
 
@@ -108,7 +114,10 @@ export default function VisitsAndRidesFormSection({
                 key={`v${formVisitId}`}
                 index={indexOfVisit /* for SortableNode */}
                 style={{ zIndex: formVisitsIds.length - indexOfVisit }}
-                className={cls({ [classes.isCompact]: shouldCollapseRides })}
+                className={cls({
+                  [classes.compact]: shouldCollapseRides,
+                  [classes.ghost]: sortingIndex === indexOfVisit,
+                })}
                 showDialog={showDialog}
                 isArrivalRideMatch={isArrivalRideMatch}
                 isDepartureRideMatch={isDepartureRideMatch}
