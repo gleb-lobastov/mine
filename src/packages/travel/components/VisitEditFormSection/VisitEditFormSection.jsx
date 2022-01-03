@@ -46,7 +46,7 @@ export default function VisitEditFormSection({
   },
 }) {
   const classes = useStyles();
-  const [onlyCities, setOnlyCities] = useState(true);
+  const [onlySettlements, setOnlySettlements] = useState(true);
   const isTripHasRides = tripRidesIds && tripRidesIds.length > 0;
   return (
     <Grid container={true} spacing={3} alignItems="center">
@@ -65,10 +65,14 @@ export default function VisitEditFormSection({
             domain: 'visitEditFormSection.geoname',
             modelName: 'geonames',
             filterField: 'locationName',
-            customQuery: onlyCities ? { class: 'P' } : undefined,
+            customQuery: onlySettlements ? { class: 'P' } : undefined,
             queryFormat: QUERY_FORMATS.SEARCH,
           }}
-          transformSuggestionToOption={transformSuggestionToOption}
+          transformSuggestionToOption={suggestion =>
+            transformSuggestionToOption(suggestion, {
+              showFeatureClass: !onlySettlements,
+            })
+          }
           triggerProps={{ label: 'Место посещения' }}
         />
       </Grid>
@@ -76,11 +80,11 @@ export default function VisitEditFormSection({
         <FormControlLabel
           control={
             <Checkbox
-              checked={onlyCities}
-              onChange={event => setOnlyCities(event.target.checked)}
+              checked={onlySettlements}
+              onChange={event => setOnlySettlements(event.target.checked)}
             />
           }
-          label="Искать только города"
+          label="Искать только населенные пункты"
         />
       </Grid>
       {isTripHasRides && (
@@ -143,11 +147,22 @@ export default function VisitEditFormSection({
 
 VisitEditFormSection.defaultProps = {};
 
-function transformSuggestionToOption(suggestion) {
-  const { locationName, countryName, regionName } = suggestion;
+function transformSuggestionToOption(suggestion, { showFeatureClass } = {}) {
+  const {
+    locationName,
+    countryName,
+    regionName,
+    featureClassName,
+  } = suggestion;
   return {
     label: locationName,
-    details: [countryName, regionName].filter(Boolean).join(', '),
+    details: [
+      countryName,
+      regionName,
+      showFeatureClass ? featureClassName : null,
+    ]
+      .filter(Boolean)
+      .join(', '),
     suggestion,
   };
 }
