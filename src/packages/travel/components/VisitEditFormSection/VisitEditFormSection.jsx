@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import OptionsSelect from 'modules/components/muiExtended/OptionsSelect';
 import Suggest, { QUERY_FORMATS } from 'modules/components/muiExtended/Suggest';
 import RideInfo from 'travel/components/RideInfo';
@@ -44,6 +46,7 @@ export default function VisitEditFormSection({
   },
 }) {
   const classes = useStyles();
+  const [onlyCities, setOnlyCities] = useState(true);
   const isTripHasRides = tripRidesIds && tripRidesIds.length > 0;
   return (
     <Grid container={true} spacing={3} alignItems="center">
@@ -62,10 +65,22 @@ export default function VisitEditFormSection({
             domain: 'visitEditFormSection.geoname',
             modelName: 'geonames',
             filterField: 'locationName',
+            customQuery: onlyCities ? { class: 'P' } : undefined,
             queryFormat: QUERY_FORMATS.SEARCH,
           }}
           transformSuggestionToOption={transformSuggestionToOption}
           triggerProps={{ label: 'Место посещения' }}
+        />
+      </Grid>
+      <Grid item={true} xs={12}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={onlyCities}
+              onChange={event => setOnlyCities(event.target.checked)}
+            />
+          }
+          label="Искать только города"
         />
       </Grid>
       {isTripHasRides && (
