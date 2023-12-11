@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const GOOGLE_API_KEY = fs.readFileSync('.google_api_key', 'utf8').trim();
-const PROD_API_URL = 'https://mine-backend.herokuapp.com';
+const PROD_API_URL = 'https://mine.freemyip.com:8443';
 const DEV_API_URL = `http://mine.local:${process.env.PORT || '8082'}`;
 
 const isDevelopmentMode = process.env.NODE_ENV !== 'production';
